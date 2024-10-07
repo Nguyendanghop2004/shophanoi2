@@ -270,6 +270,8 @@
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bình Luận</span></a></li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Sản Phẩm</span></a></li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Danh Mục Sản Phẩm</span></a></li>
+            <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="far fa-square"></i> <span>Liên Hệ</span></a></li>
+            <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="far fa-square"></i> <span>Nhân viên giao hàng</span></a></li>
         </ul>
 
         <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
