@@ -89,6 +89,6 @@ use Illuminate\Http\Request;
     public function destroy($id)
     {
         Shipper::destroy($id);
-        return redirect()->route('admin.shippers.index')->with('success', 'Xóa nhân viên giao hàng thành công!');
+        return redirect()->route('shippers.index')->with('success', 'Xóa nhân viên giao hàng thành công!');
     }
 }
