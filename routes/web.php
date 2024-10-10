@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\Admin\ShipperController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +31,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::resource('contact', ContactMessageController::class);
+Route::get('/shippers/search', [ShipperController::class, 'search'])->name('shippers.search');
+
+Route::resource('shippers', ShipperController::class);
 require __DIR__.'/auth.php';
 Route::get('categories', [CategoriesController::class, 'list'])->name('categories.list');
 Route::get('categories/create', [CategoriesController::class, 'create'])->name('categories.add');
