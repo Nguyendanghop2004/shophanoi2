@@ -272,12 +272,10 @@
          
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
-                        class="fas fa-columns"></i> <span>Danh Mục</span></a>
+                        class="fas fa-columns"></i> <span>Danh mục</span></a>
                 <ul class="dropdown-menu">
-                <li><a class="nav-link" href="{{route('categories.list')}}"><i class="far fa-square"></i> <span>Danh Sách Danh Mục</span></a></li>
-                <li><a class="nav-link" href="{{route('categories.add')}}"><i class="far fa-square"></i> <span>Thêm Mới Danh Mục</span></a></li>
-            
-               
+                <li><a class="nav-link" href="{{route('categories.list')}}"><span>Danh Sách Danh Mục</span></a></li>
+                <li><a class="nav-link" href="{{route('categories.add')}}"><span>Thêm Mới Danh Mục</span></a></li>
                 </ul>
             </li>
         </ul>
