@@ -269,7 +269,17 @@
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bài Viết</span></a></li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bình Luận</span></a></li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Sản Phẩm</span></a></li>
-            <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Danh Mục Sản Phẩm</span></a></li>
+         
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                        class="fas fa-columns"></i> <span>Danh Mục</span></a>
+                <ul class="dropdown-menu">
+                <li><a class="nav-link" href="{{route('categories.list')}}"><i class="far fa-square"></i> <span>Danh Sách Danh Mục</span></a></li>
+                <li><a class="nav-link" href="{{route('categories.add')}}"><i class="far fa-square"></i> <span>Thêm Mới Danh Mục</span></a></li>
+            
+               
+                </ul>
+            </li>
         </ul>
 
         <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
