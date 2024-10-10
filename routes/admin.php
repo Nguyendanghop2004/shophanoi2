@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\SliderController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,4 +16,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
     Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
     Route::delete('sliders/{id}/force-delete', [SliderController::class, 'forceDelete'])->name('slider.forceDelete');
+    
+    Route::get('categories', [CategoriesController::class, 'list'])->name('categories.list');
+    Route::get('categories/create', [CategoriesController::class, 'create'])->name('categories.add');
+    Route::post('categories/store', [CategoriesController::class, 'store'])->name('categories.store');
+    Route::get('categories/edit/{id}', [CategoriesController::class, 'edit'])->name('categories.edit');
+    Route::put('categories/update/{id}', [CategoriesController::class, 'update'])->name('categories.update');
+    Route::delete('categories/{id}', [CategoriesController::class, 'destroy'])->name('categories.delete');
+    Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
 });
