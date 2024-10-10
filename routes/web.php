@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('contact', ContactMessageController::class);
+Route::get('/shippers/search', [ShipperController::class, 'search'])->name('shippers.search');
 
 Route::resource('shippers', ShipperController::class);
 require __DIR__.'/auth.php';

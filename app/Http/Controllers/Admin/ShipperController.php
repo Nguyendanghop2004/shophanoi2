@@ -10,9 +10,10 @@ use Illuminate\Http\Request;
 {
     public function index()
     {
-        $shippers = Shipper::all();
+        $shippers = Shipper::paginate(10);
         return view('admin.shipper.index', compact('shippers'));
     }
+    
 
     public function create()
     {
@@ -85,6 +86,17 @@ use Illuminate\Http\Request;
 
         return redirect()->route('shippers.index')->with('success', 'Cập nhật thông tin nhân viên giao hàng thành công!');
     }
+
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+        $shippers = Shipper::where('name', 'LIKE', "%{$search}%")
+                            ->orWhere('email', 'LIKE', "%{$search}%")
+                            ->paginate(10);
+
+        return view('admin.shipper.index', compact('shippers'));
+    }
+
 
     public function destroy($id)
     {

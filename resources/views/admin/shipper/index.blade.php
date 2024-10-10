@@ -19,9 +19,9 @@
                     Danh sách nhân viên giao hàng
                 </div>
                 <div class="card-header-action">
-                    <form class="form-inline">
+                    <form action="{{ route('shippers.search') }}" method="GET" class="form-inline">
                         <div class="search-element">
-                            <input class="form-control" type="search" placeholder="Tìm kiếm" aria-label="Search" data-width="250">
+                            <input class="form-control" name="search" type="text" placeholder="Tìm kiếm" aria-label="Search" data-width="250">
                             <button class="btn" type="submit"><i class="fas fa-search"></i></button>
                         </div>
                     </form>
@@ -49,7 +49,7 @@
                                     <td>{{ $shipper->phone }}</td>
                                     <td>{{ $shipper->hometown }}</td>
                                     <td>{{ $shipper->date_of_birth }}</td>
-                                    <td><img src="{{ asset($shipper->profile_picture) }}" alt="{{ $shipper->name }}" width="50"></td>
+                                    <td><img src="{{ asset($shipper->profile_picture) }}" alt="{{ $shipper->name }}" width="150px"></td>
                                     <td>
                                         <a href="{{ route('shippers.edit', $shipper->id) }}" class="btn btn-warning btn-sm">Sửa</a>
                                         <form action="{{ route('shippers.destroy', $shipper->id) }}" method="POST" style="display:inline-block">
@@ -65,30 +65,52 @@
                 </div>
             </div>
         </div>
-        
         <div class="card-body mx-auto">
             <div class="buttons">
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">«</span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">»</span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
+                    <ul class="pagination justify-content-center">
+                        @if ($shippers->onFirstPage())
+                            <li class="page-item disabled">
+                                <a class="page-link" aria-label="Previous">
+                                    <span aria-hidden="true">«</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $shippers->previousPageUrl() }}" aria-label="Previous">
+                                    <span aria-hidden="true">«</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        @endif
+        
+                        @for ($i = 1; $i <= $shippers->lastPage(); $i++)
+                            <li class="page-item {{ $i == $shippers->currentPage() ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $shippers->url($i) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
+        
+                        @if ($shippers->hasMorePages())
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $shippers->nextPageUrl() }}" aria-label="Next">
+                                    <span aria-hidden="true">»</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="page-item disabled">
+                                <a class="page-link" aria-label="Next">
+                                    <span aria-hidden="true">»</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </nav>
             </div>
         </div>
+        
     </div>
 
 @endsection

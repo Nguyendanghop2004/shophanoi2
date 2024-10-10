@@ -68,10 +68,9 @@
                     Danh sach lien he
                 </div>
                 <div class="card-header-action">
-                    <form class="form-inline">
+                    <form class="form-inline" action="{{ route('contact.index') }}" method="GET">
                         <div class="search-element">
-                            <input class="form-control" type="search" placeholder="Search" aria-label="Search"
-                                   data-width="250">
+                            <input class="form-control" type="search" name="search" placeholder="Tìm kiếm..." value="{{ $search ?? '' }}" aria-label="Search" data-width="250">
                             <button class="btn" type="submit"><i class="fas fa-search"></i></button>
                         </div>
                     </form>
@@ -91,14 +90,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($messages as $index => $message)
+                            @foreach($contacts as $contact)
                                 <tr>
-                                    <th scope="row">{{ $index + 1 }}</th>
-                                    <td>{{ $message->name }}</td>
-                                    <td>{{ $message->email }}</td>
-                                    <td>{{ $message->phone ?? 'Không có' }}</td>
-                                    <td>{{ $message->message }}</td>
-                                    <td>{{ $message->created_at->format('d/m/Y H:i') }}</td>
+                                    <th scope="row">{{ $contact->id }}</th>
+                                    <td>{{ $contact->name }}</td>
+                                    <td>{{ $contact->email }}</td>
+                                    <td>{{ $contact->phone ?? 'N/A' }}</td>
+                                    <td>{{ $contact->message }}</td>
+                                    <td>{{ $contact->created_at->format('d/m/Y') }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -109,22 +108,44 @@
         <div class="card-body mx-auto">
             <div class="buttons">
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">«</span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">»</span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
+                    <ul class="pagination justify-content-center">
+                        @if ($contacts->onFirstPage())
+                            <li class="page-item disabled">
+                                <a class="page-link" aria-label="Previous">
+                                    <span aria-hidden="true">«</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $contacts->previousPageUrl() }}" aria-label="Previous">
+                                    <span aria-hidden="true">«</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        @endif
+        
+                        @for ($i = 1; $i <= $contacts->lastPage(); $i++)
+                            <li class="page-item {{ $i == $contacts->currentPage() ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $contacts->url($i) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
+        
+                        @if ($contacts->hasMorePages())
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $contacts->nextPageUrl() }}" aria-label="Next">
+                                    <span aria-hidden="true">»</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="page-item disabled">
+                                <a class="page-link" aria-label="Next">
+                                    <span aria-hidden="true">»</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </nav>
             </div>
