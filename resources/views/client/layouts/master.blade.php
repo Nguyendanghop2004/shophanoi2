@@ -33,7 +33,7 @@
     </div>
     <!-- /preload -->
     <div id="wrapper">
-
+        @yield('topbar')
         @hasSection('header-home')
             @yield('header-home')
         @else
@@ -49,7 +49,7 @@
         <!-- /footer -->
 
     </div>
-
+    @yield('product-detail')
     <!-- gotop -->
     <div class="progress-wrap">
         <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
@@ -112,6 +112,7 @@
     <script type="text/javascript" src="{{ asset('client/assets/js/wow.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('client/assets/js/multiple-modal.js') }}"></script>
     <script type="text/javascript" src="{{ asset('client/assets/js/main.js') }}"></script>
+    @stack('scripts')
 </body>
 
 </html>
