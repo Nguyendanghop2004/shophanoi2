@@ -17,6 +17,10 @@ use App\Http\Controllers\Client\ShopCollectionController;
 use App\Http\Controllers\Client\ShoppingCartController;
 use App\Http\Controllers\Client\TimeLineController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\PriceSaleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -65,3 +69,11 @@ Route::get('categories/edit/{id}', [CategoriesController::class, 'edit'])->name(
 Route::put('categories/update/{id}', [CategoriesController::class, 'update'])->name('categories.update');
 Route::delete('categories/{id}', [CategoriesController::class, 'destroy'])->name('categories.delete');
 Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
+
+Route::resource('attributes', AttributeController::class);
+
+Route::resource('sizes', SizeController::class);
+Route::resource('colors', ColorController::class);
+Route::resource('prices', PriceSaleController::class);
+
+Route::get('/search', [PriceSaleController::class, 'search'])->name('search');

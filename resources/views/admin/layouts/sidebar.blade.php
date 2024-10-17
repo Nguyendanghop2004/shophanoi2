@@ -266,6 +266,14 @@
 
                 </ul>
             </li>
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i> <span>Quản lý thuộc tính</span></a>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link" href="{{ route('sizes.index') }}"><span>Quản lý Kích Thước</span></a></li>
+                    <li><a class="nav-link" href="{{ route('colors.index') }}"><span>Quản lý Màu Sắc</span></a></li>
+                    <li><a class="nav-link" href="{{ route('prices.index') }}"><span>Quản lý Giá Bán</span></a></li>
+                </ul>
+            </li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bài Viết</span></a></li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bình Luận</span></a></li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Sản Phẩm</span></a></li>
