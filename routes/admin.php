@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
 Route::post('admin/login', [LoginController::class, 'store'])->name('admin.post-login');
-Route::prefix('admin')->name('admin.')->middleware('auth:admin','can:admin')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStatus')->group(function () {
     // Login admin
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
@@ -22,9 +22,24 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin','can:admin')->gr
 // Permission
 
     Route::get('permissions/index', [AccoutAdminController::class, 'permissionAdmin'])->name('permissions.index');
-    Route::get('permissions/phanquyen/{id}', [AccoutAdminController::class, 'phanquyen'])->name('permissions.phanquyen');
+    // Thêm quyền
+    Route::get('permissions/phanquyen/{id}', [AccoutAdminController::class, 'phanquyen'])->name('permissions.phanquyen')->middleware('permission:ListPermission');
+    Route::post('permissions/insertPermission', [AccoutAdminController::class, 'insertPermission'])->name('permissions.insert')->middleware('permission:insertPermission');
+    // Cấp quyền
+    Route::post('permissions/insert_permission/{id}', [AccoutAdminController::class, 'insert_permission'])->name('permissions.grant_permission');
+    // phân vai trò
+    Route::get('permissions/phanvaitro/{id}', [AccoutAdminController::class, 'phanvaitro'])->name('permissions.phanvaitro')->middleware('permission:phanvaitro');
+    Route::post('permissions/insert_roles/{id}', [AccoutAdminController::class, 'insert_roles'])->name('permissions.insert_roles');
 
     
+    // Thêm vai trò
+    Route::post('permissions/insertRoles', [AccoutAdminController::class, 'insertRoles'])->name('permissions.insertRoles');
+    
+    // Trạng thái tài khoản
+   // routes/web.php
+   Route::post('accounts/{id}/activate', [AccoutAdminController::class, 'activate'])->name('accounts.activate');
+   Route::post('accounts/{id}/deactivate', [AccoutAdminController::class, 'deactivate'])->name('accounts.deactivate');
+
     // Quản lý thanh trượt
     Route::get('slider/category/{category_id}', [SliderController::class, 'index'])->name('slider.index');
     Route::resource('slider', SliderController::class)->except(['index']);
@@ -33,12 +48,12 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin','can:admin')->gr
     Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
     Route::delete('sliders/{id}/force-delete', [SliderController::class, 'forceDelete'])->name('slider.forceDelete');
     // Quản lý danh mục
-    Route::get('categories', [CategoriesController::class, 'list'])->name('categories.list');
-    Route::get('categories/create', [CategoriesController::class, 'create'])->name('categories.add');
-    Route::post('categories/store', [CategoriesController::class, 'store'])->name('categories.store');
-    Route::get('categories/edit/{id}', [CategoriesController::class, 'edit'])->name('categories.edit');
-    Route::put('categories/update/{id}', [CategoriesController::class, 'update'])->name('categories.update');
-    Route::delete('categories/{id}', [CategoriesController::class, 'destroy'])->name('categories.delete');
+    Route::get('categories', [CategoriesController::class, 'list'])->name('categories.list')->middleware('permission:listCategories');
+    Route::get('categories/create', [CategoriesController::class, 'create'])->name('categories.add')->middleware('permission:addCategories');
+    Route::post('categories/store', [CategoriesController::class, 'store'])->name('categories.store')->middleware('permission:addCategories');
+    Route::get('categories/edit/{id}', [CategoriesController::class, 'edit'])->name('categories.edit')->middleware('permission:editCategories');
+    Route::put('categories/update/{id}', [CategoriesController::class, 'update'])->name('categories.update')->middleware('permission:editCategories');
+    Route::delete('categories/{id}', [CategoriesController::class, 'destroy'])->name('categories.delete')->middleware('permission:deleteCategories');
     Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
 });
     

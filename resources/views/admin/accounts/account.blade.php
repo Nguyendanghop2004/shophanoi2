@@ -25,6 +25,7 @@
                                 <th scope="col">Email</th>
                                 <th scope="col">Image</th>
                                 <th scope="col">Vai Trò</th>
+                                <th scope="col">Trạng thái</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -37,22 +38,48 @@
                                     <td>
                                         <img src="{{ Storage::url($admin->image_path) }}" alt="Ảnh quản trị viên" width="100px" height="60px">
                                     </td>
-                                       
-                                        <td>
-                                            @foreach($admin->roles as $key => $role)
-                                            {{$role->name}}
-                                            @endforeach
-                                        </td>
-                                        <td>
+                                    <td>
+                                        @foreach($admin->roles as $role)
+                                            {{ $role->name }}
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @if($admin->status)
+                                            <span class="badge badge-success">Hoạt động</span>
+                                        @else
+                                            <span class="badge badge-danger">Không hoạt động</span>
+                                        @endif
+                                    </td>
+                                    <td>
                                         <div class="d-flex">
-                                            <a href="{{ route('admin.accounts.edit', $admin->id) }}" class="btn btn-warning">Sửa</a>
+                                            <a href="{{ route('admin.accounts.edit', $admin->id) }}" class="btn btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
                                             <form action="{{ route('admin.accounts.destroy', $admin->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger ml-2">Xóa</button>
+                                                <button type="submit" class="btn btn-danger ml-2">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
                                             </form>
+                                            @if($admin->status)
+                                                <form action="{{ route('admin.accounts.deactivate', $admin->id) }}" method="POST" class="ml-2">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="fas fa-lock"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <form action="{{ route('admin.accounts.activate', $admin->id) }}" method="POST" class="ml-2">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-success">
+                                                        <i class="fas fa-unlock"></i> 
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </div>
                                     </td>
+                                    
                                 </tr>
                             @endforeach
                         </tbody>

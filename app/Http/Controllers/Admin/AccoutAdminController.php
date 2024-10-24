@@ -8,6 +8,8 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Permission;
 
+use function Laravel\Prompts\alert;
+
 class AccoutAdminController extends Controller
 {
     /**
@@ -16,6 +18,19 @@ class AccoutAdminController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+         
+     public function __construct()
+     {
+        //  $this->middleware('permission:publish User|create User|edit User|delete User', ['only' => ['index', 'show']]);
+        //  $this->middleware('permission:create User', ['only' => ['create']]);
+        //  $this->middleware('permission:edit User', ['only' => ['edit', 'update']]);
+        //  $this->middleware('permission:delete User', ['only' => ['destroy']]);
+        //  $this->middleware('permission:insert_permission', ['only' => ['insert_permission']]);
+        //  $this->middleware('permission:insert_roles', ['only' => ['insert_roles']]);
+        //  $this->middleware('permission:phanvaitro', ['only' => ['phanvaitro']]);
+
+         
+     }
  
     public function account(Admin $admin)
     {   
@@ -91,7 +106,7 @@ class AccoutAdminController extends Controller
         $all_column_roles = $admin->roles->first();
         $permission = Permission::orderBy('id', 'DESC')->get();
         $role = Role::orderBy('id', 'DESC')->get();
-        return view('admin.permissions.index', compact('user', 'role', 'all_column_roles', 'permission'));
+        return view('admin.permissions.phanvaitro', compact('admin', 'role', 'all_column_roles', 'permission'));
     }
     public function phanquyen($id)
     {
@@ -105,6 +120,7 @@ class AccoutAdminController extends Controller
         // dd(  $get_permission_viaroles);
         return view('admin.permissions.phanquyen', compact('admin', 'name_roles', 'permission', 'get_permission_viaroles'));
     }
+    // Cấp roles
     public function insert_roles(Request $request, $id)
     {
         $data = $request->all();
@@ -115,40 +131,73 @@ class AccoutAdminController extends Controller
         $currentUserRole = $currentUser->roles->first();
     
         // Kiểm tra nếu người đang thực hiện có vai trò 'admin' và người được cấp quyền cũng có vai trò 'admin'
-        if ($currentUserRole && $currentUserRole->name == 'admin' && $admin->hasRole('admin')) {
-            return redirect()->back()->with('error', 'Không thể cấp vai trò cho tài khoản có cùng vai trò admin.');
+        if ($currentUserRole && $currentUserRole->name != 'admin' && $admin->hasRole('admin')) {
+            return redirect()->back()->with('error', 'Bạn không thể cấp vai trò này.');
         }
-    
+        
         $admin->syncRoles($data['role']);
-        return redirect()->back()->with('thong bao', 'Thêm thành công');
+        return redirect()->route('admin.permissions.index');
     }
-    
+    // Cấp quyền
     public function insert_permission(Request $request, $id)
     {
         $data = $request->all();
         $admin = Admin::find($id);
         $role_id = $admin->roles->first()->id;
     
-        // Lấy role của người đang thực hiện yêu cầu
-        $currentAdmin = auth()->guard('admin');
+        $currentAdmin = auth()->guard('admin')->user(); // Sử dụng guard admin
         $currentAdminRole = $currentAdmin->roles->first();
     
-        // Kiểm tra nếu người đang thực hiện có vai trò 'admin' và người được cấp quyền cũng có vai trò 'admin'
         if ($currentAdminRole && $currentAdminRole->name == 'admin' && $admin->hasRole('admin')) {
-            return redirect()->back()->with('error', 'Không thể cấp quyền cho tài khoản có cùng vai trò admin.');
+            // Bạn có thể thêm logic xử lý khác ở đây nếu cần thiết
         }
     
-        $role = Role::find($role_id);
-        $role->syncPermissions($data['permission']);
+        // Kiểm tra và thiết lập quyền
+        $permissions = $data['permission'] ?? [];
     
-        return redirect()->route('admin.users.index');
+        // Đồng bộ quyền cho role
+        $role = Role::find($role_id);
+        $role->syncPermissions($permissions);
+    
+        return redirect()->route('admin.permissions.index')->with('success', 'Cập nhật quyền thành công.');
     }
+    
+    // Thêm quyền
+    
     public function  insertPermission(Request $request)
     {
         $data = $request->all();
         $permission = new Permission();
-        $permission->name = $data['permission'];
+        $permission->name = $data['permission'] ;
         $permission->save();
         return redirect()->back()->with('thong bao', 'thêm thành công');
+    }
+    // thêm roles
+
+    public function  insertRoles(Request $request)
+    {
+        $data = $request->all();
+        $role = new Role();
+        $role->name = $data['roles'];
+        $role->save();
+        return redirect()->back()->with('thong bao', 'thêm thành công');
+    }
+    // Trang thái người dùng
+    public function activate($id)
+    {
+        $admin = Admin::findOrFail($id);
+        $admin->status = true;
+        $admin->save();
+
+        return redirect()->back()->with('success', 'Tài khoản đã được kích hoạt.');
+    }
+
+    public function deactivate($id)
+    {
+        $admin = Admin::findOrFail($id);
+        $admin->status = false;
+        $admin->save();
+
+        return redirect()->back()->with('success', 'Tài khoản đã bị vô hiệu hóa.');
     }
 }

@@ -287,31 +287,21 @@
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
                     <span>Danh mục sản phẩm</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="{{ route('categories.list') }}"><span>Danh Sách Danh Mục</span></a>
-                    </li>
-                    <li><a class="nav-link" href="{{ route('categories.add') }}"><span>Thêm Mới Danh Mục</span></a>
-                    </li>
+                    <li><a class="nav-link" href="{{route('admin.categories.list')}}"><span>Danh Sách Danh Mục</span></a></li>
+                <li><a class="nav-link" href="{{route('admin.categories.add')}}"><span>Thêm Mới Danh Mục</span></a></li>
                 </ul>
             </li>
+            <li class="menu-header">Quản Lí tài khoản</li>
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
                     <span>Account</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Account
+                    <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Tài khoản
                                 Admin</span></a></li>
-                    <li><a class="nav-link" href=""><span>Account User</span></a></li>
-                </ul>
-            </li>
-
-            <li class="dropdown">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
-                    <span>Permission</span></a>
-                <ul class="dropdown-menu">
-
+                    <li><a class="nav-link" href=""><span>Tài khoản User</span></a></li>
                     <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Phân quyền và vai
                                 trò</span></a></li>
                 </ul>
             </li>
-
     </aside>
 </div>

@@ -3,7 +3,7 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Permission Admin</h1>
+            <h1>Quyền và vai trò quản trị</h1>
         </div>
 
         <div class="card card-primary">
@@ -25,7 +25,7 @@
                                 <th scope="col">Email</th>
                                 <th scope="col">Image</th>
                                 <th scope="col">Vai Trò</th>
-                                <th scope="col">Permission</th>
+                                {{-- <th scope="col">Permission</th> --}}
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -43,13 +43,13 @@
                                             {{$role->name}}
                                             @endforeach
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             @foreach($admin->getAllPermissions() as $key => $per)
                                                 <span class="badge bg-success">{{ $per->name }}</span> 
                                             @endforeach
-                                        </td>
+                                        </td> --}}
                                         <td>
-                                            <a href="{{ url('admin/phanvaitro/'. $admin->id) }}" class="btn btn-success btn-sm mb-1">Vai trò</a>
+                                            <a href="{{ url('admin/permissions/phanvaitro/'. $admin->id) }}" class="btn btn-success btn-sm mb-1">Vai trò</a>
                                             <a href="{{ url('admin/permissions/phanquyen/'. $admin->id) }}" class="btn btn-info btn-sm mb-1">Quyền</a>
                                         </td>      
                                 </tr>
