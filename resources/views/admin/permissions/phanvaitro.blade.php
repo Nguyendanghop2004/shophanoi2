@@ -8,6 +8,18 @@
     <div class="section-header">
         <h1>Phân vai trò Quản trị : {{ $admin->name }}</h1>
     </div>
+        <a href="{{route('admin.permissions.index')}}" class="btn btn-outline-danger mb-4"  >Quay lại</a>
+    {{-- Hiển thị thông báo lỗi và thành công --}}
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <div class="card card-primary">
         <div class="card-header bg-primary text-white">
@@ -30,7 +42,6 @@
                 <input type="submit" name="insertroles" value="Cấp vai trò" class="btn btn-success" {{ $admin->hasRole('admin') ? 'disabled' : '' }}>
             </form>
         </div>
-        
     </div>
 
     <div class="card card-primary mt-4">
@@ -57,6 +68,11 @@
 <script>
     $(document).ready(function() {
         $('.select2').select2();
+        
+        // Tự động ẩn thông báo sau 3 giây
+        setTimeout(function() {
+            $('.alert').fadeOut('slow');
+        }, 3000);
     });
 </script>
 @endpush

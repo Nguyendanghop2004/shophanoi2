@@ -122,44 +122,64 @@ class AccoutAdminController extends Controller
     }
     // Cấp roles
     public function insert_roles(Request $request, $id)
-    {
-        $data = $request->all();
-        $admin = Admin::find($id);
-    
-        // Lấy role của người đang thực hiện yêu cầu
-        $currentUser = auth()->user();
-        $currentUserRole = $currentUser->roles->first();
-    
-        // Kiểm tra nếu người đang thực hiện có vai trò 'admin' và người được cấp quyền cũng có vai trò 'admin'
-        if ($currentUserRole && $currentUserRole->name != 'admin' && $admin->hasRole('admin')) {
-            return redirect()->back()->with('error', 'Bạn không thể cấp vai trò này.');
-        }
-        
-        $admin->syncRoles($data['role']);
-        return redirect()->route('admin.permissions.index');
+{
+    $data = $request->all();
+    $admin = Admin::find($id);
+
+    // Lấy role của người đang thực hiện yêu cầu
+    $currentUser = auth()->user();
+    $currentUserRole = $currentUser->roles->first();
+
+    // Kiểm tra nếu người đang thực hiện có vai trò 'admin' và người được cấp quyền cũng có vai trò 'admin'
+    if ($currentUserRole && $currentUserRole->name != 'admin' && $admin->hasRole('admin')) {
+        return redirect()->back()->with('error', 'Bạn không thể cấp vai trò này.');
     }
+
+    // Kiểm tra nếu vai trò mới là 'admin' và có bất kỳ người dùng nào khác đã là 'admin'
+    if ($data['role'] === 'admin') {
+        $existingAdmin = Admin::role('admin')->where('id', '!=', $id)->first();
+        if ($existingAdmin) {
+            return redirect()->back()->with('error', 'Chỉ có một người dùng được phép có vai trò admin.');
+        }
+    }
+
+    $admin->syncRoles($data['role']);
+    return redirect()->back()->with('success', 'Cấp vai trò thành công');
+}
+
     // Cấp quyền
     public function insert_permission(Request $request, $id)
     {
         $data = $request->all();
         $admin = Admin::find($id);
+    
+        if (!$admin) {
+            return redirect()->back()->with('error', 'Người dùng không tồn tại.');
+        }
+    
         $role_id = $admin->roles->first()->id;
     
         $currentAdmin = auth()->guard('admin')->user(); // Sử dụng guard admin
         $currentAdminRole = $currentAdmin->roles->first();
     
         if ($currentAdminRole && $currentAdminRole->name == 'admin' && $admin->hasRole('admin')) {
-            // Bạn có thể thêm logic xử lý khác ở đây nếu cần thiết
+          
         }
     
         // Kiểm tra và thiết lập quyền
         $permissions = $data['permission'] ?? [];
     
-        // Đồng bộ quyền cho role
+        if (empty($permissions)) {
+            $role = Role::find($role_id);
+            $role->syncPermissions([]); 
+    
+            return redirect()->back()->with('cancel', 'Đã loại bỏ hết quyền của');
+        }
+    
         $role = Role::find($role_id);
         $role->syncPermissions($permissions);
     
-        return redirect()->route('admin.permissions.index')->with('success', 'Cập nhật quyền thành công.');
+        return redirect()->back()->with('success', 'Cấp quyền thành công');
     }
     
     // Thêm quyền
@@ -195,9 +215,16 @@ class AccoutAdminController extends Controller
     public function deactivate($id)
     {
         $admin = Admin::findOrFail($id);
+    
+        // Kiểm tra xem tài khoản có vai trò admin không
+        if ($admin->hasRole('admin')) {
+            return redirect()->back()->with('error', 'Không thể vô hiệu hóa tài khoản có quyền admin.');
+        }
+    
         $admin->status = false;
         $admin->save();
-
+    
         return redirect()->back()->with('success', 'Tài khoản đã bị vô hiệu hóa.');
     }
+    
 }

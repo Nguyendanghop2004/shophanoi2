@@ -1,6 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('content')
+
     <section class="section">
         <div class="section-header">
             <h1>Quyền và vai trò quản trị</h1>
