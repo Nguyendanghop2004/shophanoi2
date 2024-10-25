@@ -12,13 +12,16 @@ class LoginController extends Controller
      * Display a listing of the resource.
      */
     public function login()
-    {   
-        if(Auth::guard('admin')->check()){
+    {
+        if (Auth::guard('admin')->check()) {
             return redirect()->route('admin.dashboard');
         }
-        return view('admin.logins.login');
-       
+        return response()->view('admin.logins.login')
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
+    
     
     public function store(Request $request)
     {

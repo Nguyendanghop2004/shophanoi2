@@ -13,7 +13,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     // Login admin
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
-    Route::get('account', [AccoutAdminController::class, 'account'])->name('accounts.account');
+    Route::get('account', [AccoutAdminController::class, 'account'])->name('accounts.account')->middleware('permission:index_account_admin');
     Route::get('accounts/create', [AccoutAdminController::class, 'create'])->name('accounts.create');
     Route::post('accounts/store', [AccoutAdminController::class, 'store'])->name('accounts.store');
     Route::get('accounts/edit/{id}', [AccoutAdminController::class, 'edit'])->name('accounts.edit');
@@ -21,24 +21,22 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::delete('accounts/destroy/{id}', [AccoutAdminController::class, 'destroy'])->name('accounts.destroy');
 // Permission
 
-    Route::get('permissions/index', [AccoutAdminController::class, 'permissionAdmin'])->name('permissions.index');
+    Route::get('permissions/index', [AccoutAdminController::class, 'permissionAdmin'])->name('permissions.index')->middleware('permission:indexPermission');
     // Thêm quyền
     Route::get('permissions/phanquyen/{id}', [AccoutAdminController::class, 'phanquyen'])->name('permissions.phanquyen')->middleware('permission:ListPermission');
     Route::post('permissions/insertPermission', [AccoutAdminController::class, 'insertPermission'])->name('permissions.insert')->middleware('permission:insertPermission');
     // Cấp quyền
-    Route::post('permissions/insert_permission/{id}', [AccoutAdminController::class, 'insert_permission'])->name('permissions.grant_permission');
+    Route::post('permissions/insert_permission/{id}', [AccoutAdminController::class, 'insert_permission'])->name('permissions.insert_permission')->middleware('permission:grant_permission');
     // phân vai trò
     Route::get('permissions/phanvaitro/{id}', [AccoutAdminController::class, 'phanvaitro'])->name('permissions.phanvaitro')->middleware('permission:phanvaitro');
-    Route::post('permissions/insert_roles/{id}', [AccoutAdminController::class, 'insert_roles'])->name('permissions.insert_roles');
-
-    
+    Route::post('permissions/insert_roles/{id}', [AccoutAdminController::class, 'insert_roles'])->name('permissions.insert_roles')->middleware('permission:insert_roles');
     // Thêm vai trò
-    Route::post('permissions/insertRoles', [AccoutAdminController::class, 'insertRoles'])->name('permissions.insertRoles');
+    Route::post('permissions/insertRoles', [AccoutAdminController::class, 'insertRoles'])->name('permissions.insertRoles')->middleware('permission:Grant_roles');
     
     // Trạng thái tài khoản
    // routes/web.php
-   Route::post('accounts/{id}/activate', [AccoutAdminController::class, 'activate'])->name('accounts.activate');
-   Route::post('accounts/{id}/deactivate', [AccoutAdminController::class, 'deactivate'])->name('accounts.deactivate');
+   Route::post('accounts/{id}/activate', [AccoutAdminController::class, 'activate'])->name('accounts.activate')->middleware('permission:activate_Account');
+   Route::post('accounts/{id}/deactivate', [AccoutAdminController::class, 'deactivate'])->name('accounts.deactivate')->middleware('permission:deactivate_Account');
 
     // Quản lý thanh trượt
     Route::get('slider/category/{category_id}', [SliderController::class, 'index'])->name('slider.index');
