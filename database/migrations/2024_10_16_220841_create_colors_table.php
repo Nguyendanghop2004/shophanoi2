@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -10,9 +10,11 @@ class CreateColorsTable extends Migration
     {
         Schema::create('colors', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name')->unique(); // Tên màu sắc (Ví dụ: Đỏ, Xanh)
+            $table->string('sku_color')->unique();
             $table->timestamps();
         });
+
     }
 
     public function down()

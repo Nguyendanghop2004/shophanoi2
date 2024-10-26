@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -10,12 +10,14 @@ class CreatePricesalesTable extends Migration
     {
         Schema::create('pricesales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->decimal('sale_price', 10, 2);
-            $table->timestamp('start_date'); 
-            $table->timestamp('end_date')->nullable();
+            $table->foreignId('product_variant_id')->constrained('product_variants')->onDelete('cascade'); // Liên kết với biến thể sản phẩm
+            $table->decimal('sale_price', 10, 2); // Giá khuyến mãi cho biến thể
+            $table->timestamp('start_date'); // Ngày bắt đầu khuyến mãi
+            $table->timestamp('end_date')->nullable(); // Ngày kết thúc khuyến mãi
             $table->timestamps();
+            $table->softDeletes(); 
         });
+
     }
 
     public function down()

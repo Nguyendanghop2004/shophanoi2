@@ -13,14 +13,14 @@
             <div class="section-title mt-0">
                 Danh sách giá bán
             </div>
-            {{-- <div class="card-header-action">
+            <div class="card-header-action">
                 <form action="{{ route('prices.search') }}" method="GET" class="form-inline">
                     <div class="search-element">
                         <input class="form-control" name="search" type="text" placeholder="Tìm kiếm" aria-label="Search" data-width="250">
                         <button class="btn" type="submit"><i class="fas fa-search"></i></button>
                     </div>
                 </form>
-            </div> --}}
+            </div>
         </div>
 
         <div class="card-body p-0">

@@ -271,7 +271,7 @@
                 <ul class="dropdown-menu">
                     <li><a class="nav-link" href="{{ route('sizes.index') }}"><span>Quản lý Kích Thước</span></a></li>
                     <li><a class="nav-link" href="{{ route('colors.index') }}"><span>Quản lý Màu Sắc</span></a></li>
-                    <li><a class="nav-link" href="{{ route('prices.index') }}"><span>Quản lý Giá Bán</span></a></li>
+                    <li><a class="nav-link" href="{{ route('brands.index') }}"><span>Quản lý Thương Hiệu</span></a></li>
                 </ul>
             </li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bài Viết</span></a></li>
@@ -281,6 +281,7 @@
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Danh Mục Sản Phẩm</span></a></li>
             <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="far fa-square"></i> <span>Liên Hệ</span></a></li>
             <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="far fa-square"></i> <span>Nhân viên giao hàng</span></a></li>
+            <li><a class="nav-link" href="{{ route('variants.index') }}"><i class="far fa-square"></i> <span>Quản lí biến thể</span></a></li>
          
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i

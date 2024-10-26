@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PriceSale;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class PriceSaleController extends Controller
@@ -16,8 +17,8 @@ class PriceSaleController extends Controller
 
     public function create()
     {
-        // Đưa danh sách sản phẩm để chọn
-        return view('admin.prices.create');
+        $products = Product::all(); 
+        return view('admin.prices.create', compact('products'));
     }
 
     public function store(Request $request)

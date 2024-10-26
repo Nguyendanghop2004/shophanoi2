@@ -10,14 +10,14 @@
         @csrf
         <div class="card">
             <div class="card-body">
-                {{-- <div class="form-group">
+                <div class="form-group">
                     <label for="product_id">Sản phẩm</label>
                     <select class="form-control" id="product_id" name="product_id">
                         @foreach ($products as $product)
                             <option value="{{ $product->id }}">{{ $product->product_name }}</option>
                         @endforeach
                     </select>
-                </div> --}}
+                </div>
                 <div class="form-group">
                     <label for="sale_price">Giá bán</label>
                     <input type="text" class="form-control" id="sale_price" name="sale_price" required>
