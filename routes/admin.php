@@ -2,7 +2,12 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use App\Http\Controllers\Admin\PromotionController as AdminPromotionController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\PromotionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
@@ -25,3 +30,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::delete('categories/{id}', [CategoriesController::class, 'destroy'])->name('categories.delete');
     Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
 });
+Route::resource('news',AdminNewsController::class);
+Route::resource('vouchers',VoucherController::class);
+Route::resource('promotions',AdminPromotionController::class);

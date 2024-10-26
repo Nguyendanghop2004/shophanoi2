@@ -1,0 +1,109 @@
+@extends('admin.layouts.master')
+
+@section('content')
+    <section class="section">
+        <div class="section-header">
+            <h1>Voucher</h1>
+        </div>
+        <form id="postForm" action="{{route('vouchers.update',$voucher)}}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('put')
+            <div class="row">
+                <!-- Phần chính -->
+                <div class="col-lg-8 col-md-7 col-12">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Cập nhật Voucher</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="form-group col-12">
+                                    <label>Title</label>
+                                    <input type="text" name="title" class="form-control" value="{{$voucher->title}}">
+                                    @error('title')
+                                    <div class="" style="color: red";>{{ $message }}</div>
+                                @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea name="description" class="form-control summernote" cols="30" rows="5">{{$voucher->description}}</textarea>
+                                @error('description')
+                                <div class="" style="color: red";>{{ $message }}</div>
+                            @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label>Vouchers</label>
+                                <input type="number" name="vouchers" class="form-control" value="{{$voucher->vouchers}}">
+                                @error('vouchers')
+                                <div class="" style="color: red";>{{ $message }}</div>
+                            @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phần phụ -->
+                <div class="col-lg-4 col-md-5 col-12">
+                    <div class="card mb-4">
+                       
+
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input type="datetime-local" name="start_date" class="form-control" value="{{$voucher->start_date}}">
+                                @error('start_date')
+                                <div class="" style="color: red";>{{ $message }}</div>
+                            @enderror
+                            </div>
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input type="datetime-local" name="end_date" class="form-control" value="{{$voucher->end_date}}">
+                                @error('end_date')
+                                <div class="" style="color: red";>{{ $message }}</div>
+                            @enderror
+                            </div>
+                            <div class="form-group">
+                                <label>Product ID</label>
+                                <input type="number" name="products_id" class="form-control" value="{{$voucher->products_id}}">
+                                @error('products_id')
+                                <div class="" style="color: red";>{{ $message }}</div>
+                            @enderror
+                            </div>
+                            
+
+
+                            
+
+
+                            <button type="submit" class="btn btn-primary btn-block">Cập nhật Voucher</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let isFormEdited = false;
+            const form = document.getElementById('postForm');
+            form.addEventListener('input', function() {
+                isFormEdited = true;
+            });
+            window.addEventListener('beforeunload', function(e) {
+                if (isFormEdited) {
+                    const confirmationMessage =
+                        'Bạn có thay đổi chưa được lưu. Bạn có chắc chắn muốn rời khỏi trang?';
+                    e.returnValue = confirmationMessage;
+                    return confirmationMessage;
+                }
+            });
+            form.addEventListener('submit', function() {
+                isFormEdited = false;
+            });
+        });
+    </script>
+@endsection
