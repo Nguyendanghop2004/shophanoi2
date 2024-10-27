@@ -23,8 +23,15 @@ class Category extends Model
     {
         return $this->hasMany(Slider::class, 'category_id');
     }
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
     public function parent()
     {
         return $this->belongsTo(Categories::class, 'parent_id');
     }
+    
+
+   
 }

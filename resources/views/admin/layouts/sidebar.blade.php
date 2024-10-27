@@ -278,8 +278,8 @@
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-folder"></i> <span>Danh mục sản phẩm</span></a>
                 <ul class="dropdown-menu">
-                <li><a class="nav-link" href="{{route('categories.list')}}"><span>Danh Sách Danh Mục</span></a></li>
-                <li><a class="nav-link" href="{{route('categories.add')}}"><span>Thêm Mới Danh Mục</span></a></li>
+                <li><a class="nav-link" href="{{route('admin.categories.list')}}"><span>Danh Sách Danh Mục</span></a></li>
+                <li><a class="nav-link" href="{{route('admin.categories.add')}}"><span>Thêm Mới Danh Mục</span></a></li>
                 </ul>
             </li>
         </ul>
