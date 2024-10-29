@@ -6,39 +6,113 @@
         <h1>Danh Sách Kích Thước</h1>
     </div>
 
-    <a href="{{ route('sizes.create') }}" class="btn btn-primary mb-3">Thêm Kích Thước</a>
-
-    <div class="card">
+    <div class="card card-primary">
         <div class="card-header">
             <h4>Danh Sách Kích Thước</h4>
+            <div class="card-header-action">
+                <a href="{{ route('sizes.create') }}" class="btn btn-primary">Thêm Kích Thước</a>
+            </div>
         </div>
+
         <div class="card-body">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tên</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($sizes as $size)
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="section-title mt-0"></div>
+                <div class="card-header-action">
+                    <form class="form-inline" method="GET" action="{{ route('sizes.index') }}">
+                        <div class="search-element">
+                            <input class="form-control" type="search" placeholder="Tìm kiếm..." aria-label="Search" name="search" value="{{ request()->search }}" data-width="250">
+                            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
                         <tr>
-                            <td>{{ $size->id }}</td>
-                            <td>{{ $size->name }}</td>
-                            <td>
-                                <a href="{{ route('sizes.edit', $size->id) }}" class="btn btn-warning">Sửa</a>
-                                <form action="{{ route('sizes.destroy', $size->id) }}" method="POST" style="display:inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Xóa</button>
-                                </form>
-                            </td>
+                            <th scope="col">#</th>
+                            <th scope="col">Tên Kích Thước</th>
+                            <th scope="col">Hành Động</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        @if($sizes->isEmpty())
+                            <tr>
+                                <td colspan="3" class="text-center text-danger">Không có kích thước nào.</td>
+                            </tr>
+                        @else
+                            @foreach ($sizes as $index => $size)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $size->name }}</td>
+                                    <td>
+                                        <div class="d-flex justify-content-start">
+                                            <a href="{{ route('sizes.edit', $size->id) }}" class="btn btn-warning ml-2"><i class="fas fa-edit"></i></a>
+                                            <form action="{{ route('sizes.destroy', $size->id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger ml-2"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body mx-auto">
+        <div class="buttons">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item {{ $sizes->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $sizes->previousPageUrl() }}" aria-label="Previous">
+                            <span aria-hidden="true">«</span>
+                        </a>
+                    </li>
+
+                    @foreach ($sizes->getUrlRange(1, $sizes->lastPage()) as $page => $url)
+                        <li class="page-item {{ $page == $sizes->currentPage() ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                        </li>
                     @endforeach
-                </tbody>
-            </table>
+
+                    <li class="page-item {{ $sizes->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $sizes->nextPageUrl() }}" aria-label="Next">
+                            <span aria-hidden="true">»</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+<script>
+    $(document).ready(function () {
+        toastr.options = {
+            "closeButton": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+        };
+
+        @if(session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
+
+        @if(session('error'))
+            toastr.error("{{ session('error') }}");
+        @endif
+    });
+</script>
 @endsection

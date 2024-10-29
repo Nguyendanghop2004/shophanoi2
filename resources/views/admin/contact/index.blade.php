@@ -1,56 +1,10 @@
 @extends('admin.layouts.master')
 
 @section('content')
-
-    <div class="container">
-        <h1 class="mt-5">Liên Hệ</h1>
-    
-
-        <form action="{{ route('contact.store') }}" method="POST" class="p-4 border rounded shadow-sm">
-            @csrf
-            <div class="mb-3">
-                <label for="name" class="form-label">Tên:</label>
-                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}">
-                @error('name')
-                    <div class="text-danger">Bạn cần nhập tên</div>
-                @enderror
-            </div>
-        
-            <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}">
-                @error('email')
-                    <div class="text-danger">
-                        Bạn cần nhập email
-                    </div>
-                @enderror
-            </div>
-        
-            <div class="mb-3">
-                <label for="phone" class="form-label">Số điện thoại (tùy chọn):</label>
-                <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone') }}">
-                @error('phone')
-                    <div class="text-danger">
-                        Bạn cần nhập số điện thoại
-                    </div>
-                @enderror
-            </div>
-        
-            <div class="mb-3">
-                <label for="message" class="form-label">Nội dung :</label>
-                <textarea class="form-control @error('message') is-invalid @enderror" id="message" name="message" rows="4">{{ old('message') }}</textarea>
-                @error('message')
-                    <div class="text-danger">
-                        Bạn cần nhập nội dung
-                    </div>
-                @enderror
-            </div>
-        
-            <button type="submit" class="btn btn-primary">Gửi liên hệ</button>
-        </form>                        
+<section class="section">
+    <div class="section-header">
+        <h1>Liên Hệ</h1>
     </div>
-
-    <hr>
 
     <div class="card card-primary">
         <div class="card-header">
@@ -128,8 +82,9 @@
             </div>
         </div>
     </div>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
@@ -151,7 +106,5 @@
             toastr.error("{{ session('error') }}");
         @endif
     });
-
-   
 </script>
 @endsection

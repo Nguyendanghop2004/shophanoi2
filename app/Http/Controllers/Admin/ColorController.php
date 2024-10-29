@@ -8,10 +8,15 @@ use Illuminate\Http\Request;
 
 class ColorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $colors = Color::all();
-        return view('admin.colors.index', compact('colors'));
+        $search = $request->input('search');
+
+        $colors = Color::when($search, function ($query, $search) {
+            return $query->where('name', 'like', '%' . $search . '%');
+        })->paginate(10);
+
+        return view('admin.colors.index', compact('colors', 'search'));
     }
 
     public function create()

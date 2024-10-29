@@ -3,17 +3,17 @@
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>Sửa Thương Hiệu</h1>
+        <h1>Sửa Kích Thước</h1>
     </div>
 
     <div class="card card-primary">
         <div class="card-body">
-            <form action="{{ route('brands.update', $brand->id) }}" method="POST">
+            <form action="{{ route('sizes.update', $size->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
-                    <label for="name">Tên Thương Hiệu</label>
-                    <input type="text" class="form-control" name="name" id="name" value="{{ $brand->name }}" required>
+                    <label for="name">Tên Kích Thước</label>
+                    <input type="text" class="form-control" name="name" id="name" value="{{ $size->name }}" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Cập Nhật</button>
             </form>

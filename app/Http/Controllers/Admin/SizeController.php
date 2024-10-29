@@ -8,10 +8,15 @@ use Illuminate\Http\Request;
 
 class SizeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $sizes = Size::all();
-        return view('admin.sizes.index', compact('sizes'));
+        $search = $request->input('search');
+
+        $sizes = Size::when($search, function ($query, $search) {
+            return $query->where('name', 'like', '%' . $search . '%');
+        })->paginate(10);
+
+        return view('admin.sizes.index', compact('sizes', 'search'));
     }
 
     public function create()
