@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use Storage;
 use Str;
 
+
 class CategoriesController extends Controller
 {
     
