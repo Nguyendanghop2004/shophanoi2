@@ -11,13 +11,18 @@ class Category extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-      'name',
-       'slug',
-       'description',
-       'image_path',
-       'parent_id',
+        'name',
+        'slug',
+        'description',
+        'image_path',
+        'parent_id',
     ];
     protected $dates = ['deleted_at'];
+
+    public function products()
+{
+    return $this->belongsToMany(Product::class, 'category_product');
+}
 
     public function sliders()
     {
@@ -25,6 +30,12 @@ class Category extends Model
     }
     public function parent()
     {
-        return $this->belongsTo(Categories::class, 'parent_id');
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    // Quan hệ với các danh mục con
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
     }
 }

@@ -28,7 +28,7 @@
                             @error('image_path')
                                 <div class="invalid-feedback" style="display: block;">
                                     {{ $message }}
-                                </div>
+                                </div> 
                             @enderror
 
                         </div>
