@@ -58,11 +58,4 @@ Route::get('/shippers/search', [ShipperController::class, 'search'])->name('ship
 
 Route::resource('shippers', ShipperController::class);
 
-require __DIR__ . '/auth.php';
-Route::get('categories', [CategoriesController::class, 'list'])->name('categories.list');
-Route::get('categories/create', [CategoriesController::class, 'create'])->name('categories.add');
-Route::post('categories/store', [CategoriesController::class, 'store'])->name('categories.store');
-Route::get('categories/edit/{id}', [CategoriesController::class, 'edit'])->name('categories.edit');
-Route::put('categories/update/{id}', [CategoriesController::class, 'update'])->name('categories.update');
-Route::delete('categories/{id}', [CategoriesController::class, 'destroy'])->name('categories.delete');
-Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
+
