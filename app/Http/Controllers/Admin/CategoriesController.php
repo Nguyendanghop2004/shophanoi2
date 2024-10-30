@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use Storage;
 use Str;
 
+
 class CategoriesController extends Controller
 {
     
@@ -90,7 +91,7 @@ class CategoriesController extends Controller
             'image_path' => $imagePath,
             'parent_id' => $request->parent_id,
         ]);
-        return redirect()->route('categories.list')->with('success', 'Thêm mới thành công!');
+        return redirect()->route('admin.categories.list')->with('success', 'Thêm mới thành công!');
     }
 
 
@@ -103,7 +104,7 @@ class CategoriesController extends Controller
         $category->save();
         $this->updateChildCategoriesStatus($category, $newStatus);
         $message = $newStatus ? 'Danh mục và các danh mục con đã được kích hoạt.' : 'Danh mục và các danh mục con đã bị ẩn.';
-        return redirect()->route('categories.list')->with('success', $message);
+        return redirect()->route('admin.categories.list')->with('success', $message);
     }
 
     private function updateChildCategoriesStatus($category, $newStatus)
@@ -172,7 +173,7 @@ class CategoriesController extends Controller
         $category->status = $request->status; 
         $category->save();
     
-        return redirect()->route('categories.list')->with('success', 'Cập nhật danh mục thành công!');
+        return redirect()->route('admin.categories.list')->with('success', 'Cập nhật danh mục thành công!');
     }
     public function destroy($id)
     {
@@ -180,10 +181,10 @@ class CategoriesController extends Controller
         
         if ($category) {
             $category->delete(); 
-            return redirect()->route('categories.list')->with('success', 'Danh mục đã được xóa.');
+            return redirect()->route('admin.categories.list')->with('success', 'Danh mục đã được xóa.');
         }
 
-        return redirect()->route('categories.list')->with('error', 'Danh mục không tồn tại.');
+        return redirect()->route('admin.categories.list')->with('error', 'Danh mục không tồn tại.');
     }
 
 

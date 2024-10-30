@@ -1,4 +1,8 @@
 @extends('client.layouts.master')
+@section('header-home')
+    @include('client.layouts.particals.header-home')
+@endsection
+
 @section('topbar')
     <!-- top-bar -->
     <div class="tf-top-bar bg_white line">

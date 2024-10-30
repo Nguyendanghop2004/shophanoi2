@@ -17,7 +17,7 @@ class HomeController extends Controller
             ->where('is_active', true)
             ->orderBy('position', 'asc')
             ->get();
-            $categories = Category::with(['children' => function ($query) {
+            $categories = Category::with(relations: ['children' => function ($query) {
                 $query->where('status', 1); 
             }])->where('status', 1) 
             ->whereNull('parent_id')->get();
@@ -26,17 +26,15 @@ class HomeController extends Controller
     public function show($slug)
     {
         
-        $slug = Category::where('slug', $slug)->first();
-
-   
-        if (!$slug) {
-            return redirect()->route('home')->with('error', 'Bài viết không tồn tại.');
+        $category = Category::where('slug', $slug)->where('status',1 )->first();
+        if (!$category) {
+            return redirect()->route('home')->with('error', 'Danh mục không tồn tại hoặc đã bị ẩn.');
         }
 
       
         return view('client.home', compact('slug'));
     }
-    
+   
 
    
 }

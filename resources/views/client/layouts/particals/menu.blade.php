@@ -17,7 +17,7 @@
                                 <ul class="menu-list">
                                     @foreach($category->children as $child)
                                         <li>
-                                        <a href="{{ route('home.slug', ['slug' => $child->slug]) }}" class="menu-link-text link">{{ $child->name }}</a>
+                                        <a href="{{ route('shop-collection', ['slug' => $child->slug]) }}" class="menu-link-text link">{{ $child->name }}</a>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -77,7 +77,7 @@
           
         </li>
         <li class="menu-item position-relative">
-            <a href="#" class="item-link">Giới Thiệu</a>
+            <a href="" class="item-link">Giới Thiệu</a>
            
         </li>
         <li class="menu-item"><a
