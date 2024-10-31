@@ -284,13 +284,11 @@
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bình Luận</span></a></li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Sản Phẩm</span></a></li>
 
-<<<<<<< HEAD
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Danh Mục Sản Phẩm</span></a></li>
             <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="far fa-square"></i> <span>Liên Hệ</span></a></li>
             <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="far fa-square"></i> <span>Nhân viên giao hàng</span></a></li>
             <li><a class="nav-link" href="{{ route('variants.index') }}"><i class="far fa-square"></i> <span>Quản lí biến thể</span></a></li>
          
-=======
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Danh Mục Sản
                         Phẩm</span></a></li>
             <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="far fa-square"></i> <span>Liên
@@ -298,7 +296,6 @@
             <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="far fa-square"></i> <span>Nhân
                         viên giao hàng</span></a></li>
 
->>>>>>> f3b433307bbd4e93684c1b100ce558cafcfe6085
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
                     <span>Danh mục sản phẩm</span></a>

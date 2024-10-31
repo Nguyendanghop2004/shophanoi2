@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\SliderController;
 use Illuminate\Support\Facades\Route;
 

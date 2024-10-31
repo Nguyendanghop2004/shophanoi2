@@ -62,7 +62,6 @@ Route::get('/shippers/search', [ShipperController::class, 'search'])->name('ship
 
 Route::resource('shippers', ShipperController::class);
 
-require __DIR__ . '/auth.php';
 Route::get('categories', [CategoriesController::class, 'list'])->name('categories.list');
 Route::get('categories/create', [CategoriesController::class, 'create'])->name('categories.add');
 Route::post('categories/store', [CategoriesController::class, 'store'])->name('categories.store');
@@ -86,3 +85,5 @@ Route::get('/search', [ProductVariantController::class, 'search'])->name('search
 
 
 Route::resource('brands', BrandController::class);
+
+Route::get('/variants/search', [ProductVariantController::class, 'search'])->name('variants.search');
