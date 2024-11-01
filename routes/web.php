@@ -34,8 +34,8 @@ Route::get('home/{category_id?}', [HomeController::class, 'home'])->name('home')
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
-Route::get('{slug}/shop-collection', [ShopCollectionController::class, 'index'])->name('shop-collection');
-Route::get('product-detail', [ProductDetailController::class, 'index'])->name('product-detail');
+Route::get('/shop-collection/{id}', [ShopCollectionController::class, 'index'])->name('shop-collection');
+Route::get('product-detail/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
 Route::get('brand', [BrandController::class, 'index'])->name('brand');
 Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
 Route::get('faq', [FAQController::class, 'index'])->name('faq');
@@ -58,7 +58,6 @@ Route::resource('contact', ContactMessageController::class);
 Route::get('/shippers/search', [ShipperController::class, 'search'])->name('shippers.search');
 
 Route::resource('shippers', ShipperController::class);
-
 
 
 

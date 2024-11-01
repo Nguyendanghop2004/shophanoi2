@@ -17,7 +17,8 @@
                                 <ul class="menu-list">
                                     @foreach($category->children as $child)
                                         <li>
-                                        <a href="{{ route('shop-collection', ['slug' => $child->slug]) }}" class="menu-link-text link">{{ $child->name }}</a>
+                                        <a href="{{ route('shop-collection', $child->id) }}" class="menu-link-text link">{{ $child->name }}</a>
+                                       
                                         </li>
                                     @endforeach
                                 </ul>
@@ -39,30 +40,8 @@
                             <div class="mega-menu-item">
                                 <div class="menu-heading">Product layouts</div>
                                 <ul class="menu-list">
-                                    <li><a href="product-detail.html"
-                                            class="menu-link-text link">Product default</a></li>
-                                    <li><a href="product-grid-1.html"
-                                            class="menu-link-text link">Product grid 1</a></li>
-                                    <li><a href="product-grid-2.html"
-                                            class="menu-link-text link">Product grid 2</a></li>
-                                    <li><a href="product-stacked.html"
-                                            class="menu-link-text link">Product stacked</a></li>
-                                    <li><a href="product-right-thumbnails.html"
-                                            class="menu-link-text link">Product right
-                                            thumbnails</a></li>
-                                    <li><a href="product-bottom-thumbnails.html"
-                                            class="menu-link-text link">Product bottom
-                                            thumbnails</a></li>
-                                    <li><a href="product-drawer-sidebar.html"
-                                            class="menu-link-text link">Product drawer
-                                            sidebar</a></li>
-                                    <li><a href="product-description-accordion.html"
-                                            class="menu-link-text link">Product description
-                                            accordion</a></li>
-                                    <li><a href="product-description-list.html"
-                                            class="menu-link-text link">Product description
-                                            list</a></li>
-                                    <li><a href="product-description-vertical.html"
+                                   
+                                    <li><a href=""
                                             class="menu-link-text link">Product description
                                             vertical</a></li>
                                 </ul>
