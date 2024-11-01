@@ -11,7 +11,8 @@
                 <h4>Cập nhật quản trị viên</h4>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.accounts.update', $admin->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.accountsUser.update', $user->id) }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="row">
@@ -19,12 +20,12 @@
                             <div class="form-group">
                                 <label for="name">Tên</label>
                                 <input type="text" name="name" class="form-control"
-                                    value="{{ old('name', $admin->name) }}">
+                                    value="{{ old('name', $user->name) }}">
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>
                                 <input type="email" name="email" class="form-control"
-                                    value="{{ old('email', $admin->email) }}">
+                                    value="{{ old('email', $user->email) }}">
                             </div>
                             <div class="form-group">
                                 <label for="password">Mật khẩu</label>
@@ -36,31 +37,41 @@
                                 <input type="password" name="password_confirmation" class="form-control"
                                     placeholder="Để trống nếu không muốn thay đổi">
                             </div>
+
+                            <div class="form-group">
+                                <label for="address">Đỉa chỉ</label>
+                                <input type="text" name="address" class="form-control"
+                                    value="{{ old('address', $user->address) }}"  placeholder="Nhập đỉa chỉ củ thể">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone_number">Tên</label>
+                                <input type="text" name="phone_number" class="form-control"
+                                    value="{{ old('phone_number', $user->phone_number) }}" placeholder="Nhập vào số điện thoại">
+                            </div>
+
                         </div>
                         <div class="col-lg-6 col-md-6 col-12">
                             <div id="image-preview" class="image-preview mx-auto "
-                                @error('image_path') style="border:2px dashed red"  @enderror>
+                                @error('image') style="border:2px dashed red"  @enderror>
                                 <label for="image-upload" id="image-label">Chọn ảnh</label>
-                                <input type="file" name="image_path" id="image-upload" />
-                                <img src="{{ Storage::url($admin['image_path']) }}" width="250px" height="250px"
-                                    alt="">
+                                <input type="file" name="image" id="image-upload" />
+                                <img src="{{ Storage::url($user['image']) }}" width="250px" height="250px" alt="">
 
                             </div>
-                            @error('image_path')
+                            @error('image')
                                 <div class="invalid-feedback " style="display: block;">
                                     {{ $message }}
                                 </div>
                             @enderror
 
                         </div>
-                        
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Cập nhật</button>
                         </div>
                     </div>
+                    {{-- </div> --}}
+                </form>
             </div>
-            </form>
-        </div>
     </section>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -83,8 +94,5 @@
                 });
             @endif
         });
-
-
-       
     </script>
 @endsection
