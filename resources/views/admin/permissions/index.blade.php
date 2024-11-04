@@ -51,7 +51,7 @@
                                         </td> --}}
                                         <td>
                                             <a href="{{ url('admin/permissions/phanvaitro/'. $admin->id) }}" class="btn btn-success btn-sm mb-1">Vai trò</a>
-                                            <a href="{{ url('admin/permissions/phanquyen/'. $admin->id) }}" class="btn btn-info btn-sm mb-1">Quyền</a>
+                                           <a href="{{ url('admin/permissions/phanquyen/'. $admin->id) }}" class="btn btn-info btn-sm mb-1">Quyền</a>
                                         </td>      
                                 </tr>
                             @endforeach
@@ -62,4 +62,26 @@
             </div>
         </div>
     </section>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+        });
+    </script>
 @endsection

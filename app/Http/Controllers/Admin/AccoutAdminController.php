@@ -68,20 +68,18 @@ class AccoutAdminController extends Controller
      */
     public function store(AdminStoreRequest $request)
     {
-        
-        $request->except('image_path');
-        $data =
-            [
-                'name' => $request->name,
-                "email" => $request->email,
-                "password" => Hash::make($request->password),
-            ];
+        $data = $request->except('image_path');
+        $data['password'] = Hash::make($request->password);
+
         if ($request->hasFile('image_path')) {
-            $data['image_path']  =  Storage::put('public/images/admin', $request->file('image_path'));
+            $data['image_path'] = Storage::put('public/images/admin', $request->file('image_path'));
         }
+
         Admin::create($data);
+
         return redirect()->route('admin.accounts.account')->with('success', 'Thêm mới thành công');
     }
+
 
     /**
      * Display the specified resource.
@@ -136,13 +134,22 @@ class AccoutAdminController extends Controller
      */
     public function destroy(string $id)
     {
-        $dataUser = Admin::query()->findOrFail($id);
+        $dataUser = Admin::findOrFail($id);
+
+        if ($dataUser->hasRole('admin')) {
+            return back()->with('error', 'Tài khoản có vai trò admin không thể bị xóa.');
+        }
         $dataUser->delete();
-        if (Storage::exists($dataUser->image_path) && $dataUser->image_path) {
+
+        // Kiểm tra và xóa ảnh nếu có
+        if ($dataUser->image_path && Storage::exists($dataUser->image_path)) {
             Storage::delete($dataUser->image_path);
         }
-        return back()->with('error', 'Xóa thành công');
+
+        return back()->with('success', 'Xóa thành công');
     }
+
+
     public function phanvaitro($id)
     {
         $admin = Admin::find($id);
@@ -153,16 +160,19 @@ class AccoutAdminController extends Controller
     }
     public function phanquyen($id)
     {
-
         $admin = Admin::find($id);
+
+        if (!$admin->roles->first()) {
+            return redirect()->back()->with('error', 'Tài khoản này chưa được gán vai trò nào.');
+        }
+
         $permission = Permission::orderBy('id', 'DESC')->get();
-
         $name_roles = $admin->roles->first()->name;
-
         $get_permission_viaroles = $admin->getPermissionsViaRoles();
-        // dd(  $get_permission_viaroles);
+
         return view('admin.permissions.phanquyen', compact('admin', 'name_roles', 'permission', 'get_permission_viaroles'));
     }
+
     // Cấp roles
     public function insert_roles(Request $request, $id)
     {
@@ -269,7 +279,8 @@ class AccoutAdminController extends Controller
         return redirect()->back()->with('success', 'Tài khoản đã bị vô hiệu hóa.');
     }
 
-    public function profile() {
+    public function profile()
+    {
 
         return view('admin.accounts.index');
     }
