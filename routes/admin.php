@@ -61,6 +61,5 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::resource('product', ProductController::class);
     Route::get('/get-variant-card/{color}', [ProductController::class, 'getVariantCard']);
     Route::get('/product/get-variant-card/{colorId}', [ProductController::class, 'getVariantCard']);
-
-
+    
 });
