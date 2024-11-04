@@ -3,15 +3,15 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Thêm mới Admin</h1>
+            <h1>Thêm mới User</h1>
         </div>
 
         <div class="card card-primary">
             <div class="card-header">
-                <h4>Thêm mới Admin</h4>
+                <h4>Thêm mới User</h4>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.accounts.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.accountsUser.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-12">
@@ -57,7 +57,7 @@
                                 <div class="">
                                     <label for="password_confirmation">Xác nhận mật khẩu</label>
                                     <input @error('password') style="border:2px dashed red"  @enderror type="password"
-                                        name="password" class="form-control">
+                                        name="password_confirmation" class="form-control">
                                 </div>
                                 @error('password')
                                     <div class="invalid-feedback" style="display: block;">
@@ -68,11 +68,11 @@
                         </div>
                         <div class="col-lg-6 col-md-6 col-12">
                             <div id="image-preview" class="image-preview mx-auto "
-                                @error('image_path') style="border:2px dashed red"  @enderror>
+                                @error('image') style="border:2px dashed red"  @enderror>
                                 <label for="image-upload" id="image-label">Chọn ảnh</label>
-                                <input type="file" name="image_path" id="image-upload" />
+                                <input type="file" name="image" id="image-upload" />
                             </div>
-                            @error('image_path')
+                            @error('image')
                                 <div class="invalid-feedback " style="display: block;">
                                     {{ $message }}
                                 </div>
