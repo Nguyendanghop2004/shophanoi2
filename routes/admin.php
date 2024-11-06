@@ -37,9 +37,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::post('accountsUser/{id}/deactivateUser', [AccoutUserController::class, 'deactivateUser'])->name('accountsUser.deactivateUser')->middleware('permission:deactivate_Account');
     //end  status user
     Route::get('accounts/profile', [ProfileController::class, 'index'])->name('profile.index');
-
     // Permission
-
     Route::get('permissions/index', [AccoutAdminController::class, 'permissionAdmin'])->name('permissions.index')->middleware('permission:indexPermission');
     // Thêm quyền
     Route::get('permissions/phanquyen/{id}', [AccoutAdminController::class, 'phanquyen'])->name('permissions.phanquyen')->middleware('permission:ListPermission');
@@ -51,7 +49,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::post('permissions/insert_roles/{id}', [AccoutAdminController::class, 'insert_roles'])->name('permissions.insert_roles')->middleware('permission:insert_roles');
     // Thêm vai trò
     Route::post('permissions/insertRoles', [AccoutAdminController::class, 'insertRoles'])->name('permissions.insertRoles')->middleware('permission:Grant_roles');
-
+    
     // Trạng thái tài khoản
     // routes/web.php
     Route::post('accounts/{id}/activate', [AccoutAdminController::class, 'activate'])->name('accounts.activate')->middleware('permission:activate_Account');
