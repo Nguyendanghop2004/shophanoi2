@@ -30,13 +30,18 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::get('accountsUser/edit/{id}', [AccoutUserController::class, 'edit'])->name('accountsUser.edit');
     Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update');
     Route::delete('accountsUser/destroy/{id}', [AccoutUserController::class, 'destroy'])->name('accountsUser.destroy');
+    Route::get('accountsUser/change/{id}', [AccoutUserController::class, 'change'])->name('accountsUser.change');
+    Route::post('accountsUser/change/{id}', [AccoutUserController::class, 'changeUser'])->name('accountsUser.changeUser');
+    Route::get('accountsUser/show/{id}', [AccoutUserController::class, 'show'])->name('accountsUser.show');
     // end crud user 
 
     //start status user
     Route::post('accountsUser/{id}/accountUser', [AccoutUserController::class, 'activateUser'])->name('accountsUser.activateUser')->middleware('permission:activate_Account');
     Route::post('accountsUser/{id}/deactivateUser', [AccoutUserController::class, 'deactivateUser'])->name('accountsUser.deactivateUser')->middleware('permission:deactivate_Account');
     //end  status user
-    Route::get('accounts/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('accounts/profile/{id}', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('accounts/changePassword/{id}', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
+    Route::post('accounts/change/{id}', [ProfileController::class, 'change'])->name('profile.change');
 
     // Permission
 

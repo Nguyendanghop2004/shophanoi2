@@ -281,7 +281,6 @@ class AccoutAdminController extends Controller
 
     public function profile()
     {
-
         return view('admin.accounts.index');
     }
 }

@@ -28,48 +28,44 @@
                                     value="{{ old('email', $user->email) }}">
                             </div>
                             <div class="form-group">
-                                <label for="password">Mật khẩu</label>
-                                <input type="password" name="password" class="form-control"
-                                    placeholder="Để trống nếu không muốn thay đổi">
-                            </div>
-                            <div class="form-group">
-                                <label for="password_confirmation">Xác nhận mật khẩu</label>
-                                <input type="password" name="password_confirmation" class="form-control"
-                                    placeholder="Để trống nếu không muốn thay đổi">
-                            </div>
-
-                            <div class="form-group">
                                 <label for="address">Đỉa chỉ</label>
                                 <input type="text" name="address" class="form-control"
-                                    value="{{ old('address', $user->address) }}"  placeholder="Nhập đỉa chỉ củ thể">
+                                    value="{{ old('address', $user->address) }}" placeholder="Nhập đỉa chỉ củ thể">
                             </div>
                             <div class="form-group">
                                 <label for="phone_number">Tên</label>
                                 <input type="text" name="phone_number" class="form-control"
-                                    value="{{ old('phone_number', $user->phone_number) }}" placeholder="Nhập vào số điện thoại">
+                                    value="{{ old('phone_number', $user->phone_number) }}"
+                                    placeholder="Nhập vào số điện thoại">
                             </div>
 
                         </div>
                         <div class="col-lg-6 col-md-6 col-12">
-                            <div id="image-preview" class="image-preview mx-auto "
-                                @error('image') style="border:2px dashed red"  @enderror>
-                                <label for="image-upload" id="image-label">Chọn ảnh</label>
-                                <input type="file" name="image" id="image-upload" />
-                                <img src="{{ Storage::url($user['image']) }}" width="250px" height="250px" alt="">
-
+                            <div id="image-preview" class="image-preview mx-auto"
+                                @error('image') style="border:2px dashed red" @enderror>
+                                <img id="image-preview-img" src="{{ Storage::url($user->image) }}" width="250px"
+                                    height="250px" alt="">
+                            </div>
+                            <div class="form-group text-center mt-2">
+                                <label for="image-upload" class="btn btn-secondary">Chọn ảnh</label>
+                                <input type="file" name="image" id="image-upload" style="display: none;" />
                             </div>
                             @error('image')
-                                <div class="invalid-feedback " style="display: block;">
+                                <div class="invalid-feedback" style="display: block;">
                                     {{ $message }}
                                 </div>
                             @enderror
-
                         </div>
+
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Cập nhật</button>
                         </div>
+
+                        <div class="form-group ml-5">
+                            <a class="btn btn-primary" href="{{ route('admin.accountsUser.change', $user->id) }}"> Đổi mật khẩu</a>
+                        </div>
                     </div>
-                    {{-- </div> --}}
+
                 </form>
             </div>
     </section>
@@ -93,6 +89,24 @@
                     timer: 2000
                 });
             @endif
+
+            // Thêm sự kiện thay đổi cho input file
+            const imageUpload = document.getElementById('image-upload');
+            const imagePreviewImg = document.getElementById('image-preview-img');
+
+            imageUpload.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreviewImg.setAttribute('src', e.target.result);
+                        imagePreviewImg.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreviewImg.style.display = 'none';
+                }
+            });
         });
     </script>
 @endsection

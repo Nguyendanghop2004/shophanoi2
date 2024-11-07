@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ChangeUserRequest;
+use App\Http\Requests\Admin\StoreUserRequest;
 use App\Models\User;
+use Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -48,7 +51,7 @@ class AccoutUserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
 
         $request->except('image');
@@ -70,7 +73,9 @@ class AccoutUserController extends Controller
      */
     public function show(string $id)
     {
-       
+        $user = User::findOrFail($id);
+
+        return view('admin.accountsUser.show', compact('user'));
     }
 
     /**
@@ -87,7 +92,7 @@ class AccoutUserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-     
+
         $dataUser = User::query()->findOrFail($id);
         $data = $request->except('image');
         $data = [
@@ -125,5 +130,22 @@ class AccoutUserController extends Controller
             Storage::delete($dataUser->image);
         }
         return back()->with('error', 'Xóa thành công');
+    }
+    public function change(string $id)
+    {
+        $dataUser = User::query()->findOrFail($id);
+
+        return view('admin.accountsUser.change', compact('dataUser'));
+    }
+    public function changeUser(ChangeUserRequest $request)
+    {
+        try {
+            Auth::user()->update([
+                'password' => Hash::make($request->password),
+            ]);
+            return back()->with('success', 'Đổi mới thành công');
+        } catch (\Throwable $th) {
+            dd(404);
+        }
     }
 }

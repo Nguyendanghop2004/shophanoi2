@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="section-body">
-            <h2 class="section-title">{{ $dataAdmin->name }}</h2>
+            <h2 class="section-title">{{ $user->name }}</h2>
             <p class="section-lead">
                 Change information about yourself on this page.
             </p>
@@ -19,21 +19,21 @@
                 <div class="col-12 col-md-12 col-lg-5">
                     <div class="card profile-widget">
                         <div class="profile-widget-header">
-                            <img alt="image" src="{{ Storage::url($dataAdmin->image_path) }}"
+                            <img alt="image" src="{{ Storage::url($user->image) }}"
                                 class="rounded-circle profile-widget-picture">
                             <div class="profile-widget-items">
 
                             </div>
                         </div>
                         <div class="profile-widget-description">
-                            <div class="profile-widget-name">{{ $dataAdmin->name }} <div
+                            <div class="profile-widget-name">{{ $user->name }} <div
                                     class="text-muted d-inline font-weight-normal">
                                     <div class="slash"></div>Vai trò
                                 </div>
                             </div>
-                            @foreach ($dataAdmin->roles as $role)
+                            {{-- @foreach ($user->roles as $role)
                                 {{ $role->name }}
-                            @endforeach
+                            @endforeach --}}
                         </div>
                         <div class="card-footer text-center">
                             <div class="font-weight-bold mb-2">Follow Ujang On</div>
@@ -62,23 +62,39 @@
                                 <div class="row">
                                     <div class="form-group col-md-6 col-12">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" value="{{ $dataAdmin->name }}"
-                                            required="">
+                                        <input type="text" class="form-control" value="{{ $user->name }}"
+                                            required="" disabled>
                                         <div class="invalid-feedback">
                                             Please fill in the first name
                                         </div>
                                     </div>
                                     <div class="form-group col-md-6 col-12">
                                         <label>Email</label>
-                                        <input type="email" class="form-control" value="{{ $dataAdmin->email }}"
-                                            required="">
-                                        <div class="invalid-feedback">
+                                        <input type="email" class="form-control" value="{{ $user->email }}"
+                                            required=""  disabled>
+                                        <div class="invalid-feedback" >
                                             Please fill in the email
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6 col-12">
+                                        <label>Address</label>
+                                        <input type="address" class="form-control" value="{{ $user->address }}"
+                                            required=""  disabled>
+                                        <div class="invalid-feedback" >
+                                            Please fill in the address
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6 col-12">
+                                        <label>Phone_</label>
+                                        <input type="address" class="form-control" value="{{ $user->phone_number }}"
+                                            required=""  disabled>
+                                        <div class="invalid-feedback" >
+                                            Please fill in the address
                                         </div>
                                     </div>
                                 </div>
                                 <td>
-                                    @if ($dataAdmin->status)
+                                    @if ($user->status)
                                         <span class="badge badge-success">Hoạt động</span>
                                     @else
                                         <span class="badge badge-danger">Không hoạt động</span>
@@ -88,7 +104,7 @@
                             </div>
                             <div class="card-footer text-right">
                                 <a class="btn btn-primary"
-                                    href="{{ route('admin.profile.changePassword', $dataAdmin->id) }}"> Đổi mật khẩu</a>
+                                    href="{{ route('admin.accountsUser.change', $user->id) }}"> Đổi mật khẩu</a>
                             </div>
                         </form>
                     </div>
