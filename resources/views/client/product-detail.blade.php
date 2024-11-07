@@ -33,6 +33,7 @@
         <div class="tf-main-product section-image-zoom">
             <div class="container">
                 <div class="row">
+               
                 <div class="col-md-6">
     <div class="tf-product-media-wrap sticky-top">
         <div class="thumbs-slider">
@@ -41,8 +42,10 @@
                     @foreach ($product->images as $image)
                         <div class="swiper-slide">
                             <div class="item">
-                                <img class="lazyload" data-src="{{Storage::Url($image->image_url)}}"
-                                     src="{{Storage::Url($image->image_url)}}" alt="">
+                                <img class="lazyload" data-src="{{ Storage::url($image->image_url) }}"
+                                     src="{{ Storage::url($image->image_url) }}" 
+                                     data-color="{{ $image->color->sku_color }}" 
+                                     alt="">
                             </div>
                         </div>
                     @endforeach
@@ -52,11 +55,13 @@
                 <div class="swiper-wrapper">
                     @foreach ($product->images as $image)
                         <div class="swiper-slide">
-                            <a href="{{Storage::Url($image->image_url)}}" target="_blank" class="item"
+                            <a href="{{ Storage::url($image->image_url) }}" target="_blank" class="item"
                                data-pswp-width="770px" data-pswp-height="1075px">
-                                <img class="lazyload" data-zoom="{{Storage::Url($image->image_url)}}"
-                                     data-src="{{Storage::Url($image->image_url)}}"
-                                     src="{{Storage::Url($image->image_url)}}" alt="">
+                                <img class="lazyload" data-zoom="{{ Storage::url($image->image_url) }}"
+                                     data-src="{{ Storage::url($image->image_url) }}"
+                                     src="{{ Storage::url($image->image_url) }}" 
+                                     data-color="{{ $image->color->sku_color }}" 
+                                     alt="">
                             </a>
                         </div>
                     @endforeach
@@ -67,8 +72,6 @@
         </div>
     </div>
 </div>
-
-
 <div class="col-md-6">
     <div class="tf-product-info-wrap position-relative">
         <div class="tf-zoom-main"></div>
@@ -124,8 +127,12 @@
                                 if ($colorName !== $lastColorName) {
                                     $lastColorName = $colorName;
                             @endphp
-                                <input id="color-{{ $variant->color->sku_color }}" type="radio" name="color" value="{{ $variant->color_id }}" data-price="{{ $variant->price }}" {{ $variant->color_id == ($selected_color->id ?? null) ? 'checked' : '' }}>
-                                <label class="hover-tooltip radius-60" for="color-{{ $variant->color->sku_color }}" data-value="{{ $variant->color->name }}">
+                                <input id="color-{{ $variant->color->sku_color }}" type="radio" name="color" 
+                                       value="{{ $variant->color_id }}" data-price="{{ $variant->price }}" 
+                                       {{ $variant->color_id == ($selected_color->id ?? null) ? 'checked' : '' }}
+                                       onchange="updatePriceAndImages('{{ $variant->color->sku_color }}', {{ $variant->price }}, '{{ Storage::url($variant->color->image_url) }}')">
+                                <label class="hover-tooltip radius-60" for="color-{{ $variant->color->sku_color }}" 
+                                       data-value="{{ $variant->color->name }}">
                                     <span class="btn-checkbox" style="background-color: {{ $colorCode }};"></span>
                                     <span class="tooltip">{{ $variant->color->name }}</span>
                                 </label>
@@ -152,7 +159,10 @@
                                 if (!in_array($sizeName, $displayedSizes)) { 
                                     $displayedSizes[] = $sizeName; 
                             @endphp
-                                <input type="radio" name="size" id="size-{{ $variant->size->id }}" value="{{ $variant->size_id }}" {{ $variant->size_id == ($selected_size->id ?? null) ? 'checked' : '' }} data-stock="{{ $variant->stock_quantity }}">
+                                <input type="radio" name="size" id="size-{{ $variant->size->id }}" 
+                                       value="{{ $variant->size_id }}" 
+                                       {{ $variant->size_id == ($selected_size->id ?? null) ? 'checked' : '' }} 
+                                       data-stock="{{ $variant->stock_quantity }}">
                                 <label class="style-text" for="size-{{ $variant->size->id }}" data-value="{{ $variant->size->name }}">
                                     <p>{{ $variant->size->name }}</p>
                                 </label>
@@ -164,18 +174,17 @@
                 </div>
             </div>
             <div class="tf-product-info-quantity">
-    <div class="quantity-title fw-6">Quantity</div>
-    <div class="wg-quantity">
-        <span class="btn-quantity minus-btn" onclick="changeQuantity(-1)">-</span>
-        <input type="number" id="quantity-input" name="number" value="1" min="1" max="{{ $total_stock_quantity }}" oninput="validateQuantity()">
-        <span class="btn-quantity plus-btn" onclick="changeQuantity(1)">+</span>
-    </div>
-    <div class="stock-info">
-        <p class="fw-6">Số lượng: <span id="remaining-stock">{{ $total_stock_quantity }} còn lại</span></p>
-    </div>
-</div>
-
-
+                <div class="quantity-title fw-6">Quantity</div>
+                <div class="wg-quantity">
+                    <span class="btn-quantity minus-btn" onclick="changeQuantity(-1)">-</span>
+                    <input type="number" id="quantity-input" name="number" value="1" min="1" max="{{ $total_stock_quantity }}" 
+                           oninput="validateQuantity()">
+                    <span class="btn-quantity plus-btn" onclick="changeQuantity(1)">+</span>
+                </div>
+                <div class="stock-info">
+                    <p class="fw-6">Số lượng: <span id="remaining-stock">{{ $total_stock_quantity }} còn lại</span></p>
+                </div>
+            </div>
             <div class="tf-product-info-buy-button">
                 <form>
                     <a href="javascript:void(0);" class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart">
@@ -187,7 +196,8 @@
                         <span class="tooltip">Add to Wishlist</span>
                         <span class="icon icon-delete"></span>
                     </a>
-                    <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft" class="tf-product-btn-wishlist hover-tooltip box-icon bg_white compare btn-icon-action">
+                    <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft" 
+                       class="tf-product-btn-wishlist hover-tooltip box-icon bg_white compare btn-icon-action">
                         <span class="icon icon-compare"></span>
                         <span class="tooltip">Add to Compare</span>
                         <span class="icon icon-check"></span>
@@ -198,36 +208,11 @@
                     </div>
                 </form>
             </div>
-            <div class="tf-product-info-extra-link">
-                <a href="#compare_color" data-bs-toggle="modal" class="tf-product-extra-icon">
-                    <div class="icon">
-                        <img src="images/item/compare.svg" alt="">
-                    </div>
-                    <div class="text fw-6">Compare color</div>
-                </a>
-                <a href="#ask_question" data-bs-toggle="modal" class="tf-product-extra-icon">
-                    <div class="icon">
-                        <i class="icon-question"></i>
-                    </div>
-                    <div class="text fw-6">Ask a question</div>
-                </a>
-                <a href="#delivery_return" data-bs-toggle="modal" class="tf-product-extra-icon">
-                    <div class="icon">
-                        <svg class="d-inline-block" xmlns="http://www.w3.org/2000/svg" width="22" height="18" viewBox="0 0 22 18" fill="currentColor">
-                            <path d="M21.7872 10.4724C21.7872 9.73685 21.5432 9.00864 21.1002 8.4217L18.7221 5.27043C18.2421 4.63481 17.4804 4.25532 16.684 4.25532H14.9787V2.54885C14.9787 1.14111 13.8334 0 12.4255 0H9.95745V1.69779H12.4255C12.8948 1.69779 13.2766 2.07962 13.2766 2.54885V14.5957H8.15145C7.80021 13.6052 6.85421 12.8936 5.74468 12.8936H2.05465C0.86819 12.8936 0 13.7494 0 15.0057C0 16.262 0.86819 17.1188 2.05465 17.1188H5.74468C7.24889 17.1188 8.51934 18.1624 9.23465 19.0904H16.1553C16.9521 19.0904 17.6333 18.4092 17.6333 17.6123C17.6333 16.9712 17.1682 16.5 16.484 16.5H13.2766V15.0057H16.484C17.7064 15.0057 18.8789 14.0082 18.8789 12.6324V10.4724H21.7872Z"></path>
-                        </svg>
-                    </div>
-                    <div class="text fw-6">Delivery & Return</div>
-                </a>
-            </div>
         </div>
     </div>
 </div>
 
-
-
-                </div>
-            </div>
+</div>
         </div>
         <div class="tf-sticky-btn-atc">
             <div class="container">
@@ -1515,58 +1500,65 @@
     <!-- /modal share social -->
     <script>
    
+   document.addEventListener('DOMContentLoaded', function () {
     const colorInputs = document.querySelectorAll('input[name="color"]');
     const sizeInputs = document.querySelectorAll('input[name="size"]');
     const finalPrice = document.getElementById('final-price');
     const addToCartButton = document.querySelector('.btn-add-to-cart .tf-qty-price');
+    const remainingStock = document.getElementById('remaining-stock');
+    const gallerySlides = document.querySelectorAll('.swiper-slide img'); 
+    const colorImages = document.querySelectorAll('.swiper-slide img[data-color]'); 
 
-    function updatePrice() {
+    function updatePriceAndStock() {
         let basePrice = {{ $product->price }};
         let additionalPrice = 0;
+        let colorSelected = false;
 
-      
+        colorImages.forEach(img => {
+            img.style.display = 'block'; 
+        });
+
         colorInputs.forEach(input => {
             if (input.checked) {
                 additionalPrice = parseFloat(input.dataset.price) || 0;
+                colorSelected = true;
+
+                const selectedColorImage = document.querySelector(`img[data-color="${input.dataset.color}"]`);
+                if (selectedColorImage) {
+                    selectedColorImage.style.display = 'block'; 
+                }
             }
         });
 
-        
+        if (!colorSelected) {
+            gallerySlides.forEach(slide => {
+                slide.style.display = 'block';
+            });
+        }
+
         const totalPrice = basePrice + additionalPrice;
-        finalPrice.innerText = `$${totalPrice.toFixed(2)}`;
-        addToCartButton.innerText = `$${totalPrice.toFixed(2)}`;
+        finalPrice.innerText = new Intl.NumberFormat().format(totalPrice) + ' VND';
+        addToCartButton.innerText = new Intl.NumberFormat().format(totalPrice) + ' VND';
     }
 
-    colorInputs.forEach(input => input.addEventListener('change', updatePrice));
-    sizeInputs.forEach(input => input.addEventListener('change', updatePrice));
-    $(document).ready(function() {
-    
+    document.querySelectorAll('input[name="color"], input[name="size"]').forEach(input => {
+        input.addEventListener('change', function() {
+            updatePriceAndStock();
+            const selectedSizeInput = document.querySelector('input[name="size"]:checked');
 
+            if (selectedSizeInput) {
+                const stockQuantity = selectedSizeInput.dataset.stock || 0;
+                remainingStock.innerText = stockQuantity + ' còn lại';
+            }
+        });
+    });
 
-        document.getElementById('variant-select').addEventListener('change', function() {
-    var selectedOption = this.options[this.selectedIndex];
-    var basePrice = {{ $product->price }}; 
-    var variantPrice = parseFloat(selectedOption.getAttribute('data-price')); 
-    var totalPrice = basePrice + variantPrice; 
-
-    
-    document.getElementById('current-price').innerText = '$' + totalPrice.toFixed(2);
-    
-    
-    var color = selectedOption.getAttribute('data-color');
-    var size = selectedOption.getAttribute('data-size');
-    document.getElementById('selected-color').innerText = color;
-    document.getElementById('selected-size').innerText = size;
-});
-const maxQuantity = {{ $total_stock_quantity }};
-
+    const maxQuantity = {{ $total_stock_quantity }};
     function changeQuantity(delta) {
         const quantityInput = document.getElementById('quantity-input');
-        let currentQuantity = parseInt(quantityInput.value);
-
+        let currentQuantity = parseInt(quantityInput.value) || 1;
         currentQuantity += delta;
 
-        
         if (currentQuantity < 1) {
             currentQuantity = 1; 
         } else if (currentQuantity > maxQuantity) {
@@ -1574,9 +1566,43 @@ const maxQuantity = {{ $total_stock_quantity }};
         }
 
         quantityInput.value = currentQuantity;
+        validateQuantity();
     }
+
+    function validateQuantity() {
+        const quantityInput = document.getElementById('quantity-input');
+        const stock = parseInt(remainingStock.innerText) || 0;
+        quantityInput.value = Math.min(parseInt(quantityInput.value), stock);
+    }
+
+    
+    document.querySelector('.minus-btn').addEventListener('click', () => changeQuantity(-0));
+    document.querySelector('.plus-btn').addEventListener('click', () => changeQuantity(0));
+
+    
+    updatePriceAndStock();
 });
 
+function updatePriceAndImages(colorSku, price, imageUrl) {
+        
+        const finalPriceElement = document.getElementById('final-price');
+        finalPriceElement.innerHTML = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price) + ' VND';
+        
+        
+        const mainImage = document.querySelector('.tf-product-media-main .swiper-slide img[data-color="' + colorSku + '"]');
+        if (mainImage) {
+            const mainImageElement = document.querySelector('#gallery-swiper-started .swiper-slide img');
+            mainImageElement.src = mainImage.src;
+            mainImageElement.setAttribute('data-zoom', mainImage.src);
+        }
+        
+     
+        const selectedSizeInput = document.querySelector('input[name="size"]:checked');
+        if (selectedSizeInput) {
+            const stockQuantity = selectedSizeInput.dataset.stock;
+            document.getElementById('remaining-stock').innerHTML = stockQuantity + ' còn lại';
+        }
+    }
 
 </script>
 @endsection
