@@ -24,13 +24,18 @@ class ProductDetailController extends Controller
             'variants.size',   
             'images',          
             'category'         
-        ])->where('slug', $slug)->firstOrFail();
+        ])
+        ->where('slug', $slug)
+        ->where('status', 1) 
+        ->firstOrFail();
+       
         $base_price = $product->price;
         $variants = $product->variants;
         $total_stock_quantity = $variants->sum('stock_quantity');
         $variant = $variants->first();
         $additional_price = $variant ? $variant->price : 0;
         $final_price = $base_price + $additional_price;
+        
         return view('client.product-detail', compact('categories', 'product', 'base_price', 'additional_price', 'final_price', 'total_stock_quantity', 'variants'));
     }
     
