@@ -22,20 +22,27 @@ class Category extends Model
     public function products()
 {
     return $this->belongsToMany(Product::class, 'category_product');
+    
 }
 
     public function sliders()
     {
         return $this->hasMany(Slider::class, 'category_id');
     }
-    public function parent()
-    {
-        return $this->belongsTo(Category::class, 'parent_id');
-    }
-
-    // Quan hệ với các danh mục con
     public function children()
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+    public function productss()
+    {
+        return $this->hasMany(Product::class);
+    }
+  
+    
+
+   
 }

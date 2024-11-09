@@ -22,7 +22,7 @@ class AdminFactory extends Factory
         return [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
-            'password' => Hash::make('123'),
+            'password' => Hash::make(value: '123'),
         ];
     }
 }

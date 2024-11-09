@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\HomeController;
@@ -18,6 +17,7 @@ use App\Http\Controllers\Client\ShoppingCartController;
 use App\Http\Controllers\Client\TimeLineController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\PriceSaleController;
@@ -36,10 +36,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('home/{category_id?}', [HomeController::class, 'home'])->name('home');
+Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
 Route::get('shop-collection', [ShopCollectionController::class, 'index'])->name('shop-collection');
 Route::get('product-detail', [ProductDetailController::class, 'index'])->name('product-detail');
+Route::get('brand', [BrandController::class, 'index'])->name('brand');
 Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
 Route::get('faq', [FAQController::class, 'index'])->name('faq');
 Route::get('out-store', [OutStoreController::class, 'index'])->name('out-store');
@@ -70,20 +72,38 @@ Route::put('categories/update/{id}', [CategoriesController::class, 'update'])->n
 Route::delete('categories/{id}', [CategoriesController::class, 'destroy'])->name('categories.delete');
 Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
 
-Route::resource('attributes', AttributeController::class);
 
-Route::resource('sizes', SizeController::class);
-Route::resource('colors', ColorController::class);
-Route::resource('prices', PriceSaleController::class);
-Route::get('/prices/search', [PriceSaleController::class, 'search'])->name('prices.search');
+Route::get('sizes', [SizeController::class, 'index'])->name('sizes.index');
+Route::get('sizes/create', [SizeController::class, 'create'])->name('sizes.create');
+Route::post('sizes', [SizeController::class, 'store'])->name('sizes.store');
+Route::get('sizes/{id}', [SizeController::class, 'show'])->name('sizes.show');
+Route::get('sizes/{id}/edit', [SizeController::class, 'edit'])->name('sizes.edit');
+Route::put('sizes/{id}', [SizeController::class, 'update'])->name('sizes.update');
+Route::delete('sizes/{id}', [SizeController::class, 'destroy'])->name('sizes.destroy');
 
+// Route cho ColorController
+Route::get('colors', [ColorController::class, 'index'])->name('colors.index');
+Route::get('colors/create', [ColorController::class, 'create'])->name('colors.create');
+Route::post('colors', [ColorController::class, 'store'])->name('colors.store');
+Route::get('colors/{id}', [ColorController::class, 'show'])->name('colors.show');
+Route::get('colors/{id}/edit', [ColorController::class, 'edit'])->name('colors.edit');
+Route::put('colors/{id}', [ColorController::class, 'update'])->name('colors.update');
+Route::delete('colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
 
-Route::get('/search', [PriceSaleController::class, 'search'])->name('search');
+// Route cho PriceSaleController
+Route::get('pricesales', [PriceSaleController::class, 'index'])->name('pricesales.index');
+Route::get('pricesales/create', [PriceSaleController::class, 'create'])->name('pricesales.create');
+Route::post('pricesales', [PriceSaleController::class, 'store'])->name('pricesales.store');
+Route::get('pricesales/{id}', [PriceSaleController::class, 'show'])->name('pricesales.show');
+Route::get('pricesales/{id}/edit', [PriceSaleController::class, 'edit'])->name('pricesales.edit');
+Route::put('pricesales/{id}', [PriceSaleController::class, 'update'])->name('pricesales.update');
+Route::delete('pricesales/{id}', [PriceSaleController::class, 'destroy'])->name('pricesales.destroy');
 
-Route::resource('variants', ProductVariantController::class);
-Route::get('/search', [ProductVariantController::class, 'search'])->name('search');
-
-
-Route::resource('brands', BrandController::class);
-
-Route::get('/variants/search', [ProductVariantController::class, 'search'])->name('variants.search');
+// Route cho BrandController
+Route::get('brands', [BrandController::class, 'index'])->name('brands.index');
+Route::get('brands/create', [BrandController::class, 'create'])->name('brands.create');
+Route::post('brands', [BrandController::class, 'store'])->name('brands.store');
+Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show');
+Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
+Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
+Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
