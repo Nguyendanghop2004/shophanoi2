@@ -42,19 +42,5 @@ class Product extends Model
             'color_id'    // Khóa trên bảng product_variants
         )->distinct()->select('colors.id', 'colors.name', 'colors.sku_color'); // Chọn các cột cần thiết từ bảng colors
     }
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
-    public function images()
-    {
-        return $this->hasMany(ProductImage::class); 
-    }
-    public function colorss()
-{
-    return $this->hasMany(Color::class);
-}
-
-
 
 }

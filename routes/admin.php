@@ -73,8 +73,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
 
     Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
 
-    //quan li san pham
+    // Quản lý sản phẩm
     Route::resource('product', ProductController::class);
     Route::get('/get-variant-card/{color}', [ProductController::class, 'getVariantCard']);
     Route::get('/product/get-variant-card/{colorId}', [ProductController::class, 'getVariantCard']);
+
+
 });
