@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>403 &mdash; Stisla</title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>General Dashboard &mdash; Stisla</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <!-- General CSS Files -->
-  <link rel="stylesheet" href="assets/modules/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/modules/fontawesome/css/all.min.css">
+    @stack('header-css-js')
+    <!-- General CSS Files -->
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/fontawesome/css/all.min.css') }}">
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/dropzonejs/dropzone.css') }}">
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/jqvmap/dist/jqvmap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/weather-icon/css/weather-icons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/weather-icon/css/weather-icons-wind.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/summernote/summernote-bs4.css') }}">
 
-  <!-- CSS Libraries -->
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/css/components.css') }}">
+    <!-- Start GA -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-  <!-- Template CSS -->
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/components.css">
-<!-- Start GA -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
 
-  gtag('config', 'UA-94034622-3');
-</script>
-<!-- /END GA --></head>
-
-<body>
+        gtag('config', 'UA-94034622-3');
+    </script>
   <div id="app">
     <section class="section">
       <div class="container mt-5">
@@ -33,7 +41,7 @@
           <div class="page-inner">
             <h1>403</h1>
             <div class="page-description">
-            	You do not have access to this page.
+            	You Not Permission 
             </div>
             <div class="page-search">
               <form>              	
@@ -54,7 +62,7 @@
                 </div>
               </form>
               <div class="mt-3">
-                <a href="index.html">Back to Home</a>
+                <a href="/dashboard">Back to Home</a>
               </div>
             </div>
           </div>
