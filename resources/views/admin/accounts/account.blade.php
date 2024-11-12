@@ -34,7 +34,8 @@
                             @foreach ($admins as $admin)
                                 <tr>
                                     <th scope="row">{{ $admin->id }}</th>
-                                    <td>{{ $admin->name }}</td>
+                                    <td ><a class="text-primary" href="{{ route('admin.accounts.show', $admin->id) }}">{{ $admin->name }}</a>
+                                    </td>
                                     <td>{{ $admin->email }}</td>
                                     <td>
                                         <img src="{{ Storage::url($admin->image_path) }}" alt="Ảnh quản trị viên" width="100px" height="60px">

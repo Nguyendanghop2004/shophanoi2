@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="section-body">
-            <h2 class="section-title">{{ $dataAdmin->name }}</h2>
+            <h2 class="section-title">{{ $admin->name }}</h2>
             <p class="section-lead">
                 Change information about yourself on this page.
             </p>
@@ -19,19 +19,19 @@
                 <div class="col-12 col-md-12 col-lg-5">
                     <div class="card profile-widget">
                         <div class="profile-widget-header">
-                            <img  width="100px" height="100px" alt="image" src="{{ Storage::url($dataAdmin->image_path)  }} "
+                            <img  width="100px" height="100px" alt="image" src="{{ Storage::url($admin->image_path)  }} "
                                 class="rounded-circle profile-widget-picture">
                             <div class="profile-widget-items">
 
                             </div>
                         </div>
                         <div class="profile-widget-description">
-                            <div class="profile-widget-name">{{ $dataAdmin->name }} <div
+                            <div class="profile-widget-name">{{ $admin->name }} <div
                                     class="text-muted d-inline font-weight-normal">
                                     <div class="slash"></div>Vai trò
                                 </div>
                             </div>
-                            @foreach ($dataAdmin->roles as $role)
+                            @foreach ($admin->roles as $role)
                                 {{ $role->name }}
                             @endforeach
                         </div>
@@ -62,7 +62,7 @@
                                 <div class="row">
                                     <div class="form-group col-md-6 col-12">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" value="{{ $dataAdmin->name }}"
+                                        <input type="text" class="form-control" value="{{ $admin->name }}"
                                             required="">
                                         <div class="invalid-feedback">
                                             Please fill in the first name
@@ -70,7 +70,7 @@
                                     </div>
                                     <div class="form-group col-md-6 col-12">
                                         <label>Email</label>
-                                        <input type="email" class="form-control" value="{{ $dataAdmin->email }}"
+                                        <input type="email" class="form-control" value="{{ $admin->email }}"
                                             required="">
                                         <div class="invalid-feedback">
                                             Please fill in the email
@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                                 <td>
-                                    @if ($dataAdmin->status)
+                                    @if ($admin->status)
                                         <span class="badge badge-success">Hoạt động</span>
                                     @else
                                         <span class="badge badge-danger">Không hoạt động</span>
@@ -88,7 +88,7 @@
                             </div>
                             <div class="card-footer text-right">
                                 <a class="btn btn-primary"
-                                    href="{{ route('admin.profile.changePassword', $dataAdmin->id) }}"> Đổi mật khẩu</a>
+                                    href="{{ route('admin.accounts.change', $admin->id) }}"> Đổi mật khẩu</a>
                             </div>
                         </form>
                     </div>

@@ -19,7 +19,7 @@ class LoginController extends Controller
         return response()->view('admin.logins.login')
             ->header('Cache-Control', 'no-store, no-cache, must-revalidate')
             ->header('Pragma', 'no-cache')
-            ->header('Expires', '0');
+            ->header('Expires', '0 ');
     }
     
     

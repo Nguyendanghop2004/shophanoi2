@@ -6,15 +6,14 @@
                 <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
             </div>
             <div class="tf-login-form">
-                <form class="" action="my-account.html" accept-charset="utf-8">
+                <form action="{{ route('account.login') }}" method="post">
+                    @csrf
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="email"
-                            name="">
+                        <input class="tf-field-input tf-input" placeholder=" Nhập Email" type="email" name="">
                         <label class="tf-field-label" for="">Email *</label>
                     </div>
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="password"
-                            name="">
+                        <input class="tf-field-input tf-input" placeholder=" " type="password" name="">
                         <label class="tf-field-label" for="">Password *</label>
                     </div>
                     <div>
@@ -53,8 +52,7 @@
                             out, click unsubscribe in our emails</p>
                     </div>
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="email"
-                            name="">
+                        <input class="tf-field-input tf-input" placeholder=" " type="email" name="">
                         <label class="tf-field-label" for="">Email *</label>
                     </div>
                     <div>
@@ -82,23 +80,19 @@
             <div class="tf-login-form">
                 <form class="">
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="text"
-                            name="">
+                        <input class="tf-field-input tf-input" placeholder=" " type="text" name="">
                         <label class="tf-field-label" for="">First name</label>
                     </div>
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="text"
-                            name="">
+                        <input class="tf-field-input tf-input" placeholder=" " type="text" name="">
                         <label class="tf-field-label" for="">Last name</label>
                     </div>
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="email"
-                            name="">
+                        <input class="tf-field-input tf-input" placeholder=" " type="email" name="">
                         <label class="tf-field-label" for="">Email *</label>
                     </div>
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="password"
-                            name="">
+                        <input class="tf-field-input tf-input" placeholder=" " type="password" name="">
                         <label class="tf-field-label" for="">Password *</label>
                     </div>
                     <div class="bottom">

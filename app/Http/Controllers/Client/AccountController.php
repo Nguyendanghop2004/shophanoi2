@@ -22,4 +22,8 @@ class AccountController extends Controller
         return view('client.my-account', ['section' => $section]);
     }
 
+    public function login()
+    {
+        dd(1);
+    }
 }

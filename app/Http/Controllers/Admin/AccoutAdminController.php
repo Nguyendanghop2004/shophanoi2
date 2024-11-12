@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AdminStoreRequest;
+use App\Http\Requests\Admin\ChangeUserRequest;
+use Auth;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -86,7 +88,9 @@ class AccoutAdminController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $admin = Admin::findOrFail($id);
+
+        return view('admin.accounts.show', compact('admin'));
     }
 
     /**
@@ -283,4 +287,26 @@ class AccoutAdminController extends Controller
     {
         return view('admin.accounts.index');
     }
+    
+    public function change(string $id)
+    {
+        $dataUser = Admin::query()->findOrFail($id);
+
+        return view('admin.accounts.change', compact('dataUser'));
+    }
+    public function changeAdmin(ChangeUserRequest $request ,string $id)
+    {
+        // dd($request->user() ->password);
+        $dataUser = Admin::query()->findOrFail( $id);
+      
+        try {
+            $dataUser->update([
+                'password' => Hash::make($request->password),
+            ]);
+            return back()->with('success', 'Đổi mới thành công');
+        } catch (\Throwable $th) {
+            dd(404);
+        }
+    }
+   
 }

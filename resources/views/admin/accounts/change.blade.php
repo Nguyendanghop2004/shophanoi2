@@ -5,29 +5,13 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>Đổi mật khẩu / {{ $dataAdmin->name }}</h4>
+                    <h4>Đổi mật khẩu Admin / {{ $dataUser->name }}</h4>
                 </div>
-                <form action="{{ route('admin.profile.change', $dataAdmin->id) }}" method="post">
+                <form action="{{ route('admin.accounts.changeAdmin', $dataUser->id) }}" method="post">
                     @csrf
                     <div class="card-body">
                         <div class="form-group row mb-4">
-                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Mật khẩu cũ</label>
-                            <div class="col-sm-12 col-md-7">
-                                <input type="password" name="old_password"
-                                    class="form-control @error('old_password') is-invalid @enderror"
-                                    value="{{ old('old_password') }}">
-                                @error('old_password')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                        </div>
-
-
-
-                        <div class="form-group row mb-4">
-                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"> Mật khẩu mới</label>
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nhập mật khẩu mới</label>
                             <div class="col-sm-12 col-md-7">
                                 <input type="password" name="password"
                                     class="form-control @error('password') is-invalid @enderror"

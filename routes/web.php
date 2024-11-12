@@ -44,9 +44,11 @@ Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('sho
 Route::get('check-out', [CheckOutController::class, 'index'])->name('check-out');
 Route::get('payment-confirmation', [PaymentController::class, 'confirmation'])->name('payment-confirmation');
 Route::get('payment-failure', [PaymentController::class, 'failure'])->name('payment-failure');
-
+//start Account 
 Route::get('/account/{section?}', [AccountController::class, 'acc'])->name('account');
+Route::post('/account/login', [AccountController::class, 'login'])->name('account.login');
 
+// end Account 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

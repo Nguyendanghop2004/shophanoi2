@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ChangePasswordRequest;
+use App\Http\Requests\Admin\ChangeUserRequest;
 use App\Models\Admin;
 use Auth;
 use Hash;
@@ -24,7 +25,6 @@ class ProfileController extends Controller
     }
     public function change(ChangePasswordRequest $request, string $id)
     {
-       
         if (Hash::check($request->old_password, Auth::user()->password)) {
             Auth::user()->update([
                 'password' => Hash::make($request->password),
@@ -34,4 +34,5 @@ class ProfileController extends Controller
             return back()->with('error', 'Mật khẩu không trùng khớp');
         }
     }
+ 
 }
