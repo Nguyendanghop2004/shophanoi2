@@ -201,6 +201,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\Color $color
  * @property-read \App\Models\ProductVariant|null $variant
  * @method static \Illuminate\Database\Eloquent\Builder|ProductImage newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProductImage newQuery()

@@ -46,4 +46,5 @@ class Product extends Model
     {
         return $this->hasMany(ProductImage::class, 'product_id', 'id'); // Thay đổi tên model và các khóa ngoại nếu cần
     }
+    
 }
