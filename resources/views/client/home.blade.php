@@ -148,101 +148,42 @@
 
     <!-- Categories -->
     <section class="flat-spacing-5 pb_0">
-        <div class="container">
+    <div class="container">
             <div class="flat-title">
                 <span class="title wow fadeInUp" data-wow-delay="0s">Categories you might like</span>
             </div>
             <div class="hover-sw-nav">
+       
                 <div class="swiper tf-sw-collection" data-preview="4" data-tablet="2" data-mobile="2"
                     data-space-lg="30" data-space-md="30" data-space="15" data-loop="false" data-auto-play="false">
                     <div class="swiper-wrapper">
+                    @foreach($categories as $category)
                         <div class="swiper-slide" lazy="true">
-                            <div class="collection-item style-2 hover-img">
+                     
+                            <div class="collection-item style-2 hover-img" >
                                 <div class="collection-inner">
-                                    <a href="shop-collection-sub.html" class="collection-image img-style">
+                                    <a href="{{route('home.slug', $category->slug)}}" class="0"> 
                                         <img class="lazyload"
-                                            data-src="{{ asset('client/assets/images/collections/collection-42.jpg') }}"
-                                            src="{{ asset('client/assets/images/collections/collection-42.jpg') }}"
-                                            alt="collection-img">
+                                            data-src="{{  Storage::url($category->image_path) }}"
+                                            src="{{ Storage::url($category->image_path) }}"
+                                            alt="collection-img" >
                                     </a>
                                     <div class="collection-content">
-                                        <a href="shop-collection-sub.html"
-                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>Tops</span><i
+                                        <a href="{{route('home.slug', $category->slug)}}"
+                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>{{$category->name}}</span><i
                                                 class="icon icon-arrow1-top-left"></i></a>
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>
-                        <div class="swiper-slide" lazy="true">
-                            <div class="collection-item style-2 hover-img">
-                                <div class="collection-inner">
-                                    <a href="shop-collection-sub.html" class="collection-image img-style">
-                                        <img class="lazyload"
-                                            data-src="{{ asset('client/assets/images/collections/collection-43.jpg') }}"
-                                            src="{{ asset('client/assets/images/collections/collection-43.jpg') }}"
-                                            alt="collection-img">
-                                    </a>
-                                    <div class="collection-content">
-                                        <a href="shop-collection-sub.html"
-                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>Sweatshirts</span><i
-                                                class="icon icon-arrow1-top-left"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide" lazy="true">
-                            <div class="collection-item style-2 hover-img">
-                                <div class="collection-inner">
-                                    <a href="shop-collection-sub.html" class="collection-image img-style">
-                                        <img class="lazyload"
-                                            data-src="{{ asset('client/assets/images/collections/collection-44.jpg') }}"
-                                            src="{{ asset('client/assets/images/collections/collection-44.jpg') }}"
-                                            alt="collection-img">
-                                    </a>
-                                    <div class="collection-content">
-                                        <a href="shop-collection-sub.html"
-                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>Swim</span><i
-                                                class="icon icon-arrow1-top-left"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide" lazy="true">
-                            <div class="collection-item style-2 hover-img">
-                                <div class="collection-inner">
-                                    <a href="shop-collection-sub.html" class="collection-image img-style">
-                                        <img class="lazyload"
-                                            data-src="{{ asset('client/assets/images/collections/collection-45.jpg') }}"
-                                            src="{{ asset('client/assets/images/collections/collection-45.jpg') }}"
-                                            alt="collection-img">
-                                    </a>
-                                    <div class="collection-content">
-                                        <a href="shop-collection-sub.html"
-                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>Dresses</span><i
-                                                class="icon icon-arrow1-top-left"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide" lazy="true">
-                            <div class="collection-item style-2 hover-img">
-                                <div class="collection-inner">
-                                    <a href="shop-collection-sub.html" class="collection-image img-style">
-                                        <img class="lazyload"
-                                            data-src="{{ asset('client/assets/images/collections/collection-46.jpg') }}"
-                                            src="{{ asset('client/assets/images/collections/collection-46.jpg') }}"
-                                            alt="collection-img">
-                                    </a>
-                                    <div class="collection-content">
-                                        <a href="shop-collection-sub.html"
-                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>Cardigans</span><i
-                                                class="icon icon-arrow1-top-left"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                       
+                        
+                       
+                       
+                        @endforeach
                     </div>
+                    
                 </div>
                 <div class="nav-sw nav-next-slider nav-next-collection box-icon w_46 round"><span
                         class="icon icon-arrow-left"></span></div>

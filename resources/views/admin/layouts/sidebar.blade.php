@@ -23,7 +23,7 @@
                     <a href="#" class="search-close"><i class="fas fa-times"></i></a>
                 </div>
                 <div class="search-item">
-                    <a href="#">#Stisla</a>
+                    <a href="">#Stisla</a>
                     <a href="#" class="search-close"><i class="fas fa-times"></i></a>
                 </div>
                 <div class="search-header">
@@ -211,19 +211,21 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-title">Logged in 5 min ago</div>
-                <a href="features-profile.html" class="dropdown-item has-icon">
+
+                <a href="{{ route('admin.profile.index') }}" class="dropdown-item has-icon">
                     <i class="far fa-user"></i> Profile
                 </a>
                 <a href="features-activities.html" class="dropdown-item has-icon">
                     <i class="fas fa-bolt"></i> Activities
                 </a>
                 <a href="features-settings.html" class="dropdown-item has-icon">
-                    <i class="fas fa-cog"></i> Settings
+                    <i class="fas fa-cog"></i> Đổi mật khẩu
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="{{ route('admin.post-logout') }}" class="dropdown-item has-icon text-danger">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
+                
                 <!-- Form Logout -->
 
             </div>
@@ -235,7 +237,7 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="index.html">Stisla</a>
+            <a href="{{ route('admin.dashboard') }}">Stisla</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
             <a href="index.html">St</a>
@@ -259,6 +261,7 @@
                     <li><a class="nav-link" href="layout-top-navigation.html">Top Navigation</a></li>
                 </ul>
             </li>
+
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-columns"></i> <span>Thanh Trượt</span></a>
@@ -272,7 +275,39 @@
 
                 </ul>
             </li>
-            <li><a class="nav-link" href="{{ route('news.index')}}"><i class="far fa-square"></i> <span>Bài Viết</span></a></li>
+<<<<<<< HEAD
+            {{-- <li><a class="nav-link" href="{{ route('news.index')}}"><i class="far fa-square"></i> <span>Bài Viết</span></a></li> --}}
+=======
+
+            <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bài Viết</span></a></li>
+            <li class="dropdown ">
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Tài Khoản</span></a>
+                <ul class="dropdown-menu">
+                    <li class="dropdown">
+                        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                                class="fas fa-columns"></i> <span>Admin</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="{{ route('admin.accounts.create') }}"><i
+                                        class="far fa-square"></i> <span>Thêm mới</span></a></li>
+                            <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><i
+                                        class="far fa-square"></i> <span>Danh sách</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                                class="fas fa-columns"></i> <span>User</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="{{ route('admin.accountsUser.create') }}"><i
+                                        class="far fa-square"></i> <span>Thêm mới</span></a></li>
+                            <li><a class="nav-link" href="{{ route('admin.accountsUser.accountUser') }}"><i
+                                        class="far fa-square"></i> <span>Danh sách</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </li>
+
+>>>>>>> a9eada4d56985478c4763ee7f052bfe0ef51b553
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bình Luận</span></a></li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Sản Phẩm</span></a></li>
 
@@ -284,8 +319,10 @@
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
                     <span>Danh mục sản phẩm</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="{{route('admin.categories.list')}}"><span>Danh Sách Danh Mục</span></a></li>
+
+                <li><a class="nav-link" href="{{route('admin.categories.list')}}"><span>Danh Sách Danh Mục</span></a></li>
                 <li><a class="nav-link" href="{{route('admin.categories.add')}}"><span>Thêm Mới Danh Mục</span></a></li>
+
                 </ul>
             </li>
             <li class="menu-header">Quản Lí tài khoản</li>

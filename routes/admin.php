@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\AccoutAdminController;
+use App\Http\Controllers\Admin\AccoutUserController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
-use App\Http\Controllers\Admin\NewsController as AdminNewsController;
-use App\Http\Controllers\Admin\PromotionController as AdminPromotionController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\NewsController;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
 Route::post('admin/login', [LoginController::class, 'store'])->name('admin.post-login');
-Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStatus')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStatus')->group(callback: function () {
     // Login admin
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
@@ -22,10 +23,24 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::get('accounts/create', [AccoutAdminController::class, 'create'])->name('accounts.create');
     Route::post('accounts/store', [AccoutAdminController::class, 'store'])->name('accounts.store');
     Route::get('accounts/edit/{id}', [AccoutAdminController::class, 'edit'])->name('accounts.edit');
-    Route::put('accounts/update/{id}', [AccoutAdminController::class, 'update'])->name('accounts.edit');
+    Route::put('accounts/update/{id}', [AccoutAdminController::class, 'update'])->name('accounts.update');
     Route::delete('accounts/destroy/{id}', [AccoutAdminController::class, 'destroy'])->name('accounts.destroy');
-    // Permission
 
+    Route::get('accountUser', [AccoutUserController::class, 'accountUser'])->name('accountsUser.accountUser');
+    // start crud user
+    Route::get('accountsUser/create', [AccoutUserController::class, 'create'])->name('accountsUser.create');
+    Route::post('accountsUser/store', [AccoutUserController::class, 'store'])->name('accountsUser.store');
+    Route::get('accountsUser/edit/{id}', [AccoutUserController::class, 'edit'])->name('accountsUser.edit');
+    Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update');
+    Route::delete('accountsUser/destroy/{id}', [AccoutUserController::class, 'destroy'])->name('accountsUser.destroy');
+    // end crud user 
+
+    //start status user
+    Route::post('accountsUser/{id}/accountUser', [AccoutUserController::class, 'activateUser'])->name('accountsUser.activateUser')->middleware('permission:activate_Account');
+    Route::post('accountsUser/{id}/deactivateUser', [AccoutUserController::class, 'deactivateUser'])->name('accountsUser.deactivateUser')->middleware('permission:deactivate_Account');
+    //end  status user
+    Route::get('accounts/profile', [ProfileController::class, 'index'])->name('profile.index');
+    // Permission
     Route::get('permissions/index', [AccoutAdminController::class, 'permissionAdmin'])->name('permissions.index')->middleware('permission:indexPermission');
     // Thêm quyền
     Route::get('permissions/phanquyen/{id}', [AccoutAdminController::class, 'phanquyen'])->name('permissions.phanquyen')->middleware('permission:ListPermission');
@@ -37,7 +52,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::post('permissions/insert_roles/{id}', [AccoutAdminController::class, 'insert_roles'])->name('permissions.insert_roles')->middleware('permission:insert_roles');
     // Thêm vai trò
     Route::post('permissions/insertRoles', [AccoutAdminController::class, 'insertRoles'])->name('permissions.insertRoles')->middleware('permission:Grant_roles');
-
+    
     // Trạng thái tài khoản
     // routes/web.php
     Route::post('accounts/{id}/activate', [AccoutAdminController::class, 'activate'])->name('accounts.activate')->middleware('permission:activate_Account');
@@ -50,6 +65,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
 
     Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
     Route::delete('sliders/{id}/force-delete', [SliderController::class, 'forceDelete'])->name('slider.forceDelete');
+
     // Quản lý danh mục
     Route::get('categories', [CategoriesController::class, 'list'])->name('categories.list')->middleware('permission:listCategories');
     Route::get('categories/create', [CategoriesController::class, 'create'])->name('categories.add')->middleware('permission:addCategories');
@@ -57,9 +73,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::get('categories/edit/{id}', [CategoriesController::class, 'edit'])->name('categories.edit')->middleware('permission:editCategories');
     Route::put('categories/update/{id}', [CategoriesController::class, 'update'])->name('categories.update')->middleware('permission:editCategories');
     Route::delete('categories/{id}', [CategoriesController::class, 'destroy'])->name('categories.delete')->middleware('permission:deleteCategories');
+
     Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
-    //Quản lý Voucher
-    Route::resource('news',AdminNewsController::class);
-Route::resource('vouchers',VoucherController::class);
-Route::resource('promotions',AdminPromotionController::class);
 });

@@ -4,7 +4,7 @@
 
     <div class="container">
         <h1 class="mt-5">Liên Hệ</h1>
-    
+
 
         @if (session('success'))
             <div class="alert alert-success">
@@ -21,7 +21,7 @@
                     <div class="text-danger">Bạn cần nhập tên</div>
                 @enderror
             </div>
-        
+
             <div class="mb-3">
                 <label for="email" class="form-label">Email:</label>
                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}">
@@ -31,7 +31,7 @@
                     </div>
                 @enderror
             </div>
-        
+
             <div class="mb-3">
                 <label for="phone" class="form-label">Số điện thoại (tùy chọn):</label>
                 <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone') }}">
@@ -41,7 +41,7 @@
                     </div>
                 @enderror
             </div>
-        
+
             <div class="mb-3">
                 <label for="message" class="form-label">Nội dung :</label>
                 <textarea class="form-control @error('message') is-invalid @enderror" id="message" name="message" rows="4">{{ old('message') }}</textarea>
@@ -51,9 +51,9 @@
                     </div>
                 @enderror
             </div>
-        
+
             <button type="submit" class="btn btn-primary">Gửi liên hệ</button>
-        </form>                        
+        </form>
     </div>
 
     <hr>
@@ -124,13 +124,13 @@
                                 </a>
                             </li>
                         @endif
-        
+
                         @for ($i = 1; $i <= $contacts->lastPage(); $i++)
                             <li class="page-item {{ $i == $contacts->currentPage() ? 'active' : '' }}">
                                 <a class="page-link" href="{{ $contacts->url($i) }}">{{ $i }}</a>
                             </li>
                         @endfor
-        
+
                         @if ($contacts->hasMorePages())
                             <li class="page-item">
                                 <a class="page-link" href="{{ $contacts->nextPageUrl() }}" aria-label="Next">
@@ -150,5 +150,5 @@
                 </nav>
             </div>
         </div>
-    </div>    
+    </div>
 @endsection
