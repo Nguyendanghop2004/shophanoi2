@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\ShipperController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -32,7 +33,16 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('contact', ContactMessageController::class);
+
 Route::get('/shippers/search', [ShipperController::class, 'search'])->name('shippers.search');
 
 Route::resource('shippers', ShipperController::class);
+
+Route::middleware(['auth'])->group(function () {
+    //danh sanh list 
+    Route::get('wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('wishlist/add/{productId}', [WishlistController::class, 'add'])->name('wishlist.add');
+    Route::post('wishlist/remove/{productId}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+
+});
 

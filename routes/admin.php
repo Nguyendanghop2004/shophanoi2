@@ -3,6 +3,9 @@
 use App\Http\Controllers\Admin\AccoutAdminController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use App\Http\Controllers\Admin\PromotionController as AdminPromotionController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\NewsController;
@@ -55,7 +58,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::put('categories/update/{id}', [CategoriesController::class, 'update'])->name('categories.update')->middleware('permission:editCategories');
     Route::delete('categories/{id}', [CategoriesController::class, 'destroy'])->name('categories.delete')->middleware('permission:deleteCategories');
     Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
-});
-Route::resource('news',AdminNewsController::class);
+    //Quản lý Voucher
+    Route::resource('news',AdminNewsController::class);
 Route::resource('vouchers',VoucherController::class);
 Route::resource('promotions',AdminPromotionController::class);
+});
