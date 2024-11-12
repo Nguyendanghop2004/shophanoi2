@@ -20,8 +20,10 @@ use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Admin\PriceSaleController;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Admin\TagController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -107,3 +109,18 @@ Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show')
 Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
 Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
 Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+
+Route::get('tags', [TagController::class, 'index'])->name('tags.index'); 
+Route::get('tags/create', [TagController::class, 'create'])->name('tags.create'); 
+Route::post('tags', [TagController::class, 'store'])->name('tags.store'); 
+Route::get('tags/{tag}/edit', [TagController::class, 'edit'])->name('tags.edit'); 
+Route::put('tags/{tag}', [TagController::class, 'update'])->name('tags.update'); 
+Route::delete('tags/{tag}', [TagController::class, 'destroy'])->name('tags.destroy');
+
+// Danh sách chất liệu
+Route::get('/materials', [MaterialController::class, 'index'])->name('materials.index');
+Route::get('/materials/create', [MaterialController::class, 'create'])->name('materials.create');
+Route::post('/materials', [MaterialController::class, 'store'])->name('materials.store');
+Route::get('/materials/{material}/edit', [MaterialController::class, 'edit'])->name('materials.edit');
+Route::put('/materials/{material}', [MaterialController::class, 'update'])->name('materials.update');
+Route::delete('/materials/{material}', [MaterialController::class, 'destroy'])->name('materials.destroy');

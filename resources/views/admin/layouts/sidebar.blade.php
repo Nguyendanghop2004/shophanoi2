@@ -281,6 +281,8 @@
                     <li><a class="nav-link" href="{{ route('sizes.index') }}"><span>Quản lý Kích Thước</span></a></li>
                     <li><a class="nav-link" href="{{ route('colors.index') }}"><span>Quản lý Màu Sắc</span></a></li>
                     <li><a class="nav-link" href="{{ route('brands.index') }}"><span>Quản lý Thương Hiệu</span></a></li>
+                    <li><a class="nav-link" href="{{ route('tags.index') }}"><span>Quản lý Thẻ <span></a></li>
+                    <li><a class="nav-link" href="{{ route('materials.index') }}"><span>Quản lý Chất Liệu <span></a></li>
                 </ul>
             </li>
 
