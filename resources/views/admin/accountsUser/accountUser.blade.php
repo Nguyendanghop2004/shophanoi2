@@ -25,6 +25,7 @@
                                 <th scope="col">Email</th>
                                 <th scope="col">Image</th>
                                 <th scope="col">Trạng thái</th>
+                                <th scope="col">Địa chỉ</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -46,6 +47,13 @@
                                             <span class="badge badge-danger">Không hoạt động</span>
                                         @endif
                                     </td>
+                                    <td>
+                                        <p class="mb-1">{{ $user->ward->name_xaphuong ?? '' }}</p>
+                                        <p class="mb-1">{{ $user->province->name_quanhuyen ?? '' }}</p>
+                                        <p class="mb-1">{{ $user->city->name ?? '' }}</p>
+                                        <p class="mb-0">{{ $user->address }}</p>
+                                    </td>
+                                    
                                     <td>
                                         <div class="d-flex">
                                             <a href="{{ route('admin.accountsUser.edit', $user->id) }}"
@@ -69,7 +77,6 @@
                                                         <i class="fas fa-lock"></i>
                                                     </button>
                                                 </form>
-                                               
                                             @else
                                                 <form action="{{ route('admin.accountsUser.activateUser', $user->id) }}"
                                                     method="POST" class="ml-2">
@@ -82,7 +89,6 @@
 
                                         </div>
                                     </td>
-
                                 </tr>
                             @endforeach
                         </tbody>
