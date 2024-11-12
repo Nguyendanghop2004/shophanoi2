@@ -8,16 +8,18 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @stack('header-css-js')
+
     <!-- General CSS Files -->
     <link rel="stylesheet" href="{{ asset('admin/assets/modules/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/assets/modules/fontawesome/css/all.min.css') }}">
-    <!-- CSS Libraries -->
-    <link rel="stylesheet" href="{{ asset('admin/assets/modules/dropzonejs/dropzone.css') }}">
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="{{ asset('admin/assets/modules/jqvmap/dist/jqvmap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/assets/modules/weather-icon/css/weather-icons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/assets/modules/weather-icon/css/weather-icons-wind.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/assets/modules/summernote/summernote-bs4.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/select2/dist/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/jquery-selectric/selectric.css') }}">
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
@@ -34,6 +36,7 @@
 
         gtag('config', 'UA-94034622-3');
     </script>
+
     <!-- /END GA -->
 </head>
 
@@ -79,16 +82,18 @@
     <script src="{{ asset('admin/assets/modules/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>
     <script src="{{ asset('admin/assets/modules/summernote/summernote-bs4.js') }}"></script>
     <script src="{{ asset('admin/assets/modules/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
-    <script src="{{ asset('admin/assets/modules/dropzonejs/min/dropzone.min.js') }}"></script>
-
     <script src="{{ asset('admin/assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/modules/jquery-selectric/jquery.selectric.min.js') }}"></script>
     <script src="{{ asset('admin/assets/modules/upload-preview/assets/js/jquery.uploadPreview.min.js') }}"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
     <!-- Page Specific JS File -->
     <script src="{{ asset('admin/assets/js/page/index-0.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/page/components-multiple-upload.js') }}"></script>
+    
     <!-- Template JS File -->
     <script src="{{ asset('admin/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
+    
 
     @stack('scripts')
 </body>

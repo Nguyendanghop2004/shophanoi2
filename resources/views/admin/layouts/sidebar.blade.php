@@ -23,7 +23,7 @@
                     <a href="#" class="search-close"><i class="fas fa-times"></i></a>
                 </div>
                 <div class="search-item">
-                    <a href="#">#Stisla</a>
+                    <a href="">#Stisla</a>
                     <a href="#" class="search-close"><i class="fas fa-times"></i></a>
                 </div>
                 <div class="search-header">
@@ -202,26 +202,32 @@
                 </div>
             </div>
         </li>
-        <li class="dropdown"><a href="#" data-toggle="dropdown"
-                class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+        <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                 <img alt="image" src="assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
-                <div class="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div>
+                <div class="d-sm-none d-lg-inline-block">
+                    {{ Auth::check() ? Auth::user()->name : 'Guest' }}
+                </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-title">Logged in 5 min ago</div>
-                <a href="features-profile.html" class="dropdown-item has-icon">
+
+                <a href="{{ route('admin.profile.index') }}" class="dropdown-item has-icon">
                     <i class="far fa-user"></i> Profile
                 </a>
                 <a href="features-activities.html" class="dropdown-item has-icon">
                     <i class="fas fa-bolt"></i> Activities
                 </a>
                 <a href="features-settings.html" class="dropdown-item has-icon">
-                    <i class="fas fa-cog"></i> Settings
+                    <i class="fas fa-cog"></i> Đổi mật khẩu
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item has-icon text-danger">
+                <a href="{{ route('admin.post-logout') }}" class="dropdown-item has-icon text-danger">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
+                
+                <!-- Form Logout -->
+
             </div>
         </li>
     </ul>
@@ -231,7 +237,7 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="index.html">Stisla</a>
+            <a href="{{ route('admin.dashboard') }}">Stisla</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
             <a href="index.html">St</a>
@@ -255,34 +261,80 @@
                     <li><a class="nav-link" href="layout-top-navigation.html">Top Navigation</a></li>
                 </ul>
             </li>
+
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-columns"></i> <span>Thanh Trượt</span></a>
                 <ul class="dropdown-menu">
-                    @foreach($parentCategories  as $category)
-                    <li><a class="nav-link" href="{{route('admin.slider.index',$category->id)}}">{{ $category->name }}</a></li>
+                    @foreach ($parentCategories as $category)
+                        <li><a class="nav-link"
+                                href="{{ route('admin.slider.index', $category->id) }}">{{ $category->name }}</a></li>
                     @endforeach
-                    <li><a class="nav-link" href="{{route('admin.slider.index',['category_id' => 'trash'])}}">Thùng Rác<i class="fas fa-recycle"></i></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.slider.index', ['category_id' => 'trash']) }}">Thùng
+                            Rác<i class="fas fa-recycle"></i></a></li>
 
                 </ul>
             </li>
+
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bài Viết</span></a></li>
+            <li class="dropdown ">
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Tài Khoản</span></a>
+                <ul class="dropdown-menu">
+                    <li class="dropdown">
+                        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                                class="fas fa-columns"></i> <span>Admin</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="{{ route('admin.accounts.create') }}"><i
+                                        class="far fa-square"></i> <span>Thêm mới</span></a></li>
+                            <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><i
+                                        class="far fa-square"></i> <span>Danh sách</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                                class="fas fa-columns"></i> <span>User</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="{{ route('admin.accountsUser.create') }}"><i
+                                        class="far fa-square"></i> <span>Thêm mới</span></a></li>
+                            <li><a class="nav-link" href="{{ route('admin.accountsUser.accountUser') }}"><i
+                                        class="far fa-square"></i> <span>Danh sách</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </li>
+
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bình Luận</span></a></li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Sản Phẩm</span></a></li>
 
-            <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Danh Mục Sản Phẩm</span></a></li>
-            <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="far fa-square"></i> <span>Liên Hệ</span></a></li>
-            <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="far fa-square"></i> <span>Nhân viên giao hàng</span></a></li>
-         
+            <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Danh Mục Sản
+                        Phẩm</span></a></li>
+            <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="far fa-square"></i> <span>Liên
+                        Hệ</span></a></li>
+            <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="far fa-square"></i> <span>Nhân
+                        viên giao hàng</span></a></li>
+
             <li class="dropdown">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
-                        class="fas fa-folder"></i> <span>Danh mục sản phẩm</span></a>
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                    <span>Danh mục sản phẩm</span></a>
                 <ul class="dropdown-menu">
-                <li><a class="nav-link" href="{{route('categories.list')}}"><span>Danh Sách Danh Mục</span></a></li>
-                <li><a class="nav-link" href="{{route('categories.add')}}"><span>Thêm Mới Danh Mục</span></a></li>
+
+                <li><a class="nav-link" href="{{route('admin.categories.list')}}"><span>Danh Sách Danh Mục</span></a></li>
+                <li><a class="nav-link" href="{{route('admin.categories.add')}}"><span>Thêm Mới Danh Mục</span></a></li>
+
                 </ul>
             </li>
-        </ul>
-
+            <li class="menu-header">Quản Lí tài khoản</li>
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                    <span>Account</span></a>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Tài khoản
+                                Admin</span></a></li>
+                    <li><a class="nav-link" href=""><span>Tài khoản User</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Phân quyền và vai
+                                trò</span></a></li>
+                </ul>
+            </li>
     </aside>
 </div>
