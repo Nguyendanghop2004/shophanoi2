@@ -137,12 +137,10 @@
 
         if (action === 'city') {
             result = 'province';
-            // Reset the province and wards fields
             $('#province').html('<option value="">Chọn quận/huyện</option>');
             $('#wards').html('<option value="">Chọn xã/phường</option>');
         } else if (action === 'province') {
             result = 'wards';
-            // Reset the wards field
             $('#wards').html('<option value="">Chọn xã/phường</option>');
         }
 
@@ -162,7 +160,6 @@
             }
         });
 
-        // Additional code to handle resetting dependent fields
         if (action === 'city') {
             $('#province').html('<option value="">Chọn quận/huyện</option>');
             $('#wards').html('<option value="">Chọn xã/phường</option>');
