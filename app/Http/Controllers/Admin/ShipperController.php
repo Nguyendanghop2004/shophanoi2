@@ -31,10 +31,10 @@ use Illuminate\Http\Request;
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Lưu hình ảnh
+        // Lưu hình ảnh vào thư mục 'public/images'
         $profilePicturePath = null;
         if ($request->hasFile('profile_picture')) {
-            $profilePicturePath = $request->file('profile_picture')->store('images');
+            $profilePicturePath = $request->file('profile_picture')->store('images', 'public');
         }
 
         Shipper::create([
@@ -43,11 +43,12 @@ use Illuminate\Http\Request;
             'phone' => $request->phone,
             'hometown' => $request->hometown,
             'email' => $request->email,
-            'profile_picture' => $profilePicturePath,
+            'profile_picture' => $profilePicturePath ? 'storage/' . $profilePicturePath : null,
         ]);
 
         return redirect()->route('shippers.index')->with('success', 'Thêm nhân viên giao hàng thành công!');
     }
+
 
     public function edit($id)
     {
@@ -63,7 +64,7 @@ use Illuminate\Http\Request;
             'phone' => 'required',
             'hometown' => 'required',
             'date_of_birth' => 'required|date',
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $shipper = Shipper::findOrFail($id);
@@ -77,15 +78,15 @@ use Illuminate\Http\Request;
 
         // Xử lý ảnh nếu có thay đổi
         if ($request->hasFile('profile_picture')) {
-            $fileName = time() . '.' . $request->profile_picture->extension();
-            $request->profile_picture->move(public_path('images'), $fileName);
-            $shipper->profile_picture = 'images/' . $fileName;
+            $profilePicturePath = $request->file('profile_picture')->store('images', 'public');
+            $shipper->profile_picture = 'storage/' . $profilePicturePath;
         }
 
         $shipper->save();
 
         return redirect()->route('shippers.index')->with('success', 'Cập nhật thông tin nhân viên giao hàng thành công!');
     }
+
 
     public function search(Request $request)
     {
