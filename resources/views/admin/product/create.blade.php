@@ -4,17 +4,8 @@
     <section class="section">
 
         <div class="section-header">
-            <h1>Sản Phẩm</h1>
+            <h1>Tạo Mới Sản Phẩm</h1>
         </div>
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
         <form action="{{ route('admin.product.store') }}" method="post" enctype="multipart/form-data">
             @csrf
@@ -95,7 +86,8 @@
                                                 <div class="text-danger ml-2">*</div>
                                             </div>
                                             <input type="text" name="product_code"
-                                                class="form-control  @error('product_code') is-invalid  @enderror"value="{{ old('product_code') }}">
+                                                class="form-control  @error('product_code') is-invalid  @enderror"
+                                                value="{{ old('product_code') }}">
                                             @error('product_code')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -207,6 +199,11 @@
                             <div class="section-title mt-0 d-flex justify-content-start">Danh mục<div
                                     class="text-danger ml-2">*</div>
                             </div>
+                            @error('categories')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                             @foreach ($categories as $category)
                                 <div class="custom-control custom-checkbox">
                                     {{-- Hiển thị checkbox cho danh mục cha --}}
@@ -228,7 +225,7 @@
 
                         </div>
                         <div class="card-body">
-                            <div class="section-title mt-0">Bộ sưu tập</div>
+                            <div class="section-title mt1">Bộ sưu tập</div>
                             <div class="form-group">
                                 <select name="tagCollection[]" class="form-control select2" multiple="">
                                     @foreach ($tagCollection as $tag)
@@ -294,7 +291,7 @@
         async function loadVariantCard(colorId) {
             return new Promise((resolve, reject) => {
                 $.ajax({
-                    url: `{{ url('/admin/get-variant-card') }}/${colorId}`,
+                    url: `{{ url('/admin/product/get-variant-card') }}/${colorId}`,
                     method: 'GET',
                     success: function(response) {
                         resolve(response); // Trả về mã HTML của thẻ biến thể
@@ -364,7 +361,7 @@
                 </label>
             `;
                 });
-
+ 
                 sizeVariantHtml += `</div>`;
 
                 // Thêm các trường quantity collapsible cho mỗi kích thước và ẩn mặc định

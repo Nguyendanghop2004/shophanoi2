@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\CouponController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
@@ -57,10 +58,22 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
 
     Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
 
-    //quan li san pham
+    // Quản lý sản phẩm
     Route::resource('product', ProductController::class);
-    Route::get('/get-variant-card/{color}', [ProductController::class, 'getVariantCard']);
-    Route::get('/product/get-variant-card/{colorId}', [ProductController::class, 'getVariantCard']);
+//quản lí coupons
+Route::get('/admin/coupons', [CouponController::class, 'index'])->name('coupons.index');
+Route::get('/admin/coupons/create', [CouponController::class, 'create'])->name('coupons.create');
+Route::post('/admin/coupons', [CouponController::class, 'store'])->name('coupons.store');
+Route::get('/admin/coupons/{id}/edit', [CouponController::class, 'edit'])->name('coupons.edit');
+Route::put('/admin/coupons/{id}', [CouponController::class, 'update'])->name('coupons.update');
+Route::delete('/admin/coupons/{id}', [CouponController::class, 'destroy'])->name('coupons.destroy');
+    // Các route riêng cho sản phẩm
+    Route::get('/product/get-variant-card/{colorId}', [ProductController::class, 'getVariantCard'])->name('product.getVariantCard');
+    Route::put('product/{id}/update-main-product', [ProductController::class, 'updateMainProduct'])->name('product.updateMainProduct');
+    Route::put('product/{id}/update-variant-product', [ProductController::class, 'updateVariantProduct'])->name('product.updateVariantProduct');
+    Route::post('product/create-variant-product', [ProductController::class, 'createVariantProduct'])->name('product.createVariantProduct');
+    Route::post('product/create-variant-color-product', [ProductController::class, 'createVariantColorProduct'])->name('product.createVariantColorProduct');
+    Route::delete('/product-variants/{id}', [ProductController::class, 'destroyVariant'])->name('product-variants.destroy');
 
 
 });
