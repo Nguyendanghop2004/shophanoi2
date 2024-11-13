@@ -125,8 +125,8 @@
                                     <p class="fade-item fade-item-2">{{ $slider->short_description }}</p>
                                     @if ($slider->link_url !== null)
                                         <a href="{{ $slider->link_url }}"
-                                            class="fade-item fade-item-3 tf-btn btn-fill animate-hover-btn btn-xl radius-60"><span>Đi đến cửa hàng</span><i
-                                                class="icon icon-arrow-right"></i></a>
+                                            class="fade-item fade-item-3 tf-btn btn-fill animate-hover-btn btn-xl radius-60"><span>Đi
+                                                đến cửa hàng</span><i class="icon icon-arrow-right"></i></a>
                                     @endif
 
                                 </div>
@@ -254,79 +254,71 @@
                     data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3"
                     data-pagination-lg="3">
                     <div class="swiper-wrapper">
+                        @foreach ($products as $product)
                         <div class="swiper-slide" lazy="true">
                             <div class="card-product">
                                 <div class="card-product-wrapper">
-                                    <a href="product-detail.html" class="product-img">
+                                    <a href="" class="product-img">
+                                        <!-- Ảnh chính của sản phẩm -->
                                         <img class="lazyload img-product"
-                                            data-src="{{ asset('client/assets/images/products/orange-1.jpg') }}"
-                                            src="{{ asset('client/assets/images/products/orange-1.jpg') }}"
-                                            alt="image-product">
-                                        <img class="lazyload img-hover"
-                                            data-src="{{ asset('client/assets/images/products/white-1.jpg') }}"
-                                            src="{{ asset('client/assets/images/products/white-1.jpg') }}"
-                                            alt="image-product">
+                                            data-src="{{ asset('storage/' . $product->main_image_url) }}"
+                                            src="{{ asset('storage/' . $product->main_image_url) }}"
+                                            alt="{{ $product->product_name }}">
+
+                                        <!-- Ảnh hover, có thể lấy ảnh khác từ bảng images nếu có nhiều ảnh -->
+                                        @php
+                                            $hoverImage = $product->images->first(); // Giả sử bạn có quan hệ images trong model
+                                        @endphp
+                                        @if ($hoverImage)
+                                            <img class="lazyload img-hover"
+                                                data-src="{{ asset('storage/' . $hoverImage->image_url) }}"
+                                                src="{{ asset('storage/' . $hoverImage->image_url) }}"
+                                                alt="{{ $product->product_name }}">
+                                        @endif
                                     </a>
+
                                     <div class="list-product-btn">
-                                        <a href="#quick_add" data-bs-toggle="modal"
-                                            class="box-icon bg_white quick-add tf-btn-loading">
-                                            <span class="icon icon-bag"></span>
-                                            <span class="tooltip">Quick Add</span>
-                                        </a>
-                                        <a href="javascript:void(0);" class="box-icon bg_white wishlist btn-icon-action">
-                                            <span class="icon icon-heart"></span>
-                                            <span class="tooltip">Add to Wishlist</span>
-                                            <span class="icon icon-delete"></span>
-                                        </a>
-                                        <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                            class="box-icon bg_white compare btn-icon-action">
-                                            <span class="icon icon-compare"></span>
-                                            <span class="tooltip">Add to Compare</span>
-                                            <span class="icon icon-check"></span>
-                                        </a>
-                                        <a href="#quick_view" data-bs-toggle="modal"
-                                            class="box-icon bg_white quickview tf-btn-loading">
-                                            <span class="icon icon-view"></span>
-                                            <span class="tooltip">Quick View</span>
-                                        </a>
+                                        <!-- Các nút chức năng: Thêm nhanh, Yêu thích, So sánh, Xem nhanh -->
+                                        <!-- Code cho các nút chức năng -->
                                     </div>
+
                                     <div class="size-list">
-                                        <span>4 sizes available</span>
+                                        <span>{{ $product->variants->count() }} sizes available</span>
                                     </div>
                                 </div>
+
                                 <div class="card-product-info">
-                                    <a href="product-detail.html" class="title link">Ribbed Tank Top</a>
-                                    <span class="price">$16.95</span>
+                                    <a href="" class="title link">{{ $product->product_name }}</a>
+                                    <span class="price">${{ number_format($product->price, 2) }}</span>
+
+                                    <!-- Hiển thị màu sắc -->
                                     <ul class="list-color-product">
-                                        <li class="list-color-item color-swatch active">
-                                            <span class="tooltip">Orange</span>
-                                            <span class="swatch-value bg_orange-3"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/orange-1.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/orange-1.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                        <li class="list-color-item color-swatch">
-                                            <span class="tooltip">Black</span>
-                                            <span class="swatch-value bg_dark"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/black-1.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/black-1.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                        <li class="list-color-item color-swatch">
-                                            <span class="tooltip">White</span>
-                                            <span class="swatch-value bg_white"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/white-1.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/white-1.jpg') }}"
-                                                alt="image-product">
-                                        </li>
+                                        @foreach ($product->colors as $color)
+                                            <li class="list-color-item color-swatch {{ $loop->first ? 'active' : '' }}">
+                                                <span class="tooltip">{{ $color->name }}</span>
+                                                <span class="swatch-value" style="background-color: {{ $color->sku_color }}"></span>
+
+                                                @php
+                                                    // Tìm ảnh của màu tương ứng
+                                                    $colorImage = $product->images->firstWhere('color_id', $color->id);
+                                                @endphp
+                                                @if ($colorImage)
+                                                    <img class="lazyload"
+                                                        data-src="{{ asset('storage/' . $colorImage->image_url) }}"
+                                                        src="{{ asset('storage/' . $colorImage->image_url) }}"
+                                                        alt="{{ $color->name }}">
+                                                @endif
+                                            </li>
+                                        @endforeach
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="swiper-slide" lazy="true">
+                    @endforeach
+
+
+
+                        {{-- <div class="swiper-slide" lazy="true">
                             <div class="card-product">
                                 <div class="card-product-wrapper">
                                     <a href="product-detail.html" class="product-img">
@@ -675,7 +667,7 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="nav-sw nav-next-slider nav-next-product box-icon w_46 round"><span

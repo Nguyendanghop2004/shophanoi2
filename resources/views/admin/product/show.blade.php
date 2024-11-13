@@ -5,15 +5,64 @@
         <div class="section-header">
             <h1>Sản Phẩm {{ $product->product_name }} </h1>
         </div>
+
+        <div class="row">
+            <div class="col-lg-4 col-md-8 col-12">
+                <div class="card card-warning">
+                    <div class="card-header d-flex justify-content-between">
+                        <h4>Chi tiết sản phẩm </h4>
+                        <a href="javascript:history.back()" class="btn btn-primary">Quay lại</a>
+                    </div>
+                </div>
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h4>Thông tin chung sản phẩm chính </h4>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Tên Sản Phẩm:</strong> {{ $product->product_name }}</p>
+                        <p><strong>Mã Sản Phẩm:</strong> {{ $product->sku }}</p>
+                        <p><strong>Giá Sản Phẩm:</strong> {{ $product->price }}</p>
+                        <p><strong>Đường dẫn thân thiện:</strong> {{ $product->slug }}</p>
+                        <p><strong>Thương hiệu:</strong> {{ $product->brand->name }}</p>
+                        <div class="form-group d-flex align-items-center">
+                            <img id="brandImage" src="{{ asset('storage/' . $product->brand->image_brand_url) }}"
+                                alt="" style="height: 80px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h4>Danh mục</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul style="list-style-type: none; padding: 0;">
+                            @foreach($product->categories as $category)
+                                <li><strong>{{ $category->name }}</strong></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8 col-12">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h4>Mô tả</h4>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group pl-5 pr-5">
+                                {!! $product->description !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         @foreach ($product->colors as $color)
-            <div class="card card-primary">
+            <div class="card card-info">
                 <div class="card-header">
                     <h4>Biến thể màu {{ $color->name }}</h4>
-                    <div class="card-header-action">
-                        <a href="" class="btn btn-primary">
-                            Back
-                        </a>
-                    </div>
                 </div>
 
                 <div class="card-body">
@@ -37,8 +86,6 @@
                                     <tr>
                                         <th scope="col">Mã biến thể</th>
                                         <th scope="col">Tên sản phẩm</th>
-                                        <th scope="col">Danh mục</th>
-                                        <th scope="col">Biến thể màu</th>
                                         <th scope="col">Biến thể size</th>
                                         <th scope="col">Số lượng tồn kho</th>
                                         <th scope="col">Giá cộng thêm</th>
@@ -51,13 +98,11 @@
                                         <tr>
                                             <td>{{ $variant->product_code }}</td>
                                             <td>{{ $product->product_name }}</td>
-                                            <td></td>
-                                            <td>{{ $color->name }}</td>
                                             <td>{{ $variant->size->name ?? 'Không có kích thước' }}</td>
                                             <td>{{ $variant->stock_quantity }}</td>
                                             <td>{{ $variant->price }}</td>
                                             <td>
-                                                @if ($variant->status)
+                                                @if($variant->status)
                                                     <span class="badge badge-success">Hoạt động</span>
                                                 @else
                                                     <span class="badge badge-warning">Không hoạt động</span>
@@ -77,6 +122,6 @@
 @endsection
 
 @push('scripts')
-    <link rel="stylesheet" href="{{asset('admin/assets/modules/chocolat/dist/css/chocolat.css')}}">
-    <script src="{{asset('admin/assets/modules/chocolat/dist/js/jquery.chocolat.min.js')}}"></script>
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/chocolat/dist/css/chocolat.css') }}">
+    <script src="{{ asset('admin/assets/modules/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
 @endpush
