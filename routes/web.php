@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\ContactMessageController;
@@ -58,6 +57,3 @@ Route::resource('contact', ContactMessageController::class);
 Route::get('/shippers/search', [ShipperController::class, 'search'])->name('shippers.search');
 
 Route::resource('shippers', ShipperController::class);
-
-
-
