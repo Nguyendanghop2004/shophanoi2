@@ -39,5 +39,16 @@ class ProductVariant extends Model
     {
         return $this->hasMany(PriceSale::class);
     }
-    
+
+    // Quan hệ với bảng tag_collections
+    public function tagCollections()
+    {
+        return $this->belongsToMany(TagCollection::class, 'product_variant_tag_collection', 'product_variant_id', 'tag_collection_id');
+    }
+
+    // Quan hệ với bảng tag_materials
+    public function tagMaterials()
+    {
+        return $this->belongsToMany(TagMaterial::class, 'product_variant_tag_material', 'product_variant_id', 'tag_material_id');
+    }
 }

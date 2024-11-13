@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers\Admin;
 
@@ -26,8 +26,18 @@ class ColorController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|string|max:255']);
-        Color::create($request->all());
+        // Validate the name and the color (hex code)
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'color' => 'required|string|max:7', // Color must be a valid hex code (#RRGGBB)
+        ]);
+
+        // Save the color with the hex code
+        Color::create([
+            'name' => $request->input('name'),
+            'color' => $request->input('color'), // Store the color as hex
+        ]);
+
         return redirect()->route('colors.index')->with('success', 'Color created successfully.');
     }
 
@@ -38,8 +48,18 @@ class ColorController extends Controller
 
     public function update(Request $request, Color $color)
     {
-        $request->validate(['name' => 'required|string|max:255']);
-        $color->update($request->all());
+        // Validate the name and the color (hex code)
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'color' => 'required|string|max:7', // Color must be a valid hex code (#RRGGBB)
+        ]);
+
+        // Update the color with the new name and color
+        $color->update([
+            'name' => $request->input('name'),
+            'color' => $request->input('color'), // Update the color as hex
+        ]);
+
         return redirect()->route('colors.index')->with('success', 'Color updated successfully.');
     }
 

@@ -22,8 +22,11 @@ use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Admin\PriceSaleController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\TagCollectionController;
+use App\Http\Controllers\Admin\TagMaterialController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -124,3 +127,12 @@ Route::post('/materials', [MaterialController::class, 'store'])->name('materials
 Route::get('/materials/{material}/edit', [MaterialController::class, 'edit'])->name('materials.edit');
 Route::put('/materials/{material}', [MaterialController::class, 'update'])->name('materials.update');
 Route::delete('/materials/{material}', [MaterialController::class, 'destroy'])->name('materials.destroy');
+
+Route::resource('variants', ProductVariantController::class);
+Route::get('variants/search', [ProductVariantController::class, 'search'])->name('variants.search');
+
+Route::resource('product', ProductController::class);
+
+Route::resource('tag_collections', TagCollectionController::class);
+
+Route::resource('tag_materials', TagMaterialController::class);

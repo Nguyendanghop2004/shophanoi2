@@ -281,8 +281,8 @@
                     <li><a class="nav-link" href="{{ route('sizes.index') }}"><span>Quản lý Kích Thước</span></a></li>
                     <li><a class="nav-link" href="{{ route('colors.index') }}"><span>Quản lý Màu Sắc</span></a></li>
                     <li><a class="nav-link" href="{{ route('brands.index') }}"><span>Quản lý Thương Hiệu</span></a></li>
-                    <li><a class="nav-link" href="{{ route('tags.index') }}"><span>Quản lý Thẻ <span></a></li>
-                    <li><a class="nav-link" href="{{ route('materials.index') }}"><span>Quản lý Chất Liệu <span></a></li>
+                    <li><a class="nav-link" href="{{ route('tag_collections.index') }}"><span>Quản lý Bộ Sưu Tập <span></a></li>
+                    <li><a class="nav-link" href="{{ route('tag_materials.index') }}"><span>Quản lý Chất Liệu <span></a></li>
                 </ul>
             </li>
 
@@ -315,7 +315,7 @@
             </li>
 
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bình Luận</span></a></li>
-            <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Sản Phẩm</span></a></li>
+            <li><a class="nav-link" href="{{route('product.index')}}"><i class="far fa-square"></i> <span>Sản Phẩm</span></a></li>
 
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Danh Mục Sản Phẩm</span></a></li>
             <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="far fa-square"></i> <span>Liên Hệ</span></a></li>

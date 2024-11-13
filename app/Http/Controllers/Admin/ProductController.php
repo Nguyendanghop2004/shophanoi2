@@ -15,6 +15,8 @@ use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\Size;
 use App\Models\Tag;
+use App\Models\TagCollection;
+use App\Models\TagMaterial;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -70,8 +72,8 @@ class ProductController extends Controller
             ->get();
         $brands = Brand::all();
         $colors = Color::all();
-        $tagCollection = Tag::where('type', 'collection')->get();
-        $tagMaterial = Tag::where('type', 'material')->get();
+        $tagCollection = TagCollection::all();
+        $tagMaterial = TagMaterial::all();
         return view('admin.product.create', compact('categories', 'brands', 'colors', 'tagCollection', 'tagMaterial'));
     }
     public function getVariantCard($colorId)

@@ -3,14 +3,14 @@
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>Danh Sách Chất Liệu</h1>
+        <h1>Danh Sách Bộ Sưu Tập</h1>
     </div>
 
     <div class="card card-primary">
         <div class="card-header">
-            <h4>Danh Sách Chất Liệu</h4>
+            <h4>Danh Sách Bộ Sưu Tập</h4>
             <div class="card-header-action">
-                <a href="{{ route('materials.create') }}" class="btn btn-primary">Thêm Chất Liệu</a>
+                <a href="{{ route('tag_collections.create') }}" class="btn btn-primary">Thêm Bộ Sưu Tập</a>
             </div>
         </div>
 
@@ -18,7 +18,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div class="section-title mt-0"></div>
                 <div class="card-header-action">
-                    <form class="form-inline" method="GET" action="{{ route('materials.index') }}">
+                    <form class="form-inline" method="GET" action="{{ route('tag_collections.index') }}">
                         <div class="search-element">
                             <input class="form-control" type="search" placeholder="Tìm kiếm..." aria-label="Search" name="search" value="{{ request()->search }}" data-width="250">
                             <button class="btn" type="submit"><i class="fas fa-search"></i></button>
@@ -32,28 +32,24 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Tên Chất Liệu</th>
-                            <th scope="col">Loại</th>
-                            <th scope="col">Mô Tả</th>
+                            <th scope="col">Tên Bộ Sưu Tập</th>
                             <th scope="col">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if($materials->isEmpty())
+                        @if($tagCollections->isEmpty())
                             <tr>
-                                <td colspan="5" class="text-center text-danger">Không có chất liệu nào.</td>
+                                <td colspan="3" class="text-center text-danger">Không có bộ sưu tập nào.</td>
                             </tr>
                         @else
-                            @foreach ($materials as $index => $material)
+                            @foreach ($tagCollections as $index => $tagCollection)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $material->name }}</td>
-                                    <td>{{ $material->type }}</td>
-                                    <td>{{ $material->description }}</td>
+                                    <td>{{ $tagCollection->name }}</td>
                                     <td>
                                         <div class="d-flex justify-content-start">
-                                            <a href="{{ route('materials.edit', $material->id) }}" class="btn btn-warning ml-2"><i class="fas fa-edit"></i></a>
-                                            <form action="{{ route('materials.destroy', $material->id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                            <a href="{{ route('tag_collections.edit', $tagCollection->id) }}" class="btn btn-warning ml-2"><i class="fas fa-edit"></i></a>
+                                            <form action="{{ route('tag_collections.destroy', $tagCollection->id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger ml-2"><i class="fas fa-trash"></i></button>
@@ -73,20 +69,20 @@
         <div class="buttons">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
-                    <li class="page-item {{ $materials->onFirstPage() ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ $materials->previousPageUrl() }}" aria-label="Previous">
+                    <li class="page-item {{ $tagCollections->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $tagCollections->previousPageUrl() }}" aria-label="Previous">
                             <span aria-hidden="true">«</span>
                         </a>
                     </li>
 
-                    @foreach ($materials->getUrlRange(1, $materials->lastPage()) as $page => $url)
-                        <li class="page-item {{ $page == $materials->currentPage() ? 'active' : '' }}">
+                    @foreach ($tagCollections->getUrlRange(1, $tagCollections->lastPage()) as $page => $url)
+                        <li class="page-item {{ $page == $tagCollections->currentPage() ? 'active' : '' }}">
                             <a class="page-link" href="{{ $url }}">{{ $page }}</a>
                         </li>
                     @endforeach
 
-                    <li class="page-item {{ $materials->hasMorePages() ? '' : 'disabled' }}">
-                        <a class="page-link" href="{{ $materials->nextPageUrl() }}" aria-label="Next">
+                    <li class="page-item {{ $tagCollections->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $tagCollections->nextPageUrl() }}" aria-label="Next">
                             <span aria-hidden="true">»</span>
                         </a>
                     </li>
@@ -118,7 +114,5 @@
             toastr.error("{{ session('error') }}");
         @endif
     });
-
-   
 </script>
 @endsection
