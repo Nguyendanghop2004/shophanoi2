@@ -80,16 +80,16 @@ class AccoutUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
         $user = User::findOrFail($id);
-        $cities = City::orderby('matp','ASC')->get();
-        $provinces = Province::all();
-        $wards = Wards::all();
+        $cities = City::orderBy('name_thanhpho', 'ASC')->get();
+        $provinces = Province::where('matp', $user->city_id)->orderBy('name_quanhuyen', 'ASC')->get();
+        $wards = Wards::where('maqh', $user->province_id)->orderBy('name_xaphuong', 'ASC')->get();
     
         return view('admin.accountsUser.edit', compact('user', 'cities', 'provinces', 'wards'));
     }
-
+    
     /**
      * Update the specified resource in storage.
      */
@@ -120,7 +120,7 @@ class AccoutUserController extends Controller
     $dataUser->update($data);
 
     // Trả về thông báo thành công
-    return back()->with('success', 'Cập nhật thành công!');
+    return redirect()->route('admin.accountsUser.accountUser')->with('success', 'Cập nhật thành công!');
 }
 
     /**
@@ -157,9 +157,5 @@ class AccoutUserController extends Controller
             echo $output;
         }
     }
-    
-        
-    
-
     
 }

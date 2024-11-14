@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
 Route::post('admin/login', [LoginController::class, 'store'])->name('admin.post-login');
 Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStatus')->group(callback: function () {
-    // Login admin
+    // Login admin  
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
     Route::get('account', [AccoutAdminController::class, 'account'])->name('accounts.account')->middleware('permission:index_account_admin');
@@ -30,6 +30,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::get('accountsUser/edit/{id}', [AccoutUserController::class, 'edit'])->name('accountsUser.edit');
     Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update');
     Route::delete('accountsUser/destroy/{id}', [AccoutUserController::class, 'destroy'])->name('accountsUser.destroy');
+// adress
+    Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address']);
+
     // end crud user 
 
     //start status user
@@ -74,7 +77,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
 
     // Quản lý sản phẩm
-    Route::resource('product', ProductController::class);
+    Route::resource('product', ProductController::class)->middleware('permission:product');
 
     // Các route riêng cho sản phẩm
     Route::get('/product/get-variant-card/{colorId}', [ProductController::class, 'getVariantCard'])->name('product.getVariantCard');
@@ -85,7 +88,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::delete('/product-variants/{id}', [ProductController::class, 'destroyVariant'])->name('product-variants.destroy');
 
 
-    Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address']);
 
     
 
