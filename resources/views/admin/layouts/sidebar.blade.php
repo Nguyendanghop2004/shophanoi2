@@ -260,17 +260,17 @@
                 </ul>
             </li>
 
-            <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bài Viết</span></a></li>
+            <li><a class="nav-link" href="blank.html"><i class="fas fa-file-alt"></i> <span>Bài Viết</span></a></li>
          
 
-            <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bình Luận</span></a></li>
+            <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
             @can('product')
-            <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Sản Phẩm</span></a></li>
+            <li><a class="nav-link" href="blank.html"><i class="fas fa-box"></i> <span>Sản Phẩm</span></a></li>
             @endcan
-            <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="far fa-square"></i> <span>Liên
+            <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="fas fa-envelope"></i> <span>Liên
                         Hệ</span></a></li>
             @can('shipper')
-            <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="far fa-square"></i> <span>Nhân
+            <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="fas fa-shipping-fast"></i> <span>Nhân
                         viên giao hàng</span></a></li>
             @endcan
             @can('categori')
@@ -288,7 +288,7 @@
             @can('Acount')
             <li class="menu-header">Quản Lí tài khoản</li>
             <li class="dropdown">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-user"></i>
                     <span>Account</span></a>
                 <ul class="dropdown-menu">
                     <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Tài khoản
@@ -299,6 +299,5 @@
                 </ul>
             </li>
             @endcan
-
     </aside>
 </div>
