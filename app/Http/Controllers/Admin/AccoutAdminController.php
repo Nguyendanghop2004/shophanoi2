@@ -225,7 +225,7 @@ class AccoutAdminController extends Controller
             $role = Role::find($role_id);
             $role->syncPermissions([]);
 
-            return redirect()->back()->with('cancel', 'Đã loại bỏ hết quyền của');
+            return redirect()->back()->with('cancel', 'Đã loại bỏ hết quyền của '.$admin->name);
         }
 
         $role = Role::find($role_id);

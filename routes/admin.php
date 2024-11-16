@@ -30,7 +30,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::get('accountsUser/edit/{id}', [AccoutUserController::class, 'edit'])->name('accountsUser.edit');
     Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update');
     Route::delete('accountsUser/destroy/{id}', [AccoutUserController::class, 'destroy'])->name('accountsUser.destroy');
-    // end crud user 
+    // adress
+    Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address']);
+
+    // end crud user
 
     //start status user
     Route::post('accountsUser/{id}/accountUser', [AccoutUserController::class, 'activateUser'])->name('accountsUser.activateUser')->middleware('permission:activate_Account');
@@ -49,7 +52,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::post('permissions/insert_roles/{id}', [AccoutAdminController::class, 'insert_roles'])->name('permissions.insert_roles')->middleware('permission:insert_roles');
     // Thêm vai trò
     Route::post('permissions/insertRoles', [AccoutAdminController::class, 'insertRoles'])->name('permissions.insertRoles')->middleware('permission:Grant_roles');
-    
+
     // Trạng thái tài khoản
     // routes/web.php
     Route::post('accounts/{id}/activate', [AccoutAdminController::class, 'activate'])->name('accounts.activate')->middleware('permission:activate_Account');
@@ -73,14 +76,20 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
 
     Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
 
-    //quan li san pham
-    Route::resource('product', ProductController::class);
-    Route::get('/get-variant-card/{color}', [ProductController::class, 'getVariantCard']);
-    Route::get('/product/get-variant-card/{colorId}', [ProductController::class, 'getVariantCard']);
+    // Quản lý sản phẩm
+    Route::resource('product', ProductController::class)->middleware('permission:product');
+
+    // Các route riêng cho sản phẩm
+    Route::get('/product/get-variant-card/{colorId}', [ProductController::class, 'getVariantCard'])->name('product.getVariantCard');
+    Route::put('product/{id}/update-main-product', [ProductController::class, 'updateMainProduct'])->name('product.updateMainProduct');
+    Route::put('product/{id}/update-variant-product', [ProductController::class, 'updateVariantProduct'])->name('product.updateVariantProduct');
+    Route::post('product/create-variant-product', [ProductController::class, 'createVariantProduct'])->name('product.createVariantProduct');
+    Route::post('product/create-variant-image-product', [ProductController::class, 'createVariantImageColorProduct'])->name('product.createVariantImageColorProduct');
+    Route::post('product/create-variant-color-product', [ProductController::class, 'createVariantColorProduct'])->name('product.createVariantColorProduct');
+    Route::delete('/product-variants/{id}', [ProductController::class, 'destroyVariant'])->name('product-variants.destroy');
 
 
-    Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address']);
 
-    
+
 
 });

@@ -48,10 +48,10 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <p class="mb-1">{{ $user->ward->name_xaphuong ?? '' }}</p>
-                                        <p class="mb-1">{{ $user->province->name_quanhuyen ?? '' }}</p>
-                                        <p class="mb-1">{{ $user->city->name ?? '' }}</p>
-                                        <p class="mb-0">{{ $user->address }}</p>
+                                        <p class="mb-1 ga-bottom">{{ $user->ward->name_xaphuong ?? '' }}</p>
+                                        <p class="mb-1 ga-bottom ">{{ $user->province->name_quanhuyen ?? '' }}</p>
+                                        <p class="mb-1 ga-bottom ">{{ $user->city->name_thanhpho ?? '' }}</p>
+                                        <p class="mb-0 ga-bottom ">{{ $user->address }}</p>
                                     </td>
                                     
                                     <td>

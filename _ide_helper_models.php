@@ -17,6 +17,43 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
+ * @property string $email
+ * @property bool $status
+ * @property string $password
+ * @property string|null $image_path
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
+ * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
+ * @property-read int|null $roles_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin permission($permissions, $without = false)
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin role($roles, $guard = null, $without = false)
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin whereImagePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin withoutPermission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin withoutRole($roles, $guard = null)
+ */
+	class Admin extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $name
  * @property string $image_brand_url
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -58,6 +95,8 @@ namespace App\Models{
  * @property-read Category|null $parent
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $products
  * @property-read int|null $products_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $productss
+ * @property-read int|null $productss_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Slider> $sliders
  * @property-read int|null $sliders_count
  * @method static \Illuminate\Database\Eloquent\Builder|Category newModelQuery()
@@ -78,6 +117,23 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Category withoutTrashed()
  */
 	class Category extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $matp
+ * @property string $name_thanhpho
+ * @property string $type
+ * @method static \Illuminate\Database\Eloquent\Builder|City newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|City newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|City query()
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereMatp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereNameThanhpho($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereType($value)
+ */
+	class City extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -163,6 +219,8 @@ namespace App\Models{
  * @property-read int|null $categories_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Color> $colors
  * @property-read int|null $colors_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductImage> $images
+ * @property-read int|null $images_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read int|null $tags_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductVariant> $variants
@@ -258,6 +316,25 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|ProductVariant withoutTrashed()
  */
 	class ProductVariant extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $maqh
+ * @property string $name_quanhuyen
+ * @property string $type
+ * @property int $matp
+ * @method static \Illuminate\Database\Eloquent\Builder|Province newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Province newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Province query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Province whereMaqh($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Province whereMatp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Province whereNameQuanhuyen($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Province whereType($value)
+ */
+	class Province extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -378,18 +455,72 @@ namespace App\Models{
 /**
  * 
  *
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string|null $address
+ * @property int $status 0: active  1 : deactive
+ * @property string|null $phone_number
+ * @property int|null $city_id
+ * @property int|null $province_id
+ * @property int|null $wards_id
+ * @property string|null $image
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string $password
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\City|null $city
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \App\Models\Province|null $province
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
+ * @property-read \App\Models\Wards|null $ward
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePhoneNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereProvinceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereWardsId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|User withoutTrashed()
  */
 	class User extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $xaid
+ * @property string $name_xaphuong
+ * @property string $type
+ * @property int $maqh
+ * @method static \Illuminate\Database\Eloquent\Builder|Wards newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Wards newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Wards query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Wards whereMaqh($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wards whereNameXaphuong($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wards whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wards whereXaid($value)
+ */
+	class Wards extends \Eloquent {}
 }
 
