@@ -162,21 +162,21 @@
                      
                             <div class="collection-item style-2 hover-img" >
                                 <div class="collection-inner">
-                                    <a href="{{route('home.slug', $category->slug)}}" class="0"> 
+                                    <a href="" class="0"> 
                                         <img class="lazyload"
                                             data-src="{{  Storage::url($category->image_path) }}"
                                             src="{{ Storage::url($category->image_path) }}"
                                             alt="collection-img" >
                                     </a>
                                     <div class="collection-content">
-                                        <a href="{{route('home.slug', $category->slug)}}"
+                                        <a href=""
                                             class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>{{$category->name}}</span><i
                                                 class="icon icon-arrow1-top-left"></i></a>
                                     </div>
                                 </div>
                             </div>
                             
-                        </div>
+                        </div>          
                        
                         
                        
