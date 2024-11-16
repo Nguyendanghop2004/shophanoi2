@@ -84,6 +84,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::put('product/{id}/update-main-product', [ProductController::class, 'updateMainProduct'])->name('product.updateMainProduct');
     Route::put('product/{id}/update-variant-product', [ProductController::class, 'updateVariantProduct'])->name('product.updateVariantProduct');
     Route::post('product/create-variant-product', [ProductController::class, 'createVariantProduct'])->name('product.createVariantProduct');
+    Route::post('product/create-variant-image-product', [ProductController::class, 'createVariantImageColorProduct'])->name('product.createVariantImageColorProduct');
     Route::post('product/create-variant-color-product', [ProductController::class, 'createVariantColorProduct'])->name('product.createVariantColorProduct');
     Route::delete('/product-variants/{id}', [ProductController::class, 'destroyVariant'])->name('product-variants.destroy');
 

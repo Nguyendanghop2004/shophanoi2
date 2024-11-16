@@ -160,6 +160,11 @@
                                                 {{ $message }}
                                             </div>
                                         @enderror
+                                        @error('stock')
+                                            <div class="invalid-feedback" style="display: block;">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
 
                                     <div class="form-group">
@@ -361,7 +366,7 @@
                 </label>
             `;
                 });
- 
+
                 sizeVariantHtml += `</div>`;
 
                 // Thêm các trường quantity collapsible cho mỗi kích thước và ẩn mặc định

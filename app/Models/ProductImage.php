@@ -11,7 +11,7 @@ class ProductImage extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['product_id','color_id', 'image_url'];
+    protected $fillable = ['id','product_id','color_id', 'image_url'];
 
     public function variant()
     {

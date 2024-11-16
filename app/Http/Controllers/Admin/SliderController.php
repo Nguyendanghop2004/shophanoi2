@@ -107,7 +107,7 @@ class SliderController extends Controller
     protected function handleImageUpload($request, $existingImagePath = null)
     {
         if ($request->hasFile('image_path')) {
-            $imagePath = $request->file('image_path')->store('sliders', 'public');
+            $imagePath = $request->file('image_path')->store('images/sliders', 'public');
 
             if ($existingImagePath && Storage::disk('public')->exists($existingImagePath)) {
                 Storage::disk('public')->delete($existingImagePath);
@@ -170,9 +170,15 @@ class SliderController extends Controller
     {
 
         $slider = Slider::onlyTrashed()->findOrFail($id);
-        $slider->forceDelete(); 
+        $slider->forceDelete();
+        // Xóa ảnh trên hệ thống tệp (đảm bảo đường dẫn ảnh đúng)
+        $imagePath = storage_path('app/public/' . $slider->image_path); // Đảm bảo đường dẫn chính xác
 
-        return redirect()->route('admin.slider.index', ['category_id' =>'trash'])
+        if (file_exists($imagePath)) {
+            // Xóa file ảnh thực tế
+            unlink($imagePath); // Xóa ảnh khỏi hệ thống tệp
+        }
+        return redirect()->route('admin.slider.index', ['category_id' => 'trash'])
             ->with('success', 'Slider đã bị xóa vĩnh viễn!');
     }
 
