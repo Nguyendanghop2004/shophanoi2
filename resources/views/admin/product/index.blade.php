@@ -10,7 +10,7 @@
             <div class="card-header">
                 <h4>Danh Sách Sản Phẩm</h4>
                 <div class="card-header-action">
-                    <a href="{{route('admin.product.create') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.product.create') }}" class="btn btn-primary">
                         Tạo Mới Sản Phẩm
                     </a>
                 </div>
@@ -58,32 +58,42 @@
                                         </td>
                                         <td>{{ $product->product_name }}</td>
                                         <td>
-                                            @foreach ($product->categories as $category)
-                                                <a href="#" class="badge badge-light m-1">{{ $category->name }}</a>
-                                            @endforeach
+                                            <div class="row">
+                                                @foreach ($product->categories as $category)
+                                                    <a href="#"
+                                                        class="badge badge-light m-1">{{ $category->name }}</a>
+                                                @endforeach
+                                            </div>
                                         </td>
                                         <td>
-                                            @foreach ($product->colors as $color)
-                                                <span class="colorinput-color"
-                                                    style="background-color: {{ $color->sku_color }};"></span>
-                                            @endforeach
+                                            <div class="row">
+                                                @foreach ($product->colors as $color)
+                                                    <span class="colorinput-color m-1 "
+                                                        style="background-color: {{ $color->sku_color }};"></span>
+                                                @endforeach
+                                            </div>
                                         </td>
                                         <td>{{ $product->total_stock_quantity }}</td>
                                         <td>{{ $product->price }}</td>
                                         <td>
-                                            @foreach ($product->tags as $tag)
-                                                @if ($tag->type === 'collection')
-                                                    <a href="#" class="badge badge-info m-1"> {{ $tag->name }}</a>
-                                                @endif
-                                            @endforeach
+                                            <div class="row">
+                                                @foreach ($product->tags as $tag)
+                                                    @if ($tag->type === 'collection')
+                                                        <a href="#" class="badge badge-info m-1">
+                                                            {{ $tag->name }}</a>
+                                                    @endif
+                                                @endforeach
+                                            </div>
                                         </td>
                                         <td>
-                                            @foreach ($product->tags as $tag)
-                                                @if ($tag->type === 'material')
-                                                    <a href="#" class="badge badge-success m-1">
-                                                        {{ $tag->name }}</a>
-                                                @endif
-                                            @endforeach
+                                            <div class="row">
+                                                @foreach ($product->tags as $tag)
+                                                    @if ($tag->type === 'material')
+                                                        <a href="#" class="badge badge-success m-1">
+                                                            {{ $tag->name }}</a>
+                                                    @endif
+                                                @endforeach
+                                            </div>
                                         </td>
                                         <td>
                                             @if ($product->status)
@@ -95,11 +105,13 @@
 
                                         <td scope="row">
                                             <div class="d-flex justify-content-start">
-                                                <div> <a href="{{route('admin.product.show', $product->id)}}" class="btn btn-primary"><i class="fas fa-eye"
+                                                <div> <a href="{{ route('admin.product.show', $product->id) }}"
+                                                        class="btn btn-primary"><i class="fas fa-eye"
                                                             style="color: #ffffff;"></i></a></div>
 
                                                 <div class="btn-group mb-2 ml-2">
-                                                    <div> <a href="{{route('admin.product.edit', $product->id)}}" class="btn btn-warning"><i class="fas fa-edit"
+                                                    <div> <a href="{{ route('admin.product.edit', $product->id) }}"
+                                                            class="btn btn-warning"><i class="fas fa-edit"
                                                                 style="color: #ffffff;"></i></a></div>
                                                 </div>
                                                 <div>
@@ -149,3 +161,26 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <style>
+        /* CSS */
+        .colorinput-color {
+            border-radius: 50%;
+            display: inline-block;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .colorinput-color:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .colorinput-color.active {
+            border: 3px solid rgba(0, 123, 255, 0.6);
+            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.4);
+        }
+    </style>
+@endpush

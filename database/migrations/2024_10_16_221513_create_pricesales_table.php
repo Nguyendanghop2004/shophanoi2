@@ -10,16 +10,14 @@ class CreatePricesalesTable extends Migration
     {
         Schema::create('pricesales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade'); // Liên kết với biến thể sản phẩm
-            $table->decimal('sale_price', 10, 2); // Giá khuyến mãi cho biến thể
-            $table->string('sku')->unique();
-            $table->string('type');
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade'); // Liên kết với sản phẩm
+            $table->string('discount_type')->nullable(); // 'percentage' hoặc 'fixed'
+            $table->decimal('discount_value', 10, 2)->nullable(); // Giá trị giảm giá
             $table->timestamp('start_date'); // Ngày bắt đầu khuyến mãi
             $table->timestamp('end_date')->nullable(); // Ngày kết thúc khuyến mãi
             $table->timestamps();
             $table->softDeletes();
         });
-
     }
 
     public function down()

@@ -30,8 +30,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('home/{category_id?}', [HomeController::class, 'home'])->name('home');
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+Route::post('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
+Route::post('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+
+Route::get('{category_id?}', [HomeController::class, 'home'])->name('home');
+
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
 Route::get('/shop-collection/{id}', [ShopCollectionController::class, 'index'])->name('shop-collection');

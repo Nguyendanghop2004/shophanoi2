@@ -42,7 +42,7 @@
                         </button>
                     </div>
                 </div>
-              
+
             </div>
 
             <div id="sizeVariantsContainer-{{ $color->id }}" class="mt-3">
