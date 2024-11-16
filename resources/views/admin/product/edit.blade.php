@@ -261,7 +261,7 @@
                     @csrf
                     @method('PUT')
                 </form> --}}
-                {{-- <p> <button class="btn btn-primary" id="openModal">Tạo biến thể mới</button> </p> --}}
+                <p> <button class="btn btn-primary" id="openModal">Tạo biến thể mới</button> </p>
 
 
                 @foreach ($product->colors as $color)
@@ -272,9 +272,10 @@
 
                         <div class="card-body">
                             <div class="card-body">
-                                <div class="form-group">
-                                    <button class="btn btn-primary" id="openModal">Chỉnh sửa ảnh</button>
-                                    <button class="btn btn-primary open-variant-modal"
+                                <div class="form-group d-flex">
+                                    <button class="btn btn-primary open-variant-image-modal"
+                                        data-color-id="{{ $color->id }}">Chỉnh sửa ảnh</button>
+                                    <button class="btn btn-primary open-variant-modal ml-2"
                                         data-color-id="{{ $color->id }}">Tạo biến thể của màu
                                         {{ $color->name }}</button>
                                     <form action="{{ route('admin.product-variants.destroy', $color->id) }}"
@@ -344,23 +345,16 @@
                                                             @endif
                                                         </td>
                                                         <td>
-                                                            <form
-                                                                action="{{ route('admin.product-variants.destroy', $color->id) }}"
-                                                                method="post"
-                                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="button" class="btn btn-danger ml-2"
-                                                                    onclick="deleteVariant({{ $variant->id }})">
-                                                                    <i class="fas fa-trash" style="color: #ffffff;"></i>
-                                                                </button>
-                                                            </form>
+                                                            <button type="button" class="btn btn-danger ml-2"
+                                                                onclick="deleteVariant({{ $variant->id }})">
+                                                                <i class="fas fa-trash" style="color: #ffffff;"></i>
+                                                            </button>
                                                     </tr>
                                                 @endforeach
 
                                             </tbody>
                                         </table>
-                                        <button class="btn btn-primary">Cập Nhật</button>
+                                        <button type="submit" class="btn btn-primary">Cập Nhật</button>
                                     </form>
                                 </div>
                             </div>
@@ -558,6 +552,91 @@
                 </div>
             </div>
         </div>
+        <!-- Modal variant image color-->
+        <div class="modal fade" id="exampleModalvariantImagecolor{{ $color->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Tạo biến thể mới cuả màu {{ $color->name }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="{{ route('admin.product.createVariantImageColorProduct') }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" name="product_code" value="{{ $product->sku }}">
+                        <input type="hidden" name="color_id" value="{{ $color->id }}">
+
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                <label for="color">Chọn Màu</label>
+                                <select class="form-control" id="color" name="colorVatiant" disabled>
+                                    @foreach ($product->colors as $colorrr)
+                                        <option @selected($color->id == $colorrr->id) value="{{ $colorrr->id }}">
+                                            {{ $colorrr->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('colorVatiant')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="color">Thêm ảnh mới</label>
+                                @error('imagesVatiant')
+                                    <div class="invalid-feedback" style="display: block;">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                <div
+                                    class="file-upload-image-detail-color-{{ $color->id }} file-upload-image-color rounded p-4 text-center">
+                                    <input type="file" id="imageUpload-image-detail-color-{{ $color->id }}"
+                                        name="image_detail_color_{{ $color->id }}[]" multiple accept="image/*">
+                                    <div class="file-upload-label font-weight-bold">
+                                        Kéo và thả tập tin vào đây hoặc nhấn để chọn nhiều Ảnh
+                                        <div class="text-danger ml-2">*</div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="image-preview-container-image-detail-color-{{ $color->id }} image-preview-container-image-detail-color mt-3 d-flex flex-wrap">
+                                    <!-- Các ảnh được chọn sẽ hiển thị ở đây -->
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="color">Chọn ảnh cũ cần xóa</label>
+                                <div class="image-preview-container-image-detail-color mt-3 d-flex flex-wrap">
+                                    @if (isset($imagesGroupedByColor[$color->id]))
+                                        @foreach ($imagesGroupedByColor[$color->id] as $image)
+                                            <div class="image-preview-color">
+                                                <!-- Ảnh -->
+                                                <img class="w-100 h-100"
+                                                    src="{{ asset('storage/' . $image->image_url) }}" alt="">
+
+                                                <!-- Checkbox ở góc trên bên phải -->
+                                                <input type="checkbox" name="delete_images[]"
+                                                    value="{{ $image->id }}" class="checkbox-top-right">
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary" id="saveBtn">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     @endforeach
 @endsection
 
@@ -702,6 +781,159 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Xử lý tất cả phần tử có class 'file-upload-image-detail-color-'
+            const fileUploads = document.querySelectorAll('[class^="file-upload-image-detail-color-"]');
+
+            fileUploads.forEach((fileUpload) => {
+                // Lấy ID động của fileUpload và imagePreviewContainer
+                const colorId = fileUpload.classList[0].split('-').pop(); // Lấy color id từ class
+                const imageUpload = document.getElementById(`imageUpload-image-detail-color-${colorId}`);
+                const imagePreviewContainer = document.querySelector(
+                    `.image-preview-container-image-detail-color-${colorId}`);
+
+                let selectedFiles_image_color = [];
+
+                // Khi người dùng nhấn vào khu vực upload, kích hoạt input file
+                fileUpload.addEventListener('click', () => {
+                    imageUpload.click();
+                });
+
+                // Khi người dùng chọn ảnh, xử lý sự kiện thay đổi
+                imageUpload.addEventListener('change', (event) => {
+                    const files_image_color = Array.from(event.target.files);
+
+                    // Lọc bỏ các ảnh đã có trong mảng selectedFiles_image_color
+                    const newFiles_image_color = files_image_color.filter(file => !
+                        selectedFiles_image_color.some(selectedFile =>
+                            selectedFile.name === file.name));
+
+                    // Cập nhật mảng selectedFiles_image_color với các tệp mới
+                    selectedFiles_image_color = selectedFiles_image_color.concat(
+                        newFiles_image_color);
+
+                    // Xóa tất cả các ảnh đã có trong preview trước khi thêm ảnh mới
+                    imagePreviewContainer.innerHTML = '';
+
+                    // Hiển thị tất cả các ảnh đã chọn
+                    selectedFiles_image_color.forEach(file => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const imgContainer = document.createElement('div');
+                            imgContainer.classList.add('image-preview');
+
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.classList.add('w-100', 'h-100');
+                            imgContainer.appendChild(img);
+
+                            const removeButton = document.createElement('button');
+                            removeButton.classList.add('remove-button');
+                            removeButton.textContent = '×';
+                            removeButton.addEventListener('click', () => {
+                                imagePreviewContainer.removeChild(imgContainer);
+
+                                // Cập nhật selectedFiles_image_color để loại bỏ ảnh đã xóa
+                                selectedFiles_image_color =
+                                    selectedFiles_image_color.filter(
+                                        selectedFile => selectedFile.name !==
+                                        file.name);
+
+                                // Cập nhật lại giá trị của input file
+                                const dataTransfer = new DataTransfer();
+                                selectedFiles_image_color.forEach(
+                                    selectedFile => {
+                                        dataTransfer.items.add(
+                                            selectedFile);
+                                    });
+                                imageUpload.files = dataTransfer.files;
+                            });
+
+                            imgContainer.appendChild(removeButton);
+                            imagePreviewContainer.appendChild(imgContainer);
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                });
+
+                // Xử lý kéo và thả ảnh vào vùng upload
+                fileUpload.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    fileUpload.classList.add('dragover');
+                });
+
+                fileUpload.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    fileUpload.classList.remove('dragover');
+                });
+
+                fileUpload.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    fileUpload.classList.remove('dragover');
+
+                    const files_image_color = Array.from(e.dataTransfer.files);
+
+                    // Lọc bỏ các ảnh đã có trong mảng selectedFiles_image_color
+                    const newFiles_image_color = files_image_color.filter(file => !
+                        selectedFiles_image_color.some(selectedFile =>
+                            selectedFile.name === file.name));
+
+                    // Cập nhật mảng selectedFiles_image_color với các tệp mới
+                    selectedFiles_image_color = selectedFiles_image_color.concat(
+                        newFiles_image_color);
+
+                    // Xóa tất cả các ảnh đã có trong preview trước khi thêm ảnh mới
+                    imagePreviewContainer.innerHTML = '';
+
+                    // Hiển thị tất cả các ảnh đã chọn
+                    selectedFiles_image_color.forEach(file => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const imgContainer = document.createElement('div');
+                            imgContainer.classList.add('image-preview');
+
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.classList.add('w-100', 'h-100');
+                            imgContainer.appendChild(img);
+
+                            const removeButton = document.createElement('button');
+                            removeButton.classList.add('remove-button');
+                            removeButton.textContent = '×';
+                            removeButton.addEventListener('click', () => {
+                                imagePreviewContainer.removeChild(imgContainer);
+
+                                // Cập nhật selectedFiles_image_color để loại bỏ ảnh đã xóa
+                                selectedFiles_image_color =
+                                    selectedFiles_image_color.filter(
+                                        selectedFile => selectedFile.name !==
+                                        file.name);
+
+                                // Cập nhật lại giá trị của input file
+                                const dataTransfer = new DataTransfer();
+                                selectedFiles_image_color.forEach(
+                                    selectedFile => {
+                                        dataTransfer.items.add(
+                                            selectedFile);
+                                    });
+                                imageUpload.files = dataTransfer.files;
+                            });
+
+                            imgContainer.appendChild(removeButton);
+                            imagePreviewContainer.appendChild(imgContainer);
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                });
+            });
+        });
+    </script>
+
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -853,6 +1085,11 @@
                 const colorId = $(this).data("color-id"); // Lấy id màu từ thuộc tính data
                 $(`#exampleModalvariantcolor${colorId}`).modal("show"); // Mở modal tương ứng
             });
+
+            $(".open-variant-image-modal").on("click", function() {
+                const colorId = $(this).data("color-id"); // Lấy id màu từ thuộc tính data
+                $(`#exampleModalvariantImagecolor${colorId}`).modal("show"); // Mở modal tương ứng
+            });
         });
     </script>
     <script>
@@ -935,7 +1172,8 @@
         }
     </style>
     <style>
-        .file-upload {
+        .file-upload,
+        .file-upload-image-color {
             border: 2px dashed #ccc;
             /* Viền nét đứt */
             border-radius: 5px;
@@ -949,15 +1187,66 @@
             display: none;
         }
 
-        .image-preview {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            position: relative;
-            /* Để định vị nút "Xóa" */
+        .file-upload-image-color input[type="file"] {
+            display: none;
         }
+
+        .image-preview {
+            display: inline-block;
+            /* Hiển thị ảnh theo dạng ngang */
+            margin: 10px;
+            /* Khoảng cách giữa các ảnh */
+            max-width: 92px;
+            /* Đảm bảo ảnh không tràn container */
+            overflow: hidden;
+            /* Ẩn phần ảnh vượt ra ngoài */
+            position: relative;
+            /* Để vị trí của nút xóa dễ quản lý */
+        }
+
+        .image-preview-color {
+            display: inline-block;
+            margin: 10px;
+            max-width: 92px;
+            position: relative;
+            /* Để cho checkbox có thể được đặt tuyệt đối trong ảnh */
+        }
+
+        .checkbox-top-right {
+            position: absolute;
+            top: 5px;
+            /* Cách từ trên xuống */
+            right: 5px;
+            /* Cách từ bên phải sang */
+            z-index: 999;
+            /* Đảm bảo checkbox nằm trên cùng */
+            width: 20px;
+            /* Kích thước checkbox */
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .image-preview img {
+            width: 100px;
+            /* Giữ tỷ lệ ảnh phù hợp với container */
+            height: auto;
+            /* Đảm bảo tỷ lệ khung hình của ảnh không bị méo */
+            object-fit: cover;
+            /* Cắt ảnh sao cho vừa với container mà không bị kéo dãn */
+        }
+
+        .image-preview button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            /* Nền bán trong cho nút xóa */
+            border: none;
+            padding: 5px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
 
         .remove-button {
             position: absolute;

@@ -42,6 +42,11 @@ class Product extends Model
             'color_id'    // Khóa trên bảng product_variants
         )->distinct()->select('colors.id', 'colors.name', 'colors.sku_color'); // Chọn các cột cần thiết từ bảng colors
     }
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class, 'product_id', 'id'); // Thay đổi tên model và các khóa ngoại nếu cần
+    }
+
 
     public function images()
     {
