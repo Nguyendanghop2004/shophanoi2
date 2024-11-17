@@ -36,6 +36,7 @@
 
         gtag('config', 'UA-94034622-3');
     </script>
+
     <!-- /END GA -->
 </head>
 
@@ -88,10 +89,11 @@
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('admin/assets/js/page/index-0.js') }}"></script>
-
+    
     <!-- Template JS File -->
     <script src="{{ asset('admin/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
+    
 
     @stack('scripts')
 </body>

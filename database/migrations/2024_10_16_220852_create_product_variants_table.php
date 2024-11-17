@@ -18,7 +18,8 @@ return new class extends Migration
             $table->foreignId('size_id')->constrained('sizes')->onDelete('cascade'); // Liên kết với kích thước
             $table->string('product_code')->unique(); // Mã sản phẩm riêng cho từng biến thể
             $table->integer('stock_quantity')->default(0); // Số lượng tồn kho cho từng biến thể
-            $table->decimal('price', 10, 2); // Giá của biến thể sản phẩm
+            $table->integer('reserved_quantity')->default(0); // Số lượng tồn kho cho từng biến thể
+            $table->decimal('price', 10, 2); // Giá cộng thêm của biến thể sản phẩm
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
             $table->softDeletes();
