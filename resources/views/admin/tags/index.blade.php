@@ -1,0 +1,122 @@
+@extends('admin.layouts.master')
+
+@section('content')
+<section class="section">
+    <div class="section-header">
+        <h1>Danh Sách Tags</h1>
+    </div>
+
+    <div class="card card-primary">
+        <div class="card-header">
+            <h4>Danh Sách Tags</h4>
+            <div class="card-header-action">
+                <a href="{{ route('tags.create') }}" class="btn btn-primary">Thêm Tag</a>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="section-title mt-0"></div>
+                <div class="card-header-action">
+                    <form class="form-inline" method="GET" action="{{ route('tags.index') }}">
+                        <div class="search-element">
+                            <input class="form-control" type="search" placeholder="Tìm kiếm..." aria-label="Search" name="search" value="{{ request()->search }}" data-width="250">
+                            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Tên Tag</th>
+                            <th scope="col">Loại</th>
+                            <th scope="col">Mô Tả</th>
+                            <th scope="col">Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if($tags->isEmpty())
+                            <tr>
+                                <td colspan="5" class="text-center text-danger">Không có tag nào.</td>
+                            </tr>
+                        @else
+                            @foreach ($tags as $index => $tag)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $tag->name }}</td>
+                                    <td>{{ $tag->type }}</td>
+                                    <td>{{ $tag->description }}</td>
+                                    <td>
+                                        <div class="d-flex justify-content-start">
+                                            <a href="{{ route('tags.edit', $tag->id) }}" class="btn btn-warning ml-2"><i class="fas fa-edit"></i></a>
+                                            <form action="{{ route('tags.destroy', $tag->id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger ml-2"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body mx-auto">
+        <div class="buttons">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item {{ $tags->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $tags->previousPageUrl() }}" aria-label="Previous">
+                            <span aria-hidden="true">«</span>
+                        </a>
+                    </li>
+
+                    @foreach ($tags->getUrlRange(1, $tags->lastPage()) as $page => $url)
+                        <li class="page-item {{ $page == $tags->currentPage() ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                        </li>
+                    @endforeach
+
+                    <li class="page-item {{ $tags->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $tags->nextPageUrl() }}" aria-label="Next">
+                            <span aria-hidden="true">»</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+<script>
+    $(document).ready(function () {
+        toastr.options = {
+            "closeButton": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+        };
+
+        @if(session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
+
+        @if(session('error'))
+            toastr.error("{{ session('error') }}");
+        @endif
+    });
+</script>
+@endsection

@@ -1,55 +1,130 @@
 @extends('admin.layouts.master')
 
 @section('content')
-<div class="container mt-5">
-    <h1>Chỉnh Sửa Nhân Viên Giao Hàng</h1>
+<section class="section">
+    <div class="section-header">
+        <h1>Chỉnh Sửa Nhân Viên Giao Hàng</h1>
+    </div>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+    <div class="card card-primary">
+        <div class="card-header">
+            <h4>Cập Nhật Thông Tin Giao Hàng</h4>
         </div>
-    @endif
+        <div class="card-body">
+            <form action="{{ route('shippers.update', $shipper->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="form-group">
+                            <label>Ảnh Đại Diện</label>
+                            <div class="image-preview mx-auto" style="width: 100%; height: 250px; border: 2px dashed #ddd; display: flex; justify-content: center; align-items: center;">
+                                <label for="image-upload" id="image-label" style="cursor: pointer;">Chọn Tập Tin</label>
+                                <input type="file" name="profile_picture" id="image-upload" accept="image/*" style="display: none;" />
+                                <span id="image-preview" style="display: block;">
+                                    @if($shipper->profile_picture)
+                                        <img src="{{ Storage::url($shipper->profile_picture) }}" alt="Current Profile Picture" style="width: 100%; height: 100%; object-fit: cover;" />
+                                    @else
+                                        <span>Chưa có ảnh đại diện</span>
+                                    @endif
+                                </span>
+                            </div>
+                            @error('profile_picture')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
 
-    <form action="{{ route('shippers.update', $shipper->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
+                    <div class="col-lg-9 col-md-6 col-12">
+                        <div class="form-group">
+                            <label>Tên</label>
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $shipper->name) }}">
+                            @error('name')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
 
-        <div class="form-group">
-            <label for="name">Tên</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ $shipper->name }}" required>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $shipper->email) }}">
+                            @error('email')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Số Điện Thoại</label>
+                            <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone', $shipper->phone) }}">
+                            @error('phone')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Quê Quán</label>
+                            <input type="text" name="hometown" class="form-control @error('hometown') is-invalid @enderror" value="{{ old('hometown', $shipper->hometown) }}">
+                            @error('hometown')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ngày Sinh</label>
+                            <input type="date" name="date_of_birth" class="form-control @error('date_of_birth') is-invalid @enderror" value="{{ old('date_of_birth', $shipper->date_of_birth) }}">
+                            @error('date_of_birth')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
+    </div>
+</section>
 
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ $shipper->email }}" required>
-        </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-        <div class="form-group">
-            <label for="phone">Số Điện Thoại</label>
-            <input type="text" class="form-control" id="phone" name="phone" value="{{ $shipper->phone }}" required>
-        </div>
+<script>
+    $(document).ready(function () {
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+        };
 
-        <div class="form-group">
-            <label for="hometown">Quê Quán</label>
-            <input type="text" class="form-control" id="hometown" name="hometown" value="{{ $shipper->hometown }}" required>
-        </div>
+        @if(session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
 
-        <div class="form-group">
-            <label for="date_of_birth">Ngày Sinh</label>
-            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ $shipper->date_of_birth }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="profile_picture">Ảnh Đại Diện</label>
-            <input type="file" class="form-control" id="profile_picture" name="profile_picture">
-            <img src="{{ asset($shipper->profile_picture) }}" alt="Current Profile Picture" width="100" class="mt-2">
-        </div>
-
-        <button type="submit" class="btn btn-success">Cập Nhật</button>
-    </form>
-</div>
+        $('#image-upload').change(function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    $('#image-preview img').attr('src', event.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
 @endsection

@@ -13,12 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        //    'name' => 'Test User',
-        //     \App\Models\User::factory()->create([
-        //  'email' => 'test@example.com',
-        // ]);
+<<<<<<<<< Temporary merge branch 1
 
         $this->call(CategoriesTableSeeder::class);
         $this->call(SlidersTableSeeder::class);
@@ -27,7 +22,10 @@ class DatabaseSeeder extends Seeder
         $this->call(BrandSeeder::class);
         $this->call(SizeSeeder::class);
         $this->call(TagSeeder::class);
-
+        $this->call(ProductSeeder::class);
+=========
+        $this->call(AdminSeeder::class);
+>>>>>>>>> Temporary merge branch 2
     }
 }
 

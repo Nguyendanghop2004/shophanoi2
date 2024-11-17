@@ -259,24 +259,59 @@
 
                 </ul>
             </li>
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i> <span>Quản lý thuộc tính</span></a>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link" href="{{ route('sizes.index') }}"><span>Quản lý Kích Thước</span></a></li>
+                    <li><a class="nav-link" href="{{ route('colors.index') }}"><span>Quản lý Màu Sắc</span></a></li>
+                    <li><a class="nav-link" href="{{ route('brands.index') }}"><span>Quản lý Thương Hiệu</span></a></li>
+                    <li><a class="nav-link" href="{{ route('tag_collections.index') }}"><span>Quản lý Bộ Sưu Tập <span></a></li>
+                    <li><a class="nav-link" href="{{ route('tag_materials.index') }}"><span>Quản lý Chất Liệu <span></a></li>
+                </ul>
+            </li>
 
-            <li><a class="nav-link" href="blank.html"><i class="fas fa-file-alt"></i> <span>Bài Viết</span></a></li>
+            <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bài Viết</span></a></li>
+            <li class="dropdown ">
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Tài Khoản</span></a>
+                <ul class="dropdown-menu">
+                    <li class="dropdown">
+                        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                                class="fas fa-columns"></i> <span>Admin</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="{{ route('admin.accounts.create') }}"><i
+                                        class="far fa-square"></i> <span>Thêm mới</span></a></li>
+                            <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><i
+                                        class="far fa-square"></i> <span>Danh sách</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                                class="fas fa-columns"></i> <span>User</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="{{ route('admin.accountsUser.create') }}"><i
+                                        class="far fa-square"></i> <span>Thêm mới</span></a></li>
+                            <li><a class="nav-link" href="{{ route('admin.accountsUser.accountUser') }}"><i
+                                        class="far fa-square"></i> <span>Danh sách</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
 
+            </li>
 
-            <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
-            <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="fas fa-envelope"></i> <span>Liên
+            <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bình Luận</span></a></li>
+            <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Sản Phẩm</span></a></li>
+
+            <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Danh Mục Sản
+                        Phẩm</span></a></li>
+            <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="far fa-square"></i> <span>Liên
                         Hệ</span></a></li>
-            @can('shipper')
-                <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="fas fa-shipping-fast"></i>
-                        <span>Nhân
-                            viên giao hàng</span></a></li>
-            @endcan
+            <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="far fa-square"></i> <span>Nhân
+                        viên giao hàng</span></a></li>
 
-            @can('categori')
-                <li class="dropdown">
-                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
-                        <span>Danh mục sản phẩm</span></a>
-                    <ul class="dropdown-menu">
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                    <span>Danh mục sản phẩm</span></a>
+                <ul class="dropdown-menu">
 
                         <li><a class="nav-link" href="{{ route('admin.categories.list') }}"><span>Danh Sách Danh
                                     Mục</span></a></li>

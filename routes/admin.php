@@ -3,11 +3,16 @@
 use App\Http\Controllers\Admin\AccoutAdminController;
 use App\Http\Controllers\Admin\AccoutUserController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\PriceSaleController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\TagController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
@@ -77,19 +82,19 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
 
     // Quản lý sản phẩm
-    Route::resource('product', ProductController::class)->middleware('permission:product');
+    Route::resource('product', ProductController::class);
 
     // Các route riêng cho sản phẩm
     Route::get('/product/get-variant-card/{colorId}', [ProductController::class, 'getVariantCard'])->name('product.getVariantCard');
     Route::put('product/{id}/update-main-product', [ProductController::class, 'updateMainProduct'])->name('product.updateMainProduct');
     Route::put('product/{id}/update-variant-product', [ProductController::class, 'updateVariantProduct'])->name('product.updateVariantProduct');
     Route::post('product/create-variant-product', [ProductController::class, 'createVariantProduct'])->name('product.createVariantProduct');
-    Route::post('product/create-variant-image-product', [ProductController::class, 'createVariantImageColorProduct'])->name('product.createVariantImageColorProduct');
     Route::post('product/create-variant-color-product', [ProductController::class, 'createVariantColorProduct'])->name('product.createVariantColorProduct');
     Route::delete('/product-variants/{id}', [ProductController::class, 'destroyVariant'])->name('product-variants.destroy');
 
 
+    Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address']);
 
-
+    
 
 });
