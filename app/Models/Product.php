@@ -12,7 +12,7 @@ class Product extends Model
 
     protected $fillable = ['brand_id', 'slug', 'product_name', 'sku', 'description', 'price'];
 
-    public function categories()
+    public function category()
     {
         return $this->belongsToMany(Category::class, 'category_product');
     }
@@ -48,8 +48,5 @@ class Product extends Model
     }
 
 
-    public function images()
-    {
-        return $this->hasMany(ProductImage::class, 'product_id', 'id'); // Thay đổi tên model và các khóa ngoại nếu cần
-    }
+  
 }
