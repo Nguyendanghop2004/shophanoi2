@@ -5,15 +5,16 @@
                 <div class="demo-title">Log in</div>
                 <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
             </div>
+
             <div class="tf-login-form">
                 <form action="{{ route('account.login') }}" method="post">
                     @csrf
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" Nhập Email" type="email" name="">
+                        <input class="tf-field-input tf-input" placeholder=" Nhập Email" type="email" name="email">
                         <label class="tf-field-label" for="">Email *</label>
                     </div>
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="password" name="">
+                        <input class="tf-field-input tf-input" placeholder=" " type="password" name="password">
                         <label class="tf-field-label" for="">Password *</label>
                     </div>
                     <div>
@@ -78,28 +79,46 @@
                 <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
             </div>
             <div class="tf-login-form">
-                <form class="">
+
+                <form action="{{ route('accountUser.register') }}" method="post">
+                    @csrf
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="text" name="">
+                        <input class="tf-field-input tf-input" placeholder=" " type="text" name="name"
+                            value="{{ old('name') }}">
                         <label class="tf-field-label" for="">First name</label>
+                        @error('name')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
+
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="text" name="">
-                        <label class="tf-field-label" for="">Last name</label>
-                    </div>
-                    <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="email" name="">
+                        <input class="tf-field-input tf-input" placeholder=" " type="email" name="email"
+                            value="{{ old('email') }}">
                         <label class="tf-field-label" for="">Email *</label>
+                        @error('email')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="password" name="">
+                        <input class="tf-field-input tf-input" placeholder=" " type="password" name="password"
+                            value="{{ old('password') }}">
+                        <label class="tf-field-label" for="">Password </label>
+                        @error('password')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="tf-field style-1">
+                        <input class="tf-field-input tf-input" placeholder=" " type="password"
+                            name="password_confirmation" value="{{ old('password') }}">
                         <label class="tf-field-label" for="">Password *</label>
+                        @error('Password')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="bottom">
-                        <div class="w-100">
-                            <a href="register.html"
-                                class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Register</span></a>
-                        </div>
+                        <button class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"
+                            type="submit">Register</button>
+
                         <div class="w-100">
                             <a href="#login" data-bs-toggle="modal" class="btn-link fw-6 w-100 link">
                                 Already have an account? Log in here

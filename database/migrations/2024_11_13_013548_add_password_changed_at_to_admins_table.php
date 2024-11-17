@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('admins', function (Blueprint $table) {
-            $table->timestamp('password_changed_at')->nullable();
+            $table->boolean('check')->default(1)->comment('1 là đc đang nhập 0 là k đc đăng nhập');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('admins', function (Blueprint $table) {
-            $table->dropColumn('password_changed_at');
+            $table->dropColumn('check');
         });
     }
 };

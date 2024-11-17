@@ -8,7 +8,12 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AdminStoreRequest;
 use App\Http\Requests\Admin\ChangeUserRequest;
+use App\Models\HistorieAdmins;
+use App\Models\History;
+use App\Models\HistoryAdmin;
 use Auth;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -107,29 +112,38 @@ class AccoutAdminController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $dataAdmin = Admin::query()->findOrFail($id);
-        $data = $request->except('image_path');
-        $data = [
-            'name' => $request->name,
-            "email" => $request->email,
+        DB::transaction(function () use ($request, $id) {
+            $dataAdmin = Admin::query()->findOrFail($id);
+            $data = $request->except('image_path');
+            $data = [
+                'name' => $request->name,
+                "email" => $request->email,
 
-        ];
-        if ($request->password == '') {
-            $data['password'] = $dataAdmin->password;
-        } else {
-            // dd(21);
-            $data['password'] =  Hash::make($request->password);
-        }
-        if ($request->hasFile('image_path')) {
-            $data['image_path'] = Storage::put('public/images/admin', $request->file('image_path'));
-        }
-        // dd($data);
-        $img =  $dataAdmin->image_path;
+            ];
+            if ($request->password == '') {
+                $data['password'] = $dataAdmin->password;
+            } else {
+                // dd(21);
+                $data['password'] =  Hash::make($request->password);
+            }
+            if ($request->hasFile('image_path')) {
+                $data['image_path'] = Storage::put('public/images/admin', $request->file('image_path'));
+            }
+            // dd($data);
+            HistorieAdmins::create([
+                'admin_id' => auth()->id(), // Người thực hiện hành động
+                'action' => 'update', // Hành động (update, create, delete)
+                'model_type' => 'Admin', // Loại model
+                'model_id' => $dataAdmin->id, // ID của model
+                'changes' => array_diff($dataAdmin->getAttributes(), $data),
+            ]);
 
-        $dataAdmin->update($data);
-        if ($img &&  Storage::exists($img) && $request->hasFile('image_path')) {
-            Storage::delete($img);
-        }
+            $img =  $dataAdmin->image_path;
+            $dataAdmin->update($data);
+            if ($img && Storage::exists($img) && $request->hasFile('image_path')) {
+                Storage::delete($img);
+            }
+        });
         return back()->with('success', 'Sửa thành công');
     }
 
@@ -287,26 +301,27 @@ class AccoutAdminController extends Controller
     {
         return view('admin.accounts.index');
     }
-    
+
     public function change(string $id)
     {
         $dataUser = Admin::query()->findOrFail($id);
 
         return view('admin.accounts.change', compact('dataUser'));
     }
-    public function changeAdmin(ChangeUserRequest $request ,string $id)
+    public function changeAdmin(ChangeUserRequest $request, $id)
     {
-        // dd($request->user() ->password);
-        $dataUser = Admin::query()->findOrFail( $id);
-      
-        try {
-            $dataUser->update([
-                'password' => Hash::make($request->password),
-            ]);
-            return back()->with('success', 'Đổi mới thành công');
-        } catch (\Throwable $th) {
-            dd(404);
-        }
+        dd(1);
+        $user = Admin::findOrFail($id);
+        $user->timestamps = false;
+        $data = [
+            'password_changed_at' => now(),
+            'password' => Hash::make($request->password),
+            // 'check' => 0
+        ];
+        $user->update($data);
+        $user->timestamps = true;
+        return back()->with('success', 'Đổi mới thành công',);
     }
-   
+    //lịch sử cập nhật 
+
 }

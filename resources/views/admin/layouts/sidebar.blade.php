@@ -313,6 +313,8 @@
                                         class="far fa-square"></i> <span>Thêm mới</span></a></li>
                             <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><i
                                         class="far fa-square"></i> <span>Danh sách</span></a></li>
+                            <li><a class="nav-link" href="{{ route('admin.history') }}"><i
+                                        class="far fa-square"></i> <span>Lịch sử</span></a></li>
                         </ul>
                     </li>
                     <li class="dropdown">

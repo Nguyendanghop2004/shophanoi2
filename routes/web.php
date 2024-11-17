@@ -47,6 +47,8 @@ Route::get('payment-failure', [PaymentController::class, 'failure'])->name('paym
 //start Account 
 Route::get('/account/{section?}', [AccountController::class, 'acc'])->name('account');
 Route::post('/account/login', [AccountController::class, 'login'])->name('account.login');
+Route::get('/accountUser/logout', [AccountController::class, 'logout'])->name('accountUser.logout');
+Route::post('/accountUser/register', [AccountController::class, 'register'])->name('accountUser.register');
 
 // end Account 
 Route::middleware('auth')->group(function () {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 class LoginController extends Controller
 {
     /**
@@ -14,6 +15,7 @@ class LoginController extends Controller
     public function login()
     {
         if (Auth::guard('admin')->check()) {
+            
             return redirect()->route('admin.dashboard');
         }
         return response()->view('admin.logins.login')
@@ -21,13 +23,13 @@ class LoginController extends Controller
             ->header('Pragma', 'no-cache')
             ->header('Expires', '0 ');
     }
-    
-    
+
+
     public function store(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
         if (Auth::guard('admin')->attempt($credentials)) {
+
             return redirect()->route('admin.dashboard');
         }
 

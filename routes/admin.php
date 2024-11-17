@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AccoutAdminController;
 use App\Http\Controllers\Admin\AccoutUserController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\HistoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -92,4 +93,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::resource('product', ProductController::class);
     Route::get('/get-variant-card/{color}', [ProductController::class, 'getVariantCard']);
     Route::get('/product/get-variant-card/{colorId}', [ProductController::class, 'getVariantCard']);
+
+
+    Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address']);
+    // lịch sử cập nhật admin.
+    Route::get('history', [HistoryController::class, 'history'])->name('history');
+    Route::get('history/show/{id}', [HistoryController::class, 'show'])->name('show');
+    Route::delete('history/delete/{id}', [HistoryController::class, 'delete'])->name('delete');
+
 });

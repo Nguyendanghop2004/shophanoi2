@@ -2,13 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Admin;
 use Auth;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckPasswordChange
+class UpdateLogin
 {
     /**
      * Handle an incoming request.
@@ -17,13 +16,7 @@ class CheckPasswordChange
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $admin = Auth::user();
-        if (!$admin->check) {
-            // dd(1);
-            Auth::logout();
-            return redirect()->route('admin.login')->withErrors(['email' => 'Tài khoản của bạn đã bị thay đổi mật khẩu.']);
-
-        }
+        // Auth::user()->save();
         return $next($request);
     }
 }
