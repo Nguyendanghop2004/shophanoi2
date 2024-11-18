@@ -374,7 +374,7 @@
                 <div class="meta-filter-shop"></div>
                 <div class="grid-layout wrapper-shop" data-grid="grid-3">
    
-                @foreach ($products->products as $product)
+                {{-- @foreach ($products->products as $product)
 <div class="card-product" data-price="{{ $product->price }}" data-color="{{ implode(' ', $product->variants->pluck('color.name')->toArray()) }}">
     <div class="card-product-wrapper">
         @php
@@ -444,11 +444,82 @@
                 @php
                     }
                 @endphp
+            @endforeach --}}
+            @foreach ($products as $product)  <!-- Điều chỉnh để đúng với dữ liệu bạn truyền -->
+            <div class="card-product" data-price="{{ $product->price }}" data-color="{{ implode(' ', $product->variants->pluck('color.name')->toArray()) }}">
+                <div class="card-product-wrapper">
+                    @php
+                        $primaryImage = $product->images->first();  // Hình ảnh chính của sản phẩm
+                        $hoverImage = $product->images->skip(1)->first();  // Hình ảnh hover (nếu có)
+                    @endphp
+            
+                    <a href="{{ route('product-detail', ['slug' => $product->slug]) }}">
+                        <img class="lazyload img-product" id="main-image-{{ $product->id }}" data-src="{{ Storage::url($primaryImage->image_url) }}" src="{{ Storage::url($primaryImage->image_url) }}" alt="{{ $product->product_name }}">
+                        @if ($hoverImage)
+                            <img class="lazyload img-hover" data-src="{{ Storage::url($hoverImage->image_url) }}" src="{{ Storage::url($hoverImage->image_url) }}" alt="{{ $product->product_name }}">
+                        @endif
+                    </a>
+            
+                    <div class="list-product-btn absolute-2">
+                        <a href="#quick_add" data-bs-toggle="modal" class="box-icon bg_white quick-add tf-btn-loading">
+                            <span class="icon icon-bag"></span>
+                            <span class="tooltip">Quick Add</span>
+                        </a>
+                        <a href="javascript:void(0);" class="box-icon bg_white wishlist btn-icon-action">
+                            <span class="icon icon-heart"></span>
+                            <span class="tooltip">Add to Wishlist</span>
+                            <span class="icon icon-delete"></span>
+                        </a>
+                        <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft" class="box-icon bg_white compare btn-icon-action">
+                            <span class="icon icon-compare"></span>
+                            <span class="tooltip">Add to Compare</span>
+                            <span class="icon icon-check"></span>
+                        </a>
+                        <a href="#quick_view" data-bs-toggle="modal" class="box-icon bg_white quickview tf-btn-loading">
+                            <span class="icon icon-view"></span>
+                            <span class="tooltip">Quick View</span>
+                        </a>
+                    </div>
+                </div>
+            
+                <div class="card-product-info">
+                    <a href="{{ route('product-detail', ['slug' => $product->slug]) }}" class="title link">{{ $product->product_name }}</a>
+                    <span class="price" id="price-{{ $product->id }}">{{ number_format($product->price, 0) }} VNĐ</span>
+                    
+                    <ul class="list-color-product">
+                        @php
+                            $displayedColors = []; 
+                        @endphp
+            
+                        @foreach ($product->variants as $variant)
+                            @php
+                                $colorName = $variant->color->name;
+                                $colorCode = $variant->color->sku_color;
+                                $variantPrice = $variant->price;
+            
+                                // Chỉ hiển thị mỗi màu một lần
+                                if (!in_array($colorName, $displayedColors)) {
+                                    $displayedColors[] = $colorName;
+                                    $variantImage = $product->images->where('color_id', $variant->color->id)->first();
+                            @endphp
+                            <li class="list-color-item color-swatch">
+                                <span class="tooltip">{{ $colorName }}</span>
+                                <span class="swatch-value" 
+                                      style="background-color: {{ $colorCode }}" 
+                                      data-variant-price="{{ $variantPrice }}" 
+                                      data-product-id="{{ $product->id }}"
+                                      data-image-url="{{ Storage::url($variantImage->image_url ?? '') }}" 
+                                      onclick="updatePrice({{ $product->id }}, {{ $product->price }}, {{ $variantPrice }}, '{{ Storage::url($primaryImage->image_url) }}', '{{ Storage::url($variantImage->image_url ?? '') }}')">
+                                </span>
+                            </li>
+                            @php
+                                }
+                            @endphp
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
             @endforeach
-        </ul>
-    </div>
-</div>
-@endforeach
 
 
 </div>
