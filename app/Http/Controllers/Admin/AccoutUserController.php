@@ -167,16 +167,12 @@ class AccoutUserController extends Controller
     public function changeUser(ChangeUserRequest $request, string $id)
     {
 
-        try {
-            $user = User::findOrFail($id);
-            $data = [
-                'password' => Hash::make($request->password),
-            ];
-            $user->update($data);
-            return back()->with('success', 'Đổi mới thành công',);
-        } catch (\Throwable $th) {
-            dd(404);
-        }
+        $user = User::findOrFail($id);
+        $data = [
+            'password' => Hash::make($request->password),
+        ];
+        $user->update($data);
+        return back()->with('success', 'Đổi mới thành công',);
     }
 
     public function select_address(Request $request)

@@ -243,7 +243,7 @@ class AccoutAdminController extends Controller
             $role = Role::find($role_id);
             $role->syncPermissions([]);
 
-            return redirect()->back()->with('cancel', 'Đã loại bỏ hết quyền của '.$admin->name);
+            return redirect()->back()->with('cancel', 'Đã loại bỏ hết quyền của ' . $admin->name);
         }
 
         $role = Role::find($role_id);
@@ -310,16 +310,11 @@ class AccoutAdminController extends Controller
     }
     public function changeAdmin(ChangeUserRequest $request, $id)
     {
-        dd(1);
         $user = Admin::findOrFail($id);
-        $user->timestamps = false;
         $data = [
-            'password_changed_at' => now(),
             'password' => Hash::make($request->password),
-            // 'check' => 0
         ];
         $user->update($data);
-        $user->timestamps = true;
         return back()->with('success', 'Đổi mới thành công',);
     }
     //lịch sử cập nhật 
