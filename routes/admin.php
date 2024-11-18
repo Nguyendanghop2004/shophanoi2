@@ -3,11 +3,17 @@
 use App\Http\Controllers\Admin\AccoutAdminController;
 use App\Http\Controllers\Admin\AccoutUserController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\ShipperController;
+use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\TagController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
@@ -88,6 +94,42 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::post('product/create-variant-color-product', [ProductController::class, 'createVariantColorProduct'])->name('product.createVariantColorProduct');
     Route::delete('/product-variants/{id}', [ProductController::class, 'destroyVariant'])->name('product-variants.destroy');
 
+    Route::resource('contact', ContactMessageController::class);
+    Route::get('/shippers/search', [ShipperController::class, 'search'])->name('shippers.search');
+
+    Route::resource('shippers', ShipperController::class);
+    Route::get('tags', [TagController::class, 'index'])->name('tags.index');
+    Route::get('tags/create', [TagController::class, 'create'])->name('tags.create');
+    Route::post('tags', [TagController::class, 'store'])->name('tags.store');
+    Route::get('tags/{tag}/edit', [TagController::class, 'edit'])->name('tags.edit');
+    Route::put('tags/{tag}', [TagController::class, 'update'])->name('tags.update');
+    Route::delete('/tags/{id}', [TagController::class, 'destroy'])->name('tags.destroy');
+    
+    Route::get('sizes', [SizeController::class, 'index'])->name('sizes.index');
+    Route::get('sizes/create', [SizeController::class, 'create'])->name('sizes.create');
+    Route::post('sizes', [SizeController::class, 'store'])->name('sizes.store');
+    Route::get('sizes/{id}', [SizeController::class, 'show'])->name('sizes.show');
+    Route::get('sizes/{id}/edit', [SizeController::class, 'edit'])->name('sizes.edit');
+    Route::put('sizes/{id}', [SizeController::class, 'update'])->name('sizes.update');
+    Route::delete('sizes/{id}', [SizeController::class, 'destroy'])->name('sizes.destroy');
+
+    // Route cho ColorController
+    Route::get('colors', [ColorController::class, 'index'])->name('colors.index');
+    Route::get('colors/create', [ColorController::class, 'create'])->name('colors.create');
+    Route::post('colors', [ColorController::class, 'store'])->name('colors.store');
+    Route::get('colors/{id}', [ColorController::class, 'show'])->name('colors.show');
+    Route::get('colors/{id}/edit', [ColorController::class, 'edit'])->name('colors.edit');
+    Route::put('colors/{id}', [ColorController::class, 'update'])->name('colors.update');
+    Route::delete('colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
+
+    // Route cho BrandController
+    Route::get('brands', [BrandController::class, 'index'])->name('brands.index');
+    Route::get('brands/create', [BrandController::class, 'create'])->name('brands.create');
+    Route::post('brands', [BrandController::class, 'store'])->name('brands.store');
+    Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show');
+    Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
+    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
+    Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
 
 
 
