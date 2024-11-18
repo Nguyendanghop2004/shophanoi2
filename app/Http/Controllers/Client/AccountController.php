@@ -28,14 +28,16 @@ class AccountController extends Controller
 
     public function login(Request $request)
     {
+        
         // dd($request->all());
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
             // Đăng nhập thành công
-            $request->session()->regenerate();
+            // $request->session()->regenerate();
             return redirect()->route('home');
         }
+        return redirect()->route('home');
     }
     public function logout(Request $request)
     {

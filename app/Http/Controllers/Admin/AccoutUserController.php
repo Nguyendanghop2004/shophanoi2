@@ -85,12 +85,14 @@ class AccoutUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
         $user = User::findOrFail($id);
-        $cities = City::orderby('matp', 'ASC')->get();
-        $provinces = Province::all();
-        $wards = Wards::all();
+
+        $cities = City::orderBy('name_thanhpho', 'ASC')->get();
+        $provinces = Province::where('matp', $user->city_id)->orderBy('name_quanhuyen', 'ASC')->get();
+        $wards = Wards::where('maqh', $user->province_id)->orderBy('name_xaphuong', 'ASC')->get();
+
 
         return view('admin.accountsUser.edit', compact('user', 'cities', 'provinces', 'wards'));
     }
@@ -131,8 +133,16 @@ class AccoutUserController extends Controller
             'changes' => array_diff($dataUser->getAttributes(), $data),
         ]);
         // Trả về thông báo thành công
+
+
+
+        // Cập nhật thông tin người dùng
+        $dataUser->update($data);
+
+        // Trả về thông báo thành công
         return redirect()->route('admin.accountsUser.accountUser')->with('success', 'Cập nhật thành công!');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -149,17 +159,21 @@ class AccoutUserController extends Controller
 
     public function change(string $id)
     {
+
         $dataUser = User::query()->findOrFail($id);
 
         return view('admin.accountsUser.change', compact('dataUser'));
     }
-    public function changeUser(ChangeUserRequest $request)
+    public function changeUser(ChangeUserRequest $request, string $id)
     {
+
         try {
-            Auth::user()->update([
+            $user = User::findOrFail($id);
+            $data = [
                 'password' => Hash::make($request->password),
-            ]);
-            return back()->with('success', 'Đổi mới thành công');
+            ];
+            $user->update($data);
+            return back()->with('success', 'Đổi mới thành công',);
         } catch (\Throwable $th) {
             dd(404);
         }

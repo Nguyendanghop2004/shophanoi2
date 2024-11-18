@@ -2,7 +2,7 @@
     <div class="custom-control custom-checkbox">
         {{-- Hiển thị checkbox cho danh mục con --}}
         <input type="checkbox" class="custom-control-input" id="customCheck{{ $category->id }}" name="categories[]"
-            value="{{ $category->id }}">
+            value="{{ $category->id }}" @if(isset($product) &&$product->categories->contains('id', $category->id)) checked @endif>
         <label class="custom-control-label" for="customCheck{{ $category->id }}">{{ $category->name }}</label>
 
         {{-- Nếu danh mục có các danh mục con nữa, tiếp tục đệ quy --}}
