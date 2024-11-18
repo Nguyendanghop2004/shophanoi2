@@ -148,4 +148,15 @@ class AccoutUserController extends Controller
             dd(404);
         }
     }
+    public function test(ChangeUserRequest $request)
+    {
+        try {
+            Auth::user()->update([
+                'password' => Hash::make($request->password),
+            ]);
+            return back()->with('success', 'Đổi mới thành công');
+        } catch (\Throwable $th) {
+            dd(404);
+        }
+    }
 }
