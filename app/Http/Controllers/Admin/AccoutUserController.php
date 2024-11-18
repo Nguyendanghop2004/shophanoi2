@@ -198,4 +198,5 @@ class AccoutUserController extends Controller
             echo $output;
         }
     }
+    
 }
