@@ -4,11 +4,12 @@ use App\Http\Controllers\Admin\AccoutAdminController;
 use App\Http\Controllers\Admin\AccoutUserController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\DiscountCodeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SliderController;
-use App\Http\Controllers\Admin\CouponController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
@@ -77,12 +78,22 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     // Quản lý sản phẩm
     Route::resource('product', ProductController::class);
 //quản lí coupons
-Route::get('/admin/coupons', [CouponController::class, 'index'])->name('coupons.index');
-Route::get('/admin/coupons/create', [CouponController::class, 'create'])->name('coupons.create');
-Route::post('/admin/coupons', [CouponController::class, 'store'])->name('coupons.store');
-Route::get('/admin/coupons/{id}/edit', [CouponController::class, 'edit'])->name('coupons.edit');
-Route::put('/admin/coupons/{id}', [CouponController::class, 'update'])->name('coupons.update');
-Route::delete('/admin/coupons/{id}', [CouponController::class, 'destroy'])->name('coupons.destroy');
+Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('discount_codes.index');
+
+    // Route để hiển thị form tạo mã giảm giá
+    Route::get('discount-codes/create', [DiscountCodeController::class, 'create'])->name('discount_codes.create');
+
+    // Route để lưu mã giảm giá mới
+    Route::post('discount-codes', [DiscountCodeController::class, 'store'])->name('discount_codes.store');
+
+    // Route để hiển thị form sửa mã giảm giá
+    Route::get('discount-codes/{id}/edit', [DiscountCodeController::class, 'edit'])->name('discount_codes.edit');
+
+    // Route để cập nhật mã giảm giá
+    Route::put('discount-codes/{id}', [DiscountCodeController::class, 'update'])->name('discount_codes.update');
+
+    // Route để xóa mã giảm giá
+    Route::delete('discount-codes/{id}', [DiscountCodeController::class, 'destroy'])->name('discount_codes.destroy');
     // Các route riêng cho sản phẩm
     Route::get('/product/get-variant-card/{colorId}', [ProductController::class, 'getVariantCard'])->name('product.getVariantCard');
     Route::put('product/{id}/update-main-product', [ProductController::class, 'updateMainProduct'])->name('product.updateMainProduct');

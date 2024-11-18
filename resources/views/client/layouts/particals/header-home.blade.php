@@ -91,10 +91,11 @@
                                       class="icon icon-account"></i></a></li>
                           <li class="nav-wishlist"><a href="wishlist.html" class="nav-icon-item"><i
                                       class="icon icon-heart"></i><span class="count-box">0</span></a></li>
-                          <li class="nav-cart"><a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item"><i
+                          <li class="nav-cart"><a href="{{route('shopping-cart')}}" data-bs-toggle="modal" class="nav-icon-item"><i
                                       class="icon icon-bag"></i><span class="count-box">0</span></a></li>
+                                    
                       </ul>
-
+                      <a href="{{route('shopping-cart')}}">cart</a>
                   </div>
               </div>
           </div>
