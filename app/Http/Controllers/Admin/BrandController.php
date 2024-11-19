@@ -5,68 +5,112 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Storage;
 
 class BrandController extends Controller
 {
     public function index(Request $request)
-{
-    $query = Brand::query();
+    {
+        $search = $request->input('search');
+        $perPage = 5;
 
-    if ($request->filled('search')) {
-        $query->where('name', 'like', '%' . $request->search . '%');
+        $brands = Brand::when($search, function ($query) use ($search) {
+            return $query->where('name', 'like', '%' . $search . '%');
+        })->paginate($perPage);
+
+        return view('admin.brands.index', compact('brands'));
     }
-
-    $brands = $query->paginate(10);
-    return view('admin.brands.index', compact('brands'));
-}
-
 
     public function create()
     {
-        return view('admin.brands.create'); 
+        return view('admin.brands.create');
     }
 
-    public function store(Request $request){
-    $request->validate([
-        'name' => 'required|unique:brands,name|max:255',
-        'image_brand_url' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-    ]);
-
-    // Xử lý upload ảnh
-    if ($request->hasFile('image_brand_url')) {
-        $image = $request->file('image_brand_url');
-        $imagePath = $image->store('brands', 'public');
-    }
-
-    Brand::create([
-        'name' => $request->name,
-        'image_brand_url' => $imagePath,
-    ]);
-
-    return redirect()->route('admin.brands.index')->with('success', 'Brand created successfully.');
-}
-
-
-    public function edit(Brand $brand)
+    public function store(Request $request)
     {
-        return view('admin.brands.edit', compact('brand')); 
+        $validatedData = $this->validateBrand($request);
+
+        $validatedData['image_brand_url'] = $this->handleImageUpload($request);
+
+        Brand::create($validatedData);
+
+        return redirect()->route('admin.brands.index')->with('success', 'Thương hiệu được tạo thành công.');
     }
 
-    public function update(Request $request, Brand $brand)
+    public function edit($id)
     {
-        $request->validate([
-            'name' => 'required|unique:brands,name,' . $brand->id,
-            'image_brand_url' => 'required|url',
+        $brand = Brand::find($id);
+
+        if (!$brand) {
+            return redirect()->route('admin.brands.index')->with('error', 'Thương hiệu không tồn tại.');
+        }
+
+        return view('admin.brands.edit', compact('brand'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $brand = Brand::find($id);
+
+        if (!$brand) {
+            return redirect()->route('admin.brands.index')->with('error', 'Thương hiệu không tồn tại.');
+        }
+
+        $validatedData = $this->validateBrand($request, $brand);
+
+        if ($request->hasFile('image_brand_url')) {
+            $this->deleteOldImage($brand->image_brand_url);
+            $validatedData['image_brand_url'] = $this->handleImageUpload($request);
+        }
+
+        $brand->update($validatedData);
+
+        return redirect()->route('admin.brands.index')->with('success', 'Thương hiệu đã được cập nhật.');
+    }
+
+    public function destroy($id)
+    {
+        $brand = Brand::find($id);
+
+        if ($brand) {
+            $this->deleteOldImage($brand->image_brand_url);
+            $brand->delete();
+            return redirect()->route('admin.brands.index')->with('success', 'Thương hiệu đã được xóa.');
+        }
+
+        return redirect()->route('admin.brands.index')->with('error', 'Thương hiệu không tồn tại.');
+    }
+
+    private function validateBrand(Request $request, $brand = null)
+    {
+        return $request->validate([
+            'name' => [
+                'required',
+                'max:255',
+                Rule::unique('brands')->ignore($brand?->id),
+            ],
+            'image_brand_url' => 'nullable|image',
+        ], [
+            'name.required' => 'Tên thương hiệu không được để trống.',
+            'name.unique' => 'Tên thương hiệu đã tồn tại.',
+            'name.max' => 'Tên thương hiệu không được vượt quá 255 ký tự.',
+            'image_brand_url.image' => 'Ảnh thương hiệu phải là hình ảnh.',
         ]);
-
-        $brand->update($request->all()); 
-
-        return redirect()->route('admin.brands.index')->with('success', 'Brand updated successfully.');
     }
 
-    public function destroy(Brand $brand)
+    private function handleImageUpload(Request $request)
     {
-        $brand->delete(); 
-        return redirect()->route('admin.brands.index')->with('success', 'Brand deleted successfully.');
+        if ($request->hasFile('image_brand_url')) {
+            return $request->file('image_brand_url')->store('brands', 'public');
+        }
+        return null;
+    }
+
+    private function deleteOldImage($imagePath)
+    {
+        if ($imagePath && Storage::disk('public')->exists($imagePath)) {
+            Storage::disk('public')->delete($imagePath);
+        }
     }
 }

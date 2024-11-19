@@ -128,8 +128,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::post('brands', [BrandController::class, 'store'])->name('brands.store');
     Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show');
     Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
-    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
     Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
 
 
 

@@ -10,7 +10,7 @@ class Brand extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'image_brand_url'];
 
     public function products()
     {
