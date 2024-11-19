@@ -51,11 +51,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::post('accountsUser/{id}/accountUser', [AccoutUserController::class, 'activateUser'])->name('accountsUser.activateUser')->middleware('permission:activate_Account');
     Route::post('accountsUser/{id}/deactivateUser', [AccoutUserController::class, 'deactivateUser'])->name('accountsUser.deactivateUser')->middleware('permission:deactivate_Account');
     //end  status user
-<<<<<<< HEAD
+
     
 //start status change
-=======
->>>>>>> a3ce197ec20f900b1a1948036792345b243f00f5
     Route::get('accounts/profile/{id}', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('accounts/changePassword/{id}', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
     Route::post('accounts/change/{id}', [ProfileController::class, 'change'])->name('profile.change');
@@ -63,10 +61,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
 
     // Route::get('accounts/profile', [ProfileController::class, 'index'])->name('profile.index');
 
-<<<<<<< HEAD
-=======
-
->>>>>>> a3ce197ec20f900b1a1948036792345b243f00f5
     // Permission
     Route::get('permissions/index', [AccoutAdminController::class, 'permissionAdmin'])->name('permissions.index')->middleware('permission:indexPermission');
     // Thêm quyền
