@@ -29,7 +29,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('{category_id?}', [HomeController::class, 'home'])->name('home');
+
+
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
@@ -41,6 +44,8 @@ Route::get('faq', [FAQController::class, 'index'])->name('faq');
 Route::get('out-store', [OutStoreController::class, 'index'])->name('out-store');
 Route::get('time-line', [TimeLineController::class, 'index'])->name('time-line');
 Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping-cart');
+
+
 Route::get('check-out', [CheckOutController::class, 'index'])->name('check-out');
 Route::get('payment-confirmation', [PaymentController::class, 'confirmation'])->name('payment-confirmation');
 Route::get('payment-failure', [PaymentController::class, 'failure'])->name('payment-failure');

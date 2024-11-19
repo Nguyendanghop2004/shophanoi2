@@ -162,7 +162,7 @@
                      
                             <div class="collection-item style-2 hover-img" >
                                 <div class="collection-inner">
-                                    <a href="{{route('home.slug', $category->slug)}}" class="0"> 
+                                    <a href="{{route(name: 'home.slug', parameters: $category->slug)}}" class="0"> 
                                         <img class="lazyload"
                                             data-src="{{  Storage::url($category->image_path) }}"
                                             src="{{ Storage::url($category->image_path) }}"

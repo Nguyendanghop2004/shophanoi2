@@ -94,34 +94,34 @@ class AccoutUserController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-{
-    // Lấy dữ liệu người dùng cũ
-    $dataUser = User::findOrFail($id);
-
-    $data = $request->only('name', 'email', 'phone_number','address', 'city_id', 'province_id', 'wards_id');
-
-    if ($request->password) {
-        $data['password'] = Hash::make($request->password);
-    } else {
-        $data['password'] = $dataUser->password;
-    }
-
-    // Xử lý ảnh (nếu có)
-    if ($request->hasFile('image')) {
-        // Xóa ảnh cũ nếu có ảnh mới
-        if ($dataUser->image && Storage::exists($dataUser->image)) {
-            Storage::delete($dataUser->image);
+    {
+        // Lấy dữ liệu người dùng cũ
+        $dataUser = User::findOrFail($id);
+    
+        $data = $request->only('name', 'email', 'phone_number','address', 'city_id', 'province_id', 'wards_id');
+    
+        if ($request->password) {
+            $data['password'] = Hash::make($request->password);
+        } else {
+            $data['password'] = $dataUser->password;
         }
-        // Lưu ảnh mới
-        $data['image'] = Storage::put('public/images/User', $request->file('image'));
+    
+        // Xử lý ảnh (nếu có)
+        if ($request->hasFile('image')) {
+            // Xóa ảnh cũ nếu có ảnh mới
+            if ($dataUser->image && Storage::exists($dataUser->image)) {
+                Storage::delete($dataUser->image);
+            }
+            // Lưu ảnh mới
+            $data['image'] = Storage::put('public/images/User', $request->file('image'));
+        }
+    
+        // Cập nhật thông tin người dùng
+        $dataUser->update($data);
+    
+        // Trả về thông báo thành công
+        return back()->with('success', 'Cập nhật thành công!');
     }
-
-    // Cập nhật thông tin người dùng
-    $dataUser->update($data);
-
-    // Trả về thông báo thành công
-    return back()->with('success', 'Cập nhật thành công!');
-}
 
     /**
      * Remove the specified resource from storage.

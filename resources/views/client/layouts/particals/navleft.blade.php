@@ -6,7 +6,7 @@
     Store</a></li> --}}
 
   @foreach ($parentCategories as $item)
-    <li class="categories-item"><a href="{{route('shop-collection',$item->slug)}}" class="text-uppercase">{{$item->name}}</a></li>
+    <li class="categories-item"><a href="{{route('shop-collection',$item->id)}}" class="text-uppercase">{{$item->name}}</a></li>
   @endforeach
 
   

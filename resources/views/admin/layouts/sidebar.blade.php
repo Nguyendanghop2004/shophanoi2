@@ -307,8 +307,7 @@
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Bình Luận</span></a></li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Sản Phẩm</span></a></li>
 
-            <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Danh Mục Sản
-                        Phẩm</span></a></li>
+            <li><a class="nav-link" href="{{route('admin.discount_codes.index')}}"><i class="far fa-square"></i> <span>Danh Mục Giảm Gía</span></a></li>
             <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="far fa-square"></i> <span>Liên
                         Hệ</span></a></li>
             <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="far fa-square"></i> <span>Nhân
