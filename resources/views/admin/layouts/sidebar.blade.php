@@ -218,7 +218,8 @@
                 <a href="features-activities.html" class="dropdown-item has-icon">
                     <i class="fas fa-bolt"></i> Activities
                 </a>
-                <a href="{{ route('admin.profile.changePassword', Auth::user()->id) }}" class="dropdown-item has-icon">
+                <a href="{{ route('admin.profile.changePassword', Auth::user()->id) }}"
+                    class="dropdown-item has-icon">
                     <i class="fas fa-cog"></i> Đổi mật khẩu
                 </a>
                 <div class="dropdown-divider"></div>
@@ -290,34 +291,7 @@
                     </ul>
                 </li>
                 <li class="menu-header">Quản Lí tài khoản</li>
-                {{-- <li class="dropdown ">
-                    <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Tài Khoản</span></a>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown">
-                            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
-                                    class="fas fa-columns"></i> <span>Admin</span></a>
-                            <ul class="dropdown-menu">
-                                <li><a class="nav-link" href="{{ route('admin.accounts.create') }}"><i
-                                            class="far fa-square"></i> <span>Thêm mới</span></a></li>
-                                <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><i
-                                            class="far fa-square"></i> <span>Danh sách</span></a></li>
-                                <li><a class="nav-link" href="{{ route('admin.history') }}"><i
-                                            class="far fa-square"></i> <span>Lịch sử</span></a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
-                                    class="fas fa-columns"></i> <span>User</span></a>
-                            <ul class="dropdown-menu">
-                                <li><a class="nav-link" href="{{ route('admin.accountsUser.create') }}"><i
-                                            class="far fa-square"></i> <span>Thêm mới</span></a></li>
-                                <li><a class="nav-link" href="{{ route('admin.accountsUser.accountUser') }}"><i
-                                            class="far fa-square"></i> <span>Danh sách</span></a></li>
-                            </ul>
-                        </li>
-                    </ul>
 
-                </li> --}}
                 <li class="dropdown">
 
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
@@ -368,21 +342,7 @@
                 </li>
             @endcan
 
-            {{-- @can('Acount')
-                <li class="menu-header">Quản Lí tài khoản</li>
-                <li class="dropdown">
-                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-user"></i>
-                        <span>Account</span></a>
-                    <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Tài khoản
-                                    Admin</span></a></li>
-                        <li><a class="nav-link" href="{{ route('admin.accountsUser.accountUser') }}"><span> Tài khoản
-                                    User</span></a></li>
-                        <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Phân quyền và vai
-                                    trò</span></a></li>
-                    </ul>
-                </li>
-            @endcan --}}
+
 
     </aside>
 </div>
