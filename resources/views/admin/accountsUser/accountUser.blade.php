@@ -3,12 +3,12 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Account Quản trị viên</h1>
+            <h1>Account User</h1>
         </div>
 
         <div class="card card-primary">
             <div class="card-header">
-                <h4>Danh Sách Quản Trị</h4>
+                <h4>Danh Sách User</h4>
                 <div class="card-header-action">
                     <a href="{{ route('admin.accountsUser.create') }}" class="btn btn-primary">
                         Tạo Mới
@@ -33,11 +33,12 @@
                             @foreach ($users as $user)
                                 <tr>
                                     <th scope="row">{{ $user->id }}</th>
-                                    <td>{{ $user->name }}</td>
+                                    <td ><a class="text-primary" href="{{ route('admin.accountsUser.show', $user->id) }}">{{ $user->name }}</a>
+                                    </td>
                                     <td>{{ $user->email }}</td>
                                     <td>
-                                        <img src="{{ Storage::url($user->image) }}" alt="Ảnh quản trị viên"
-                                            width="100px" height="60px">
+                                        <img src="{{ Storage::url($user->image) }}" alt="Ảnh quản trị viên" width="100px"
+                                            height="60px">
                                     </td>
 
                                     <td>
