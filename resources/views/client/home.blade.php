@@ -22,6 +22,7 @@
                                     <a href="shop-collection-sub.html" class="link title fw-6">New Arrivals</a>
                                 </div>
                             </div>
+                            {{-- @dd(Auth::user()->name) --}}
                             <div class="collection-item-circle hover-img">
                                 <a href="shop-collection-sub.html" class="collection-image img-style">
                                     <img class="lazyload"
