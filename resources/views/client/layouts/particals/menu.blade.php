@@ -32,6 +32,7 @@
 </li>
 
         <li class="menu-item">
+       
             <a href="#" class="item-link">Sản Phẩm<i class="icon icon-arrow-down"></i></a>
             <div class="sub-menu mega-menu">
                 <div class="container">
@@ -52,7 +53,7 @@
             </div>
         </li>
         <li class="menu-item position-relative">
-            <a href="#" class="item-link">Bài Viết</a>
+         
           
         </li>
         <li class="menu-item position-relative">

@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('home/{category_id?}', [HomeController::class, 'home'])->name('home');
+Route::get('{category_id?}', [HomeController::class, 'home'])->name('home');
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
