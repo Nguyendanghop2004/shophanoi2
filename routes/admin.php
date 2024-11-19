@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
 Route::post('admin/login', [LoginController::class, 'store'])->name('admin.post-login');
-Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus' ,'checkPassword'])->group( function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus'])->group( function () {
     // Login admin
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
