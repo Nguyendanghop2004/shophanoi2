@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
 Route::post('admin/login', [LoginController::class, 'store'])->name('admin.post-login');
-Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus' ,'checkPassword'])->group( function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus'])->group( function () {
     // Login admin
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
@@ -64,13 +64,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     
 //start status change
 
-
     Route::get('accounts/profile/{id}', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('accounts/changePassword/{id}', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
     Route::post('accounts/change/{id}', [ProfileController::class, 'change'])->name('profile.change');
 //end  status  change
 
     // Route::get('accounts/profile', [ProfileController::class, 'index'])->name('profile.index');
+
     // Permission
     Route::get('permissions/index', [AccoutAdminController::class, 'permissionAdmin'])->name('permissions.index')->middleware('permission:indexPermission');
     // Thêm quyền
