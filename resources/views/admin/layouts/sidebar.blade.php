@@ -266,10 +266,10 @@
 
 
             <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
-            <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="fas fa-envelope"></i> <span>Liên
+            <li><a class="nav-link" href="{{ route('admin.contact.index') }}"><i class="fas fa-envelope"></i> <span>Liên
                         Hệ</span></a></li>
             @can('shipper')
-                <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="fas fa-shipping-fast"></i>
+                <li><a class="nav-link" href="{{ route('admin.shippers.index') }}"><i class="fas fa-shipping-fast"></i>
                         <span>Nhân
                             viên giao hàng</span></a></li>
             @endcan
@@ -348,6 +348,16 @@
                         <li><a class="nav-link" href="{{ route('admin.product.index') }}"><span>Danh Sách</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.product.create') }}"><span>Tạo Mới</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Thùng Rác</span></a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i>
+                        <span>Quản lí Biển Thể</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="{{ route('admin.colors.index') }}"><span>Quản Màu Sắc</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.sizes.index') }}"><span>Quản Lí Số Đo</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.brands.index') }}"><span>Quản Lí Thương Hiệu</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.tags.index') }}"><span>Quản lí Thẻ</span></a></li>
                     </ul>
                 </li>
             @endcan
