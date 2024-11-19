@@ -25,12 +25,13 @@
                                 <label for="email">Email</label>
                                 <input type="email" name="email" class="form-control"
                                     value="{{ old('email', $admin->email) }}">
-                            </div>                    
+                            </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-12">
                             <div id="image-preview" class="image-preview mx-auto"
                                 @error('image_path') style="border:2px dashed red" @enderror>
-                                <img id="image-preview-img" src="{{ Storage::url($admin['image_path']) }}" width="250px" height="250px" alt="">
+                                <img id="image-preview-img" src="{{ Storage::url($admin['image_path']) }}" width="250px"
+                                    height="250px" alt="">
                             </div>
                             <div class="form-group text-center mt-2">
                                 <label for="image-upload" class="btn btn-secondary">Chọn ảnh</label>
@@ -42,8 +43,8 @@
                                 </div>
                             @enderror
                         </div>
-                        
-                        
+
+
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Cập nhật</button>
                         </div>
@@ -51,6 +52,7 @@
             </div>
             </form>
         </div>
+        
     </section>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -88,5 +90,6 @@
                 }
             });
         });
+        
     </script>
 @endsection

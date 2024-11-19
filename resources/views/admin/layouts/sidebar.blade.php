@@ -212,7 +212,7 @@
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-title">Logged in 5 min ago</div>
 
-                <a href="{{ route('admin.profile.index') }}" class="dropdown-item has-icon">
+                <a href="{{ route('admin.profile.index', Auth::user()->id) }}" class="dropdown-item has-icon">
                     <i class="far fa-user"></i> Profile
                 </a>
                 <a href="features-activities.html" class="dropdown-item has-icon">
@@ -260,7 +260,9 @@
                 </ul>
             </li>
 
+
             <li><a class="nav-link" href="blank.html"><i class="fas fa-file-alt"></i> <span>Bài Viết</span></a></li>
+
 
 
             <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
@@ -277,6 +279,57 @@
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
                         <span>Danh mục sản phẩm</span></a>
                     <ul class="dropdown-menu">
+
+
+                    <li><a class="nav-link" href="{{ route('admin.categories.list') }}"><span>Danh Sách Danh
+                                Mục</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.categories.add') }}"><span>Thêm Mới Danh
+                                Mục</span></a></li>
+
+                </ul>
+            </li>
+            <li class="menu-header">Quản Lí tài khoản</li>
+            <li class="dropdown ">
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Tài Khoản</span></a>
+                <ul class="dropdown-menu">
+                    <li class="dropdown">
+                        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                                class="fas fa-columns"></i> <span>Admin</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="{{ route('admin.accounts.create') }}"><i
+                                        class="far fa-square"></i> <span>Thêm mới</span></a></li>
+                            <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><i
+                                        class="far fa-square"></i> <span>Danh sách</span></a></li>
+                            <li><a class="nav-link" href="{{ route('admin.history') }}"><i
+                                        class="far fa-square"></i> <span>Lịch sử</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                                class="fas fa-columns"></i> <span>User</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="{{ route('admin.accountsUser.create') }}"><i
+                                        class="far fa-square"></i> <span>Thêm mới</span></a></li>
+                            <li><a class="nav-link" href="{{ route('admin.accountsUser.accountUser') }}"><i
+                                        class="far fa-square"></i> <span>Danh sách</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </li>
+            <li class="dropdown">
+
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                    <span>Account</span></a>
+                <ul class="dropdown-menu">
+
+                    <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Tài khoản
+                                Admin</span></a></li>
+                    <li><a class="nav-link" href=""><span>Tài khoản User</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Phân quyền và vai
+                                trò</span></a></li>
+                </ul>
+            </li>
 
                         <li><a class="nav-link" href="{{ route('admin.categories.list') }}"><span>Danh Sách Danh
                                     Mục</span></a></li>
@@ -324,5 +377,6 @@
                     </ul>
                 </li>
             @endcan
+
     </aside>
 </div>

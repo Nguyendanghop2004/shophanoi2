@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AdminStoreRequest extends FormRequest
+class StoreUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,6 +28,8 @@ class AdminStoreRequest extends FormRequest
             'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048|dimensions:min_width=100,min_height=100',
         ];
     }
+
+    // Tùy chọn: Tùy chỉnh thông báo lỗi (nếu cần)
     public function messages()
     {
         return [
@@ -42,3 +44,4 @@ class AdminStoreRequest extends FormRequest
         ];
     }
 }
+

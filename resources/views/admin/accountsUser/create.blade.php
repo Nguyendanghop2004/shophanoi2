@@ -67,6 +67,21 @@
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-12">
+                            <div id="image-preview" class="image-preview mx-auto @error('image') is-invalid @enderror">
+                                <img id="image-preview-img" src="#" alt="Preview Image" style="display: none;" width="250px" height="250px">
+                                <input type="file" name="image" id="image-upload" style="display: none;" accept="image/*">
+                            </div>
+                            <div class="form-group text-center mt-2">
+                                <label for="image-upload" class="btn btn-secondary">Chọn ảnh</label>
+                                <input type="file" name="image" id="image-upload" style="display: none;" />
+                            </div>
+                            @error('image')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        {{-- <div class="col-lg-6 col-md-6 col-12">
                             <div id="image-preview" class="image-preview mx-auto "
                                 @error('image') style="border:2px dashed red"  @enderror>
                                 <label for="image-upload" id="image-label">Chọn ảnh</label>
@@ -78,7 +93,7 @@
                                 </div>
                             @enderror
 
-                        </div>
+                        </div> --}}
                         {{-- <div class="">
                                 <label for="image_path">Ảnh</label>
                                 <input @error('image_path') style="border:2px dashed red"  @enderror type="file"
@@ -99,4 +114,43 @@
         </div>
         </div>
     </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+
+            // Thêm sự kiện thay đổi cho input file
+            const imageUpload = document.getElementById('image-upload');
+            const imagePreviewImg = document.getElementById('image-preview-img');
+
+            imageUpload.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreviewImg.setAttribute('src', e.target.result);
+                        imagePreviewImg.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreviewImg.style.display = 'none';
+                }
+            });
+        });
+    </script>
 @endsection
