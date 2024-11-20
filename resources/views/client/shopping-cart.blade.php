@@ -46,9 +46,9 @@
                                                 <a href="product-detail.html"
                                                     class="cart-title link">{{ $item['product_name'] }}</a>
                                                 <div class="cart-meta-variant">{{ $item['color_name'] }} /
-                                                    {{ $item['size'] }}</div>
+                                                    {{ $item['size_name'] }}</div>
                                                 <span class="remove-cart link remove"
-                                                    onclick="removeFromCart({{ $item['product_id'] }})">Remove</span>
+                                                    onclick="removeFromCart({{ $item['product_id'] }},{{$item['color_id']}},{{$item['size_id']}})">Remove</span>
                                             </div>
                                         </td>
                                         <td class="tf-cart-item_price" cart-data-title="Price">
@@ -903,13 +903,15 @@
 @push('scripts')
     <script>
         // Xử lý khi nhấn nút xóa
-        function removeFromCart(productId) {
+        function removeFromCart(productId,colorId,sizeId) {
             $.ajax({
                 url: '/remove-from-cart', // URL tới route xóa sản phẩm
-                method: 'POST',
+                method: 'GET',
                 data: {
                     product_id: productId,
-                    _token: '{{ csrf_token() }}', // Đảm bảo gửi CSRF token
+                    color_id: colorId,
+                    size_id: sizeId,
+                    _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
                 },
                 success: function(response) {
                     if (response.success) {

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Color;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
+use App\Models\Size;
 use DB;
 use Illuminate\Http\Request;
 use Session;
@@ -14,132 +17,213 @@ use Session;
 class CartController extends Controller
 {
     // Thêm sản phẩm vào giỏ hàng
+
     public function addToCart(Request $request)
     {
-        $cart = Session::get('cart', []); // Lấy giỏ hàng từ session hoặc mảng rỗng
+        if (auth()->check()) {
+            // Lấy hoặc tạo giỏ hàng cho người dùng đã đăng nhập
+            $cart = Cart::firstOrCreate([
+                'user_id' => auth()->id(),
+            ]);
 
-        // Dữ liệu sản phẩm thêm vào giỏ hàng
-        $newItem = [
-            'product_id' => $request->input('product_id'),
-            'color_id' => $request->input('color_id'),
-            'size' => $request->input('size'),
-            'quantity' => $request->input('quantity'),
-            'price' => $request->input('price'),
-        ];
+            // Dữ liệu sản phẩm thêm vào giỏ hàng
+            $newItem = [
+                'product_id' => $request['product_id'],
+                'color_id' => $request['color_id'],
+                'size_id' => $request['size_id'],
+                'quantity' => $request['quantity'],
+                'price' => floatval($request['price']),
+            ];
+            // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng chưa
+            $cartItem = $cart->cartItems()->where([
+                ['product_id', '=', $newItem['product_id']],
+                ['color_id', '=', $newItem['color_id']],
+                ['size_id', '=', $newItem['size_id']],
+            ])->first();
 
-        // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng chưa (cùng ID, màu, size)
-        $found = false;
-        foreach ($cart as &$item) {
-            if (
-                $item['product_id'] == $newItem['product_id'] &&
-                $item['color_id'] == $newItem['color_id'] &&
-                $item['size'] == $newItem['size']
-            ) {
-                $item['quantity'] += $newItem['quantity']; // Cập nhật số lượng
-                $found = true;
-                break;
+            if ($cartItem) {
+                // Nếu sản phẩm đã tồn tại, cập nhật số lượng
+                $cartItem->quantity += $newItem['quantity'];
+                $cartItem->save();
+            } else {
+                // Nếu sản phẩm chưa tồn tại, thêm mới vào giỏ hàng
+                $cart->cartItems()->create($newItem);
             }
+            // Trả về phản hồi với danh sách sản phẩm trong giỏ hàng
+            return response()->json([
+                'success' => true,
+                'message' => 'Product added to cart successfully.',
+                'cart' => $cart->cartItems, // Danh sách sản phẩm trong giỏ hàng
+            ]);
+        } else {
+            // Người dùng chưa đăng nhập, lưu giỏ hàng vào session
+            $cart = Session::get('cart', []);
+
+            // Dữ liệu sản phẩm thêm vào giỏ hàng
+            $newItem = [
+                'product_id' => $request['product_id'],
+                'color_id' => $request['color_id'],
+                'size_id' => $request['size_id'],
+                'quantity' => $request['quantity'],
+                'price' => floatval($request['price']),
+            ];
+
+            // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng chưa (dựa vào product_id, color_id, size_id)
+            $found = false;
+            foreach ($cart as &$item) {
+                if (
+                    $item['product_id'] == $newItem['product_id'] &&
+                    $item['color_id'] == $newItem['color_id'] &&
+                    $item['size_id'] == $newItem['size_id']
+                ) {
+                    $item['quantity'] += $newItem['quantity']; // Cộng dồn số lượng
+                    $found = true;
+                    break;
+                }
+            }
+
+            // Nếu sản phẩm chưa tồn tại, thêm mới vào giỏ hàng
+            if (!$found) {
+                $cart[] = $newItem;
+            }
+
+            // Lưu giỏ hàng vào session
+            Session::put('cart', $cart);
+
+            // Trả về phản hồi
+            return response()->json([
+                'success' => true,
+                'message' => 'Product added to cart successfully.',
+                'cart' => $cart, // Gửi giỏ hàng hiện tại về để frontend xử lý
+            ]);
         }
-
-        // Nếu sản phẩm chưa tồn tại, thêm mới
-        if (!$found) {
-            $cart[] = $newItem;
-        }
-
-        // Cập nhật lại session
-        Session::put('cart', $cart);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Product added to cart',
-            'cart' => $cart,
-        ]);
-    }
-    public function findVariantId($productId, $colorId, $sizeId)
-    {
-        $variant = ProductVariant::where('product_id', $productId)
-            ->where('color_id', $colorId)
-            ->where('size_id', $sizeId)
-            ->first();
-
-        if ($variant) {
-            return $variant->id;
-        }
-
-        return null; // Nếu không tìm thấy
     }
     public function viewCart()
     {
-        $cart = Session::get('cart', []); // Lấy dữ liệu từ session
-
-        // Nếu giỏ hàng trống, trả về view với thông báo
-        if (empty($cart)) {
-            return view('client.shopping-cart', ['cartDetails' => []]);
-        }
-
-        // Lấy danh sách product_id và color_id từ giỏ hàng
-        $productIds = array_column($cart, 'product_id');
-        $colorIds = array_column($cart, 'color_id');
-
-        // Truy vấn thông tin sản phẩm sử dụng Model
-        $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
-
-        // Truy vấn thông tin màu sắc sử dụng Model
-        $colors = Color::whereIn('id', $colorIds)->get()->keyBy('id');
-
-        // Truy vấn ảnh ngẫu nhiên thuộc màu và sản phẩm sử dụng Model
-        $images = ProductImage::whereIn('product_id', $productIds)
-            ->whereIn('color_id', $colorIds)
-            ->get()
-            ->groupBy('product_id');
-
-        // Kết hợp dữ liệu từ giỏ hàng và dữ liệu sản phẩm
         $cartDetails = [];
-        foreach ($cart as $item) {
-            // Lấy thông tin sản phẩm, màu và ảnh cho từng item trong giỏ hàng
-            $product = $products[$item['product_id']] ?? null;
-            $color = $colors[$item['color_id']] ?? null;
-            $image = $images[$item['product_id']]->firstWhere('color_id', $item['color_id']) ?? null;
 
-            $cartDetails[] = [
-                'product_id' => $item['product_id'],
-                'color_id' => $color->id,
-                'product_name' => $product->product_name ?? 'N/A',
-                'color_name' => $color->name ?? 'N/A',
-                'size' => $item['size'],
-                'quantity' => $item['quantity'],
-                'price' => $product->price ?? 0,
-                'image_url' => $image->image_url ?? '/default-image.jpg',
-                'subtotal' => (floatval($product->price) ?? 0) * (intval($item['quantity']) ?? 0),
-            ];
+        if (auth()->check()) {
+            // Người dùng đã đăng nhập: lấy giỏ hàng từ cơ sở dữ liệu
+            $cart = Cart::where('user_id', auth()->id())
+                ->with([
+                    'cartItems.product.images' => function ($query) {
+                        $query->orderBy('color_id'); // Ưu tiên ảnh theo color_id
+                    },
+                    'cartItems.color',
+                    'cartItems.size'
+                ])
+                ->first();
+
+            if ($cart && $cart->cartItems->isNotEmpty()) {
+                $cartDetails = $cart->cartItems->map(function ($item) {
+                    $product = $item->product;
+                    $color = $item->color;
+                    $size = $item->size;
+                    $image = $product->images->firstWhere('color_id', $color->id);
+
+                    return [
+                        'product_id' => $product->id,
+                        'color_id' => $color->id ?? null,
+                        'size_id' => $size->id ?? null,
+                        'product_name' => $product->product_name ?? 'N/A',
+                        'color_name' => $color->name ?? 'N/A',
+                        'size_name' => $size->name ?? 'N/A',
+                        'quantity' => $item->quantity,
+                        'price' => $item->price ?? $product->price,
+                        'image_url' => $image->image_url ?? '/default-image.jpg',
+                        'subtotal' => ($item->price ?? $product->price) * $item->quantity,
+                    ];
+                });
+            }
+        } else {
+            // Người dùng chưa đăng nhập: lấy giỏ hàng từ session
+            $cart = Session::get('cart', []);
+
+            if (!empty($cart)) {
+                $productIds = array_column($cart, 'product_id');
+                $colorIds = array_column($cart, 'color_id');
+                $sizeIds = array_column($cart, 'size_id');
+
+                $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
+                $colors = Color::whereIn('id', $colorIds)->get()->keyBy('id');
+                $sizes = Size::whereIn('id', $sizeIds)->get()->keyBy('id');
+                $images = ProductImage::whereIn('product_id', $productIds)
+                    ->whereIn('color_id', $colorIds)
+                    ->get()
+                    ->groupBy('product_id');
+
+                $cartDetails = array_map(function ($item) use ($products, $colors, $sizes, $images) {
+                    $product = $products[$item['product_id']] ?? null;
+                    $color = $colors[$item['color_id']] ?? null;
+                    $size = $sizes[$item['size_id']] ?? null;
+                    $image = $images[$item['product_id']]->firstWhere('color_id', $item['color_id']) ?? null;
+
+                    return [
+                        'product_id' => $item['product_id'],
+                        'color_id' => $color->id ?? null,
+                        'size_id' => $size->id ?? null,
+                        'product_name' => $product->product_name ?? 'N/A',
+                        'color_name' => $color->name ?? 'N/A',
+                        'size_name' => $size->name ?? 'N/A',
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'] ?? $product->price,
+                        'image_url' => $image->image_url ?? '/default-image.jpg',
+                        'subtotal' => ($product->price ?? 0) * $item['quantity'],
+                    ];
+                }, $cart);
+            }
         }
 
         return view('client.shopping-cart', compact('cartDetails'));
     }
-
-
-
     public function removeFromCart(Request $request)
     {
-        $cart = Session::get('cart', []);  // Lấy giỏ hàng từ session
+        // Kiểm tra xem người dùng đã đăng nhập chưa
+        if (auth()->check()) {
+            // Lấy người dùng đã đăng nhập
+            $user = auth()->user();
 
-        // Lọc bỏ sản phẩm muốn xóa dựa trên product_id (và các trường khác nếu cần)
-        $cart = array_filter($cart, function ($item) use ($request) {
-            return $item['product_id'] != $request->input('product_id');  // Xóa theo product_id
-        });
+            // Xóa sản phẩm khỏi giỏ hàng của người dùng trong cơ sở dữ liệu sử dụng model
+            CartItem::where('user_id', $user->id)
+                ->where('product_id',  $request['product_id'])
+                ->where('color_id', $request['color_id'])
+                ->where('size_id', $request['size_id'])
+                ->delete();
+        } else {
+            // Lấy giỏ hàng từ session
+            $cart = Session::get('cart', []);
 
-        // Reset lại chỉ số mảng để đảm bảo giỏ hàng có chỉ số liên tục
-        $cart = array_values($cart);
+            // Lọc bỏ sản phẩm muốn xóa dựa trên product_id, color_id, và size_id
+            $cart = array_filter($cart, function ($item) use ($request) {
+                return !(
+                    $item['product_id'] ==  $request['product_id'] &&
+                    $item['color_id'] == $request['color_id'] &&
+                    $item['size_id'] == $request['size_id']
+                );
+            });
 
-        // Cập nhật lại giỏ hàng vào session
-        Session::put('cart', $cart);
+            // Reset lại chỉ số mảng để đảm bảo giỏ hàng có chỉ số liên tục
+            $cart = array_values($cart);
+
+            // Cập nhật lại giỏ hàng vào session
+            Session::put('cart', $cart);
+        }
 
         // Trả về kết quả dưới dạng JSON
         return response()->json([
             'success' => true,
             'message' => 'Product removed from cart',
-            'cart' => $cart,  // Giỏ hàng đã được cập nhật
+            'cart' => $cart,  // Trả về giỏ hàng đã được cập nhật
         ]);
+    }
+
+
+    // Hàm lấy giỏ hàng của người dùng từ cơ sở dữ liệu
+    private function getUserCart($userId)
+    {
+        return DB::table('cart_items')
+            ->where('user_id', $userId)
+            ->get();
     }
 
 
