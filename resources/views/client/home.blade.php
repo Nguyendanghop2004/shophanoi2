@@ -4,6 +4,8 @@
 @endsection
 
 @section('content')
+
+
     <!-- categories -->
     <section class="flat-spacing-20">
         <div class="container">
@@ -109,7 +111,7 @@
         </div>
     </section>
     <!-- /categories -->
-
+    {{--
     <!-- slider -->
     <div class="tf-slideshow slider-women slider-effect-fade position-relative">
         <div class="swiper tf-sw-slideshow" data-preview="1" data-tablet="1" data-mobile="1" data-centered="false"
@@ -145,105 +147,46 @@
             </div>
         </div>
     </div>
-    <!-- /slider -->
+    <!-- /slider --> --}}
 
-    <!-- Categories -->
+    {{-- <!-- Categories -->
     <section class="flat-spacing-5 pb_0">
         <div class="container">
             <div class="flat-title">
                 <span class="title wow fadeInUp" data-wow-delay="0s">Categories you might like</span>
             </div>
             <div class="hover-sw-nav">
+       
                 <div class="swiper tf-sw-collection" data-preview="4" data-tablet="2" data-mobile="2"
                     data-space-lg="30" data-space-md="30" data-space="15" data-loop="false" data-auto-play="false">
                     <div class="swiper-wrapper">
+                    @foreach($categories as $category)
                         <div class="swiper-slide" lazy="true">
-                            <div class="collection-item style-2 hover-img">
+                     
+                            <div class="collection-item style-2 hover-img" >
                                 <div class="collection-inner">
-                                    <a href="shop-collection-sub.html" class="collection-image img-style">
+                                    <a href="{{route('home.slug', $category->slug)}}" class="0"> 
                                         <img class="lazyload"
                                             data-src="{{ asset('client/assets/images/collections/collection-42.jpg') }}"
                                             src="{{ asset('client/assets/images/collections/collection-42.jpg') }}"
                                             alt="collection-img">
                                     </a>
                                     <div class="collection-content">
-                                        <a href="shop-collection-sub.html"
-                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>Tops</span><i
+                                        <a href="{{route('home.slug', $category->slug)}}"
+                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>{{$category->name}}</span><i
                                                 class="icon icon-arrow1-top-left"></i></a>
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>
-                        <div class="swiper-slide" lazy="true">
-                            <div class="collection-item style-2 hover-img">
-                                <div class="collection-inner">
-                                    <a href="shop-collection-sub.html" class="collection-image img-style">
-                                        <img class="lazyload"
-                                            data-src="{{ asset('client/assets/images/collections/collection-43.jpg') }}"
-                                            src="{{ asset('client/assets/images/collections/collection-43.jpg') }}"
-                                            alt="collection-img">
-                                    </a>
-                                    <div class="collection-content">
-                                        <a href="shop-collection-sub.html"
-                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>Sweatshirts</span><i
-                                                class="icon icon-arrow1-top-left"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide" lazy="true">
-                            <div class="collection-item style-2 hover-img">
-                                <div class="collection-inner">
-                                    <a href="shop-collection-sub.html" class="collection-image img-style">
-                                        <img class="lazyload"
-                                            data-src="{{ asset('client/assets/images/collections/collection-44.jpg') }}"
-                                            src="{{ asset('client/assets/images/collections/collection-44.jpg') }}"
-                                            alt="collection-img">
-                                    </a>
-                                    <div class="collection-content">
-                                        <a href="shop-collection-sub.html"
-                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>Swim</span><i
-                                                class="icon icon-arrow1-top-left"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide" lazy="true">
-                            <div class="collection-item style-2 hover-img">
-                                <div class="collection-inner">
-                                    <a href="shop-collection-sub.html" class="collection-image img-style">
-                                        <img class="lazyload"
-                                            data-src="{{ asset('client/assets/images/collections/collection-45.jpg') }}"
-                                            src="{{ asset('client/assets/images/collections/collection-45.jpg') }}"
-                                            alt="collection-img">
-                                    </a>
-                                    <div class="collection-content">
-                                        <a href="shop-collection-sub.html"
-                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>Dresses</span><i
-                                                class="icon icon-arrow1-top-left"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide" lazy="true">
-                            <div class="collection-item style-2 hover-img">
-                                <div class="collection-inner">
-                                    <a href="shop-collection-sub.html" class="collection-image img-style">
-                                        <img class="lazyload"
-                                            data-src="{{ asset('client/assets/images/collections/collection-46.jpg') }}"
-                                            src="{{ asset('client/assets/images/collections/collection-46.jpg') }}"
-                                            alt="collection-img">
-                                    </a>
-                                    <div class="collection-content">
-                                        <a href="shop-collection-sub.html"
-                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>Cardigans</span><i
-                                                class="icon icon-arrow1-top-left"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                       
+                        
+                       
+                       
+                        @endforeach
                     </div>
+                    
                 </div>
                 <div class="nav-sw nav-next-slider nav-next-collection box-icon w_46 round"><span
                         class="icon icon-arrow-left"></span></div>
@@ -253,8 +196,8 @@
             </div>
         </div>
     </section>
-    <!-- /Categories -->
-    <!-- Banner Collection -->
+    <!-- /Categories --> --}}
+    {{-- <!-- Banner Collection -->
     <section class="flat-spacing-10 pb_0">
         <div class="container">
             <div class="swiper tf-sw-recent" data-preview="2" data-tablet="2" data-mobile="1.3" data-space-lg="30"
@@ -300,7 +243,7 @@
             </div>
         </div>
     </section>
-    <!-- /Banner Collection -->
+    <!-- /Banner Collection --> --}}
 
     <!-- Best seller -->
     <section class="flat-spacing-15 pb_0">
@@ -323,31 +266,31 @@
                                         <img class="lazyload img-product"
                                             data-src="{{ asset('storage/' . $product->main_image_url) }}"
                                             src="{{ asset('storage/' . $product->main_image_url) }}"
-                                            alt="{{ $product->product_name }}" width="100px" height="100px">
-                                           
-                                            <div class="list-product-btn absolute-2">
-                                                <!-- Nút Add to Wishlist -->
-                                                <form action="{{ route('wishlist.add', $product->id) }}" method="POST" style="display: inline;"  onclick="return confirm('Thêm sản phẩm yêu thích thành công');">
-                                                    @csrf
-                                                    <button type="submit"  class="box-icon bg_white wishlist btn-icon-action">
-                                                        <span class="icon icon-heart"></span>
-                                                        <span class="tooltip" >Add to Wishlist</span>
-                                                    </button>
-                                                </form>
-                                            </div>
+                                            alt="{{ $product->product_name }}">
+
+                                            <!-- Ảnh hover, có thể lấy ảnh khác từ bảng images nếu có nhiều ảnh -->
+                                            @php
+                                                $hoverImage = $product->images->first(); // Giả sử bạn có quan hệ images trong model
+                                            @endphp
+                                            @if ($hoverImage)
+                                                <img class="lazyload img-hover"
+                                                    data-src="{{ asset('storage/' . $hoverImage->image_url) }}"
+                                                    src="{{ asset('storage/' . $hoverImage->image_url) }}"
+                                                    alt="{{ $product->product_name }}">
+                                            @endif
                                         </a>
-                                      
-                                        {{-- <div class="list-product-btn absolute-2">
-                                            <a href="#shoppingCart" data-bs-toggle="modal"
+
+                                        <div class="list-product-btn">
+                                            <a href="#quick_add" data-bs-toggle="modal" data-product-id="{{ $product->id }}"
                                                 class="box-icon bg_white quick-add tf-btn-loading">
                                                 <span class="icon icon-bag"></span>
-                                                <span class="tooltip">Add to cart</span>
+                                                <span class="tooltip">Quick Add</span>
                                             </a>
-                                            <a href="javascript:void(0);" class="box-icon bg_white wishlist btn-icon-action">
+                                            <a href="javascript:void(0);"
+                                                class="box-icon bg_white wishlist btn-icon-action">
                                                 <span class="icon icon-heart"></span>
                                                 <span class="tooltip">Add to Wishlist</span>
                                                 <span class="icon icon-delete"></span>
-                                                
                                             </a>
                                             <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                                                 class="box-icon bg_white compare btn-icon-action">
@@ -361,59 +304,45 @@
                                                 <span class="tooltip">Quick View</span>
                                             </a>
                                         </div>
-                                        --}}
 
-                                        <!-- Ảnh hover, có thể lấy ảnh khác từ bảng images nếu có nhiều ảnh -->
-                                        @php
-                                            $hoverImage = $product->images->first(); // Giả sử bạn có quan hệ images trong model
-                                        @endphp
-                                        @if ($hoverImage)
-                                            <img class="lazyload img-hover"
-                                                data-src="{{ asset('storage/' . $hoverImage->image_url) }}"
-                                                src="{{ asset('storage/' . $hoverImage->image_url) }}"
-                                                alt="{{ $product->product_name }}">
-                                        @endif
-                                    </a>
-
-                                    <div class="list-product-btn">
-                                        <!-- Các nút chức năng: Thêm nhanh, Yêu thích, So sánh, Xem nhanh -->
-                                        <!-- Code cho các nút chức năng -->
+                                        <div class="size-list">
+                                            <span>{{ $product->variants->count() }} sizes available</span>
+                                        </div>
                                     </div>
 
-                                    <div class="size-list">
-                                        <span>{{ $product->variants->count() }} sizes available</span>
+                                    <div class="card-product-info">
+                                        <a href="" class="title link">{{ $product->product_name }}</a>
+                                        <span class="price">${{ number_format($product->price, 2) }}</span>
+
+                                        <!-- Hiển thị màu sắc -->
+                                        <ul class="list-color-product">
+                                            @foreach ($product->colors as $color)
+                                                <li
+                                                    class="list-color-item color-swatch {{ $loop->first ? 'active' : '' }}">
+                                                    <span class="tooltip">{{ $color->name }}</span>
+                                                    <span class="swatch-value"
+                                                        style="background-color: {{ $color->sku_color }}"></span>
+
+                                                    @php
+                                                        // Tìm ảnh của màu tương ứng
+                                                        $colorImage = $product->images->firstWhere(
+                                                            'color_id',
+                                                            $color->id,
+                                                        );
+                                                    @endphp
+                                                    @if ($colorImage)
+                                                        <img class="lazyload"
+                                                            data-src="{{ asset('storage/' . $colorImage->image_url) }}"
+                                                            src="{{ asset('storage/' . $colorImage->image_url) }}"
+                                                            alt="{{ $color->name }}">
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     </div>
-                                </div>
-
-                                <div class="card-product-info">
-                                    <a href="" class="title link">{{ $product->product_name }}</a>
-                                    <span class="price">${{ number_format($product->price, 2) }}</span>
-
-                                    <!-- Hiển thị màu sắc -->
-                                    <ul class="list-color-product">
-                                        @foreach ($product->colors as $color)
-                                            <li class="list-color-item color-swatch {{ $loop->first ? 'active' : '' }}">
-                                                <span class="tooltip">{{ $color->name }}</span>
-                                                <span class="swatch-value" style="background-color: {{ $color->sku_color }}"></span>
-
-                                                @php
-                                                    // Tìm ảnh của màu tương ứng
-                                                    $colorImage = $product->images->firstWhere('color_id', $color->id);
-                                                @endphp
-                                                @if ($colorImage)
-                                                    <img class="lazyload"
-                                                        data-src="{{ asset('storage/' . $colorImage->image_url) }}"
-                                                        src="{{ asset('storage/' . $colorImage->image_url) }}"
-                                                        alt="{{ $color->name }}">
-                                                @endif
-                                            </li>
-                                        @endforeach
-                                    </ul>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
-
+                        @endforeach
 
 
 

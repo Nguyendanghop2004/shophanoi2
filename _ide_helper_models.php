@@ -81,6 +81,54 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int|null $user_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CartItem> $cartItems
+ * @property-read int|null $cart_items_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Cart newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Cart newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Cart query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Cart whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cart whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cart whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cart whereUserId($value)
+ */
+	class Cart extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $cart_id
+ * @property int $variant_id
+ * @property int $quantity
+ * @property string $price
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Cart $cart
+ * @property-read \App\Models\ProductVariant $variant
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereCartId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereVariantId($value)
+ */
+	class CartItem extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property string $name
  * @property string $slug
  * @property string|null $description
@@ -188,6 +236,95 @@ namespace App\Models{
 /**
  * 
  *
+ * @property-read \App\Models\Admin|null $admin
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins query()
+ */
+	class HistorieAdmins extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \App\Models\Admin|null $admin
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|History newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|History newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|History query()
+ */
+	class History extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $order_code
+ * @property int|null $user_id
+ * @property string $name
+ * @property string $phone
+ * @property string $address
+ * @property string|null $email
+ * @property string|null $note
+ * @property string $total
+ * @property string $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $orderItems
+ * @property-read int|null $order_items_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
+ */
+	class Order extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $order_id
+ * @property int $variant_id
+ * @property int $quantity
+ * @property string $price
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Order|null $order
+ * @property-read \App\Models\ProductVariant|null $variant
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereVariantId($value)
+ */
+	class OrderItem extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
  * @property-read \App\Models\ProductVariant|null $variant
  * @method static \Illuminate\Database\Eloquent\Builder|PriceSale newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PriceSale newQuery()
@@ -252,7 +389,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $product_id
- * @property int $color_id
+ * @property int|null $color_id
  * @property string $image_url
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
