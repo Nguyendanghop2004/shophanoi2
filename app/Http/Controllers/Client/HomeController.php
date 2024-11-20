@@ -120,3 +120,4 @@ class HomeController extends Controller
         return view('client.layouts.components.ajax-file.quick-add', compact('product', 'randomImages', 'colorSizes'))->render();
     }
 }
+    

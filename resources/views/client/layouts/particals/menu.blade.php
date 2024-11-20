@@ -56,6 +56,10 @@
           
         </li>
         <li class="menu-item position-relative">
+            <a href="{{route('shop-collection')}}" class="item-link">Bài Viết</a>
+          
+        </li>
+        <li class="menu-item position-relative">
             <a href="" class="item-link">Giới Thiệu</a>
            
         </li>

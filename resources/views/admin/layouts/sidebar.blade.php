@@ -266,8 +266,8 @@
 
 
             <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
-            <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="fas fa-envelope"></i> <span>Liên
-                        Hệ</span></a></li>
+            {{-- <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="fas fa-envelope"></i> <span>Liên
+                        Hệ</span></a></li> --}}
             @can('shipper')
                 <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="fas fa-shipping-fast"></i>
                         <span>Nhân
@@ -288,6 +288,8 @@
                     </ul>
                 </li>
             @endcan
+
+               
             @can('product')
                 <li class="menu-header">Quản Lí Sản Phẩm</li>
                 <li class="dropdown">
@@ -315,6 +317,36 @@
                 </li>
             @endcan
 
+            @can('Acount')
+            <li class="menu-header">Quản Lí tài khoản</li>
+
+            <li class="dropdown">
+
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                    <span>Account</span></a>
+                <ul class="dropdown-menu">
+
+                    <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Tài khoản
+                                Admin</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.history') }}">
+                            <span>Lịch sử Admin</span></a></li>
+                    <li><a class="nav-link" href=""><span>Tài khoản User</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Phân quyền và vai
+                                trò</span></a></li>
+                    
+                </ul>
+            </li>
+            @endcan
+
+
+            <li class="menu-header">Quản Lí Đơn Hàng</li>
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-user"></i>
+                    <span>Đơn hàng</span></a>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link" href=""><span>Danh sách đơn hàng</span></a></li>
+                </ul>
+            </li>
 
 
     </aside>
