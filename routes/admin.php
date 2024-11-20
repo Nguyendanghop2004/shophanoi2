@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AccoutAdminController;
 use App\Http\Controllers\Admin\AccoutUserController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriesController;
 
@@ -163,6 +164,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::get('history', [HistoryController::class, 'history'])->name('history');
     Route::get('history/show/{id}', [HistoryController::class, 'show'])->name('show');
     Route::delete('history/delete/{id}', [HistoryController::class, 'delete'])->name('delete');
+
+    //start blog
+    Route::get('blog/index', [BlogController::class, 'index'])->name('blog.index');
+    Route::post('blog/store', [BlogController::class, 'store'])->name('blog.store');
+    Route::get('blog/show', [BlogController::class, 'show'])->name('blog.show');
 
 
 });
