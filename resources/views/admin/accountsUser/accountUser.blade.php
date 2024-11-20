@@ -33,11 +33,12 @@
                             @foreach ($users as $user)
                                 <tr>
                                     <th scope="row">{{ $user->id }}</th>
-                                    <td>{{ $user->name }}</td>
+                                    <td ><a class="text-primary" href="{{ route('admin.accountsUser.show', $user->id) }}">{{ $user->name }}</a>
+                                    </td>
                                     <td>{{ $user->email }}</td>
                                     <td>
-                                        <img src="{{ Storage::url($user->image) }}" alt="Ảnh quản trị viên"
-                                            width="100px" height="60px">
+                                        <img src="{{ Storage::url($user->image) }}" alt="Ảnh quản trị viên" width="100px"
+                                            height="60px">
                                     </td>
 
                                     <td>

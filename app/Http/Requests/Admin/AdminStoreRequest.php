@@ -24,7 +24,7 @@ class AdminStoreRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|confirmed',
             'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048|dimensions:min_width=100,min_height=100',
         ];
     }
@@ -35,7 +35,6 @@ class AdminStoreRequest extends FormRequest
             'email.required' => 'Email là bắt buộc.',
             'email.unique' => 'Email này đã được sử dụng.',
             'password.required' => 'Mật khẩu là bắt buộc.',
-            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
             'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
             'image_path.image' => 'Ảnh đại diện phải là một tệp hình ảnh.',
             'image_path.mimes' => 'Ảnh đại diện phải là một tệp có định dạng: jpeg, png, jpg, gif.',

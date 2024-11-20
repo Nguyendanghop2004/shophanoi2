@@ -1,5 +1,6 @@
  <!-- Header -->
  <header id="header" class="header-default">
+    
     <div class="px_15 lg-px_40">
         <div class="row wrapper-header align-items-center">
             <div class="col-md-4 col-3 tf-lg-hidden">
@@ -17,6 +18,7 @@
                     <img src="{{ asset('client/assets/images/logo/logo.svg') }}" alt="logo" class="logo">
                 </a>
             </div>
+            
             <div class="col-xl-6 tf-md-hidden">
                <!-- list menu -->
                @include('client.layouts.particals.menu')

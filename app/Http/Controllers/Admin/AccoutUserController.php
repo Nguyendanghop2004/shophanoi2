@@ -5,13 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ChangeUserRequest;
+use App\Http\Requests\Admin\StoreUserRequest;
 use App\Models\City;
+use App\Models\History;
 use App\Models\Province;
 use App\Models\Wards;
 use App\Models\User;
+use Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
 
 class AccoutUserController extends Controller
 {
@@ -42,8 +45,8 @@ class AccoutUserController extends Controller
         // $user->assignRole('Super Admin');
         $users = User::query()->latest('id')->paginate(5);
         return view(('admin.accountsUser.accountUser'), compact('users'));
-    } 
-    
+    }
+
     public function create()
     {
         return view(('admin.accountsUser.create'));
@@ -52,7 +55,7 @@ class AccoutUserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
 
         $request->except('image');
@@ -74,19 +77,23 @@ class AccoutUserController extends Controller
      */
     public function show(string $id)
     {
-       
+        $user = User::findOrFail($id);
+
+        return view('admin.accountsUser.show', compact('user'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
         $user = User::findOrFail($id);
-        $cities = City::orderby('matp','ASC')->get();
-        $provinces = Province::all();
-        $wards = Wards::all();
-    
+
+        $cities = City::orderBy('name_thanhpho', 'ASC')->get();
+        $provinces = Province::where('matp', $user->city_id)->orderBy('name_quanhuyen', 'ASC')->get();
+        $wards = Wards::where('maqh', $user->province_id)->orderBy('name_xaphuong', 'ASC')->get();
+
+
         return view('admin.accountsUser.edit', compact('user', 'cities', 'provinces', 'wards'));
     }
 
@@ -97,15 +104,19 @@ class AccoutUserController extends Controller
     {
         // Lấy dữ liệu người dùng cũ
         $dataUser = User::findOrFail($id);
-    
-        $data = $request->only('name', 'email', 'phone_number','address', 'city_id', 'province_id', 'wards_id');
-    
+
+
+        $data = $request->only('name', 'email', 'phone_number', 'address', 'city_id', 'province_id', 'wards_id');
+
+
         if ($request->password) {
             $data['password'] = Hash::make($request->password);
         } else {
             $data['password'] = $dataUser->password;
         }
-    
+
+
+
         // Xử lý ảnh (nếu có)
         if ($request->hasFile('image')) {
             // Xóa ảnh cũ nếu có ảnh mới
@@ -115,13 +126,29 @@ class AccoutUserController extends Controller
             // Lưu ảnh mới
             $data['image'] = Storage::put('public/images/User', $request->file('image'));
         }
-    
+
+
         // Cập nhật thông tin người dùng
         $dataUser->update($data);
-    
+        History::create([
+            'user_id' => auth()->id(), // Người thực hiện hành động
+            'action' => 'update', // Hành động (update, create, delete)
+            'model_type' => 'User', // Loại model
+            'model_id' => $dataUser->id, // ID của model
+            'changes' => array_diff($dataUser->getAttributes(), $data),
+        ]);
         // Trả về thông báo thành công
-        return back()->with('success', 'Cập nhật thành công!');
+
+
+
+        // Cập nhật thông tin người dùng
+        $dataUser->update($data);
+
+        // Trả về thông báo thành công
+        return redirect()->route('admin.accountsUser.accountUser')->with('success', 'Cập nhật thành công!');
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -135,31 +162,47 @@ class AccoutUserController extends Controller
         }
         return back()->with('error', 'Xóa thành công');
     }
-    public function select_address(Request $request){
+
+    public function change(string $id)
+    {
+
+        $dataUser = User::query()->findOrFail($id);
+
+        return view('admin.accountsUser.change', compact('dataUser'));
+    }
+    public function changeUser(ChangeUserRequest $request, string $id)
+    {
+
+        $user = User::findOrFail($id);
+        $data = [
+            'password' => Hash::make($request->password),
+        ];
+        $user->update($data);
+        return back()->with('success', 'Đổi mới thành công',);
+    }
+
+    public function select_address(Request $request)
+    {
         $data = $request->all();
-    
-        if(isset($data['action'])) {
+
+        if (isset($data['action'])) {
             $output = '';
-    
-            if($data['action'] == "city") {
+
+            if ($data['action'] == "city") {
                 $select_province = Province::where('matp', $data['ma_id'])->orderBy('maqh', 'ASC')->get();
                 $output .= '<option>--Chọn Quận Huyện---</option>';
-                foreach($select_province as $province) {
+                foreach ($select_province as $province) {
                     $output .= '<option value="' . $province->maqh . '">' . $province->name_quanhuyen . '</option>';
                 }
             } else {
                 $select_wards = Wards::where('maqh', $data['ma_id'])->orderBy('xaid', 'ASC')->get();
                 $output .= '<option>--Chọn Xã Phường---</option>';
-                foreach($select_wards as $ward) {
+                foreach ($select_wards as $ward) {
                     $output .= '<option value="' . $ward->xaid . '">' . $ward->name_xaphuong . '</option>';
                 }
             }
             echo $output;
         }
     }
-    
-        
-    
-
     
 }

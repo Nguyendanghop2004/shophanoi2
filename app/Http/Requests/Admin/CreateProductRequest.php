@@ -62,7 +62,9 @@ class CreateProductRequest extends FormRequest
             'product_code.unique' => 'Mã sản phẩm đã tồn tại, vui lòng chọn mã khác.',
             'status.required' => 'Trạng thái sản phẩm là bắt buộc.',
             'categories.required' => 'Vui lòng chọn ít nhất một danh mục cho sản phẩm.',
-            'categories.*.exists' => 'Danh mục không hợp lệ.',
+
+            'categories.*.exists' => 'Danh mục không hợp lệ.', 
+
             'tagCollection.*.exists' => 'Tag không tồn tại.',
             'tagMaterial.*.exists' => 'Tag không tồn tại.',
 

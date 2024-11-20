@@ -43,7 +43,7 @@
                                 @foreach ($sliders as $slider)
                                     <tr>
                                         <th scope="row">{{ $slider->id }}</th>
-                                        <td><div style="padding: 5px;"><img src="{{ asset('storage/' . $slider->image_path) }}" alt=""></div></td>
+                                        <td><div style="padding: 5px;"><img src="{{ asset('storage/' . $slider->image_path) }}" style="max-height: 100px;max-width: 100px" alt=""></div></td>
                                         <td>{{ $slider->title }}</td>
                                         <td>{{ $slider->short_description }}</td>
                                         <td>{{ $slider->category_id }}</td>

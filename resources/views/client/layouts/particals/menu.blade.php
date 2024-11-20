@@ -9,7 +9,7 @@
     <div class="sub-menu mega-menu">
         <div class="container">
             <div class="row">
-                @foreach($categories as $category)
+                 @foreach($categories as $category)
                     <div class="col-lg-2">
                         <div class="mega-menu-item">
                             <div class="menu-heading">{{ $category->name }}</div>

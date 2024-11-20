@@ -10,7 +10,7 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['brand_id', 'slug', 'product_name', 'sku', 'description','price'];
+    protected $fillable = ['brand_id', 'slug', 'product_name', 'sku', 'description', 'price'];
 
     public function categories()
     {
@@ -42,17 +42,10 @@ class Product extends Model
             'color_id'    // Khóa trên bảng product_variants
         )->distinct()->select('colors.id', 'colors.name', 'colors.sku_color'); // Chọn các cột cần thiết từ bảng colors
     }
-   
+
     public function images()
     {
-        return $this->hasMany(ProductImage::class); 
+        return $this->hasMany(ProductImage::class, 'product_id', 'id'); // Thay đổi tên model và các khóa ngoại nếu cần
     }
-    public function colorss()
-{
-    return $this->hasMany(Color::class);
-}
-public function sizes()
-{
-    return $this->belongsToMany(Size::class, 'product_variants')->withPivot('stock_quantity');
-}
+
 }

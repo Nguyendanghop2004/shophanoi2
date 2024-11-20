@@ -97,8 +97,11 @@ class ProductController extends Controller
                 'slug' => $request->input('slug'),
                 'price' => $request->input('price'),
                 'status' => $request->input('status'),
-                'description' => $this->processDescription($request->input('description')),
             ]);
+            $product->description = $this->processDescription($request->input('description'), $product->id);
+
+            // Lưu sản phẩm
+            $product->save();
             // Lưu tags cho tagCollection và tagMaterial
             if ($request->has('tagCollection')) {
                 $this->syncTags($product, $request->input('tagCollection'), 'collection');
@@ -125,10 +128,13 @@ class ProductController extends Controller
     // Hàm xử lý lưu tag sản phẩm
     protected function syncTags($product, $tagIds, $type = null)
     {
+        if (is_null($tagIds) || empty($tagIds)) {
+            $tagIds = [];
+        }
         foreach ($tagIds as $tagId) {
             $tag = Tag::find($tagId);
             if ($tag && $tag->type === $type) {
-                $product->tags()->syncWithoutDetaching([$tagId]);
+                $product->tags()->sync([$tagId]);
             }
         }
     }
@@ -163,7 +169,7 @@ class ProductController extends Controller
             foreach ($images as $colorId => $files) {
                 foreach ($files as $file) {
                     $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                    $path = $file->storeAs('product', $filename, 'public');
+                    $path = $file->storeAs('images/products', $filename, 'public');
 
                     ProductImage::create([
                         'product_id' => $productId,
@@ -175,15 +181,24 @@ class ProductController extends Controller
         }
     }
 
-    private function processDescription($description)
+
+    private function processDescription($description, $productId)
     {
         if (empty(trim($description))) {
-            return ''; // Trả về chuỗi rỗng nếu không có nội dung
+            // Nếu mô tả rỗng, xóa toàn bộ ảnh liên quan
+            ProductImage::where('product_id', $productId)->get()->each(function ($image) {
+                Storage::delete("public/" . $image->image_url); // Xóa file
+                $image->delete(); // Xóa bản ghi trong CSDL
+            });
+            return ''; // Trả về chuỗi rỗng
         }
 
         $dom = new \DOMDocument();
         libxml_use_internal_errors(true); // Bỏ qua các lỗi HTML không hợp lệ
         $dom->loadHTML(mb_convert_encoding($description, 'HTML-ENTITIES', 'UTF-8'));
+
+        // Danh sách ảnh trong mô tả mới
+        $newImages = [];
 
         foreach ($dom->getElementsByTagName('img') as $img) {
             /** @var \DOMElement $img */
@@ -196,12 +211,36 @@ class ProductController extends Controller
 
                 // Tạo tên ảnh ngẫu nhiên
                 $imageName = uniqid() . '.png';
-                $filePath = "public/summernote/$imageName";
+                $filePath = "public/images/products/summernote/$imageName";
                 Storage::put($filePath, $data);
 
                 // Cập nhật đường dẫn của ảnh trong nội dung
-                $img->setAttribute('src', asset("storage/summernote/$imageName"));
+                $img->setAttribute('src', asset("storage/images/products/summernote/$imageName"));
+
+                // Lưu thông tin ảnh mới vào CSDL
+                $imageUrl = "images/products/summernote/$imageName";
+                ProductImage::create([
+                    'product_id' => $productId,
+                    'image_url' => $imageUrl,
+                ]);
+
+                // Thêm vào danh sách ảnh mới
+                $newImages[] = $imageUrl;
+            } else {
+                // Nếu ảnh đã tồn tại (không phải base64), thêm vào danh sách ảnh mới
+                $existingPath = str_replace(asset('storage') . '/', '', $src); // Loại bỏ asset URL để lấy đường dẫn lưu trữ
+                $newImages[] = $existingPath;
             }
+        }
+
+        // Lấy danh sách ảnh cũ từ CSDL
+        $oldImages = ProductImage::where('product_id', $productId)->pluck('image_url')->toArray();
+        // Xóa các ảnh cũ không còn trong mô tả
+        $imagesToDelete = array_diff($oldImages, $newImages);
+
+        foreach ($imagesToDelete as $imagePath) {
+            Storage::delete("public/" . $imagePath); // Xóa file khỏi storage
+            ProductImage::where('product_id', $productId)->where('image_url', $imagePath)->delete(); // Xóa bản ghi CSDL
         }
 
         // Chỉ lấy phần nội dung bên trong <body>
@@ -273,7 +312,9 @@ class ProductController extends Controller
                     ->with(['color:id,name', 'size:id,name']); // Chỉ lấy các trường cần thiết
             },
             'images' => function ($query) {
-                $query->select('color_id', 'image_url', 'product_id'); // Chỉ lấy các trường cần thiết
+
+                $query->select('id', 'color_id', 'image_url', 'product_id'); // Chỉ lấy các trường cần thiết
+
             },
             'brand:id,name,image_brand_url', // Lấy thông tin thương hiệu
             'categories:id,name', // Lấy danh sách danh mục
@@ -306,7 +347,9 @@ class ProductController extends Controller
         $product->slug = $request->slug;
         $product->sku = $request->product_code;
         $product->brand_id = $request->brand_id;
-        $product->description = $this->processDescription($request->description);
+
+        $product->description = $this->processDescription($request->description, $id);
+
 
         // Lưu sản phẩm
         $product->save();
@@ -341,6 +384,8 @@ class ProductController extends Controller
         return redirect()->back()->with('success', 'Cập nhật thành công!');
 
     }
+
+   
 
 
     public function createVariantProduct(CreateVariantProductRequest $request)
@@ -445,6 +490,7 @@ class ProductController extends Controller
 
 
     }
+
 
     public function destroy(string $id)
     {
