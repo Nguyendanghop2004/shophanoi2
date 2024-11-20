@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ShipperController;
 use App\Http\Controllers\Client\AboutUsController;
 use App\Http\Controllers\Client\AccountController;
 use App\Http\Controllers\Client\BrandController;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckOutController;
 use App\Http\Controllers\Client\FAQController;
 use App\Http\Controllers\Client\OutStoreController;
@@ -43,15 +44,26 @@ Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('sho
 Route::get('check-out', [CheckOutController::class, 'index'])->name('check-out');
 Route::get('payment-confirmation', [PaymentController::class, 'confirmation'])->name('payment-confirmation');
 Route::get('payment-failure', [PaymentController::class, 'failure'])->name('payment-failure');
-//start Account 
+//start Account
 Route::get('/account/{section?}', [AccountController::class, 'acc'])->name('account');
 Route::post('/account/login', [AccountController::class, 'login'])->name('account.login');
 Route::get('/accountUser/logout', [AccountController::class, 'logout'])->name('accountUser.logout');
 Route::post('/accountUser/register', [AccountController::class, 'register'])->name('accountUser.register');
 
-// end Account 
+// end Account
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+// cart
+Route::get('/get-product-info', [HomeController::class, 'getProductInfo']);
+Route::post('/add-to-cart', [CartController::class, 'addToCart']);
+Route::get('/cart', [CartController::class, 'viewCart'])->name('cart');
+Route::get('/debug-cart', function () {
+    return Session::get('cart');
+});
+
+Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');

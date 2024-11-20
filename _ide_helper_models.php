@@ -236,6 +236,31 @@ namespace App\Models{
 /**
  * 
  *
+ * @property-read \App\Models\Admin|null $admin
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins query()
+ */
+	class HistorieAdmins extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \App\Models\Admin|null $admin
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|History newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|History newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|History query()
+ */
+	class History extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
  * @property int $id
  * @property string $order_code
  * @property int|null $user_id
