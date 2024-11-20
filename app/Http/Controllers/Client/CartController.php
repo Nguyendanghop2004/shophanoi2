@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Color;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductVariant;
 use DB;
 use Illuminate\Http\Request;
 use Session;
@@ -54,7 +55,19 @@ class CartController extends Controller
             'cart' => $cart,
         ]);
     }
+    public function findVariantId($productId, $colorId, $sizeId)
+    {
+        $variant = ProductVariant::where('product_id', $productId)
+            ->where('color_id', $colorId)
+            ->where('size_id', $sizeId)
+            ->first();
 
+        if ($variant) {
+            return $variant->id;
+        }
+
+        return null; // Nếu không tìm thấy
+    }
     public function viewCart()
     {
         $cart = Session::get('cart', []); // Lấy dữ liệu từ session

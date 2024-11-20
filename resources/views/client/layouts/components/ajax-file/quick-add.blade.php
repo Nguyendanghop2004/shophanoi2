@@ -116,7 +116,7 @@
 
         sizes.forEach(function(size) {
             var sizeElement = `
-                <input type="radio" name="size" id="values-${size.name}-${colorId}" data-size-name="${size.name}">
+                <input type="radio" name="size" id="values-${size.name}-${colorId}" data-size-id="${size.id}">
                 <label class="style-text" for="values-${size.name}-${colorId}" data-value="${size.name}">
                     <p>${size.name}</p>
                 </label>
@@ -124,25 +124,19 @@
             sizeContainer.append(sizeElement); // Thêm các size vào container
         });
     }
-
-
-
-
-
-
 </script>
 
 <script>
-  $('.btn-add-to-cart').click(function(e) {
+   $('.btn-add-to-cart').click(function(e) {
     e.preventDefault();
 
     var productId = {{ $product->id }}; // ID sản phẩm
     var colorId = $('.btn-color:checked').data('color-id'); // ID màu sắc đã chọn
-    var size = $('input[name="size"]:checked').data('size-name'); // Kích thước đã chọn
+    var sizeId = $('input[name="size"]:checked').data('size-id'); // Kích thước đã chọn
     var quantity = $('input[name="quantity_product"]').val(); // Số lượng
 
     // Kiểm tra xem tất cả thông tin có hợp lệ không
-    if (!size) {
+    if (!sizeId) {
         alert('Please select a size.');
         return;
     }
@@ -151,7 +145,7 @@
     console.log({
         product_id: productId,
         color_id: colorId,
-        size: size,
+        size_id: sizeId,
         quantity: quantity
     });
 
@@ -162,7 +156,7 @@
         data: {
             product_id: productId,
             color_id: colorId,
-            size: size,
+            size_id: sizeId,
             quantity: quantity,
             _token: '{{ csrf_token() }}' // Thêm CSRF token để bảo mật yêu cầu
         },
