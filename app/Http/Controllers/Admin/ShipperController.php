@@ -46,7 +46,7 @@ use Illuminate\Http\Request;
             'profile_picture' => $profilePicturePath,
         ]);
 
-        return redirect()->route('shippers.index')->with('success', 'Thêm nhân viên giao hàng thành công!');
+        return redirect()->route('admin.shippers.index')->with('success', 'Thêm nhân viên giao hàng thành công!');
     }
 
     public function edit($id)
@@ -84,7 +84,7 @@ use Illuminate\Http\Request;
 
         $shipper->save();
 
-        return redirect()->route('shippers.index')->with('success', 'Cập nhật thông tin nhân viên giao hàng thành công!');
+        return redirect()->route('admin.shippers.index')->with('success', 'Cập nhật thông tin nhân viên giao hàng thành công!');
     }
 
     public function search(Request $request)
@@ -101,6 +101,6 @@ use Illuminate\Http\Request;
     public function destroy($id)
     {
         Shipper::destroy($id);
-        return redirect()->route('shippers.index')->with('success', 'Xóa nhân viên giao hàng thành công!');
+        return redirect()->route('admin.shippers.index')->with('success', 'Xóa nhân viên giao hàng thành công!');
     }
 }

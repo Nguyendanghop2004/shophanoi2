@@ -34,7 +34,7 @@ class AccountController extends Controller
 
         if (Auth::attempt($credentials)) {
             // Đăng nhập thành công
-            // $request->session()->regenerate();
+            $request->session()->regenerate();
             return redirect()->route('home');
         }
         return redirect()->route('home');

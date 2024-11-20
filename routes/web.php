@@ -63,8 +63,3 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-// contac nào đây ?
-Route::resource('contact', ContactMessageController::class);
-Route::get('/shippers/search', [ShipperController::class, 'search'])->name('shippers.search');
-
-Route::resource('shippers', ShipperController::class);
