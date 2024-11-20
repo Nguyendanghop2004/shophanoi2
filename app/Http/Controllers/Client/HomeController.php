@@ -25,10 +25,7 @@ class HomeController extends Controller
             ->orderBy('position', 'asc')
             ->get();
 
-            $categories = Category::with(relations: ['children' => function ($query) {
-                $query->where('status', 1); 
-            }])->where('status', 1) 
-            ->whereNull('parent_id')->get();
+
 
         $products = Product::with([
             'colors' => function ($query) {
@@ -54,14 +51,14 @@ class HomeController extends Controller
             ->get();
 
 
-        return view('client.home', compact('sliders', 'products','categories'));
- 
+        return view('client.home', compact('sliders', 'products'));
+
     }
     public function show($slug)
     {
-
-        $categories = Category::where('slug', $slug)->where('status', 1)->first();
-        if (!$categories) {
+        
+        $category = Category::where('slug', $slug)->where('status',1 )->first();
+        if (!$category) {
             return redirect()->route('home')->with('error', 'Danh mục không tồn tại hoặc đã bị ẩn.');
         }
 

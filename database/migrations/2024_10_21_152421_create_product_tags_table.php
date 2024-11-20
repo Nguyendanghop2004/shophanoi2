@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('product_tags', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade'); // Liên kết với sản phẩm chính
-            $table->foreignId('tag_id')->constrained('tags')->onDelete('cascade'); // Liên kết với tag
-            $table->timestamps();
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('tag_id')->constrained('tags') ->onDelete('cascade');
+            $table->string('type');
+            $table->timestamps(); 
         });
-
     }
 
     /**

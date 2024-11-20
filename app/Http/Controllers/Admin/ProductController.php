@@ -99,8 +99,8 @@ class ProductController extends Controller
                 'price' => $request->input('price'),
                 'status' => $request->input('status'),
             ]);
-            $product->description = $this->processDescription($request->input('description'), $product->id);
 
+            $product->description = $this->processDescription($request->input('description'), $product->id);
             // Lưu sản phẩm
             $product->save();
             // Lưu tags cho tagCollection và tagMaterial
