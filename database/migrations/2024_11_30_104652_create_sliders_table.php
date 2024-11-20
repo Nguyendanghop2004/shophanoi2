@@ -20,9 +20,8 @@ return new class extends Migration
             $table->integer('position')->nullable(); // Cho phép NULL
             $table->boolean('is_active')->default(true); // Trạng thái hoạt động
             $table->unsignedBigInteger('category_id'); // Khóa ngoại liên kết với bảng categories
-            $table->timestamps(); // Tạo created_at và updated_at
-            $table->softDeletes(); // Tạo cột deleted_at cho soft delete
-
+            $table->timestamps(); 
+            $table->softDeletes(); 
             // Tạo khóa ngoại cho category_id
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 

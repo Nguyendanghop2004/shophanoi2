@@ -326,11 +326,11 @@
                                            
                                             <div class="list-product-btn absolute-2">
                                                 <!-- Nút Add to Wishlist -->
-                                                <form action="{{ route('wishlist.add', $product->id) }}" method="POST" style="display: inline;">
+                                                <form action="{{ route('wishlist.add', $product->id) }}" method="POST" style="display: inline;"  onclick="return confirm('Thêm sản phẩm yêu thích thành công');">
                                                     @csrf
-                                                    <button type="submit" class="box-icon bg_white wishlist btn-icon-action">
+                                                    <button type="submit"  class="box-icon bg_white wishlist btn-icon-action">
                                                         <span class="icon icon-heart"></span>
-                                                        <span class="tooltip">Add to Wishlist</span>
+                                                        <span class="tooltip" >Add to Wishlist</span>
                                                     </button>
                                                 </form>
                                             </div>

@@ -15,9 +15,9 @@
             </form>
         </div>
     @endforeach
-@endif --}}
+@endif --}} 
 <div>
-    <!-- He who is contented is rich. - Laozi -->
+  
 </div>
 
 @extends('admin.layouts.master')
@@ -46,10 +46,10 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    {{-- danh mục cha con tự thiết kế  --}}
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Title</th>
-                                    <th scope="col">Content</th>
+                                    danh mục cha con tự thiết kế 
+                                    <th scope="col">Name </th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Function</th>
                                    
                                 </tr>
                             </thead>
@@ -67,7 +67,7 @@
                                                
                                                 <form action="{{route('wishlist.remove', $item->product->id)}}" method="POST">
                                                     @csrf
-                                                    {{-- @method('delete') --}}
+                                                    @method('delete') 
                                                     <button type="submit" class="btn btn-danger" onclick="return confirm('bạn có muốn xoá không?')"><i class="fas fa-trash"
                                                         style="color: #ffffff;"></i></button>
                                                    </form>
@@ -79,7 +79,7 @@
                                       
                                       
                                   
-                                {{-- @endforeach --}}
+                           
                             @endif
                                             </div>
                                         </div>

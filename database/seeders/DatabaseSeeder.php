@@ -15,6 +15,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
+        $this->call(AdminSeeder::class);
+
+
         $this->call(CategoriesTableSeeder::class);
         $this->call(SlidersTableSeeder::class);
 
@@ -23,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SizeSeeder::class);
         $this->call(TagSeeder::class);
         $this->call(ProductSeeder::class);
+
     }
 }
 

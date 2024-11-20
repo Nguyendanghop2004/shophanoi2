@@ -43,8 +43,23 @@ class Product extends Model
         )->distinct()->select('colors.id', 'colors.name', 'colors.sku_color'); // Chọn các cột cần thiết từ bảng colors
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    
+    public function colorss()
+{
+    return $this->hasMany(Color::class);
+}
+
+
+
+
     public function images()
     {
         return $this->hasMany(ProductImage::class, 'product_id', 'id'); // Thay đổi tên model và các khóa ngoại nếu cần
     }
+    
+
 }
