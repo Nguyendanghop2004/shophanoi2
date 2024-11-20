@@ -23,6 +23,7 @@ namespace App\Models{
  * @property string|null $image_path
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property bool $check 1 là đc đang nhập 0 là k đc đăng nhập
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
@@ -34,6 +35,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Admin permission($permissions, $without = false)
  * @method static \Illuminate\Database\Eloquent\Builder|Admin query()
  * @method static \Illuminate\Database\Eloquent\Builder|Admin role($roles, $guard = null, $without = false)
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin whereCheck($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Admin whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Admin whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Admin whereId($value)
@@ -103,23 +105,29 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $cart_id
- * @property int $variant_id
+ * @property int $product_id
+ * @property int $color_id
+ * @property int $size_id
  * @property int $quantity
  * @property string $price
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Cart $cart
- * @property-read \App\Models\ProductVariant $variant
+ * @property-read \App\Models\Color $color
+ * @property-read \App\Models\Product $product
+ * @property-read \App\Models\Size $size
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem query()
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereCartId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereColorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereSizeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereVariantId($value)
  */
 	class CartItem extends \Eloquent {}
 }
@@ -236,10 +244,26 @@ namespace App\Models{
 /**
  * 
  *
- * @property-read \App\Models\Admin|null $admin
+ * @property int $id
+ * @property int $admin_id
+ * @property string $action
+ * @property string $model_type
+ * @property int $model_id
+ * @property array $changes
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Admin $admin
  * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins query()
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereAction($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereAdminId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereChanges($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereModelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereModelType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereUpdatedAt($value)
  */
 	class HistorieAdmins extends \Eloquent {}
 }
@@ -248,11 +272,27 @@ namespace App\Models{
 /**
  * 
  *
+ * @property int $id
+ * @property int $user_id
+ * @property string $action
+ * @property string $model_type
+ * @property int $model_id
+ * @property array $changes
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Admin|null $admin
- * @property-read \App\Models\User|null $user
+ * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|History newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|History newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|History query()
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereAction($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereChanges($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereModelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereModelType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereUserId($value)
  */
 	class History extends \Eloquent {}
 }
@@ -389,7 +429,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $product_id
- * @property int|null $color_id
+ * @property int $color_id
  * @property string $image_url
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

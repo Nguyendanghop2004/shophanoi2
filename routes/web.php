@@ -63,7 +63,10 @@ Route::get('/get-product-info', [HomeController::class, 'getProductInfo']);
 Route::post('/add-to-cart', [CartController::class, 'addToCart']);
 Route::get('/cart', [CartController::class, 'viewCart'])->name('cart');
 Route::get('/debug-cart', function () {
+
+    // Session::forget('cart');
     return Session::get('cart');
+
 });
 
-Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');

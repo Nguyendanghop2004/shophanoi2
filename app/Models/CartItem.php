@@ -8,18 +8,30 @@ use Illuminate\Database\Eloquent\Model;
 class CartItem extends Model
 {
     use HasFactory;
+    protected $fillable = ['cart_id', 'product_id', 'color_id', 'size_id', 'quantity', 'price'];
 
-    protected $fillable = [
-        'cart_id', 'variant_id', 'quantity', 'price', 'created_at', 'updated_at',
-    ];
+
 
     public function cart()
     {
         return $this->belongsTo(Cart::class);
     }
 
-    public function variant()
+    // Mối quan hệ với model Product
+    public function product()
     {
-        return $this->belongsTo(ProductVariant::class); // Nếu có model Variant
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    // Mối quan hệ với Color (nếu có)
+    public function color()
+    {
+        return $this->belongsTo(Color::class, 'color_id');
+    }
+
+    // Mối quan hệ với Size (nếu có)
+    public function size()
+    {
+        return $this->belongsTo(Size::class, 'size_id');
     }
 }

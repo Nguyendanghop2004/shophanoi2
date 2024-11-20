@@ -16,6 +16,7 @@
             <div class="compare-at-price">$10.00</div>
             <div class="badges-on-sale"><span>20</span>% OFF</div> -->
             <div class="price">${{ number_format($product->price, 2) }}</div>
+            <input type="hidden" name="price" value="{{ $product->price }}">
         </div>
     </div>
 </div>
@@ -116,7 +117,7 @@
 
         sizes.forEach(function(size) {
             var sizeElement = `
-                <input type="radio" name="size" id="values-${size.name}-${colorId}" data-size-name="${size.name}">
+                <input type="radio" name="size" id="values-${size.name}-${colorId}" data-size-id="${size.id}">
                 <label class="style-text" for="values-${size.name}-${colorId}" data-value="${size.name}">
                     <p>${size.name}</p>
                 </label>
@@ -124,62 +125,55 @@
             sizeContainer.append(sizeElement); // Thêm các size vào container
         });
     }
-
-
-
-
-
-
 </script>
 
 <script>
-  $('.btn-add-to-cart').click(function(e) {
-    e.preventDefault();
+    $('.btn-add-to-cart').click(function(e) {
+        e.preventDefault();
 
-    var productId = {{ $product->id }}; // ID sản phẩm
-    var colorId = $('.btn-color:checked').data('color-id'); // ID màu sắc đã chọn
-    var size = $('input[name="size"]:checked').data('size-name'); // Kích thước đã chọn
-    var quantity = $('input[name="quantity_product"]').val(); // Số lượng
+        var productId = {{ $product->id }}; // ID sản phẩm
+        var colorId = $('.btn-color:checked').data('color-id'); // ID màu sắc đã chọn
+        var sizeId = $('input[name="size"]:checked').data('size-id'); // Kích thước đã chọn
+        var quantity = $('input[name="quantity_product"]').val(); // Số lượng
+        var price = $('input[name="price"]').val();
 
-    // Kiểm tra xem tất cả thông tin có hợp lệ không
-    if (!size) {
-        alert('Please select a size.');
-        return;
-    }
+        // Kiểm tra xem tất cả thông tin có hợp lệ không
+        if (!sizeId) {
+            alert('Please select a size.');
+            return;
+        }
 
-    // In dữ liệu gửi đi vào Console
-    console.log({
-        product_id: productId,
-        color_id: colorId,
-        size: size,
-        quantity: quantity
-    });
-
-    // Gửi yêu cầu Ajax đến route xử lý thêm vào giỏ hàng
-    $.ajax({
-        url: '/add-to-cart', // Route xử lý thêm sản phẩm vào giỏ hàng
-        method: 'POST',
-        data: {
+        // In dữ liệu gửi đi vào Console
+        console.log({
             product_id: productId,
             color_id: colorId,
-            size: size,
+            size_id: sizeId,
             quantity: quantity,
-            _token: '{{ csrf_token() }}' // Thêm CSRF token để bảo mật yêu cầu
-        },
-        success: function(response) {
-            if (response.success) {
-                alert('Product added to cart successfully!');
-                // Cập nhật giao diện nếu cần (ví dụ: số lượng sản phẩm trong giỏ hàng)
-            } else {
-                alert('Failed to add product to cart.');
-            }
-        },
-        error: function() {
-            alert('An error occurred. Please try again.');
-        }
-    });
-});
+            price: price
+        });
 
+        // Gửi yêu cầu Ajax đến route xử lý thêm vào giỏ hàng
+        $.ajax({
+            url: '/add-to-cart',
+            type: 'POST',
+            data: {
+                product_id: productId,
+                color_id: colorId,
+                size_id: sizeId,
+                quantity: quantity,
+                price: price,
+                _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
+            },
+            success: function(response) {
+                console.log(response); // Xem phản hồi từ server
+            },
+            error: function(xhr, status, error) {
+                console.error('Lỗi Ajax:', error); // In ra chi tiết lỗi
+                console.log(xhr.responseText); // Xem thông báo lỗi chi tiết từ server
+            }
+        });
+
+    });
 </script>
 
 
