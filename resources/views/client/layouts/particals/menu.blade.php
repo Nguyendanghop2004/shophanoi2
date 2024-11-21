@@ -9,24 +9,7 @@
     <div class="sub-menu mega-menu">
         <div class="container">
             <div class="row">
-                 @foreach($categories as $category)
-                    <div class="col-lg-2">
-                        <div class="mega-menu-item">
-                            <div class="menu-heading">{{ $category->name }}</div>
-                            @if($category->children->isNotEmpty())
-                                <ul class="menu-list">
-                                    @foreach($category->children as $child)
-                                        <li>
-                                        <a href="{{ route('shop-collection', $child->id) }}" class="menu-link-text link">{{ $child->name }}</a>
-                                       
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        </div>
-                    </div>
-                @endforeach
-            </div>
+           
         </div>
     </div>
 </li>

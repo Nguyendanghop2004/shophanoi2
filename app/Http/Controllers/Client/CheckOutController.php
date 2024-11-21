@@ -3,12 +3,94 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\Color;
+use App\Models\Product;
+use App\Models\ProductImage;
+use App\Models\Size;
 use Illuminate\Http\Request;
-
+use Session;
+use DB;
 class CheckOutController extends Controller
 {
-    public function index()
+    public function checkout()
     {
-            return view('client.check-out');
+        // Biến chứa thông tin giỏ hàng
+        $cartDetails = [];
+        $totalPrice = 0;
+    
+      
+        if (auth()->check()) {
+         
+            $cart = Cart::where('user_id', auth()->id())
+                ->with(['cartItems.product.images', 'cartItems.color', 'cartItems.size'])
+                ->first();
+    
+            if ($cart && $cart->cartItems->isNotEmpty()) {
+             
+                $cartDetails = $cart->cartItems->map(function ($item) {
+                    $product = $item->product;
+                    $color = $item->color;
+                    $size = $item->size;
+                    $image = $product->images->firstWhere('color_id', $color->id);
+    
+                    // Lấy URL ảnh sản phẩm, nếu không có thì dùng ảnh mặc định
+                    $imageUrl = $image ? $image->image_url : '/default-image.jpg';
+    
+                    return [
+                        'product_id' => $product->id,
+                        'color_id' => $color->id ?? null,
+                        'size_id' => $size->id ?? null,
+                        'product_name' => $product->product_name ?? 'N/A',
+                        'color_name' => $color->name ?? 'N/A',
+                        'size_name' => $size->name ?? 'N/A',
+                        'quantity' => $item->quantity,
+                        'price' => $item->price ?? $product->price,
+                        'image_url' => $imageUrl,
+                        'subtotal' => ($item->price ?? $product->price) * $item->quantity,
+                    ];
+                });
+    
+                // Tính tổng giá trị đơn hàng
+                $totalPrice = $cartDetails->sum('subtotal');
+            }
+        } else {
+            // Nếu chưa đăng nhập, lấy giỏ hàng từ session
+            $cart = session()->get('cart', []);
+    
+            if (!empty($cart)) {
+                foreach ($cart as $item) {
+                    // Lấy thông tin sản phẩm từ session
+                    $product = Product::find($item['product_id']);
+                    $color = Color::find($item['color_id']);
+                    $size = Size::find($item['size_id']);
+                    $image = $product->images->firstWhere('color_id', $color->id);
+    
+                    // Lấy URL ảnh sản phẩm, nếu không có thì dùng ảnh mặc định
+                    $imageUrl = $image ? $image->image_url : '/default-image.jpg';
+    
+                    $cartDetails[] = [
+                        'product_id' => $product->id,
+                        'color_id' => $color->id ?? null,
+                        'size_id' => $size->id ?? null,
+                        'product_name' => $product->product_name ?? 'N/A',
+                        'color_name' => $color->name ?? 'N/A',
+                        'size_name' => $size->name ?? 'N/A',
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'] ?? $product->price,
+                        'image_url' => $imageUrl,
+                        'subtotal' => ($item['price'] ?? $product->price) * $item['quantity'],
+                    ];
+                }
+    
+                // Tính tổng giá trị đơn hàng từ giỏ hàng trong session
+                $totalPrice = array_sum(array_column($cartDetails, 'subtotal'));
+            }
+        }
+    
+        return view('client.check-out', compact('cartDetails', 'totalPrice'));
     }
+    
+    
+    
 }
