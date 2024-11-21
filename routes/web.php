@@ -55,18 +55,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/get-product-info', [HomeController::class, 'getProductInfo']);
+    Route::post('/add-to-cart', [CartController::class, 'addToCart']);
+    Route::get('/cart', [CartController::class, 'viewCart'])->name('cart');
+    Route::get('/debug-cart', function () {
+        // Session::forget('cart');
+        return Session::get('cart');
+    });
+    Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
 });
 
 
 // cart
-Route::get('/get-product-info', [HomeController::class, 'getProductInfo']);
-Route::post('/add-to-cart', [CartController::class, 'addToCart']);
-Route::get('/cart', [CartController::class, 'viewCart'])->name('cart');
-Route::get('/debug-cart', function () {
 
-    // Session::forget('cart');
-    return Session::get('cart');
-
-});
-
-Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
