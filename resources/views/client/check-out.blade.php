@@ -6,11 +6,13 @@
 
 <!-- page-cart -->
 <section class="flat-spacing-11">
+    <form action="{{route('placeOrder')}}" method="POST">
+        @csrf
 <div class="container">
     <div class="tf-page-cart-wrap layout-2">
         <div class="tf-page-cart-item">
             <h5 class="fw-5 mb_20">Billing details</h5>
-            <form class="form-checkout">
+         
                 <div class="box grid-2">
                     <fieldset class="fieldset">
                         <label for="first-name">Name</label>
@@ -24,19 +26,19 @@
 
                 <fieldset class="box fieldset">
                     <label for="city">Address</label>
-                    <input type="text" id="city" value="{{ auth()->check() ? auth()->user()->address : '' }}">
+                    <input name="address" type="text" id="city" value="{{ auth()->check() ? auth()->user()->address : '' }}">
                 </fieldset>
 
                 <fieldset class="box fieldset">
                     <label for="phone">Phone Number</label>
-                    <input type="text" id="phone" value="{{ auth()->check() ? auth()->user()->phone_number : '' }}">
+                    <input name="phone_number" type="text" id="phone" value="{{ auth()->check() ? auth()->user()->phone_number : '' }}">
                 </fieldset>
 
                 <fieldset class="box fieldset">
                     <label for="note">Order notes (optional)</label>
                     <textarea name="note" id="note"></textarea>
                 </fieldset>
-            </form>
+           
         </div>
 
         <div class="tf-page-cart-footer">
@@ -87,13 +89,13 @@
                         </div>
                     </div>
 
-                    <button class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">Place order</button>
-                </form>
+                    <button type="submit" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">Place order</button>
+             
             </div>
         </div>
     </div>
 </div>
-
+</form>
 
 
 </section>

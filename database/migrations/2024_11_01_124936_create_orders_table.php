@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('total_price', 10, 2); // Tổng giá trị đơn hàng
             $table->string('address'); // Địa chỉ giao hàng
             $table->string('phone_number'); // Số điện thoại giao hàng
+            $table->string('order_code'); // mã đơn hàng
             $table->text('note')->nullable(); 
             $table->enum('status', ['chờ_xác_nhận', 'đã_xác_nhận', 'đang_giao_hàng', 'giao_hàng_thành_công', 'đã_hủy'])
                   ->default('chờ_xác_nhận'); // Trạng thái đơn hàng: chờ xác nhận, đã xác nhận, đang giao hàng, giao hàng thành công, đã hủy// Ghi chú

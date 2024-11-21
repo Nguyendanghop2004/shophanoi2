@@ -47,7 +47,8 @@ Route::get('time-line', [TimeLineController::class, 'index'])->name('time-line')
 Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping-cart');
 
 //thanh toán
-
+Route::get('check-out', [CheckOutController::class, 'checkout'])->name('check-out');
+Route::post('check-out', [CheckoutController::class, 'placeOrder'])->name('placeOrder');
 //end thanh toán
 Route::get('payment-confirmation', [PaymentController::class, 'confirmation'])->name('payment-confirmation');
 Route::get('payment-failure', [PaymentController::class, 'failure'])->name('payment-failure');
