@@ -105,13 +105,17 @@ class AccoutUserController extends Controller
         // Lấy dữ liệu người dùng cũ
         $dataUser = User::findOrFail($id);
 
+
         $data = $request->only('name', 'email', 'phone_number', 'address', 'city_id', 'province_id', 'wards_id');
+
 
         if ($request->password) {
             $data['password'] = Hash::make($request->password);
         } else {
             $data['password'] = $dataUser->password;
         }
+
+
 
         // Xử lý ảnh (nếu có)
         if ($request->hasFile('image')) {
@@ -122,6 +126,7 @@ class AccoutUserController extends Controller
             // Lưu ảnh mới
             $data['image'] = Storage::put('public/images/User', $request->file('image'));
         }
+
 
         // Cập nhật thông tin người dùng
         $dataUser->update($data);
@@ -142,6 +147,7 @@ class AccoutUserController extends Controller
         // Trả về thông báo thành công
         return redirect()->route('admin.accountsUser.accountUser')->with('success', 'Cập nhật thành công!');
     }
+
 
 
     /**

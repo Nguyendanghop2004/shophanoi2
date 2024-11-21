@@ -378,7 +378,7 @@
 <div class="card-product" data-price="{{ $product->price }}" data-color="{{ implode(' ', $product->variants->pluck('color.name')->toArray()) }}">
     <div class="card-product-wrapper">
         @php
-            // Lấy hình ảnh chính và hình ảnh hover
+          
             $primaryImage = $product->images->first();
             $hoverImage = $product->images->skip(1)->first();
         @endphp

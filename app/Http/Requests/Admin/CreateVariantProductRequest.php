@@ -43,7 +43,9 @@ class CreateVariantProductRequest extends FormRequest
                 ->withInput()
                 ->with('active_tab', 'variantproduct') // Tab form 2
         );
+
     } 
+
     public function messages()
     {
         return [

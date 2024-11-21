@@ -282,7 +282,6 @@
                         <span>Danh mục sản phẩm</span></a>
                     <ul class="dropdown-menu">
 
-
                         <li><a class="nav-link" href="{{ route('admin.categories.list') }}"><span>Danh Sách Danh
                                     Mục</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.categories.add') }}"><span>Thêm Mới Danh
