@@ -6,21 +6,21 @@
 
 <!-- page-cart -->
 <section class="flat-spacing-11">
-    <form action="{{route('placeOrder')}}" method="POST">
-        @csrf
+<form  action="{{route('placeOrder')}}" method="POST" class="tf-page-cart-checkout widget-wrap-checkout">
+@csrf
 <div class="container">
     <div class="tf-page-cart-wrap layout-2">
         <div class="tf-page-cart-item">
             <h5 class="fw-5 mb_20">Billing details</h5>
-         
+          
                 <div class="box grid-2">
                     <fieldset class="fieldset">
                         <label for="first-name">Name</label>
-                        <input type="text" id="first-name" value="{{ auth()->check() ? auth()->user()->name : '' }}" placeholder="Themesflat">
+                        <input name="" type="text" id="first-name" value="{{ auth()->check() ? auth()->user()->name : '' }}" placeholder="Themesflat">
                     </fieldset>
                     <fieldset class="fieldset">
                         <label for="last-name">Email</label>
-                        <input type="text" id="last-name" value="{{ auth()->check() ? auth()->user()->email : '' }}">
+                        <input name="email" type="text" id="last-name" value="{{ auth()->check() ? auth()->user()->email : '' }}">
                     </fieldset>
                 </div>
 
@@ -31,7 +31,7 @@
 
                 <fieldset class="box fieldset">
                     <label for="phone">Phone Number</label>
-                    <input name="phone_number" type="text" id="phone" value="{{ auth()->check() ? auth()->user()->phone_number : '' }}">
+                    <input type="text" name="phone_number" id="phone" value="{{ auth()->check() ? auth()->user()->phone_number : '' }}">
                 </fieldset>
 
                 <fieldset class="box fieldset">
@@ -44,7 +44,7 @@
         <div class="tf-page-cart-footer">
             <div class="tf-cart-footer-inner">
                 <h5 class="fw-5 mb_20">Your order</h5>
-                <form class="tf-page-cart-checkout widget-wrap-checkout">
+              
                     <ul class="wrap-checkout-product">
                         @foreach ($cartDetails as $item)
                             <li class="checkout-product-item">
@@ -89,8 +89,8 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">Place order</button>
-             
+                    <button class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">Place order</button>
+              
             </div>
         </div>
     </div>

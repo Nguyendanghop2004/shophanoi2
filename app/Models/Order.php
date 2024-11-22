@@ -14,7 +14,7 @@ class Order extends Model
         'user_id', 'name', 'phone_number', 'address', 'email', 'note', 'total_price', 'status','payment_method','order_code','created_at', 'updated_at',
     ];
 
-    public function orderItems()
+    public function Orderitems()
     {
         return $this->hasMany(OrderItem::class);
     }
