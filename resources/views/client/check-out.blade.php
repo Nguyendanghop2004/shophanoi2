@@ -87,7 +87,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">
+                    <button name="redirect" type="submit" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">
                         Place order
                     </button>
                 </div>
