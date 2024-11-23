@@ -112,7 +112,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
 
     // Quản lý sản phẩm
+// quản lí đơn hàng
 
+//end quản lí đơn hàng
     Route::resource('product', ProductController::class);
 //quản lí coupons
 Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('discount_codes.index');

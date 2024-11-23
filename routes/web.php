@@ -48,7 +48,8 @@ Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('sho
 
 //thanh toán
 Route::get('check-out', [CheckOutController::class, 'checkout'])->name('check-out');
-Route::post('check-out', [CheckoutController::class, 'placeOrder'])->name('placeOrder');
+Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
+Route::get('/vnpay/return', [CheckoutController::class, 'vnPayReturn'])->name('vnpay.return');
 //end thanh toán
 Route::get('payment-confirmation', [PaymentController::class, 'confirmation'])->name('payment-confirmation');
 Route::get('payment-failure', [PaymentController::class, 'failure'])->name('payment-failure');
