@@ -261,9 +261,7 @@
                     @csrf
                     @method('PUT')
                 </form> --}}
-
                 <p> <button class="btn btn-primary" id="openModal">Tạo biến thể mới</button> </p>
-
 
 
                 @foreach ($product->colors as $color)
@@ -274,13 +272,10 @@
 
                         <div class="card-body">
                             <div class="card-body">
-
-
                                 <div class="form-group d-flex">
                                     <button class="btn btn-primary open-variant-image-modal"
                                         data-color-id="{{ $color->id }}">Chỉnh sửa ảnh</button>
                                     <button class="btn btn-primary open-variant-modal ml-2"
-
                                         data-color-id="{{ $color->id }}">Tạo biến thể của màu
                                         {{ $color->name }}</button>
                                     <form action="{{ route('admin.product-variants.destroy', $color->id) }}"
@@ -350,20 +345,16 @@
                                                             @endif
                                                         </td>
                                                         <td>
-
                                                             <button type="button" class="btn btn-danger ml-2"
                                                                 onclick="deleteVariant({{ $variant->id }})">
                                                                 <i class="fas fa-trash" style="color: #ffffff;"></i>
                                                             </button>
-
                                                     </tr>
                                                 @endforeach
 
                                             </tbody>
                                         </table>
-
                                         <button type="submit" class="btn btn-primary">Cập Nhật</button>
-
                                     </form>
                                 </div>
                             </div>
@@ -561,7 +552,91 @@
                 </div>
             </div>
         </div>
+        <!-- Modal variant image color-->
+        <div class="modal fade" id="exampleModalvariantImagecolor{{ $color->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Tạo biến thể mới cuả màu {{ $color->name }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="{{ route('admin.product.createVariantImageColorProduct') }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" name="product_code" value="{{ $product->sku }}">
+                        <input type="hidden" name="color_id" value="{{ $color->id }}">
 
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                <label for="color">Chọn Màu</label>
+                                <select class="form-control" id="color" name="colorVatiant" disabled>
+                                    @foreach ($product->colors as $colorrr)
+                                        <option @selected($color->id == $colorrr->id) value="{{ $colorrr->id }}">
+                                            {{ $colorrr->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('colorVatiant')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="color">Thêm ảnh mới</label>
+                                @error('imagesVatiant')
+                                    <div class="invalid-feedback" style="display: block;">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                <div
+                                    class="file-upload-image-detail-color-{{ $color->id }} file-upload-image-color rounded p-4 text-center">
+                                    <input type="file" id="imageUpload-image-detail-color-{{ $color->id }}"
+                                        name="image_detail_color_{{ $color->id }}[]" multiple accept="image/*">
+                                    <div class="file-upload-label font-weight-bold">
+                                        Kéo và thả tập tin vào đây hoặc nhấn để chọn nhiều Ảnh
+                                        <div class="text-danger ml-2">*</div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="image-preview-container-image-detail-color-{{ $color->id }} image-preview-container-image-detail-color mt-3 d-flex flex-wrap">
+                                    <!-- Các ảnh được chọn sẽ hiển thị ở đây -->
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="color">Chọn ảnh cũ cần xóa</label>
+                                <div class="image-preview-container-image-detail-color mt-3 d-flex flex-wrap">
+                                    @if (isset($imagesGroupedByColor[$color->id]))
+                                        @foreach ($imagesGroupedByColor[$color->id] as $image)
+                                            <div class="image-preview-color">
+                                                <!-- Ảnh -->
+                                                <img class="w-100 h-100"
+                                                    src="{{ asset('storage/' . $image->image_url) }}" alt="">
+
+                                                <!-- Checkbox ở góc trên bên phải -->
+                                                <input type="checkbox" name="delete_images[]"
+                                                    value="{{ $image->id }}" class="checkbox-top-right">
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary" id="saveBtn">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     @endforeach
 @endsection
 
@@ -706,8 +781,6 @@
             });
         });
     </script>
-<<<<<<< HEAD
-=======
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Xử lý tất cả phần tử có class 'file-upload-image-detail-color-'
@@ -861,7 +934,6 @@
     </script>
 
 
->>>>>>> 87ffdd2103be8f405e0cead21bb9d5215ddfd4b6
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -1013,14 +1085,11 @@
                 const colorId = $(this).data("color-id"); // Lấy id màu từ thuộc tính data
                 $(`#exampleModalvariantcolor${colorId}`).modal("show"); // Mở modal tương ứng
             });
-<<<<<<< HEAD
-=======
 
             $(".open-variant-image-modal").on("click", function() {
                 const colorId = $(this).data("color-id"); // Lấy id màu từ thuộc tính data
                 $(`#exampleModalvariantImagecolor${colorId}`).modal("show"); // Mở modal tương ứng
             });
->>>>>>> 87ffdd2103be8f405e0cead21bb9d5215ddfd4b6
         });
     </script>
     <script>
@@ -1103,12 +1172,8 @@
         }
     </style>
     <style>
-<<<<<<< HEAD
-        .file-upload {
-=======
         .file-upload,
         .file-upload-image-color {
->>>>>>> 87ffdd2103be8f405e0cead21bb9d5215ddfd4b6
             border: 2px dashed #ccc;
             /* Viền nét đứt */
             border-radius: 5px;
@@ -1122,18 +1187,6 @@
             display: none;
         }
 
-<<<<<<< HEAD
-        .image-preview {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            position: relative;
-            /* Để định vị nút "Xóa" */
-        }
-
-=======
         .file-upload-image-color input[type="file"] {
             display: none;
         }
@@ -1195,7 +1248,6 @@
         }
 
 
->>>>>>> 87ffdd2103be8f405e0cead21bb9d5215ddfd4b6
         .remove-button {
             position: absolute;
             top: 5px;

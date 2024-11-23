@@ -13,15 +13,27 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null'); // Khóa ngoại đến bảng users
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('name');
+            $table->string('email');
+            
+            $table->string('payment_method')->nullable(); 
+            
+            
+            $table->enum('payment_status', ['pending', 'paid', 'failed'])
+                  ->default('pending');
+            
           
-            $table->string('payment_method')->nullable(); // Phương thức thanh toán
-            $table->decimal('total_price', 10, 2)->default(0); // Đặt giá trị mặc định là 0
-            $table->string('address'); // Địa chỉ giao hàng
-            $table->string('phone_number')->nullable();
+            $table->decimal('total_price', 10, 2); 
+            $table->string('address'); 
+            $table->string('phone_number'); 
+            $table->string('order_code'); 
             $table->text('note')->nullable(); 
+            
+           
             $table->enum('status', ['chờ_xác_nhận', 'đã_xác_nhận', 'đang_giao_hàng', 'giao_hàng_thành_công', 'đã_hủy'])
-                  ->default('chờ_xác_nhận'); // Trạng thái đơn hàng: chờ xác nhận, đã xác nhận, đang giao hàng, giao hàng thành công, đã hủy// Ghi chú
+                  ->default('chờ_xác_nhận'); 
+            
             $table->timestamps();
         });
     }

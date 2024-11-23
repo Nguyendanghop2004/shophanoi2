@@ -290,8 +290,20 @@
                     </ul>
                 </li>
             @endcan
-
                
+            @can('order')
+            <li class="menu-header">Quản Lí Đơn Hàng</li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                        <span>Đơn Hàng</span></a>
+                    <ul class="dropdown-menu">
+
+                        <li><a class="nav-link" href=""><span>Danh Sách Đơn Hàng</span></a></li>
+                       
+                    </ul>
+                </li>
+                
+            @endcan
             @can('product')
                 <li class="menu-header">Quản Lí Sản Phẩm</li>
                 <li class="dropdown">
@@ -341,14 +353,7 @@
             @endcan
 
 
-            <li class="menu-header">Quản Lí Đơn Hàng</li>
-            <li class="dropdown">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-user"></i>
-                    <span>Đơn hàng</span></a>
-                <ul class="dropdown-menu">
-                    <li><a class="nav-link" href=""><span>Danh sách đơn hàng</span></a></li>
-                </ul>
-            </li>
+         
 
 
     </aside>

@@ -313,9 +313,7 @@ class ProductController extends Controller
                     ->with(['color:id,name', 'size:id,name']); // Chỉ lấy các trường cần thiết
             },
             'images' => function ($query) {
-
                 $query->select('id', 'color_id', 'image_url', 'product_id'); // Chỉ lấy các trường cần thiết
-
             },
             'brand:id,name,image_brand_url', // Lấy thông tin thương hiệu
             'categories:id,name', // Lấy danh sách danh mục
@@ -348,9 +346,7 @@ class ProductController extends Controller
         $product->slug = $request->slug;
         $product->sku = $request->product_code;
         $product->brand_id = $request->brand_id;
-
         $product->description = $this->processDescription($request->description, $id);
-
 
         // Lưu sản phẩm
         $product->save();
@@ -399,8 +395,6 @@ class ProductController extends Controller
         return redirect()->back()->with('success', 'Cập nhật thành công!');
 
     }
-
-   
 
 
     public function createVariantProduct(CreateVariantProductRequest $request)
@@ -467,6 +461,70 @@ class ProductController extends Controller
 
         return redirect()->back()->with('success', 'Sản phẩm đã được lưu thành công.');
     }
+    public function createVariantImageColorProduct(Request $request)
+    {
+        // Lấy dữ liệu từ request
+        $productId = $request->input('product_id');
+        $productCode = $request->input('product_code');
+        $colorId = $request->input('color_id');
+
+        // Lấy danh sách ảnh cần xóa (nếu có)
+        $imageIds = $request->input('delete_images');
+
+        // Nếu có ảnh cần xóa, xử lý xóa ảnh
+        if ($imageIds) {
+            $imagesToDelete = ProductImage::whereIn('id', $imageIds)->get();
+
+            foreach ($imagesToDelete as $image) {
+                // Xóa ảnh trên hệ thống tệp (đảm bảo đường dẫn ảnh đúng)
+                $imagePath = storage_path('app/public/' . $image->image_url); // Đảm bảo đường dẫn chính xác
+                if (file_exists($imagePath)) {
+                    unlink($imagePath); // Xóa file ảnh thực tế
+                }
+
+                // Xóa bản ghi trong cơ sở dữ liệu
+                $image->delete();
+            }
+        }
+
+        // Kiểm tra nếu có file ảnh mới được upload
+        if ($request->hasFile('image_detail_color_' . $colorId)) {
+            // Lấy ảnh mới từ request
+            $images = $request->file('image_detail_color_' . $colorId);
+
+            // Tạo thư mục lưu trữ theo cấu trúc: /uploads/products/{product_code}/{color_id}/
+            $uploadPath = "images/products/{$colorId}/";
+
+            // Mảng lưu đường dẫn các ảnh đã upload
+            $savedImages = [];
+
+            // Xử lý lưu trữ từng file ảnh
+            foreach ($images as $image) {
+                // Tạo tên file duy nhất
+                $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
+
+                // Lưu file vào thư mục
+                $path = $image->storeAs($uploadPath, $fileName, 'public');
+
+                // Lưu thông tin vào bảng product_images
+                $productImage = ProductImage::create([
+                    'product_id' => $productId,
+                    'color_id' => $colorId,
+                    'image_url' => $path,
+                ]);
+
+                // Thêm đường dẫn ảnh vào mảng để trả về
+                $savedImages[] = [
+                    'id' => $productImage->id,
+                    'image_url' => $path,
+                ];
+            }
+        }
+
+        // Trả về thông báo thành công
+        return redirect()->back()->with('success', 'Cập nhật sản phẩm thành công.');
+    }
+
     /**
      * Remove the specified resource from storage.
      */

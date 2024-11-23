@@ -22,7 +22,7 @@ class CheckAdminStatus
             Auth::guard('admin')->logout();
             return redirect()->route('admin.login')->withErrors(['email' => 'Tài khoản của bạn đã bị khóa.']);
         }
-        
+
         return $next($request);
 
     }
