@@ -521,7 +521,7 @@
                         <!-- Nút Previous -->
                         <li>
                             <a href="{{ $products->previousPageUrl() }}"
-                               class="pagination-link animate-hover-btn {{ $products->onFirstPage() ? 'disabled' : '' }}">
+                                class="pagination-link animate-hover-btn {{ $products->onFirstPage() ? 'disabled' : '' }}">
                                 <span class="icon icon-arrow-left"></span>
                             </a>
                         </li>
@@ -536,7 +536,7 @@
                         <!-- Nút Next -->
                         <li>
                             <a href="{{ $products->nextPageUrl() }}"
-                               class="pagination-link animate-hover-btn {{ $products->currentPage() == $products->lastPage() ? 'disabled' : '' }}">
+                                class="pagination-link animate-hover-btn {{ $products->currentPage() == $products->lastPage() ? 'disabled' : '' }}">
                                 <span class="icon icon-arrow-right"></span>
                             </a>
                         </li>

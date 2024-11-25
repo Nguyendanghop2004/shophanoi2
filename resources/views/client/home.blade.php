@@ -97,7 +97,8 @@
 
                             <div class="collection-item style-2 hover-img" >
                                 <div class="collection-inner">
-                                    <a href="" class="0">
+   <a href="" class="0">
+
                                         <img class="lazyload"
                                             data-src="{{  Storage::url($category->image_path) }}"
                                             src="{{ Storage::url($category->image_path) }}"
@@ -188,6 +189,7 @@
                 <div class="swiper tf-sw-product-sell wrap-sw-over" data-preview="4" data-tablet="3" data-mobile="2"
                     data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3" data-pagination-lg="3">
                     <div class="swiper-wrapper">
+
                         @foreach ($products as $product)
                             <div class="swiper-slide" lazy="true">
                                 <div class="card-product">
@@ -255,6 +257,7 @@
                                 </div>
                             </div>
                         @endforeach
+                        <<<<<<< HEAD=======>>>>>>> 9acf184d78a127cf488f226048bee73740c6ec1b
                     </div>
 
 

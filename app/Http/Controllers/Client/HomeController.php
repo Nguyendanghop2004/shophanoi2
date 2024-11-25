@@ -10,6 +10,7 @@ use App\Models\Slider;
 
 use App\Models\Category;
 use App\Models\Tag;
+
 use DB;
 
 use Illuminate\Http\Request;
@@ -29,6 +30,7 @@ class HomeController extends Controller
         ])->where('status', 1)
             ->whereNull('parent_id')->get();
         $collections = Tag::where('type', 'collection')->get();
+
 
         $products = Product::query()
             ->join('product_variants', 'products.id', '=', 'product_variants.product_id')

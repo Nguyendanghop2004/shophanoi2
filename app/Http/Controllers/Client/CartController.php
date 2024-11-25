@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
+use DB;
+use Session;
 use App\Models\Cart;
-use App\Models\CartItem;
+use App\Models\Size;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\CartItem;
 use App\Models\ProductImage;
-use App\Models\ProductVariant;
-use App\Models\Size;
-use DB;
 use Illuminate\Http\Request;
-use Session;
+use App\Models\ProductVariant;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -20,10 +21,10 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
-        if (auth()->check()) {
+        if (Auth::guard('web')->check()) {
             // Lấy hoặc tạo giỏ hàng cho người dùng đã đăng nhập
             $cart = Cart::firstOrCreate([
-                'user_id' => auth()->id(),
+                'user_id' => Auth::guard('web')->id(),
             ]);
 
             // Dữ liệu sản phẩm thêm vào giỏ hàng
@@ -102,7 +103,7 @@ class CartController extends Controller
     {
         $cartDetails = [];
 
-        if (auth()->check()) {
+        if (Auth::guard('web')->check()) {
             // Người dùng đã đăng nhập: lấy giỏ hàng từ cơ sở dữ liệu
             $cart = Cart::where('user_id', auth()->id())
                 ->with([
@@ -133,7 +134,7 @@ class CartController extends Controller
                         'image_url' => $image->image_url ?? '/default-image.jpg',
                         'subtotal' => ($item->price ?? $product->price) * $item->quantity,
                     ];
-                });
+                })->toArray();
             }
         } else {
             // Người dùng chưa đăng nhập: lấy giỏ hàng từ session
@@ -176,6 +177,7 @@ class CartController extends Controller
 
         return view('client.shopping-cart', compact('cartDetails'));
     }
+
     public function removeFromCart(Request $request)
     {
         // Kiểm tra xem người dùng đã đăng nhập chưa
@@ -215,9 +217,7 @@ class CartController extends Controller
             Session::put('cart', $cart);
         }
 
-
     }
-
 
     // Hàm lấy giỏ hàng của người dùng từ cơ sở dữ liệu
     private function getUserCart($userId)

@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
-
+@section('header-home')
+    @include('client.layouts.particals.header-home')
+@endsection
 @section('content')
     @include('client.layouts.particals.page-title')
 
@@ -7,10 +9,10 @@
     <section class="flat-spacing-11">
         <div class="container">
             <!-- <div class="tf-page-cart text-center mt_140 mb_200">
-                                            <h5 class="mb_24">Your cart is empty</h5>
-                                            <p class="mb_24">You may check out all the available products and buy some in the shop</p>
-                                            <a href="shop-default.html" class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Return to shop<i class="icon icon-arrow1-top-left"></i></a>
-                                        </div> -->
+                                        <h5 class="mb_24">Your cart is empty</h5>
+                                        <p class="mb_24">You may check out all the available products and buy some in the shop</p>
+                                        <a href="shop-default.html" class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Return to shop<i class="icon icon-arrow1-top-left"></i></a>
+                                    </div> -->
             <div class="tf-cart-countdown">
                 <div class="title-left">
                     <svg class="d-inline-block" xmlns="http://www.w3.org/2000/svg" width="16" height="24"
@@ -20,6 +22,7 @@
                         </path>
                     </svg>
                     <p>These products are limited, checkout within </p>
+
                 </div>
                 <div class="js-countdown timer-count" data-timer="600" data-labels="d:,h:,m:,s"></div>
             </div>
@@ -46,7 +49,8 @@
                                                 <a href="product-detail.html"
                                                     class="cart-title link">{{ $item['product_name'] }}</a>
                                                 <div class="cart-meta-variant">{{ $item['color_name'] }} /
-                                                    {{ $item['size_name'] }}</div>
+                                                    {{ $item['size_name'] }}
+                                                </div>
                                                 <span class="remove-cart link remove"
                                                     onclick="removeFromCart({{ $item['product_id'] }},{{ $item['color_id'] }},{{ $item['size_id'] }})">Remove</span>
                                             </div>
@@ -84,7 +88,6 @@
                                         </td>
                                     </tr>
                                 @endforeach
-
                             </tbody>
                         </table>
                         <div class="tf-page-cart-note">
@@ -217,10 +220,12 @@
                                 </label>
                             </div>
                             <div class="cart-checkout-btn">
-                                <button class="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center">
+                                <a href="{{ route('check-out') }}"
+                                    class="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center">
                                     <span>Check out</span>
-                                </button>
+                                </a>
                             </div>
+
                             <div class="tf-page-cart_imgtrust">
                                 <p class="text-center fw-6">Guarantee Safe Checkout</p>
                                 <div class="cart-list-social">
@@ -910,7 +915,6 @@
                 color_id: colorId,
                 size_id: sizeId
             });
-
             $.ajax({
                 url: '/remove-from-cart', // URL tới route xóa sản phẩm
                 method: 'POST', // Chú ý: nên dùng POST thay vì GET cho hành động xóa

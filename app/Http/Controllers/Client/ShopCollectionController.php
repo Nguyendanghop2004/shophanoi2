@@ -80,4 +80,5 @@ class ShopCollectionController extends Controller
 
         return view('client.shop-collection', compact('categories', 'products'));
     }
+
 }

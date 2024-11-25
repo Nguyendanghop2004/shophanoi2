@@ -83,6 +83,7 @@
 
                    @include('client.layouts.particals.navright')
 
+
                </div>
            </div>
        </div>
