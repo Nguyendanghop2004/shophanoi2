@@ -33,19 +33,21 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Tên Màu Sắc</th>
+                            <th scope="col">SKU Color</th> <!-- Thêm cột SKU Color -->
                             <th scope="col">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if($colors->isEmpty())
                             <tr>
-                                <td colspan="3" class="text-center text-danger">Không có màu sắc nào.</td>
+                                <td colspan="4" class="text-center text-danger">Không có màu sắc nào.</td>
                             </tr>
                         @else
                             @foreach ($colors as $index => $color)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $color->name }}</td>
+                                    <td>{{ $color->sku_color }}</td> <!-- Hiển thị SKU Color -->
                                     <td>
                                         <div class="d-flex justify-content-start">
                                             <a href="{{ route('admin.colors.edit', $color->id) }}" class="btn btn-warning ml-2"><i class="fas fa-edit"></i></a>

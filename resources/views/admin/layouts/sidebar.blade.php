@@ -301,8 +301,7 @@
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i>
                         <span>Quản lí Biển Thể</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="{{ route('admin.colors.index') }}"><span>Quản Màu Sắc</span></a></li>
-                        <li><a class="nav-link" href="{{ route('admin.sizes.index') }}"><span>Quản Lí Số Đo</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.colors_sizes.index') }}"><span>Quản Lí Màu Sắc, Kích thước</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.brands.index') }}"><span>Quản Lí Thương Hiệu</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.tags.index') }}"><span>Quản lí Thẻ</span></a></li>
                     </ul>

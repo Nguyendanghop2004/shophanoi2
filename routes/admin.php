@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\ColorSizeController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
@@ -131,7 +132,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin', 'checkAdminStat
     Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
     Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
 
-
+    Route::get('colors-sizes', [ColorSizeController::class, 'index'])->name('colors_sizes.index');
 
 
 });
