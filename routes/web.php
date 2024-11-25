@@ -81,7 +81,8 @@ Route::get('/debug-cart', function () {
 
     // Session::forget('cart');
     return Session::get('cart');
+    
 
 });
-
+Route::get('/thanhtoanthanhcong', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
 Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');

@@ -31,7 +31,7 @@ return new class extends Migration
             $table->text('note')->nullable(); 
             
            
-            $table->enum('status', ['chờ_xác_nhận', 'đã_xác_nhận', 'đang_giao_hàng', 'giao_hàng_thành_công', 'đã_hủy'])
+            $table->enum('status', ['   chờ_xác_nhận', 'đã_xác_nhận', 'đang_giao_hàng', 'giao_hàng_thành_công', 'đã_hủy'])
                   ->default('chờ_xác_nhận'); 
             
             $table->timestamps();

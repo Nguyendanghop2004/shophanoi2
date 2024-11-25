@@ -252,16 +252,17 @@ private function handleVNPay(Order $order, $totalPrice)
     $vnp_HashSecret = "QILK1HU3OIQHN2B6P9LKCZFL1RAEF0L4"; // Chuỗi bí mật
     $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; // URL thanh toán
     $vnp_TxnRef = time(); // Mã đơn hàng
-    $vnp_OrderInfo = "Thanh toán cho đơn hàng #" . $order->order_code;
+    $vnp_OrderInfo =  $order->order_code;
     $vnp_OrderType = "billpayment";
     $vnp_Amount = intval($totalPrice * 100); // Số tiền thanh toán
     $vnp_Locale = 'vn'; // Ngôn ngữ
     $vnp_BankCode = "NCB"; // Mã ngân hàng
-    $vnp_Returnurl = route('home'); // URL trả về sau khi thanh toán
+    $vnp_Returnurl = route('thanhtoanthanhcong'); // URL trả về sau khi thanh toán
     $vnp_IpAddr = request()->ip(); // IP của khách hàng
 
     // Dữ liệu gửi đến VNPAY
     $inputData = array(
+
         "vnp_Version" => "2.0.0",
         "vnp_TmnCode" => $vnp_TmnCode,
         "vnp_Amount" => $vnp_Amount,
@@ -332,37 +333,11 @@ private function handleVNPay(Order $order, $totalPrice)
         echo json_encode($returnData);
     }
 }
-
-
-// Hàm xử lý kết quả trả về từ VNPAY (vnpayReturn)
-public function vnpayReturn(Request $request)
+public function thanhtoanthanhcong(Request $request)
 {
-    $vnp_HashSecret = "RJVBT58452T7DZK0UOOM0EY10SVH79VS"; // Chuỗi bí mật
-    $inputData = $request->all();
-
-    $secureHash = $inputData['vnp_SecureHash'];
-    unset($inputData['vnp_SecureHash']);
-
-    // Sắp xếp tham số và tạo hash để kiểm tra
-    ksort($inputData);
-    $query = http_build_query($inputData);
-    $hashData = $query . "&vnp_HashSecret=" . $vnp_HashSecret;
-    $checkHash = strtoupper(hash('sha256', $hashData));
-
-    // Kiểm tra mã bảo mật
-    if ($checkHash === $secureHash) {
-        if ($inputData['vnp_ResponseCode'] === '00') {
-            // Cập nhật trạng thái thanh toán
-            $order = Order::where('order_code', $inputData['vnp_TxnRef'])->first();
-            $order->payment_status = 1; // Đặt trạng thái thanh toán thành công
-            $order->save();
-
-            return redirect()->route('home')->with('success', 'Thanh toán thành công');
-        } else {
-            return redirect()->route('home')->with('error', 'Thanh toán thất bại');
-        }
-    } else {
-        return redirect()->route('home')->with('error', 'Lỗi bảo mật, vui lòng thử lại');
-    }
+    $data = $request->all();
+    return view('client.thanhtoansuccess', compact('data'));
 }
+
+
 }
