@@ -30,10 +30,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('home/{category_id?}', [HomeController::class, 'home'])->name('home');
+Route::get('/', [HomeController::class, 'home'])->name('home');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
-Route::get('/shop-collection/{id}', [ShopCollectionController::class, 'index'])->name('shop-collection');
+Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
 Route::get('product-detail/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
 Route::get('brand', [BrandController::class, 'index'])->name('brand');
 Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
@@ -69,4 +69,4 @@ Route::get('/debug-cart', function () {
 
 });
 
-Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');

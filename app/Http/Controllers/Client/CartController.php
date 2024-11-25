@@ -180,15 +180,21 @@ class CartController extends Controller
     {
         // Kiểm tra xem người dùng đã đăng nhập chưa
         if (auth()->check()) {
-            // Lấy người dùng đã đăng nhập
-            $user = auth()->user();
+             // Lấy `cart_id` từ người dùng đã đăng nhập
+             $cart = Cart::where('user_id', auth()->id())->first();
 
-            // Xóa sản phẩm khỏi giỏ hàng của người dùng trong cơ sở dữ liệu sử dụng model
-            CartItem::where('user_id', $user->id)
-                ->where('product_id',  $request['product_id'])
-                ->where('color_id', $request['color_id'])
-                ->where('size_id', $request['size_id'])
-                ->delete();
+             // Xóa sản phẩm khỏi giỏ hàng dựa trên `cart_id`
+             CartItem::where('cart_id', $cart->id)
+                 ->where('product_id', $request['product_id'])
+                 ->where('color_id', $request['color_id'])
+                 ->where('size_id', $request['size_id'])
+                 ->delete();
+      // Trả về kết quả dưới dạng JSON
+        return response()->json([
+            'success' => true,
+            'message' => 'Product removed from cart',
+            'cart' => $cart->id,  // Trả về giỏ hàng đã được cập nhật
+        ]);
         } else {
             // Lấy giỏ hàng từ session
             $cart = Session::get('cart', []);
@@ -209,12 +215,7 @@ class CartController extends Controller
             Session::put('cart', $cart);
         }
 
-        // Trả về kết quả dưới dạng JSON
-        return response()->json([
-            'success' => true,
-            'message' => 'Product removed from cart',
-            'cart' => $cart,  // Trả về giỏ hàng đã được cập nhật
-        ]);
+
     }
 
 

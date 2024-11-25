@@ -7,10 +7,10 @@
     <section class="flat-spacing-11">
         <div class="container">
             <!-- <div class="tf-page-cart text-center mt_140 mb_200">
-                                    <h5 class="mb_24">Your cart is empty</h5>
-                                    <p class="mb_24">You may check out all the available products and buy some in the shop</p>
-                                    <a href="shop-default.html" class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Return to shop<i class="icon icon-arrow1-top-left"></i></a>
-                                </div> -->
+                                            <h5 class="mb_24">Your cart is empty</h5>
+                                            <p class="mb_24">You may check out all the available products and buy some in the shop</p>
+                                            <a href="shop-default.html" class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Return to shop<i class="icon icon-arrow1-top-left"></i></a>
+                                        </div> -->
             <div class="tf-cart-countdown">
                 <div class="title-left">
                     <svg class="d-inline-block" xmlns="http://www.w3.org/2000/svg" width="16" height="24"
@@ -48,7 +48,7 @@
                                                 <div class="cart-meta-variant">{{ $item['color_name'] }} /
                                                     {{ $item['size_name'] }}</div>
                                                 <span class="remove-cart link remove"
-                                                    onclick="removeFromCart({{ $item['product_id'] }},{{$item['color_id']}},{{$item['size_id']}})">Remove</span>
+                                                    onclick="removeFromCart({{ $item['product_id'] }},{{ $item['color_id'] }},{{ $item['size_id'] }})">Remove</span>
                                             </div>
                                         </td>
                                         <td class="tf-cart-item_price" cart-data-title="Price">
@@ -903,10 +903,17 @@
 @push('scripts')
     <script>
         // Xử lý khi nhấn nút xóa
-        function removeFromCart(productId,colorId,sizeId) {
+        function removeFromCart(productId, colorId, sizeId) {
+            // Ghi log dữ liệu đầu vào để kiểm tra
+            console.log("Input data:", {
+                product_id: productId,
+                color_id: colorId,
+                size_id: sizeId
+            });
+
             $.ajax({
                 url: '/remove-from-cart', // URL tới route xóa sản phẩm
-                method: 'GET',
+                method: 'POST', // Chú ý: nên dùng POST thay vì GET cho hành động xóa
                 data: {
                     product_id: productId,
                     color_id: colorId,
@@ -915,13 +922,16 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        console.log(response.message);
-                        // Cập nhật lại giỏ hàng trong giao diện (nếu cần)
+                        console.log("Response:", response); // Ghi log phản hồi từ server
+                        alert(response.message);
+                        // Cập nhật lại giao diện nếu cần
                     } else {
+                        console.error("Failed to remove product:", response);
                         alert('Failed to remove product from cart');
                     }
                 },
-                error: function() {
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", status, error, xhr.responseText); // Ghi log lỗi AJAX
                     alert('There was an error processing your request.');
                 }
             });

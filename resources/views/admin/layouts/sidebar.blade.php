@@ -251,10 +251,10 @@
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-columns"></i> <span>Thanh Trượt</span></a>
                 <ul class="dropdown-menu">
-                    @foreach ($parentCategories as $category)
+                    {{-- @foreach ($parentCategories as $category)
                         <li><a class="nav-link"
                                 href="{{ route('admin.slider.index', $category->id) }}">{{ $category->name }}</a></li>
-                    @endforeach
+                    @endforeach --}}
                     <li><a class="nav-link" href="{{ route('admin.slider.index', ['category_id' => 'trash']) }}">Thùng
                             Rác<i class="fas fa-recycle"></i></a></li>
 

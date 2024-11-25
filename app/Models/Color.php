@@ -14,5 +14,10 @@ class Color extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
-  
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class, 'color_id', 'id');
+    }
+
+
 }
