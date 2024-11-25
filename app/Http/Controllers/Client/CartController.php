@@ -13,6 +13,7 @@ use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Models\ProductVariant;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
@@ -101,6 +102,13 @@ class CartController extends Controller
     }
     public function viewCart()
     {
+        $categories = Category::with(relations: [
+            'children' => function ($query) {
+                $query->where('status', 1);
+            }
+        ])->where('status', 1)
+            ->whereNull('parent_id')->get();
+
         $cartDetails = [];
 
         if (Auth::guard('web')->check()) {
@@ -175,7 +183,7 @@ class CartController extends Controller
             }
         }
 
-        return view('client.shopping-cart', compact('cartDetails'));
+        return view('client.shopping-cart', compact('cartDetails','categories'));
     }
 
     public function removeFromCart(Request $request)
