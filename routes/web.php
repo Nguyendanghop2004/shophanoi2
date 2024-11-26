@@ -30,14 +30,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', [HomeController::class, 'home'])->name('home');
 
-Route::get('home/{category_id?}', [HomeController::class, 'home'])->name('home');
 
 
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
-Route::get('/shop-collection/{id}', [ShopCollectionController::class, 'index'])->name('shop-collection');
+Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
 Route::get('product-detail/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
 Route::get('brand', [BrandController::class, 'index'])->name('brand');
 Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
@@ -79,10 +79,16 @@ Route::get('/debug-cart', function () {
 
     // Session::forget('cart');
     return Session::get('cart');
-    
+
 
 });
-Route::get('/thanhtoanthanhcong', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
+Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
+
+
+
+
+Route::get('/thanhtoanthanhcong', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
 Route::post('/select-address', [CheckoutController::class, 'select_address']);
 

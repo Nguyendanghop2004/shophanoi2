@@ -47,6 +47,11 @@ class Product extends Model
     {
         return $this->hasMany(ProductImage::class, 'product_id', 'id'); // Thay đổi tên model và các khóa ngoại nếu cần
     }
+    // App\Models\Product.php
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class, 'product_variants', 'product_id', 'size_id');
+    }
 
 
 }
