@@ -85,6 +85,10 @@ Route::get('/debug-cart', function () {
 
 });
 Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+
+
+
 
 Route::get('/thanhtoanthanhcong', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
 Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');

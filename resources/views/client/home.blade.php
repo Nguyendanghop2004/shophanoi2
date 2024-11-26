@@ -237,8 +237,9 @@
                                         <a href="product-detail.html" class="title link">{{ $product['name'] }}</a>
                                         <span class="price">${{ $product['price'] }}</span>
                                         <ul class="list-color-product">
-                                            @foreach ($product['colors'] as $color)
-                                                <li class="list-color-item color-swatch active">
+                                            @foreach ($product['colors'] as $index => $color)
+                                                <li
+                                                    class="list-color-item color-swatch @if ($index == 0) active @endif">
                                                     <span class="tooltip">{{ $color['name'] }}</span>
                                                     <span class="swatch-value"
                                                         style="background-color: {{ $color['sku_color'] }}"></span>
@@ -257,11 +258,7 @@
                                 </div>
                             </div>
                         @endforeach
-                        <<<<<<< HEAD=======>>>>>>> 9acf184d78a127cf488f226048bee73740c6ec1b
                     </div>
-
-
-
                 </div>
                 <div class="nav-sw nav-next-slider nav-next-product box-icon w_46 round"><span
                         class="icon icon-arrow-left"></span></div>

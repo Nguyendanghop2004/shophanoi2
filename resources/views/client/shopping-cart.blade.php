@@ -9,10 +9,10 @@
     <section class="flat-spacing-11">
         <div class="container">
             <!-- <div class="tf-page-cart text-center mt_140 mb_200">
-                                        <h5 class="mb_24">Your cart is empty</h5>
-                                        <p class="mb_24">You may check out all the available products and buy some in the shop</p>
-                                        <a href="shop-default.html" class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Return to shop<i class="icon icon-arrow1-top-left"></i></a>
-                                    </div> -->
+                                                        <h5 class="mb_24">Your cart is empty</h5>
+                                                        <p class="mb_24">You may check out all the available products and buy some in the shop</p>
+                                                        <a href="shop-default.html" class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Return to shop<i class="icon icon-arrow1-top-left"></i></a>
+                                                    </div> -->
             <div class="tf-cart-countdown">
                 <div class="title-left">
                     <svg class="d-inline-block" xmlns="http://www.w3.org/2000/svg" width="16" height="24"
@@ -61,7 +61,12 @@
                                         <td class="tf-cart-item_quantity" cart-data-title="Quantity">
                                             <div class="cart-quantity">
                                                 <div class="wg-quantity">
-                                                    <span class="btn-quantity minus-btn">
+                                                    <!-- Nút giảm số lượng -->
+                                                    <span class="btn-quantity minus-btn-cart"
+                                                        data-url="{{ route('cart.update') }}"
+                                                        data-id="{{ $item['product_id'] }}"
+                                                        data-color="{{ $item['color_id'] }}"
+                                                        data-size="{{ $item['size_id'] }}">
                                                         <svg class="d-inline-block" width="9" height="1"
                                                             viewBox="0 0 9 1" fill="currentColor">
                                                             <path
@@ -69,8 +74,21 @@
                                                             </path>
                                                         </svg>
                                                     </span>
-                                                    <input type="text" name="number" value="{{ $item['quantity'] }}">
-                                                    <span class="btn-quantity plus-btn">
+
+                                                    <!-- Trường nhập số lượng -->
+                                                    <input type="text" class="quantity-input" name="number"
+                                                        value="{{ $item['quantity'] }}"
+                                                        data-url="{{ route('cart.update') }}"
+                                                        data-id="{{ $item['product_id'] }}"
+                                                        data-color="{{ $item['color_id'] }}"
+                                                        data-size="{{ $item['size_id'] }}">
+
+                                                    <!-- Nút tăng số lượng -->
+                                                    <span class="btn-quantity plus-btn-cart"
+                                                        data-url="{{ route('cart.update') }}"
+                                                        data-id="{{ $item['product_id'] }}"
+                                                        data-color="{{ $item['color_id'] }}"
+                                                        data-size="{{ $item['size_id'] }}">
                                                         <svg class="d-inline-block" width="9" height="9"
                                                             viewBox="0 0 9 9" fill="currentColor">
                                                             <path
@@ -940,5 +958,79 @@
                 }
             });
         }
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Hàm gửi AJAX cập nhật số lượng
+            function updateQuantity(productId, colorId, sizeId, newQuantity, url) {
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'), // CSRF Token
+                        product_id: productId,
+                        color_id: colorId,
+                        size_id: sizeId,
+                        quantity: newQuantity
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            console.log('Cập nhật thành công');
+                        } else {
+                            alert(response.message || 'Đã xảy ra lỗi!');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        alert('Không thể cập nhật số lượng. Vui lòng thử lại!');
+                    }
+                });
+            }
+
+            // Gắn sự kiện click cho nút plus và minus
+            $(document).off('click', '.btn-quantity').on('click', '.btn-quantity', function(e) {
+                e.preventDefault();
+
+                let button = $(this);
+                let inputField = button.siblings('.quantity-input'); // Trường input
+                let productId = button.data('id');
+                let colorId = button.data('color');
+                let sizeId = button.data('size');
+                let url = button.data('url');
+                let currentQuantity = parseInt(inputField.val()) || 1;
+
+                // Tăng hoặc giảm số lượng
+                if (button.hasClass('plus-btn-cart')) {
+                    currentQuantity += 1;
+                } else if (button.hasClass('minus-btn-cart') && currentQuantity > 1) {
+                    currentQuantity -= 1;
+                }
+
+                // Cập nhật số lượng trong input
+                inputField.val(currentQuantity);
+
+                // Gửi AJAX cập nhật
+                updateQuantity(productId, colorId, sizeId, currentQuantity, url);
+            });
+
+            // Gắn sự kiện change cho input
+            $(document).off('change', '.quantity-input').on('change', '.quantity-input', function() {
+                let inputField = $(this);
+                let productId = inputField.data('id');
+                let colorId = inputField.data('color');
+                let sizeId = inputField.data('size');
+                let url = inputField.data('url');
+                let newQuantity = parseInt(inputField.val()) || 1;
+
+                // Đảm bảo số lượng tối thiểu là 1
+                if (newQuantity < 1) {
+                    newQuantity = 1;
+                    inputField.val(newQuantity);
+                }
+
+                // Gửi AJAX cập nhật
+                updateQuantity(productId, colorId, sizeId, newQuantity, url);
+            });
+        });
     </script>
 @endpush
