@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\HistoryController;
 
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ShipperController;
 use App\Http\Controllers\Admin\SizeController;
@@ -56,7 +57,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     // end crud user 
 
     // adress
-    Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address']);
 
     // end crud user
 
@@ -193,5 +193,11 @@ Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('di
     Route::get('history/show/{id}', [HistoryController::class, 'show'])->name('show');
     Route::delete('history/delete/{id}', [HistoryController::class, 'delete'])->name('delete');
 
+
+    // ORDERS
+    Route::get('order/getList',[OrderController::class,'getList'])->name('order.getList');
+    Route::get('order/{id}', [OrderController::class, 'chitiet'])->name('order.chitiet');
+    Route::post('order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.update-status');
+    Route::get('order/index', [OrderController::class, 'index'])->name('order.index');
 
 });

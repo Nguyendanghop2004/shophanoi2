@@ -2,30 +2,33 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use App\Mail\OrderConfirmationMail;
-use App\Models\Cart;
-use App\Models\Color;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\Product;
-use App\Models\ProductVariant;
-use App\Models\Size;
-use Illuminate\Http\Request;
+use DB;
 use Mail;
 use Session;
-use DB;
+use App\Models\Cart;
+use App\Models\City;
+use App\Models\Size;
+use App\Models\Color;
+use App\Models\Order;
+use App\Models\Wards;
+use App\Models\Product;
+use App\Models\Province;
+use App\Models\OrderItem;
+use Illuminate\Http\Request;
+use App\Models\ProductVariant;
+use App\Mail\OrderConfirmationMail;
+use App\Http\Controllers\Controller;
 
 class CheckOutController extends Controller
 {
     public function checkout()
     {
-        // Biến chứa thông tin giỏ hàng
         $cartDetails = [];
         $totalPrice = 0;
+        $user = auth()->user();
     
         if (auth()->check()) {
-            $cart = Cart::where('user_id', auth()->id())
+            $cart = Cart::where('user_id', $user->id)
                 ->with(['cartItems.product.images', 'cartItems.color', 'cartItems.size'])
                 ->first();
     
@@ -51,11 +54,9 @@ class CheckOutController extends Controller
                     ];
                 });
     
-                // Tính tổng giá trị đơn hàng
                 $totalPrice = $cartDetails->sum('subtotal');
             }
         } else {
-            // Nếu chưa đăng nhập, lấy giỏ hàng từ session
             $cart = session()->get('cart', []);
     
             if (!empty($cart)) {
@@ -65,7 +66,6 @@ class CheckOutController extends Controller
                     $size = Size::find($item['size_id']);
                     $image = $product->images->firstWhere('color_id', $color->id);
     
-                    // Lấy URL ảnh sản phẩm, nếu không có thì dùng ảnh mặc định
                     $imageUrl = $image ? $image->image_url : '/default-image.jpg';
     
                     $cartDetails[] = [
@@ -82,12 +82,44 @@ class CheckOutController extends Controller
                     ];
                 }
     
-                // Tính tổng giá trị đơn hàng từ giỏ hàng trong session
                 $totalPrice = array_sum(array_column($cartDetails, 'subtotal'));
             }
         }
+        
+        
+            $cities = City::orderBy('name_thanhpho', 'ASC')->get();
+            $provinces = collect();
+            $wards = collect();
+        
+            if (auth()->check()) {
+                $user = auth()->user();
+                $provinces = Province::where('matp', $user->city_id)->orderBy('name_quanhuyen', 'ASC')->get();
+                $wards = Wards::where('maqh', $user->province_id)->orderBy('name_xaphuong', 'ASC')->get();
+            }
     
-        return view('client.check-out', compact('cartDetails', 'totalPrice'));
+        return view('client.check-out', compact('cartDetails', 'totalPrice', 'cities', 'provinces', 'wards', 'user'));
+    }
+    
+     public function select_address(Request $request)
+    {
+        $data = $request->all();
+        if (isset($data['action'])) {
+            $output = '';
+            if ($data['action'] == "city") {
+                $select_province = Province::where('matp', $data['ma_id'])->orderBy('maqh', 'ASC')->get();
+                $output .= '<option>--Chọn Quận Huyện---</option>';
+                foreach ($select_province as $province) {
+                    $output .= '<option value="' . $province->maqh . '">' . $province->name_quanhuyen . '</option>';
+                }
+            } else {
+                $select_wards = Wards::where('maqh', $data['ma_id'])->orderBy('xaid', 'ASC')->get();
+                $output .= '<option>--Chọn Xã Phường---</option>';
+                foreach ($select_wards as $ward) {
+                    $output .= '<option value="' . $ward->xaid . '">' . $ward->name_xaphuong . '</option>';
+                }
+            }
+            echo $output;
+        }
     }
 
     public function placeOrder(Request $request)
@@ -186,47 +218,45 @@ class CheckOutController extends Controller
 
     return ['items' => $cartDetails, 'totalPrice' => $totalPrice];
 }
+private function createOrder(Request $request, $cartDetails, $totalPrice, $orderCode, $paymentMethod)
+{
+    $order = Order::create([
+        'user_id' => auth()->id() ?? null,  
+        'order_code' => $orderCode,  
+        'total_price' => $totalPrice, 
+        'payment_method' => $paymentMethod,  
+        'phone_number' => $request->phone_number,  
+        'address' => $request->address,  
+        'city_id' => $request->city_id, 
+        'wards_id' => $request->wards_id, 
+        'province_id' => $request->province_id, 
+        'name' => $request->name, 
+        'email' => $request->email, 
+        'payment_status' => $paymentMethod === 'vnpay' ? 0 : 1,  
+        'status' => 1, 
+    ]);
 
-    private function createOrder(Request $request, $cartDetails, $totalPrice, $orderCode, $paymentMethod)
-    {
-
-        $order = Order::create([
-            'user_id' => auth()->id() ?? null,  
-            'order_code' => $orderCode,  
-            'total_price' => $totalPrice, 
-            'payment_method' => $paymentMethod,  
-            'phone_number' => $request->phone_number,  
-            'address' => $request->address,  
-            'name' => $request->name, 
-            'email' => $request->email, 
-            'payment_status' => $paymentMethod === 'vnpay' ? 0 : 1,  
-            'status' => 1, 
+    foreach ($cartDetails as $detail) {
+        $order->OrderItems()->create([
+            'product_id' => $detail['product_id'],  
+            'color_name' => $detail['color_name'],  
+            'size_name' => $detail['size_name'], 
+            'quantity' => $detail['quantity'],  
+            'price' => $detail['price'], 
         ]);
-    
-      
-        foreach ($cartDetails as $detail) {
-            $order->OrderItems()->create([
-                'product_id' => $detail['product_id'],  
-                'color_name' => $detail['color_name'],  
-                'size_name' => $detail['size_name'], 
-                'quantity' => $detail['quantity'],  
-                'price' => $detail['price'], 
-            ]);
-    
-    
-            $variant = ProductVariant::where('product_id', $detail['product_id'])
-                ->where('color_id', $detail['color_id'])
-                ->where('size_id', $detail['size_id'])
-                ->first();
-    
-            if ($variant) {
-              
-                $variant->decrement('stock_quantity', $detail['quantity']);
-            }
+
+        $variant = ProductVariant::where('product_id', $detail['product_id'])
+            ->where('color_id', $detail['color_id'])
+            ->where('size_id', $detail['size_id'])
+            ->first();
+
+        if ($variant) {
+            $variant->decrement('stock_quantity', $detail['quantity']);
         }
-    
-        return $order;  
     }
+
+    return $order;  
+}
 
     private function handleCOD(Order $order)
     {

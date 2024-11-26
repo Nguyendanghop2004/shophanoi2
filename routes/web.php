@@ -50,8 +50,6 @@ Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('sho
 Route::get('check-out', [CheckOutController::class, 'checkout'])->name('check-out');
 Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
 
-
-
 // routes/web.php
 
 //end thanh toán
@@ -86,3 +84,5 @@ Route::get('/debug-cart', function () {
 });
 Route::get('/thanhtoanthanhcong', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
 Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/select-address', [CheckoutController::class, 'select_address']);
+
