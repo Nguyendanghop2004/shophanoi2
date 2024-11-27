@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateProductRequest;
+use App\Http\Requests\Admin\CreateProductVariantColorRequest;
 use App\Http\Requests\Admin\CreateVariantProductRequest;
 use App\Http\Requests\Admin\UpdateMainProductRequest;
 use App\Http\Requests\Admin\UpdateVariantProductRequest;
@@ -98,8 +99,8 @@ class ProductController extends Controller
                 'price' => $request->input('price'),
                 'status' => $request->input('status'),
             ]);
-            $product->description = $this->processDescription($request->input('description'), $product->id);
 
+            $product->description = $this->processDescription($request->input('description'), $product->id);
             // Lưu sản phẩm
             $product->save();
             // Lưu tags cho tagCollection và tagMaterial
@@ -305,7 +306,7 @@ class ProductController extends Controller
         $product = Product::with([
             'colors' => function ($query) {
                 $query->select('colors.id', 'colors.name', 'colors.sku_color') // Sử dụng tên bảng để tránh mơ hồ
-                    ->whereHas('variants'); // Lọc màu sắc có ít nhất một biến thể
+                    ->whereHas('productvariants'); // Lọc màu sắc có ít nhất một biến thể
             },
             'variants' => function ($query) {
                 $query->select('id', 'product_id', 'color_id', 'size_id', 'product_code', 'status', 'price', 'stock_quantity') // Đảm bảo không có xung đột cột
@@ -354,7 +355,21 @@ class ProductController extends Controller
         $this->syncTags($product, $request->tagCollection, 'collection');
         $this->syncTags($product, $request->tagMaterial, 'material');
         $product->categories()->sync($request->categories);
+        // Lấy tất cả biến thể sản phẩm
+        $variants = ProductVariant::where('product_id', $product->id)->get();
 
+        // Duyệt qua từng biến thể và cập nhật mã sản phẩm
+        foreach ($variants as $variant) {
+            $color_id = $variant->color_id;
+            $size_id = $variant->size_id;
+
+            // Tạo mã sản phẩm cho biến thể
+            $productCode = $this->generateProductCode($product->sku, $color_id, $size_id);
+
+            // Cập nhật mã sản phẩm cho biến thể
+            $variant->product_code = $productCode;
+            $variant->save(); // Lưu lại biến thể
+        }
         // Chuyển hướng hoặc trả về thông báo thành công
         return redirect()->route('admin.product.edit', $id)->with('success', 'Product updated successfully.');
     }
@@ -423,7 +438,7 @@ class ProductController extends Controller
         return $sku . '-' . $colorName . '-' . $sizeName;
     }
 
-    public function createVariantColorProduct(Request $request)
+    public function createVariantColorProduct(CreateProductVariantColorRequest $request)
     {
         // Lấy các dữ liệu từ form
         $product_id = $request->input('product_id');

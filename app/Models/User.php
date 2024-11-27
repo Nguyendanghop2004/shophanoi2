@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Wards::class, 'wards_id', 'xaid');
     }
+    
+    public function discountCodes()
+{
+    return $this->belongsToMany(DiscountCode::class, 'discount_code_user');
+}
 }

@@ -366,7 +366,7 @@
                 </label>
             `;
                 });
-
+ 
                 sizeVariantHtml += `</div>`;
 
                 // Thêm các trường quantity collapsible cho mỗi kích thước và ẩn mặc định
