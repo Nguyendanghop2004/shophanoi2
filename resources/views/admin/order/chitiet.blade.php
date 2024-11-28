@@ -40,19 +40,27 @@
                     </tr>
                     <tr>
                         <th>Total Price</th>
-                        <td>{{ $order->total_price }}</td>
+                        <td>{{ number_format($order->total_price, 0, ',', '.')}} VND</td>
                     </tr>
                     <tr>
                         <th>Status</th>
                         <td>{{ $order->status }}</td>
                     </tr>
                     <tr>
+                        <th>Lý do hủy</th>
+                        <td>{{ $order->reason}}</td>
+                    </tr>
+                    <tr>
                         <th>Payment Method</th>
-                        <td>{{ $order->payment_method }}</td>
+                        <td>{{ $order->payment_method}}</td>
                     </tr>
                     <tr>
                         <th>Order Code</th>
                         <td>{{ $order->order_code }}</td>
+                    </tr>
+                    <tr>
+                        <th>Order PaymentStatus</th>
+                        <td>{{ $order->payment_status }}</td>
                     </tr>
                     <tr>
                         <th>Note</th>

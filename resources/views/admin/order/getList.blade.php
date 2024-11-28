@@ -2,6 +2,7 @@
 
 @section('content')
 <section class="section">
+    
     <div class="section-header">
         <h1>Danh Mục Đơn Hàng</h1>
     </div>
@@ -10,22 +11,32 @@
         <div class="card-header">
             <h4>Danh Sách Đơn Hàng</h4>
             <div class="card-header-action">
-                <a href="#" class="btn btn-primary">Tạo Mới</a>
+                <a href="#" class="btn btn-primary"></a>
             </div>
         </div>
-
         <div class="card-body">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div class="section-title mt-0"></div>
                 <div class="card-header-action">
-                    <form class="form-inline" method="GET" action="{{ route('admin.order.index') }}">
+                    <form class="form-inline" method="GET" action="{{ route('admin.order.getList') }}">
                         <div class="search-element">
-                            <input class="form-control" type="search" placeholder="Tìm theo mã đơn hàng..." aria-label="Search" name="order_code" value="{{ request('order_code') }}" data-width="250">
-                            <input class="form-control" type="search" placeholder="Tìm theo tên..." aria-label="Search" name="name" value="{{ request('name') }}" data-width="250">
-                            <input class="form-control" type="search" placeholder="Tìm theo email..." aria-label="Search" name="email" value="{{ request('email') }}" data-width="250">
+                            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm" value="{{ request('search') }}">
                             <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+                            <select name="status" class="form-control ml-2" onchange="this.form.submit()">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="chờ_xác_nhận" {{ request('status') == 'chờ_xác_nhận' ? 'selected' : '' }}>Chờ Xác Nhận</option>
+                                <option value="đã_xác_nhận" {{ request('status') == 'đã_xác_nhận' ? 'selected' : '' }}>Đã Xác Nhận</option>
+                                <option value="đang_giao_hàng" {{ request('status') == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
+                                <option value="giao_hàng_thành_công" {{ request('status') == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
+                                <option value="hủy" {{ request('status') == 'hủy' ? 'selected' : '' }}>Hủy</option>
+                            </select>
+                            <select name="payment_method" class="form-control ml-2" onchange="this.form.submit()">
+                                <option value="">Tất cả thanh toán</option>
+                                <option value="vnpay" {{ request('payment_method') == 'vnpay' ? 'selected' : '' }}>Thanh Toán VNPAY</option>
+                                <option value="cod" {{ request('payment_method') == 'cod' ? 'selected' : '' }}>Thanh Toán COD</option>
+                            </select>
                         </div>
-                    </form>
+                    </form> 
                 </div>
             </div>
 
@@ -40,6 +51,8 @@
                                 <th scope="col">Thanh Toán</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Mã Đơn Hàng</th>
+                                <th scope="col">Thanh toán</th>
+                                <th scope="col">Trạng thái</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -50,24 +63,50 @@
                                 <td>{{ $order->name }}</td>
                                 <td>{{ $order->email }}</td>
                                 <td>{{ $order->status }}</td>
-                                <td>{{ $order->total_price }}</td>
+                                <td>{{ number_format($order->total_price, 0, ',', '.') }} VND</td>
                                 <td>{{ $order->order_code }}</td>
+                                <td>{{ $order->payment_status}}</td>
                                 <td>
                                     <form action="{{ route('admin.order.update-status', $order->id) }}" method="POST">
                                         @csrf
-                                        <select name="status" class="form-control">
-                                            <option value="chờ_xác_nhận" {{ $order->status == 'chờ_xác_nhận' ? 'selected' : '' }}>Chờ Xác Nhận</option>
-                                            <option value="đã_xác_nhận" {{ $order->status == 'đã_xác_nhận' ? 'selected' : '' }}>Đã Xác Nhận</option>
-                                            <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
-                                            <option value="giao_hàng_thành_công" {{ $order->status == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
-                                            <option value="đã_hủy" {{ $order->status == 'đã_hủy' ? 'selected' : '' }}>Đã Hủy</option>
+                                        <select name="status" class="form-control " onchange="showReasonField(this)">
+                                            @if($order->status == 'chờ_xác_nhận')
+                                                <option value="chờ_xác_nhận" {{ $order->status == 'chờ_xác_nhận' ? 'selected' : '' }}>Chờ Xác Nhận</option>
+                                                <option value="đã_xác_nhận" {{ $order->status == 'đã_xác_nhận' ? 'selected' : '' }}>Đã Xác Nhận</option>
+                                                <option value="hủy" {{ $order->status == '' ? 'selected' : '' }}>Hủy</option>
+                                            @elseif($order->status == 'đã_xác_nhận')
+                                                <option value="đã_xác_nhận" {{ $order->status == 'đã_xác_nhận' ? 'selected' : '' }}>Đã Xác Nhận</option>
+                                                <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
+                                                <option value="hủy" {{ $order->status == 'hủy' ? 'selected' : '' }}>Hủy</option>
+                                            @elseif($order->status == 'đang_giao_hàng')
+                                                <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
+                                                <option value="giao_hàng_thành_công" {{ $order->status == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
+                                            @elseif($order->status == 'giao_hàng_thành_công')
+                                                <option value="giao_hàng_thành_công" {{ $order->status == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
+                                            @elseif($order->status == 'hủy')
+                                                <option value="hủy" {{ $order->status == 'hủy' ? 'selected' : '' }}>Hủy</option>
+                                            @endif
                                         </select>
-                                        <button type="submit" class="btn btn-success btn-sm">Cập Nhật</button>
+                                        <div class="reason-field mt-2" style="display: none;">
+                                            <select name="reason" class="form-control ">
+                                                <option value="Không muốn mua nữa">Không muốn mua nữa</option>
+                                                <option value="Thay đổi địa chỉ giao hàng">Thay đổi địa chỉ giao hàng</option>
+                                                <option value="Sản phẩm không còn cần thiết">Sản phẩm không còn cần thiết</option>
+                                                <option value="Tìm thấy giá rẻ hơn ở nơi khác">Tìm thấy giá rẻ hơn ở nơi khác</option>
+                                                <option value="Quá trình giao hàng quá lâu">Quá trình giao hàng quá lâu</option>
+                                                <option value="Phí vận chuyển quá cao">Phí vận chuyển quá cao</option>
+                                                <option value="Đã đặt nhầm sản phẩm">Đã đặt nhầm sản phẩm</option>
+                                                <option value="Đã mua sản phẩm từ cửa hàng khác">Đã mua sản phẩm từ cửa hàng khác</option>
+                                                <option value="Sản phẩm không như mong đợi">Sản phẩm không như mong đợi</option>
+                                            </select>
+                                            <button type="button" class="btn btn-danger btn-sm mt-2 mx-2 close-btn" onclick="resetStatus(this)">X</button>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-success btn-sm mt-2">Cập Nhật</button>
                                     </form>
-                                </td>
+                                </td>   
                                 <td>
                                     <a href="{{ route('admin.order.chitiet', $order->id) }}" class="btn btn-info btn-sm">Chi tiết</a>
-                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
                                 </td>
                             </tr>
                             @endforeach
@@ -82,21 +121,35 @@
     </div>
 </section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
-
 <script>
-    $(document).ready(function () {
-        toastr.options = {
-            "closeButton": false,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "timeOut": "1000",
-            "extendedTimeOut": "1000",
-        };
+    // Lưu trạng thái ban đầu khi chọn "Hủy"
+    let originalStatus = '';
 
-        toastr.success("Đã làm mới trang");
-    });
+    function showReasonField(selectElement) {
+        var reasonField = selectElement.closest('td').querySelector('.reason-field');
+        var selectedStatus = selectElement.value;
+
+        // Lưu trạng thái ban đầu
+        if (selectedStatus === 'hủy' && !originalStatus) {
+            originalStatus = selectElement.value;
+        }
+
+        // Hiển thị phần lý do nếu chọn hủy
+        if (selectedStatus === 'hủy') {
+            reasonField.style.display = 'block';
+        } else {
+            reasonField.style.display = 'none';
+        }
+    }
+
+    // Khi nhấn X, khôi phục trạng thái ban đầu và ẩn trường lý do
+    function resetStatus(button) {
+        var reasonField = button.closest('.reason-field');
+        var selectStatus = button.closest('td').querySelector('select[name="status"]');
+        
+        // Khôi phục trạng thái ban đầu
+        selectStatus.value = originalStatus;
+        reasonField.style.display = 'none';
+    }
 </script>
 @endsection
