@@ -19,7 +19,13 @@
     <h4>Chi tiết sản phẩm:</h4>
     <ul>
         @foreach($orderItems as $item)
-            <li>{{ $item['quantity'] }} x {{ $item['product_name'] }} (Màu: {{ $item['color_name'] }}, Size: {{ $item['size_name'] }})</li>
+            <li>
+                <!-- Hiển thị hình ảnh sản phẩm -->
+                <img src="{{ Storage::url($item['image_url'])}}" style="width: 100px; height: 100px; object-fit: cover;">
+                <br>
+                {{ $item['quantity'] }} x {{ $item['product_name'] }} 
+                (Màu: {{ $item['color_name'] }}, Size: {{ $item['size_name'] }})
+            </li>
         @endforeach
     </ul>
 

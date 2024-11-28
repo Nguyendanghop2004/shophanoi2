@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\ContactMessageController;
 
 use App\Http\Controllers\Admin\HistoryController;
 
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -113,7 +114,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
 
     // Quản lý sản phẩm
 // quản lí đơn hàng
-
+Route::get('order', [OrderController::class, 'index'])->name('order.index');
+Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+Route::get('/orders/{id}/update-status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+Route::get('/orders/cancel/{id}', [OrderController::class, 'cancel'])->name('orders.cancel');
+Route::get('/orders/{order}/print', [OrderController::class, 'printOrder'])->name('orders.print');
 //end quản lí đơn hàng
     Route::resource('product', ProductController::class);
 //quản lí coupons

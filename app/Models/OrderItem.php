@@ -10,7 +10,7 @@ class OrderItem extends Model
     use HasFactory;
 
     protected $fillable = [
-        'order_id', 'product_id','color_name','size_name', 'quantity', 'price', 'created_at', 'updated_at',
+        'order_id', 'product_name','color_name','size_name', 'quantity', 'price','image_url', 'created_at', 'updated_at',
     ];
 
     public function order()
@@ -20,7 +20,7 @@ class OrderItem extends Model
 
     public function variant()
     {
-        return $this->belongsTo(ProductVariant::class); // Nếu có model Variant
+        return $this->belongsTo(ProductVariant::class, 'variant_id'); // Đảm bảo dùng đúng khóa ngoại 'variant_id'
     }
     public function product()
     {

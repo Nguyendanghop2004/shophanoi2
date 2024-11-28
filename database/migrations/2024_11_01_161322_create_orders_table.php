@@ -20,10 +20,11 @@ return new class extends Migration
             $table->string('payment_method')->nullable(); 
             
             
-            $table->enum('payment_status', ['pending', 'paid', 'failed'])
-                  ->default('pending');
+            $table->enum('payment_status', ['chờ thanh toán', 'đã thanh toán', 'thất bại'])
+                  ->default('chờ thanh toán');
+           
             
-          
+               $table->string('reason')->nullable();
             $table->decimal('total_price', 10, 2); 
             $table->string('address'); 
             $table->string('phone_number'); 

@@ -38,55 +38,50 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($cartDetails as $item)
-                                <tr class="tf-cart-item file-delete">
-                                    <td class="tf-cart-item_product">
-                                        <a href="product-detail.html" class="img-box">
-                                            <img src="{{ asset('storage/' . $item['image_url']) }}" alt="img-product">
-                                        </a>
-                                        <div class="cart-info">
-                                            <a href="product-detail.html"
-                                                class="cart-title link">{{ $item['product_name'] }}</a>
-                                            <div class="cart-meta-variant">{{ $item['color_name'] }} /
-                                                {{ $item['size_name'] }}
-                                            </div>
-                                            <span class="remove-cart link remove"
-                                                onclick="removeFromCart({{ $item['product_id'] }},{{$item['color_id']}},{{$item['size_id']}})">Remove</span>
-                                        </div>
-                                    </td>
-                                    <td class="tf-cart-item_price" cart-data-title="Price">
-                                        <div class="cart-price">${{ number_format($item['price'], 0, ',', '.') }}</div>
-                                    </td>
-                                    <td class="tf-cart-item_quantity" cart-data-title="Quantity">
-                                        <div class="cart-quantity">
-                                            <div class="wg-quantity">
-                                                <span class="btn-quantity minus-btn">
-                                                    <svg class="d-inline-block" width="9" height="1" viewBox="0 0 9 1"
-                                                        fill="currentColor">
-                                                        <path
-                                                            d="M9 1H5.14286H3.85714H0V1.50201e-05H3.85714L5.14286 0L9 1.50201e-05V1Z">
-                                                        </path>
-                                                    </svg>
-                                                </span>
-                                                <input type="text" name="number" value="{{ $item['quantity'] }}">
-                                                <span class="btn-quantity plus-btn">
-                                                    <svg class="d-inline-block" width="9" height="9" viewBox="0 0 9 9"
-                                                        fill="currentColor">
-                                                        <path
-                                                            d="M9 5.14286H5.14286V9H3.85714V5.14286H0V3.85714H3.85714V0H5.14286V3.85714H9V5.14286Z">
-                                                        </path>
-                                                    </svg>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="tf-cart-item_total" cart-data-title="Total">
-                                        <div class="cart-total">
-                                            ${{ number_format((int) $item['quantity'] * (float) $item['price'], 0, ',', '.') }}
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+                        @if(count($cartDetails) > 0)
+    @foreach ($cartDetails as $item)
+        <tr class="tf-cart-item file-delete">
+            <td class="tf-cart-item_product">
+                <a href="" class="img-box">
+                    <img src="{{ asset('storage/' . $item['image_url']) }}" alt="img-product">
+                </a>
+                <div class="cart-info">
+                    <a href="" class="cart-title link">{{ $item['product_name'] }}</a>
+                    <div class="cart-meta-variant">{{ $item['color_name'] }} / {{ $item['size_name'] }}</div>
+                    <span class="remove-cart link remove"
+                        onclick="removeFromCart({{ $item['product_id'] }},{{$item['color_id']}},{{$item['size_id']}})">Remove</span>
+                </div>
+            </td>
+            <td class="tf-cart-item_price" cart-data-title="Price">
+                <div class="cart-price">${{ number_format($item['price'], 0, ',', '.') }}</div>
+            </td>
+            <td class="tf-cart-item_quantity" cart-data-title="Quantity">
+                <div class="cart-quantity">
+                    <div class="wg-quantity">
+                        <span class="btn-quantity minus-btn">
+                            <svg class="d-inline-block" width="9" height="1" viewBox="0 0 9 1" fill="currentColor">
+                                <path d="M9 1H5.14286H3.85714H0V1.50201e-05H3.85714L5.14286 0L9 1.50201e-05V1Z"></path>
+                            </svg>
+                        </span>
+                        <input type="text" name="number" value="{{ $item['quantity'] }}">
+                        <span class="btn-quantity plus-btn">
+                            <svg class="d-inline-block" width="9" height="9" viewBox="0 0 9 9" fill="currentColor">
+                                <path d="M9 5.14286H5.14286V9H3.85714V5.14286H0V3.85714H3.85714V0H5.14286V3.85714H9V5.14286Z"></path>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </td>
+            <td class="tf-cart-item_total" cart-data-title="Total">
+                <div class="cart-total">${{ number_format((int) $item['quantity'] * (float) $item['price'], 0, ',', '.') }}</div>
+            </td>
+        </tr>
+    @endforeach
+@else
+    <tr>
+        <td colspan="4" class="text-center">Giỏ hàng trống</td>
+    </tr>
+@endif
 
                         </tbody>
                     </table>
@@ -219,12 +214,17 @@
                                 I agree with the <a href="terms-conditions.html">terms and conditions</a>
                             </label>
                         </div>
-                        <div class="cart-checkout-btn">
-                            <a href="{{ route('check-out') }}"
-                                class="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center">
-                                <span>Check out</span>
-                            </a>
-                        </div>
+                        @php
+    $isCartEmpty = count($cartDetails) == 0; // Kiểm tra giỏ hàng có trống không
+@endphp
+
+<div class="cart-checkout-btn">
+    <a href="{{ route('check-out') }}"
+       class="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center @if($isCartEmpty) disabled @endif"
+       @if($isCartEmpty) style="pointer-events: none; opacity: 0.5;" @endif>
+        <span>Check out</span>
+    </a>
+</div>
                         <div class="tf-page-cart_imgtrust">
                             <p class="text-center fw-6">Guarantee Safe Checkout</p>
                             <div class="cart-list-social">
@@ -930,5 +930,33 @@
                 }
             });
         }
+
+
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+@if(count($cartDetails) == 0)
+<script>
+            $(document).ready(function() {
+                toastr.options = {
+                    "closeButton": false,  
+                    "progressBar": true,
+                    "positionClass": "toast-top-right", 
+                    "timeOut": "7000", 
+                    "extendedTimeOut": "1500",
+                    "showMethod": "fadeIn", 
+                    "hideMethod": "fadeOut", 
+                    "iconClass": 'toast-warning',  
+                };
+
+                toastr.warning("<i class='fas fa-shopping-cart'></i> Giỏ hàng trống!", "Thông báo", {
+                    closeButton: false,
+                    tapToDismiss: false,
+                    timeOut: 5000
+                });
+            });
+        </script>
+    @endif
 @endpush

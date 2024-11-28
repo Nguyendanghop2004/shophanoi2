@@ -321,7 +321,7 @@
                         <span>Đơn Hàng</span></a>
                     <ul class="dropdown-menu">
 
-                        <li><a class="nav-link" href=""><span>Danh Sách Đơn Hàng</span></a></li>
+                        <li><a class="nav-link" href="{{route('admin.order.index')}}"><span>Danh Sách Đơn Hàng</span></a></li>
                        
                     </ul>
                 </li>

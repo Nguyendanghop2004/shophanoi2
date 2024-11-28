@@ -15,22 +15,31 @@
                 <div class="box grid-2">
                     <fieldset class="fieldset">
                         <label for="first-name">Name</label>
-                        <input name="name" type="text" id="first-name" value="{{ auth()->check() ? auth()->user()->name : '' }}" placeholder="Your Name" required>
+                        <input name="name" type="text" id="first-name" 
+                            value="{{ auth()->check() ? auth()->user()->name : '' }}" 
+                            placeholder="Your Name" required>
                     </fieldset>
                     <fieldset class="fieldset">
                         <label for="last-name">Email</label>
-                        <input name="email" type="email" id="last-name" value="{{ auth()->check() ? auth()->user()->email : '' }}" required>
+                        <input name="email" type="email" id="last-name" 
+                            value="{{ auth()->check() ? auth()->user()->email : '' }}" 
+                            required>
                     </fieldset>
                 </div>
 
+            
                 <fieldset class="box fieldset">
-                    <label for="city">Address</label>
-                    <input name="address" type="text" id="city" value="{{ auth()->check() ? auth()->user()->address : '' }}" required>
+                    <label for="address">Address</label>
+                    <input name="address" type="text" id="address" 
+                        value="{{ auth()->check() ? auth()->user()->address : '' }}" 
+                        required>
                 </fieldset>
 
                 <fieldset class="box fieldset">
                     <label for="phone">Phone Number</label>
-                    <input type="text" name="phone_number" id="phone" value="{{ auth()->check() ? auth()->user()->phone_number : '' }}" required>
+                    <input type="text" name="phone_number" id="phone" 
+                        value="{{ auth()->check() ? auth()->user()->phone_number : '' }}" 
+                        required>
                 </fieldset>
 
                 <fieldset class="box fieldset">
@@ -87,7 +96,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">
+                    <button type="submit" name="redirect" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">
                         Place order
                     </button>
                 </div>
@@ -95,6 +104,8 @@
         </div>
     </div>
 </form>
+
+
 
 
 
