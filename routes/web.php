@@ -86,6 +86,7 @@ Route::get('/debug-cart', function () {
 });
 Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::get('/cart/modal-cart', [CartController::class, 'getModalCart'])->name('cart.modal');
 
 
 

@@ -15,13 +15,20 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
-
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        Paginator::useBootstrapFour();
+        // Sử dụng Bootstrap cho phân trang
+        Paginator::useBootstrap();
 
+        // Lấy danh mục (categories) và truyền vào view menu
+        View::composer('client.layouts.particals.menu', function ($view) {
+            $categories = Category::with([
+                'children' => function ($query) {
+                    $query->where('status', 1);
+                }
+            ])->where('status', 1)->whereNull('parent_id')->get();
+
+            $view->with('categories', $categories);
+        });
     }
 }
