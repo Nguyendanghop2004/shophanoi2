@@ -199,5 +199,6 @@ Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('di
     Route::get('order/{id}', [OrderController::class, 'chitiet'])->name('order.chitiet');
     Route::post('order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.update-status');
     Route::get('order/index', [OrderController::class, 'index'])->name('order.index');
+    Route::get('order/in-hoadon/{id}', [OrderController::class, 'inhoadon'])->name('order.inHoaDon');
 
 });

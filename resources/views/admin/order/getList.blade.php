@@ -101,8 +101,9 @@
                                             </select>
                                             <button type="button" class="btn btn-danger btn-sm mt-2 mx-2 close-btn" onclick="resetStatus(this)">X</button>
                                         </div>
-
+                                        @if($order->status != 'hủy' &&  $order->status != 'giao_hàng_thành_công')
                                         <button type="submit" class="btn btn-success btn-sm mt-2">Cập Nhật</button>
+                                        @endif
                                     </form>
                                 </td>   
                                 <td>
@@ -122,19 +123,16 @@
 </section>
 
 <script>
-    // Lưu trạng thái ban đầu khi chọn "Hủy"
     let originalStatus = '';
 
     function showReasonField(selectElement) {
         var reasonField = selectElement.closest('td').querySelector('.reason-field');
         var selectedStatus = selectElement.value;
 
-        // Lưu trạng thái ban đầu
         if (selectedStatus === 'hủy' && !originalStatus) {
             originalStatus = selectElement.value;
         }
 
-        // Hiển thị phần lý do nếu chọn hủy
         if (selectedStatus === 'hủy') {
             reasonField.style.display = 'block';
         } else {
@@ -142,12 +140,10 @@
         }
     }
 
-    // Khi nhấn X, khôi phục trạng thái ban đầu và ẩn trường lý do
     function resetStatus(button) {
         var reasonField = button.closest('.reason-field');
         var selectStatus = button.closest('td').querySelector('select[name="status"]');
         
-        // Khôi phục trạng thái ban đầu
         selectStatus.value = originalStatus;
         reasonField.style.display = 'none';
     }

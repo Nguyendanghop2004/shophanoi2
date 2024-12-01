@@ -38,10 +38,7 @@
                             {{ $city->name_thanhpho ?? "...." }}
                         </td>
                     </tr>
-                    <tr>
-                        <th>Total Price</th>
-                        <td>{{ number_format($order->total_price, 0, ',', '.')}} VND</td>
-                    </tr>
+
                     <tr>
                         <th>Status</th>
                         <td>{{ $order->status }}</td>
@@ -67,18 +64,53 @@
                         <td>{{ $order->note }}</td>
                     </tr>
                     <tr>
-                        <th>Created At</th>
+                        <th>Ngày đặt</th>
                         <td>{{ $order->created_at }}</td>
                     </tr>
-                    <tr>
-                        <th>Updated At</th>
-                        <td>{{ $order->updated_at }}</td>
-                    </tr>
+
                 </table>
+                <tr>
+                    <h3>Tổng sản phẩm đã đặt</h3>
+                    <td>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Ảnh Sản Phẩm</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($orderitems as $index => $item)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>
+                                            <img src="{{Storage::Url($item->image_url)}}" width="60px" height="60px">
+                                        </td>
+                                        <td>{{ $item->product_name }}</td>
+                                        <td>{{ number_format($item->price, 0, ',', '.') }} VND</td>
+                                        <td>{{ $item->quantity }}</td>
+                                        <td>{{ number_format($item->price * $item->quantity, 0, ',', '.') }} VND</td>
+                                    </tr>
+
+                                @endforeach
+                                <tr>
+                                    <th>Total Price</th>
+                                    <td class="text-left">{{ number_format($order->total_price, 0, ',', '.')}} VND</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
             </div>
         </div>
         <div class="card-footer text-right">
             <a href="{{ route('admin.order.getList') }}" class="btn btn-primary">Quay Lại</a>
+            <a href="{{ route('admin.order.inHoaDon', ['id' => $order->id]) }}" class="btn btn-success">In Hóa Đơn</a>
         </div>
     </div>
 </section>

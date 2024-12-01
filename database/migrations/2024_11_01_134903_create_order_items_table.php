@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade'); // Khóa ngoại đến bảng orders
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade'); // Khóa ngoại đến bảng products
+            $table->string('product_name');
+            $table->string('image_url');
             $table->string('color_name'); // Tên màu sản phẩm
             $table->string('size_name'); // Tên kích thước sản phẩm
             $table->decimal('price', 10, 2); // Giá sản phẩm trong đơn hàng

@@ -23,12 +23,7 @@ class HomeController extends Controller
      */
     public function home()
     {
-        $categories = Category::with(relations: [
-            'children' => function ($query) {
-                $query->where('status', 1);
-            }
-        ])->where('status', 1)
-            ->whereNull('parent_id')->get();
+      
         $collections = Tag::where('type', 'collection')->get();
 
 
