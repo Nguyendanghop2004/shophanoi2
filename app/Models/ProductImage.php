@@ -11,16 +11,11 @@ class ProductImage extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['id','product_id','color_id', 'image_url'];
+    protected $fillable = ['product_id', 'color_id', 'image_url'];
 
     public function variant()
     {
         return $this->belongsTo(ProductVariant::class);
     }
-
-    public function color()
-{
-    return $this->belongsTo(Color::class);
-}
 
 }

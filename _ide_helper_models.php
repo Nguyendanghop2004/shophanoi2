@@ -201,6 +201,8 @@ namespace App\Models{
  * @property string $sku_color
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductImage> $images
+ * @property-read int|null $images_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductVariant> $variants
  * @property-read int|null $variants_count
  * @method static \Illuminate\Database\Eloquent\Builder|Color newModelQuery()
@@ -398,6 +400,8 @@ namespace App\Models{
  * @property-read int|null $colors_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductImage> $images
  * @property-read int|null $images_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Size> $sizes
+ * @property-read int|null $sizes_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read int|null $tags_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductVariant> $variants

@@ -51,5 +51,11 @@ class Product extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+    // App\Models\Product.php
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class, 'product_variants', 'product_id', 'size_id');
+    }
+
 
 }
