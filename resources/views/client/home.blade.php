@@ -165,7 +165,7 @@
 
                             <div class="collection-item style-2 hover-img" >
                                 <div class="collection-inner">
-                                    <a href="" class="0">
+
                                         <img class="lazyload"
                                             data-src="{{  Storage::url($category->image_path) }}"
                                             src="{{ Storage::url($category->image_path) }}"
@@ -257,6 +257,7 @@
                     data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3"
                     data-pagination-lg="3">
                     <div class="swiper-wrapper">
+
                         @foreach ($products as $product)
                             <div class="swiper-slide" lazy="true">
                                 <div class="card-product">
@@ -343,6 +344,7 @@
                                 </div>
                             </div>
                         @endforeach
+
 
                     </div>
                 </div>

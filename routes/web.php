@@ -30,7 +30,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('home/{category_id?}', [HomeController::class, 'home'])->name('home');
+
+
+Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
 Route::get('/shop-collection/{id}', [ShopCollectionController::class, 'index'])->name('shop-collection');
@@ -41,16 +45,23 @@ Route::get('faq', [FAQController::class, 'index'])->name('faq');
 Route::get('out-store', [OutStoreController::class, 'index'])->name('out-store');
 Route::get('time-line', [TimeLineController::class, 'index'])->name('time-line');
 Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping-cart');
-Route::get('check-out', [CheckOutController::class, 'index'])->name('check-out');
+
+//thanh toán
+Route::get('check-out', [CheckOutController::class, 'checkout'])->name('check-out');
+Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
+Route::get('/vnpay/return', [CheckoutController::class, 'vnPayReturn'])->name('vnpay.return');
+//end thanh toán
 Route::get('payment-confirmation', [PaymentController::class, 'confirmation'])->name('payment-confirmation');
 Route::get('payment-failure', [PaymentController::class, 'failure'])->name('payment-failure');
-//start Account
+
 Route::get('/account/{section?}', [AccountController::class, 'acc'])->name('account');
 Route::post('/account/login', [AccountController::class, 'login'])->name('account.login');
 Route::get('/accountUser/logout', [AccountController::class, 'logout'])->name('accountUser.logout');
 Route::post('/accountUser/register', [AccountController::class, 'register'])->name('accountUser.register');
 
-// end Account
+
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -19,7 +19,9 @@ return new class extends Migration
             $table->integer('min_quantity')->default(1); // Số lượng sản phẩm tối thiểu để áp dụng mã
             $table->decimal('min_total', 10, 2)->nullable(); // Giá trị đơn hàng tối thiểu để áp dụng mã
             $table->timestamp('start_date'); // Ngày bắt đầu của mã giảm giá
+
             $table->timestamp('end_date')->nullable(); // Ngày kết thúc của mã giảm giá
+
             $table->integer('usage_limit')->default(1); // Số lần có thể sử dụng
             $table->timestamps();
             $table->softDeletes();

@@ -81,6 +81,7 @@
                        </a>
                    </div>
 
+
                    <div class="col-xl-5 col-md-4 col-3">
                        <!-- chu y -->
                        {{-- @dd(Auth::user()->name) --}}
@@ -104,6 +105,7 @@
                            <li class="nav-cart"><a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item"><i
                                        class="icon icon-bag"></i><span class="count-box">0</span></a></li>
                        </ul>
+
 
                    </div>
                </div>
