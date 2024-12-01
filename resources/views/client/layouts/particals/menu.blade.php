@@ -52,7 +52,7 @@
             </div>
         </li>
         <li class="menu-item position-relative">
-            <a href="#" class="item-link">Bài Viết</a>
+            <a href="{{route('blog.show')}}" class="item-link">Bài Viết</a>
           
         </li>
         <li class="menu-item position-relative">

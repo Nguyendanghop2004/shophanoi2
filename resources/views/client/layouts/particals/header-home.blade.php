@@ -90,8 +90,8 @@
                            @if (Auth::user())
                             <a href="{{ route('accountUser.logout')}}">logout</a>
                            @else
-                               <li class="nav-account">
-                                   <a href="#login" data-bs-toggle="modal" class="nav-icon-item">
+                               <li class="">
+                                   <a href="{{route('accountUser.login')}}" class="nav-icon-item">
                                        <i class="icon icon-account"></i>
                                    </a>
                                </li>

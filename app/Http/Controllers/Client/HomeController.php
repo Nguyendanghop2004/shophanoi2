@@ -24,9 +24,11 @@ class HomeController extends Controller
             ->orderBy('position', 'asc')
             ->get();
 
-        $categories = Category::with(relations: ['children' => function ($query) {
-            $query->where('status', 1);
-        }])->where('status', 1)
+        $categories = Category::with(relations: [
+            'children' => function ($query) {
+                $query->where('status', 1);
+            }
+        ])->where('status', 1)
             ->whereNull('parent_id')->get();
 
         $products = Product::with([
@@ -53,7 +55,7 @@ class HomeController extends Controller
             ->get();
 
 
-        return view('client.home', compact('sliders', 'products','categories'));
+        return view('client.home', compact('sliders', 'products', 'categories'));
     }
     public function show($slug)
     {
@@ -65,5 +67,57 @@ class HomeController extends Controller
 
 
         return view('client.home', compact('slug'));
+    }
+    public function getProductInfo(Request $request)
+    {
+        $product = Product::with(['variants', 'colors', 'images'])->find($request->id);
+
+        // Lấy ảnh ngẫu nhiên cho từng màu
+        $randomImages = $product->colors->mapWithKeys(function ($color) use ($product) {
+            $randomImage = $product->images
+                ->where('color_id', $color->id)
+                ->random(1)
+                ->first();
+
+            return [$color->id => $randomImage];
+        });
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+        // Tạo danh sách size cho mỗi màu
+        $colorSizes = [];
+        foreach ($product->variants as $variant) {
+            $colorId = $variant->color_id;
+            $size = $variant->size;
+
+            if (!isset($colorSizes[$colorId])) {
+                $colorSizes[$colorId] = [];
+            }
+
+            // Chỉ thêm size nếu chưa có
+            if (!in_array($size, $colorSizes[$colorId])) {
+                $colorSizes[$colorId][] = $size;
+            }
+        }
+
+        // Tạo danh sách size cho mỗi màu
+        $colorSizes = [];
+        foreach ($product->variants as $variant) {
+            $colorId = $variant->color_id;
+            $size = $variant->size;
+
+            // Nếu chưa có màu này trong danh sách $colorSizes thì tạo mới
+            if (!isset($colorSizes[$colorId])) {
+                $colorSizes[$colorId] = [];
+            }
+
+            // Chỉ thêm size nếu chưa có
+            if (!in_array($size, $colorSizes[$colorId])) {
+                $colorSizes[$colorId][] = $size;
+            }
+        }
+
+        // Trả về một view partial chứa thông tin sản phẩm, ảnh ngẫu nhiên, và các size theo màu
+        return view('client.layouts.components.ajax-file.quick-add', compact('product', 'randomImages', 'colorSizes'))->render();
     }
 }

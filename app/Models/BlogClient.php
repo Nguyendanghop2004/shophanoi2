@@ -15,9 +15,11 @@ class BlogClient extends Model
         'title',
         'unique',
         'slug',
+        'image',
+        'status'
     ];
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
+    protected $casts = [
+        'status' => 'boolean',
+    ];
+   
 }

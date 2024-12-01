@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('blog_clients', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('category_id')->nullable(); // Cột category_id có thể để trống
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
             $table->text('content');
             $table->string('title');
             $table->string('unique');
+            $table->string('image');
             $table->string('slug')->unique();
+            $table->boolean('status')->default(true);
+
             $table->timestamps();
         });
     }

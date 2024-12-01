@@ -92,7 +92,7 @@
         });
       }, 100);
     }
-    
+
   };
 
   /* Scroll process
@@ -132,7 +132,7 @@
     });
   };
 
-  /* Delete file 
+  /* Delete file
   -------------------------------------------------------------------------------------*/
   var delete_file = function (e) {
     $(".remove").on("click", function (e) {
@@ -548,7 +548,7 @@
     $(window).scroll(function (event) {
       didScroll = true;
     });
-    
+
     setInterval(function () {
       if (didScroll) {
         let st = $(this).scrollTop();
@@ -660,7 +660,7 @@
       });
     }); // each contactform
   };
-  
+
   /* subscribe mailchimp
   ------------------------------------------------------------------------------------- */
   var ajaxSubscribe = {
@@ -846,3 +846,4 @@
     new WOW().init();
   });
 })(jQuery);
+btn-add-to-cart

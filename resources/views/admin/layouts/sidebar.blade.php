@@ -262,7 +262,18 @@
             </li>
 
 
-            <li><a class="nav-link" href="{{ route('admin.blog.index') }}"><i class="fas fa-file-alt"></i> <span>Bài Viết</span></a></li>
+            <li class="dropdown">
+                <a href="{{ route('admin.blog.index') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                        class="fas fa-folder"></i>
+                    <span>Bài Viết</span></a>
+                <ul class="dropdown-menu">
+
+
+                    <li><a class="nav-link" href="{{ route('admin.blog.show') }}"><span>Danh Sách Bài viết</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.blog.index') }}"><span>Thêm Mới Bài viết</span></a></li>
+
+                </ul>
+            </li>
             <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
             <li><a class="nav-link" href="{{ route('admin.contact.index') }}"><i class="fas fa-envelope"></i>
                     <span>Liên
