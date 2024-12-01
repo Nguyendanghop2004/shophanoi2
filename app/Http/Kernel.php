@@ -70,4 +70,5 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         'updateLogin' => \App\Http\Middleware\UpdateLogin::class,
     ];
+    
 }

@@ -9,29 +9,13 @@
     <div class="sub-menu mega-menu">
         <div class="container">
             <div class="row">
-                {{-- @foreach($categories as $category)
-                    <div class="col-lg-2">
-                        <div class="mega-menu-item">
-                            <div class="menu-heading">{{ $category->name }}</div>
-                            @if($category->children->isNotEmpty())
-                                <ul class="menu-list">
-                                    @foreach($category->children as $child)
-                                        <li>
-                                        <a href="{{ route('shop-collection', $child->id) }}" class="menu-link-text link">{{ $child->name }}</a>
-                                       
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        </div>
-                    </div>
-                @endforeach --}}
-            </div>
+           
         </div>
     </div>
 </li>
 
         <li class="menu-item">
+       
             <a href="#" class="item-link">Sản Phẩm<i class="icon icon-arrow-down"></i></a>
             <div class="sub-menu mega-menu">
                 <div class="container">
@@ -53,7 +37,6 @@
         </li>
         <li class="menu-item position-relative">
             <a href="{{route('blog.show')}}" class="item-link">Bài Viết</a>
-          
         </li>
         <li class="menu-item position-relative">
             <a href="" class="item-link">Giới Thiệu</a>

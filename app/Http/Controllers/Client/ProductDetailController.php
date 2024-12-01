@@ -23,7 +23,7 @@ class ProductDetailController extends Controller
             'variants.color',   
             'variants.size',   
             'images',          
-            'category'         
+            'categories'         
         ])
         ->where('slug', $slug)
         ->where('status', 1) 

@@ -81,6 +81,7 @@
                        </a>
                    </div>
 
+
                    <div class="col-xl-5 col-md-4 col-3">
                     
                        <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
@@ -102,6 +103,7 @@
                            <li class="nav-cart"><a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item"><i
                                        class="icon icon-bag"></i><span class="count-box">0</span></a></li>
                        </ul>
+
 
                    </div>
                </div>

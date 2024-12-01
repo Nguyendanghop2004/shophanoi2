@@ -290,7 +290,6 @@
                         <span>Danh mục sản phẩm</span></a>
                     <ul class="dropdown-menu">
 
-
                         <li><a class="nav-link" href="{{ route('admin.categories.list') }}"><span>Danh Sách Danh
                                     Mục</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.categories.add') }}"><span>Thêm Mới Danh
@@ -322,6 +321,19 @@
                                     User</span></a></li>
                     </ul>
                 </li>
+            @endcan
+            @can('order')
+            <li class="menu-header">Quản Lí Đơn Hàng</li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                        <span>Đơn Hàng</span></a>
+                    <ul class="dropdown-menu">
+
+                        <li><a class="nav-link" href="{{route('admin.order.index')}}"><span>Danh Sách Đơn Hàng</span></a></li>
+                       
+                    </ul>
+                </li>
+                
             @endcan
             @can('product')
                 <li class="menu-header">Quản Lí Sản Phẩm</li>

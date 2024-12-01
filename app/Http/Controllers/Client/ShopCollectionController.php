@@ -32,4 +32,5 @@ class ShopCollectionController extends Controller
 
     return view('client.shop-collection', compact('category', 'products', 'categories'));
 }
+
 }

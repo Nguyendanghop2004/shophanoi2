@@ -7,18 +7,25 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriesController;
 
+use App\Http\Controllers\Admin\DiscountCodeController;
+
+
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ContactMessageController;
 
+
 use App\Http\Controllers\Admin\HistoryController;
 
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ShipperController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SliderController;
+
 use App\Http\Controllers\Admin\TagController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
@@ -60,6 +67,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::post('accountsUser/{id}/accountUser', [AccoutUserController::class, 'activateUser'])->name('accountsUser.activateUser')->middleware('permission:activate_Account');
     Route::post('accountsUser/{id}/deactivateUser', [AccoutUserController::class, 'deactivateUser'])->name('accountsUser.deactivateUser')->middleware('permission:deactivate_Account');
     //end  status user
+
 
 
     //start status change
@@ -108,13 +116,41 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
 
     // Quản lý sản phẩm
+// quản lí đơn hàng
+Route::get('order', [OrderController::class, 'index'])->name('order.index');
+Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+Route::get('/orders/{id}/update-status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+Route::get('/orders/cancel/{id}', [OrderController::class, 'cancel'])->name('orders.cancel');
+Route::get('/orders/{order}/print', [OrderController::class, 'printOrder'])->name('orders.print');
+//end quản lí đơn hàng
+    Route::resource('product', ProductController::class);
+//quản lí coupons
+Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('discount_codes.index');
+
+    // Route để hiển thị form tạo mã giảm giá
+    Route::get('discount-codes/create', [DiscountCodeController::class, 'create'])->name('discount_codes.create');
+
+    // Route để lưu mã giảm giá mới
+    Route::post('discount-codes', [DiscountCodeController::class, 'store'])->name('discount_codes.store');
+
+    // Route để hiển thị form sửa mã giảm giá
+    Route::get('discount-codes/{id}/edit', [DiscountCodeController::class, 'edit'])->name('discount_codes.edit');
+
+    // Route để cập nhật mã giảm giá
+    Route::put('discount-codes/{id}', [DiscountCodeController::class, 'update'])->name('discount_codes.update');
+
+    // Route để xóa mã giảm giá
+    Route::delete('discount-codes/{id}', [DiscountCodeController::class, 'destroy'])->name('discount_codes.destroy');
+
     Route::resource('product', ProductController::class)->middleware('permission:product');
+
 
     // Các route riêng cho sản phẩm
     Route::get('/product/get-variant-card/{colorId}', [ProductController::class, 'getVariantCard'])->name('product.getVariantCard');
     Route::put('product/{id}/update-main-product', [ProductController::class, 'updateMainProduct'])->name('product.updateMainProduct');
     Route::put('product/{id}/update-variant-product', [ProductController::class, 'updateVariantProduct'])->name('product.updateVariantProduct');
     Route::post('product/create-variant-product', [ProductController::class, 'createVariantProduct'])->name('product.createVariantProduct');
+
     Route::post('product/create-variant-image-product', [ProductController::class, 'createVariantImageColorProduct'])->name('product.createVariantImageColorProduct');
     Route::post('product/create-variant-color-product', [ProductController::class, 'createVariantColorProduct'])->name('product.createVariantColorProduct');
     Route::delete('/product-variants/{id}', [ProductController::class, 'destroyVariant'])->name('product-variants.destroy');
@@ -155,6 +191,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
     Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
     Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+
 
 
 
