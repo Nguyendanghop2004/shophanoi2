@@ -251,10 +251,10 @@
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-columns"></i> <span>Thanh Trượt</span></a>
                 <ul class="dropdown-menu">
-                    @foreach ($parentCategories as $category)
+                    {{-- @foreach ($parentCategories as $category)
                         <li><a class="nav-link"
                                 href="{{ route('admin.slider.index', $category->id) }}">{{ $category->name }}</a></li>
-                    @endforeach
+                    @endforeach --}}
                     <li><a class="nav-link" href="{{ route('admin.slider.index', ['category_id' => 'trash']) }}">Thùng
                             Rác<i class="fas fa-recycle"></i></a></li>
 
@@ -289,39 +289,16 @@
 
                     </ul>
                 </li>
-                <li class="menu-header">Quản Lí tài khoản</li>
-
-                <li class="dropdown">
-
-                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
-                        <span>Account</span></a>
-                    <ul class="dropdown-menu">
-
-                        <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Tài khoản
-                                    Admin</span></a></li>
-                        <li><a class="nav-link" href="{{ route('admin.accounts.create') }}"> <span>Thêm mới
-                                    Amdin</span></a>
-                        </li>
-                        <li><a class="nav-link" href="{{ route('admin.history') }}">
-                                <span>Lịch sử Admin</span></a></li>
-                        <li><a class="nav-link" href=""><span>Tài khoản User</span></a></li>
-                        <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Phân quyền và vai
-                                    trò</span></a></li>
-                        <li><a class="nav-link" href="{{ route('admin.accountsUser.create') }}"> <span>Thêm mới
-                                    User</span></a></li>
-                        <li><a class="nav-link" href="{{ route('admin.accountsUser.accountUser') }}"> <span>Danh sách
-                                    User</span></a></li>
-                    </ul>
-                </li>
             @endcan
+               
             @can('order')
             <li class="menu-header">Quản Lí Đơn Hàng</li>
                 <li class="dropdown">
-                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                    <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
                         <span>Đơn Hàng</span></a>
                     <ul class="dropdown-menu">
 
-                        <li><a class="nav-link" href="{{route('admin.order.index')}}"><span>Danh Sách Đơn Hàng</span></a></li>
+                        <li><a class="nav-link" href="{{route('admin.order.getList')}}"><span>Danh Sách Đơn Hàng</span></a></li>
                        
                     </ul>
                 </li>
@@ -354,6 +331,29 @@
                 </li>
             @endcan
 
+            @can('Acount')
+            <li class="menu-header">Quản Lí tài khoản</li>
+
+            <li class="dropdown">
+
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                    <span>Account</span></a>
+                <ul class="dropdown-menu">
+
+                    <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Tài khoản
+                                Admin</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.history') }}">
+                            <span>Lịch sử Admin</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.accountsUser.accountUser') }}"><span>Tài khoản User</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Phân quyền và vai
+                                trò</span></a></li>
+                    
+                </ul>
+            </li>
+            @endcan
+
+
+         
 
 
     </aside>
