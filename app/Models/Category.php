@@ -22,7 +22,7 @@ class Category extends Model
     public function products()
 {
     return $this->belongsToMany(Product::class, 'category_product');
-    
+
 }
 
     public function sliders()
@@ -33,6 +33,11 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
+    public function allChildren()
+{
+    return $this->children()->with('allChildren');
+}
+
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id');
@@ -41,8 +46,8 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
-  
-    
 
-   
+
+
+
 }

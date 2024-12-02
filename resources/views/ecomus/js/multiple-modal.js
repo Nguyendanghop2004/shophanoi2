@@ -68,3 +68,5 @@
         $(document).multiModal('hidden', e.target);
     });
 }(jQuery, window));
+
+

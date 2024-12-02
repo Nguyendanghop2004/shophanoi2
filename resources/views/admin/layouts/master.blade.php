@@ -47,6 +47,11 @@
             @include('admin.layouts.sidebar')
             <!-- Main Content -->
             <div class="main-content">
+                <style>
+                    body {
+                        font-family: 'Times New Roman', serif;
+                    }
+                </style>
                 @yield('content')
             </div>
             <footer class="main-footer">

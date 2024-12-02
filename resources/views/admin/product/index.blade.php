@@ -132,7 +132,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </div> 
             <div class="card-body mx-auto">
                 <div class="buttons">
                     <nav aria-label="Page navigation example">

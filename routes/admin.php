@@ -58,7 +58,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     // end crud user 
 
     // adress
-    Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address']);
 
     // end crud user
 
@@ -117,11 +116,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
 
     // Quản lý sản phẩm
 // quản lí đơn hàng
-Route::get('order', [OrderController::class, 'index'])->name('order.index');
-Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
-Route::get('/orders/{id}/update-status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
-Route::get('/orders/cancel/{id}', [OrderController::class, 'cancel'])->name('orders.cancel');
-Route::get('/orders/{order}/print', [OrderController::class, 'printOrder'])->name('orders.print');
+
 //end quản lí đơn hàng
     Route::resource('product', ProductController::class);
 //quản lí coupons
@@ -212,4 +207,11 @@ Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('di
     Route::post('blog/{id}/accountBlog', [BlogController::class, 'activateBlog'])->name('accountsUser.activateBlog');
     Route::post('blog/{id}/deactivateBlog', [BlogController::class, 'deactivateBlog'])->name('accountsUser.deactivateBlog');
     //end blog
+    // ORDERS
+    Route::get('order/getList',[OrderController::class,'getList'])->name('order.getList');
+    Route::get('order/{id}', [OrderController::class, 'chitiet'])->name('order.chitiet');
+    Route::post('order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.update-status');
+    Route::get('order/index', [OrderController::class, 'index'])->name('order.index');
+    Route::get('order/in-hoadon/{id}', [OrderController::class, 'inhoadon'])->name('order.inHoaDon');
+
 });
