@@ -126,99 +126,106 @@
             <div class="tf-row-flex">
                 <div class="tf-shop-sidebar wrap-sidebar-mobile">
                     <div class="widget-facet wd-categories">
-                        <div class="facet-title" data-bs-target="#categories" data-bs-toggle="collapse" aria-expanded="true"
-                            aria-controls="categories">
+                        <div class="facet-title d-flex justify-content-between align-items-center" 
+                             data-bs-target="#categories" 
+                             data-bs-toggle="collapse" 
+                             aria-expanded="true" 
+                             aria-controls="categories">
                             <span>Product categories</span>
-                            <span class="icon icon-arrow-up"></span>
+                            <span class="icon">
+                                <i class="fas fa-chevron-up"></i>
+                            </span>
                         </div>
                         <div id="categories" class="collapse show">
-                            <ul class="list-categoris current-scrollbar mb_36">
-                                <li class="cate-item current"><a href="#"><span>Fashion</span></a></li>
-                                <li class="cate-item"><a href="#"><span>Men</span></a></li>
-                                <li class="cate-item"><a href="#"><span>Women</span></a></li>
-                                <li class="cate-item"><a href="#"><span>Denim</span></a></li>
-                                <li class="cate-item"><a href="#"><span>Dress</span></a></li>
+                            <ul class="list-categories current-scrollbar mb_36">
+                                @foreach ($categories as $category)
+                                    <li class="cate-item {{ request('category') == $category->id ? 'current' : '' }}">
+                                        <a href="{{ route('shop-collection.index', ['category' => $category->id]) }}">
+                                            <span>{{ $category->name }}</span>
+                                        </a>
+                                    </li>
+                                    @if ($category->children->isNotEmpty())
+                                        <ul class="sub-categories">
+                                            @foreach ($category->children as $child)
+                                                <li class="cate-item {{ request('category') == $child->id ? 'current' : '' }}">
+                                                    <a href="{{ route('shop-collection.index', ['category' => $child->id]) }}">
+                                                        <span>{{ $child->name }}</span>
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                @endforeach
                             </ul>
                         </div>
-                    </div>
+                    </div>                    
                     <form action="#" id="facet-filter-form" class="facet-filter-form">
-                        <div class="widget-facet">
+                        {{-- <div class="widget-facet">
                             <div class="facet-title" data-bs-target="#availability" data-bs-toggle="collapse"
                                 aria-expanded="true" aria-controls="availability">
                                 <span>Availability</span>
                                 <span class="icon icon-arrow-up"></span>
                             </div>
                             <div id="availability" class="collapse show">
-                                <ul class="tf-filter-group current-scrollbar mb_36">
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="radio" name="availability" class="tf-check" id="availability-1">
-                                        <label for="availability-1" class="label"><span>In
-                                                stock</span>&nbsp;<span>(14)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="radio" name="availability" class="tf-check" id="availability-2">
-                                        <label for="availability-2" class="label"><span>Out of
-                                                stock</span>&nbsp;<span>(2)</span></label>
-                                    </li>
-                                </ul>
+                                <form id="availability-filter" method="GET" action="{{ route('shop-collection.index') }}">
+                                    <ul class="tf-filter-group current-scrollbar mb_36">
+                                        <li class="list-item d-flex gap-12 align-items-center">
+                                            <input type="radio" name="availability" class="tf-check" id="availability-1" value="in-stock"
+                                                {{ request('availability') === 'in-stock' ? 'checked' : '' }}>
+                                            <label for="availability-1" class="label">
+                                                <span>In stock</span>&nbsp;<span>({{ $inStockCount }})</span>
+                                            </label>
+                                        </li>
+                                        <li class="list-item d-flex gap-12 align-items-center">
+                                            <input type="radio" name="availability" class="tf-check" id="availability-2" value="out-of-stock"
+                                                {{ request('availability') === 'out-of-stock' ? 'checked' : '' }}>
+                                            <label for="availability-2" class="label">
+                                                <span>Out of stock</span>&nbsp;<span>({{ $outOfStockCount }})</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </form>
                             </div>
-                        </div>
-                        <div class="widget-facet wrap-price">
-                            <div class="facet-title" data-bs-target="#price" data-bs-toggle="collapse" aria-expanded="true"
-                                aria-controls="price">
+                        </div> --}}
+                                                
+                        <div id="filter-price" class="widget-facet wrap-price">
+                            <div class="facet-title">
                                 <span>Price</span>
-                                <span class="icon icon-arrow-up"></span>
                             </div>
-                            <div id="price" class="collapse show">
-                                <div class="widget-price filter-price">
-                                    <div class="tow-bar-block">
-                                        <div class="progress-price"></div>
-                                    </div>
-                                    <div class="range-input">
-                                        <input class="range-min" type="range" min="0" max="300"
-                                            value="0" />
-                                        <input class="range-max" type="range" min="0" max="300"
-                                            value="300" />
-                                    </div>
-                                    <div class="box-title-price">
-                                        <span class="title-price">Price :</span>
-                                        <div class="caption-price">
-                                            <div>
-                                                <span>$</span>
-                                                <span class="min-price">0</span>
-                                            </div>
-                                            <span>-</span>
-                                            <div>
-                                                <span>$</span>
-                                                <span class="max-price">300</span>
-                                            </div>
-                                        </div>
+                            <div class="filter-price">
+                                <div class="range-input">
+                                    <input id="price-min" class="range-min" type="range" min="0" max="5000" value="0" />
+                                    <input id="price-max" class="range-max" type="range" min="0" max="5000" value="5000" />
+                                </div>
+                                <div class="box-title-price">
+                                    <span>Price:</span>
+                                    <div>
+                                        $<span id="display-min">0</span> - $<span id="display-max">5000</span>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
+                        
                         <div class="widget-facet">
-                            <div class="facet-title" data-bs-target="#brand" data-bs-toggle="collapse"
-                                aria-expanded="true" aria-controls="brand">
+                            <div class="facet-title" data-bs-target="#brand" data-bs-toggle="collapse" aria-expanded="true" aria-controls="brand">
                                 <span>Brand</span>
                                 <span class="icon icon-arrow-up"></span>
                             </div>
                             <div id="brand" class="collapse show">
                                 <ul class="tf-filter-group current-scrollbar mb_36">
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="radio" name="brand" class="tf-check" id="brand-1">
-                                        <label for="brand-1"
-                                            class="label"><span>Ecomus</span>&nbsp;<span>(8)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="radio" name="brand" class="tf-check" id="brand-2">
-                                        <label for="brand-2"
-                                            class="label"><span>M&H</span>&nbsp;<span>(8)</span></label>
-                                    </li>
+                                    @foreach ($brands as $brand)
+                                        <li class="list-item d-flex gap-12 align-items-center">
+                                            <input type="radio" name="brand" class="tf-check" id="brand-{{ $brand->id }}" data-brand-id="{{ $brand->id }}">
+                                            <label for="brand-{{ $brand->id }}" class="label">
+                                                <span>{{ $brand->name }}</span>&nbsp;<span>({{ $brand->products_count }})</span>
+                                            </label>
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
+                                                
+
                         <div class="widget-facet">
                             <div class="facet-title" data-bs-target="#color" data-bs-toggle="collapse"
                                 aria-expanded="true" aria-controls="color">
@@ -392,65 +399,6 @@
                 <div class="tf-shop-content wrapper-control-shop">
                     <div class="meta-filter-shop"></div>
                     <div class="grid-layout wrapper-shop" data-grid="grid-3">
-
-                        {{-- <!-- card product 5 -->
-                        <div class="card-product" data-price="114.95" data-size="s m l xl" data-color="brown white">
-                            <div class="card-product-wrapper">
-                                <a href="product-detail.html" class="product-img">
-                                    <img class="lazyload img-product" data-src="images/products/brown-2.jpg"
-                                        src="images/products/brown-2.jpg" alt="image-product">
-                                    <img class="lazyload img-hover" data-src="images/products/brown-3.jpg"
-                                        src="images/products/brown-3.jpg" alt="image-product">
-                                </a>
-                                <div class="size-list">
-                                    <span>S</span>
-                                    <span>M</span>
-                                    <span>L</span>
-                                    <span>XL</span>
-                                </div>
-                                <div class="list-product-btn">
-                                    <a href="#quick_add" data-bs-toggle="modal"
-                                        class="box-icon bg_white quick-add tf-btn-loading">
-                                        <span class="icon icon-bag"></span>
-                                        <span class="tooltip">Quick Add</span>
-                                    </a>
-                                    <a href="javascript:void(0);" class="box-icon bg_white wishlist btn-icon-action">
-                                        <span class="icon icon-heart"></span>
-                                        <span class="tooltip">Add to Wishlist</span>
-                                        <span class="icon icon-delete"></span>
-                                    </a>
-                                    <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                        class="box-icon bg_white compare btn-icon-action">
-                                        <span class="icon icon-compare"></span>
-                                        <span class="tooltip">Add to Compare</span>
-                                        <span class="icon icon-check"></span>
-                                    </a>
-                                    <a href="#quick_view" data-bs-toggle="modal"
-                                        class="box-icon bg_white quickview tf-btn-loading">
-                                        <span class="icon icon-view"></span>
-                                        <span class="tooltip">Quick View</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="card-product-info">
-                                <a href="product-detail.html" class="title link">V-neck linen T-shirt</a>
-                                <span class="price">$114.95</span>
-                                <ul class="list-color-product">
-                                    <li class="list-color-item color-swatch active">
-                                        <span class="tooltip">Brown</span>
-                                        <span class="swatch-value bg_brown"></span>
-                                        <img class="lazyload" data-src="images/products/brown-2.jpg"
-                                            src="images/products/brown-2.jpg" alt="image-product">
-                                    </li>
-                                    <li class="list-color-item color-swatch">
-                                        <span class="tooltip">White</span>
-                                        <span class="swatch-value bg_white"></span>
-                                        <img class="lazyload" data-src="images/products/white-5.jpg"
-                                            src="images/products/white-5.jpg" alt="image-product">
-                                    </li>
-                                </ul>
-                            </div>
-                        </div> --}}
                         @foreach ($products as $product)
                             <div class="card-product">
                                 <div class="card-product-wrapper">
@@ -555,4 +503,205 @@
             </button>
         </a>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const elements = {
+                rangeMin: document.getElementById('price-min'),
+                rangeMax: document.getElementById('price-max'),
+                displayMin: document.getElementById('display-min'),
+                displayMax: document.getElementById('display-max'),
+                productList: document.getElementById('product-list'), // Để xử lý AJAX
+            };
+    
+            // Cập nhật giá trị hiển thị
+            const updatePrices = () => {
+                elements.displayMin.textContent = elements.rangeMin.value;
+                elements.displayMax.textContent = elements.rangeMax.value;
+            };
+    
+            // Gửi yêu cầu AJAX
+            const filterProducts = debounce(() => {
+                const url = new URL(window.location.href);
+                url.searchParams.set('price_min', elements.rangeMin.value);
+                url.searchParams.set('price_max', elements.rangeMax.value);
+    
+                fetch(url.toString(), {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                })
+                    .then((response) => response.text())
+                    .then((html) => {
+                        if (elements.productList) {
+                            elements.productList.innerHTML = html;
+                        }
+                    })
+                    .catch((error) => console.error('Error:', error));
+            }, 300);
+    
+            // Xử lý sự kiện thanh trượt
+            const handleRangeInput = (isMin) => {
+                const minValue = parseInt(elements.rangeMin.value);
+                const maxValue = parseInt(elements.rangeMax.value);
+    
+                if (isMin && minValue > maxValue) {
+                    elements.rangeMin.value = maxValue;
+                } else if (!isMin && maxValue < minValue) {
+                    elements.rangeMax.value = minValue;
+                }
+    
+                updatePrices();
+                if (elements.productList) {
+                    filterProducts();
+                } else {
+                    // Nếu không có AJAX, sử dụng reload trang
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('price_min', elements.rangeMin.value);
+                    url.searchParams.set('price_max', elements.rangeMax.value);
+                    window.location.href = url.toString();
+                }
+            };
+    
+            // Gắn sự kiện
+            elements.rangeMin.addEventListener('input', () => handleRangeInput(true));
+            elements.rangeMax.addEventListener('input', () => handleRangeInput(false));
+    
+            // Khởi tạo giá trị ban đầu
+            updatePrices();
+        });
+    
+        // Hàm debounce để giới hạn số lần gọi AJAX
+        function debounce(func, wait) {
+            let timeout;
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func(...args), wait);
+            };
+        }
+
+////
+
+        document.addEventListener('DOMContentLoaded', function () {
+    const elements = {
+        productList: document.getElementById('product-list'),
+    };
+
+    // Gửi yêu cầu AJAX để lọc sản phẩm theo thương hiệu
+    const filterProducts = debounce(() => {
+        const url = new URL(window.location.href);
+        
+        // Lọc theo thương hiệu
+        const brand = document.querySelector('input[name="brand"]:checked');
+        if (brand) {
+            url.searchParams.set('brand', brand.dataset.brandId);
+        }
+
+        fetch(url.toString(), {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+            .then((response) => response.text())
+            .then((html) => {
+                if (elements.productList) {
+                    elements.productList.innerHTML = html; // Cập nhật danh sách sản phẩm
+                }
+            })
+            .catch((error) => console.error('Error:', error));
+    }, 300);
+
+    // Gắn sự kiện cho các thương hiệu
+    document.querySelectorAll('input[name="brand"]').forEach(input => {
+        input.addEventListener('change', () => {
+            filterProducts(); // Gọi lại khi người dùng thay đổi thương hiệu
+        });
+    });
+});
+
+// Hàm debounce để giới hạn số lần gọi AJAX
+function debounce(func, wait) {
+    let timeout;
+    return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
+}
+
+
+
+    </script>
+    
+    
+    
+    
+    <style>
+        .widget-facet {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.widget-facet .facet-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.widget-facet .facet-title .icon i {
+    transition: transform 0.3s ease;
+}
+
+.widget-facet .facet-title[aria-expanded="true"] .icon i {
+    transform: rotate(180deg);
+}
+
+.list-categories {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.cate-item {
+    margin: 5px 0;
+    padding-left: 10px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.cate-item.current > a {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.cate-item a {
+    text-decoration: none;
+    color: #333;
+}
+
+.cate-item:hover > a {
+    color: #0056b3;
+}
+
+.sub-categories {
+    margin-left: 20px;
+    border-left: 2px solid #ddd;
+    padding-left: 10px;
+}
+
+.sub-categories .cate-item {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.sub-categories .cate-item:hover > a {
+    color: #007bff;
+}
+
+    </style>
 @endsection
