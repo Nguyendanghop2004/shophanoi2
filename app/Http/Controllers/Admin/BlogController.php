@@ -102,12 +102,5 @@ class BlogController extends Controller
 
         return redirect()->back()->with('success', 'Bài viết đã bị vô hiệu hóa.');
     }
-    public function hop($id)
-    {
-        $user = BlogClient::findOrFail($id);
-        $user->status = false;
-        $user->save();
-
-        return redirect()->back()->with('success', 'Bài viết đã bị vô hiệu hóa.');
-    }
+  
 }
