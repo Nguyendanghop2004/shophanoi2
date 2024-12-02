@@ -8,7 +8,7 @@ class Wishlist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['product_id', 'session_id'];
+    protected $fillable = ['product_id', 'user_id'];
 
     public function product()
     {

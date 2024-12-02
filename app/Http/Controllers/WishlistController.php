@@ -1,82 +1,129 @@
 <?php
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Wishlist;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class WishlistController extends Controller
 {
-    // Hiển thị wishlist của người dùng
-    // public function index()
+    // Hiển thị danh sách sản phẩm trong wishlist
+    // public function index(Request $request)
     // {
-    //     $wishlists = Wishlist::where('user_id', Auth::id())->with('product')->get();
-    //     return view('wishlist.index', compact('wishlists'));
-    // }
-
-    // // Thêm sản phẩm vào wishlist
-    // public function add($productId)
-    // {
-    //     $product = Product::findOrFail($productId);
+    //     // Dùng session ID làm user_id nếu người dùng không đăng nhập
         
-    //     // Kiểm tra nếu sản phẩm đã có trong wishlist
-    //     $exists = Wishlist::where('user_id', Auth::id())->where('product_id', $productId)->exists();
-    //     if ($exists) {
-    //         return redirect()->route('wishlist.index')->with('message', 'Product already in wishlist');
-    //     }
+    //     // $userId = auth()->check() ? auth()->id() : $request->session()->getId();
 
-    //     // Thêm sản phẩm vào wishlist
-    //     Wishlist::create([
-    //         'user_id' => Auth::id(),
-    //         'product_id' => $productId,
-    //     ]);
+    //     $wishlistItems = Wishlist::where('user_id')
+    //         ->with('product')
+    //         ->get();
+    //         dd($wishlistItems); //
+    //     return view('wishlist', compact('wishlistItems'));
+//     // }
+//     public function index(Request $request)
+//     {
+       
+//         // Sử dụng session ID hoặc user ID nếu người dùng đăng nhập
+//         $userId = auth()->check() ? auth()->id() : $request->session()->getId();
+    
+//         // Truy vấn danh sách wishlist theo user ID
+//         $wishlistItems = Wishlist::where('user_id', $userId)
+//             ->with('product') // Eager load sản phẩm
+//             ->get();
+//     // dd($wishlistItems);
+//         // Trả về view cùng với dữ liệu wishlist
+//         return view('wishlist', compact('wishlistItems'));
+//     }
+//     // Thêm sản phẩm vào wishlist
+//     public function add(Request $request, $productId)
+//     {
+//         // if (!auth()->check()) {
+//         //     // Lưu URL hiện tại để chuyển hướng lại sau khi đăng nhập
+//         //     $request->session()->put('url.intended', url()->previous());
+//         // $userId = auth()->check() ? auth()->id() : $request->session()->getId();
 
-    //     return redirect()->route('wishlist.index')->with('message', 'Product added to wishlist');
-    // }
+//         // // Kiểm tra nếu sản phẩm đã tồn tại trong wishlist
+//         // if (!Wishlist::where('product_id', $productId)->where('user_id', $userId)->exists()) {
+//         //     Wishlist::create([
+//         //         'product_id' => $productId,
+//         //         'user_id' => $userId,
+//         //     ]);
+//         // }
 
-    // // Xóa sản phẩm khỏi wishlist
-    // public function remove($productId)
-    // {
-    //     $wishlist = Wishlist::where('user_id', Auth::id())->where('product_id', $productId)->first();
+//         // return redirect()->back()->with('success', 'Product added to wishlist.');
+//         if (!auth()->check()) {
+//             // Lưu URL hiện tại để chuyển hướng lại sau khi đăng nhập
+//             $request->session()->put('url.intended', url()->previous());
 
-    //     if ($wishlist) {
-    //         $wishlist->delete();
-    //         return redirect()->route('wishlist.index')->with('message', 'Product removed from wishlist');
-    //     }
+//             // Chuyển hướng đến trang đăng nhập
+//             return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để thêm sản phẩm vào wishlist.');
+//         }
 
-    //     return redirect()->route('wishlist.index')->with('message', 'Product not found in wishlist');
-    // }
-    public function index(Request $request)
-    {
-        $session_id = $request->session()->getId();
-        $wishlistItems = Wishlist::where('session_id', $session_id)->with('product')->get();
-        return view('client.wishlist', compact('wishlistItems'));
+//         // Lấy ID người dùng đã đăng nhập
+//         $userId = auth()->id();
+
+//         // Kiểm tra nếu sản phẩm đã tồn tại trong wishlist
+//         if (!Wishlist::where('product_id', $productId)->where('user_id', $userId)->exists()) {
+//             Wishlist::create([
+//                 'product_id' => $productId,
+//                 'user_id' => $userId,
+//             ]);
+//         }
+
+//         // Chuyển hướng lại với thông báo thành công
+//         return redirect()->back()->with('success', 'Sản phẩm đã được thêm vào wishlist.');
+//     }
+//     }
+
+
+    
+
+//     // Xóa sản phẩm khỏi wishlist
+//     // public function remove(Request $request, $id)
+//     // {
+//     //     $userId = auth()->check() ? auth()->id() : $request->session()->getId();
+
+//     //     Wishlist::where('id', $id)->where('user_id', $userId)->delete();
+
+//     //     return response()->json(['message' => 'Product removed from wishlist'], 200);
+//     // }
+//     public function remove(Request $request, $id)
+// {
+//     $userId = auth()->check() ? auth()->id() : $request->session()->getId();
+
+//     Wishlist::where('id', $id)->where('user_id', $userId)->delete();
+
+//     return redirect()->back()->with('success', 'Product removed from wishlist.');
+// }
+// }
+public function index(Request $request)
+{
+    $userId = auth()->check() ? auth()->id() : $request->session()->getId();
+    $wishlistItems = Wishlist::where('user_id', $userId)->with('product')->get();
+
+    return view('wishlist', compact('wishlistItems'));
+}
+
+public function add(Request $request, $productId)
+{
+    if (!auth()->check()) {
+        $request->session()->put('url.intended', url()->previous());
+        return redirect()->route('account')->with('error', 'Bạn cần đăng nhập để thêm sản phẩm vào wishlist.');
     }
 
-    public function add(Request $request, $id)
-    {
-        $session_id = $request->session()->getId();
-
-        // Kiểm tra xem sản phẩm đã có trong wishlist chưa
-        $exists = Wishlist::where('session_id', $session_id)->where('product_id', $id)->exists();
-
-        if (!$exists) {
-            Wishlist::create([
-                'product_id' => $id,
-                'session_id' => $session_id
-            ]);
-        }
-
-        return redirect()->back()->with('success', 'Đã thêm sản phẩm vào danh sách yêu thích');
+    $userId = auth()->id();
+    if (!Wishlist::where('product_id', $productId)->where('user_id', $userId)->exists()) {
+        Wishlist::create(['product_id' => $productId, 'user_id' => $userId]);
     }
 
-    public function remove(Request $request, $id)
-    {
-        $session_id = $request->session()->getId();
+    return redirect()->back()->with('success', 'Sản phẩm đã được thêm vào wishlist.');
+}
 
-        Wishlist::where('session_id', $session_id)->where('product_id', $id)->delete();
+public function remove(Request $request, $id)
+{
+    $userId = auth()->check() ? auth()->id() : $request->session()->getId();
+    Wishlist::where('id', $id)->where('user_id', $userId)->delete();
 
-        return redirect()->back()->with('success', 'Đã xóa sản phẩm khỏi danh sách yêu thích');
-    }
+    return redirect()->back()->with('success', 'Sản phẩm đã được xóa khỏi wishlist.');
+}
 }

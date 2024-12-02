@@ -3,7 +3,6 @@
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\ContactMessageController;
-use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\ShipperController;
 use App\Http\Controllers\Client\AboutUsController;
 use App\Http\Controllers\Client\AccountController;
@@ -17,6 +16,10 @@ use App\Http\Controllers\Client\ProductDetailController;
 use App\Http\Controllers\Client\ShopCollectionController;
 use App\Http\Controllers\Client\ShoppingCartController;
 use App\Http\Controllers\Client\TimeLineController;
+
+use App\Http\Controllers\WishlistController;
+
+
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,13 +37,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('home/{category_id?}', [HomeController::class, 'home'])->name('home');
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
-Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 Route::post('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
-
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 
 
-Route::get('{category_id?}', [HomeController::class, 'home'])->name('home');
+
+
+
+// Route::get('{category_id?}', [HomeController::class, 'home'])->name('home');
 
 
 
@@ -67,4 +72,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+    //ưl
+
 });
+
+// routes/web.php
+

@@ -4,8 +4,6 @@
 @endsection
 
 @section('content')
-
-
     <!-- categories -->
     <section class="flat-spacing-20">
         <div class="container">
@@ -160,7 +158,7 @@
                 <div class="swiper tf-sw-collection" data-preview="4" data-tablet="2" data-mobile="2"
                     data-space-lg="30" data-space-md="30" data-space="15" data-loop="false" data-auto-play="false">
                     <div class="swiper-wrapper">
-                    @foreach($categories as $category)
+                    @foreach ($categories as $category)
                         <div class="swiper-slide" lazy="true">
                      
                             <div class="collection-item style-2 hover-img" >
@@ -246,10 +244,40 @@
     <!-- /Banner Collection --> --}}
 
     <!-- Best seller -->
+    {{-- @if(session('success'))
+    <div style="padding: 10px; margin-bottom: 15px; border: 1px solid #c3e6cb; background-color: #d4edda; color: #155724; border-radius: 5px; width:1000px;">
+        <strong>Thành công!</strong> {{ session('success') }}
+        <button style="float: left; background: none; border: none; color: #155724; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
+    </div>
+@endif
+
+@if(session('error'))
+    <div style="padding: 10px; margin-bottom: 15px; border: 1px solid #f5c6cb; background-color: #f8d7da; color: #721c24; border-radius: 5px;">
+        <strong>Lỗi!</strong> {{ session('error') }}
+        <button style="float: right; background: none; border: none; color: #721c24; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
+    </div>
+@endif --}}
+@if(session('success'))
+    <div style="position: relative; padding: 15px; margin: 15px 0; background: linear-gradient(to right, #a8e063, #56ab2f); color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <strong style="font-size: 16px;">🎉 Thành công!</strong>
+        <p style="margin: 5px 0; font-size: 14px;">{{ session('success') }}</p>
+        <button style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
+    </div>
+@endif
+
+@if(session('error'))
+    <div style="position: relative; padding: 15px; margin: 15px 0; background: linear-gradient(to right, #e53935, #d32f2f); color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <strong style="font-size: 16px;">⚠️ Lỗi!</strong>
+        <p style="margin: 5px 0; font-size: 14px;">{{ session('error') }}</p>
+        <button style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
+    </div>
+@endif
+
     <section class="flat-spacing-15 pb_0">
         <div class="container">
             <div class="flat-title wow fadeInUp" data-wow-delay="0s">
                 <span class="title">Ecomus’s Favorites</span>
+
                 <p class="sub-title">Beautifully Functional. Purposefully Designed. Consciously Crafted.</p>
             </div>
             <div class="hover-sw-nav hover-sw-3">
@@ -257,6 +285,18 @@
                     data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3"
                     data-pagination-lg="3">
                     <div class="swiper-wrapper">
+                        {{-- @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif --}}
+  
                         @foreach ($products as $product)
                         <div class="swiper-slide" lazy="true">
                             <div class="card-product">
@@ -266,7 +306,7 @@
                                         <img class="lazyload img-product"
                                             data-src="{{ asset('storage/' . $product->main_image_url) }}"
                                             src="{{ asset('storage/' . $product->main_image_url) }}"
-                                            alt="{{ $product->product_name }}">
+                                            alt="{{ $product->product_name }}" width="100px" height="100px">
 
                                             <!-- Ảnh hover, có thể lấy ảnh khác từ bảng images nếu có nhiều ảnh -->
                                             @php
@@ -286,12 +326,129 @@
                                                 <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick Add</span>
                                             </a>
-                                            <a href="javascript:void(0);"
-                                                class="box-icon bg_white wishlist btn-icon-action">
-                                                <span class="icon icon-heart"></span>
-                                                <span class="tooltip">Add to Wishlist</span>
-                                                <span class="icon icon-delete"></span>
+                                            
+                                          
+                                                <form action="{{ route('wishlist.add', $product->id) }}" method="POST" style="display: inline;">
+                                                    @csrf
+                                                    <button type="submit" class="box-icon bg_white wishlist btn-icon-action">
+                                                        <span class="icon icon-heart"></span>
+                                                        <span class="tooltip">Add to Wishlist</span>
+                                                    </button>
+                                                </form>
+                                                
+                                           
+                                            <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
+                                                class="box-icon bg_white compare btn-icon-action">
+                                                <span class="icon icon-compare"></span>
+                                                <span class="tooltip">Add to Compare</span>
+                                                <span class="icon icon-check"></span>
                                             </a>
+                                            <a href="#quick_view" data-bs-toggle="modal"
+                                                class="box-icon bg_white quickview tf-btn-loading">
+                                                <span class="icon icon-view"></span>
+                                                <span class="tooltip">Quick View</span>
+                                            </a>
+                                        </div>
+
+                                        <div class="size-list">
+                                            <span>{{ $product->variants->count() }} sizes available</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-product-info">
+                                        <a href="" class="title link">{{ $product->product_name }}</a>
+                                        <span class="price">${{ number_format($product->price, 2) }}</span>
+
+                                        <!-- Hiển thị màu sắc -->
+                                        <ul class="list-color-product">
+                                            @foreach ($product->colors as $color)
+                                                <li
+                                                    class="list-color-item color-swatch {{ $loop->first ? 'active' : '' }}">
+                                                    <span class="tooltip">{{ $color->name }}</span>
+                                                    <span class="swatch-value"
+                                                        style="background-color: {{ $color->sku_color }}"></span>
+
+                                                    @php
+                                                        // Tìm ảnh của màu tương ứng
+                                                        $colorImage = $product->images->firstWhere(
+                                                            'color_id',
+                                                            $color->id,
+                                                        );
+                                                    @endphp             
+                                                    @if ($colorImage)
+                                                        <img class="lazyload"
+                                                            data-src="{{ asset('storage/' . $colorImage->image_url) }}"
+                                                            src="{{ asset('storage/' . $colorImage->image_url) }}"
+                                                            alt="{{ $color->name }}">
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                        {{-- @foreach ($products as $product)
+                            <div class="swiper-slide" lazy="true">
+                                <div class="card-product">
+                                    <div class="card-product-wrapper">
+                                        <a href="" class="product-img">
+                                            <!-- Ảnh chính của sản phẩm -->
+                                            <img class="lazyload img-product"
+                                                data-src="{{ asset('storage/' . $product->main_image_url) }}"
+                                                src="{{ asset('storage/' . $product->main_image_url) }}"
+                                                alt="{{ $product->product_name }}" width="100px" height="100px">
+
+                                            <!-- Ảnh hover, có thể lấy ảnh khác từ bảng images nếu có nhiều ảnh -->
+                                            @php
+                                                $hoverImage = $product->images->first(); // Giả sử bạn có quan hệ images trong model
+                                            @endphp
+                                            @if ($hoverImage)
+                                                <img class="lazyload img-hover"
+                                                    data-src="{{ asset('storage/' . $hoverImage->image_url) }}"
+                                                    src="{{ asset('storage/' . $hoverImage->image_url) }}"
+                                                    alt="{{ $product->product_name }}">
+                                            @endif
+                                        </a>
+                                        @php
+                                        // Lấy user_id hoặc session ID
+                                        $userId = auth()->check() ? auth()->id() : session()->getId();
+                                        
+                                        // Kiểm tra sản phẩm có trong wishlist
+                                        $inWishlist = \App\Models\Wishlist::where('product_id', $product->id)
+                                            ->where('user_id', $userId)
+                                            ->exists();
+                                    @endphp
+                                        <div class="list-product-btn">
+                                            <a href="#quick_add" data-bs-toggle="modal"
+                                                data-product-id="{{ $product->id }}"
+                                                class="box-icon bg_white quick-add tf-btn-loading">
+                                                <span class="icon icon-bag"></span>
+                                                <span class="tooltip">Quick Add</span>
+                                            </a>
+
+                                            <form action="{{ route('wishlist.add', $product->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" {{ $inWishlist ? 'disabled' : '' }}
+                                                    class="box-icon bg_white wishlist btn-icon-action">
+                                                    <span class="icon icon-heart"></span>
+                                                    <span class="tooltip">Add to Wishlist</span>
+                                                </button>
+                                            </form>
+                                            @if ($inWishlist)
+            <form action="{{ route('wishlist.remove', $product->id) }}" method="POST">
+                @csrf
+                                              
+                                                    @method('delete')
+                                                    <button type="submit"
+                                                        class="box-icon bg_white wishlist btn-icon-action">
+                                                        <span class="tooltip">Remove Wishlist</span>
+                                                        <span class="icon icon-delete"></span>
+                                                    </button>
+                                            @endif
+
+
+
                                             <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                                                 class="box-icon bg_white compare btn-icon-action">
                                                 <span class="icon icon-compare"></span>
@@ -344,6 +501,7 @@
                             </div>
                         @endforeach
 
+ --}}
 
 
                         {{-- <div class="swiper-slide" lazy="true">

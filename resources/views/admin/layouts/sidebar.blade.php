@@ -265,11 +265,13 @@
             <li><a class="nav-link" href="blank.html"><i class="fas fa-file-alt"></i> <span>Bài Viết</span></a></li>
 
 
+
             <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
-            {{-- <li><a class="nav-link" href="{{ route('contact.index') }}"><i class="fas fa-envelope"></i> <span>Liên
-                        Hệ</span></a></li> --}}
+            <li><a class="nav-link" href="{{ route('admin.contact.index') }}"><i class="fas fa-envelope"></i>
+                    <span>Liên
+                        Hệ</span></a></li>
             @can('shipper')
-                <li><a class="nav-link" href="{{ route('shippers.index') }}"><i class="fas fa-shipping-fast"></i>
+                <li><a class="nav-link" href="{{ route('admin.shippers.index') }}"><i class="fas fa-shipping-fast"></i>
                         <span>Nhân
                             viên giao hàng</span></a></li>
             @endcan
@@ -279,6 +281,7 @@
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
                         <span>Danh mục sản phẩm</span></a>
                     <ul class="dropdown-menu">
+
 
                         <li><a class="nav-link" href="{{ route('admin.categories.list') }}"><span>Danh Sách Danh
                                     Mục</span></a></li>
