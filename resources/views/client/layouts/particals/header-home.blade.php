@@ -81,7 +81,6 @@
                        </a>
                    </div>
 
-<<<<<<< HEAD
 
                    <div class="col-xl-5 col-md-4 col-3">
                     
@@ -104,10 +103,7 @@
                            <li class="nav-cart"><a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item"><i
                                        class="icon icon-bag"></i><span class="count-box">0</span></a></li>
                        </ul>
-=======
                    @include('client.layouts.particals.navright')
->>>>>>> 7f926c59d41326b58d373776f9d349e12732c333
-
 
                </div>
            </div>
