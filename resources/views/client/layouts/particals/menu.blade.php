@@ -22,23 +22,7 @@
                                 </ul>
                             </div>
                         </div>
-                        @foreach ($categories as $category)
-                            <div class="col-lg-2">
-                                <div class="mega-menu-item">
-                                    <div class="menu-heading text-center fs-4">{{ $category->name }}</div>
-                                    @if ($category->children->isNotEmpty())
-                                        <ul class="menu-list">
-                                            @foreach ($category->children as $child)
-                                                @include('client.layouts.particals.child-categories', [
-                                                    'child' => $child,
-                                                    'index' => 1,
-                                                ])
-                                            @endforeach
-                                        </ul>
-                                    @endif
-                                </div>
-                            </div>
-                        @endforeach
+                        
                         <div class="col-lg-4">
                             <div class="menu-heading">Best seller</div>
                             <div class="hover-sw-nav hover-sw-2">
@@ -236,7 +220,6 @@
                                                     </div>
                                                     <div class="size-list">
                                                         <span>S</span>
-                                                        <span>M</span>
                                                         <span>L</span>
                                                         <span>XL</span>
                                                     </div>
@@ -323,11 +306,7 @@
                 </div>
         </li>
         <li class="menu-item position-relative">
-<<<<<<< HEAD
             <a href="{{route('blog.show')}}" class="item-link">Bài Viết</a>
-=======
-            <a href="#" class="item-link">Bài Viết</a>
->>>>>>> 7f926c59d41326b58d373776f9d349e12732c333
         </li>
 
         <li class="menu-item position-relative">
