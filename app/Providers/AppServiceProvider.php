@@ -22,12 +22,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFour();
-       
-        View::composer(['admin.layouts.sidebar', 'client.layouts.particals.navleft'], function ($view) {
 
-            $parentCategories  = Category::whereNull('parent_id')->get();
-
-            $view->with('parentCategories', $parentCategories );
-        });
     }
 }
