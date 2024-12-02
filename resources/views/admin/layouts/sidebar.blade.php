@@ -262,10 +262,18 @@
             </li>
 
 
-            <li><a class="nav-link" href="blank.html"><i class="fas fa-file-alt"></i> <span>Bài Viết</span></a></li>
+            <li class="dropdown">
+                <a href="{{ route('admin.blog.index') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                        class="fas fa-folder"></i>
+                    <span>Bài Viết</span></a>
+                <ul class="dropdown-menu">
 
 
+                    <li><a class="nav-link" href="{{ route('admin.blog.show') }}"><span>Danh Sách Bài viết</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.blog.index') }}"><span>Thêm Mới Bài viết</span></a></li>
 
+                </ul>
+            </li>
             <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
             <li><a class="nav-link" href="{{ route('admin.contact.index') }}"><i class="fas fa-envelope"></i>
                     <span>Liên
@@ -294,11 +302,11 @@
             @can('order')
             <li class="menu-header">Quản Lí Đơn Hàng</li>
                 <li class="dropdown">
-                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                    <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
                         <span>Đơn Hàng</span></a>
                     <ul class="dropdown-menu">
 
-                        <li><a class="nav-link" href=""><span>Danh Sách Đơn Hàng</span></a></li>
+                        <li><a class="nav-link" href="{{route('admin.order.getList')}}"><span>Danh Sách Đơn Hàng</span></a></li>
                        
                     </ul>
                 </li>
@@ -341,7 +349,7 @@
                                 Admin</span></a></li>
                     <li><a class="nav-link" href="{{ route('admin.history') }}">
                             <span>Lịch sử Admin</span></a></li>
-                    <li><a class="nav-link" href=""><span>Tài khoản User</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.accountsUser.accountUser') }}"><span>Tài khoản User</span></a></li>
                     <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Phân quyền và vai
                                 trò</span></a></li>
                     

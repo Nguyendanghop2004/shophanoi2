@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cart_items', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->foreignId('cart_id')->constrained()->onDelete('cascade'); // Liên kết với cart
-            $table->foreignId('product_id')->constrained();
-            $table->foreignId('color_id')->constrained();
-            $table->foreignId('size_id')->constrained();
-            $table->integer('quantity');
-            $table->decimal('price', 8, 2);
-            $table->timestamps();
-        });
+        // Schema::create('cart_items', function (Blueprint $table) {
+        //     $table->bigIncrements('id');
+        //     $table->foreignId('cart_id')->constrained()->onDelete('cascade'); // Liên kết với cart
+        //     $table->foreignId('product_id')->constrained();
+        //     $table->foreignId('color_id')->constrained();
+        //     $table->foreignId('size_id')->constrained();
+        //     $table->integer('quantity');
+        //     $table->decimal('price', 8, 2);
+        //     $table->timestamps();
+        // });
     }
 
     /**

@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
-
+@section('header-home')
+    @include('client.layouts.particals.header-home')
+@endsection
 @section('content')
 <section class="flat-spacing-11">
     <div class="container">
@@ -16,6 +18,9 @@
                     <li><strong>Ngày thanh toán:</strong> {{ \Carbon\Carbon::createFromFormat('YmdHis', $data['vnp_PayDate'])->format('d/m/Y H:i:s') }}</li>
                     <li><strong>Mã giao dịch VNPay:</strong> {{ $data['vnp_TransactionNo'] }}</li>
                     <li><strong>Trạng thái giao dịch:</strong> {{ $data['vnp_TransactionStatus'] == '00' ? 'Thành công' : 'Thất bại' }}</li>
+                    <li><strong>Thành phố:</strong> {{ $data['city_id'] ?? 'Chưa có thông tin' }}</li>
+                    <li><strong>Quận/Huyện:</strong> {{ $data['province_name'] ?? 'Chưa có thông tin' }}</li>
+                    <li><strong>Xã/Phường:</strong> {{ $data['wards_name'] ?? 'Chưa có thông tin' }}</li>
                 </ul>
             </div>
         </div>

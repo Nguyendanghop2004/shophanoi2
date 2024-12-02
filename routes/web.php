@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\ShipperController;
 use App\Http\Controllers\Client\AboutUsController;
 use App\Http\Controllers\Client\AccountController;
+use App\Http\Controllers\Client\BlogController;
 use App\Http\Controllers\Client\BrandController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckOutController;
@@ -49,8 +50,7 @@ Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('sho
 //thanh toán
 Route::get('check-out', [CheckOutController::class, 'checkout'])->name('check-out');
 Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
-
-
+Route::get('/vnpay/return', [CheckoutController::class, 'vnPayReturn'])->name('vnpay.return');
 
 // routes/web.php
 
@@ -59,9 +59,13 @@ Route::get('payment-confirmation', [PaymentController::class, 'confirmation'])->
 Route::get('payment-failure', [PaymentController::class, 'failure'])->name('payment-failure');
 
 Route::get('/account/{section?}', [AccountController::class, 'acc'])->name('account');
+
 Route::post('/account/login', [AccountController::class, 'login'])->name('account.login');
+Route::get('/accountUser/login', [AccountController::class, 'loginIndex'])->name('accountUser.login');
+
 Route::get('/accountUser/logout', [AccountController::class, 'logout'])->name('accountUser.logout');
 Route::post('/accountUser/register', [AccountController::class, 'register'])->name('accountUser.register');
+Route::get('/accountUser/register', [AccountController::class, 'RegisterIndex'])->name('account.register');
 
 
 
@@ -75,6 +79,11 @@ Route::middleware('auth')->group(function () {
 
 });
 
+    //start blog
+    Route::get('/blog/show', [BlogController::class, 'show'])->name('blog.show');
+    Route::get('/blog/{id}/detail', [BlogController::class, 'detail'])->name('blog.detail');
+
+    //end blog
 
 // cart
 Route::get('/get-product-info', [HomeController::class, 'getProductInfo']);
@@ -89,12 +98,13 @@ Route::get('/debug-cart', function () {
 });
 Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
 
 
 
 
 Route::get('/thanhtoanthanhcong', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
-Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/select-address', [CheckoutController::class, 'select_address']);
 
 Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
 Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');

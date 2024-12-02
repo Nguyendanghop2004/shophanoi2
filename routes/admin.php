@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AccoutAdminController;
 use App\Http\Controllers\Admin\AccoutUserController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriesController;
 
@@ -16,6 +17,7 @@ use App\Http\Controllers\Admin\ContactMessageController;
 
 use App\Http\Controllers\Admin\HistoryController;
 
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -29,7 +31,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
 Route::post('admin/login', [LoginController::class, 'store'])->name('admin.post-login');
-Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus'])->group( function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus'])->group(function () {
     // Login admin
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
@@ -57,22 +59,23 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     // end crud user 
 
     // adress
-    Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address']);
 
     // end crud user
 
 
     //start status user
-    
     Route::post('accountsUser/{id}/accountUser', [AccoutUserController::class, 'activateUser'])->name('accountsUser.activateUser')->middleware('permission:activate_Account');
     Route::post('accountsUser/{id}/deactivateUser', [AccoutUserController::class, 'deactivateUser'])->name('accountsUser.deactivateUser')->middleware('permission:deactivate_Account');
     //end  status user
 
 
+
+    //start status change
+
     Route::get('accounts/profile/{id}', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('accounts/changePassword/{id}', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
     Route::post('accounts/change/{id}', [ProfileController::class, 'change'])->name('profile.change');
-//end  status  change
+    //end  status  change
 
     // Route::get('accounts/profile', [ProfileController::class, 'index'])->name('profile.index');
 
@@ -158,7 +161,7 @@ Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('di
     Route::get('tags/{tag}/edit', [TagController::class, 'edit'])->name('tags.edit');
     Route::put('tags/{tag}', [TagController::class, 'update'])->name('tags.update');
     Route::delete('/tags/{id}', [TagController::class, 'destroy'])->name('tags.destroy');
-    
+
     Route::get('sizes', [SizeController::class, 'index'])->name('sizes.index');
     Route::get('sizes/create', [SizeController::class, 'create'])->name('sizes.create');
     Route::post('sizes', [SizeController::class, 'store'])->name('sizes.store');
@@ -194,5 +197,22 @@ Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('di
     Route::get('history/show/{id}', [HistoryController::class, 'show'])->name('show');
     Route::delete('history/delete/{id}', [HistoryController::class, 'delete'])->name('delete');
 
+    //start blog
+    Route::get('blog/index', [BlogController::class, 'index'])->name('blog.index');
+    Route::post('blog/store', [BlogController::class, 'store'])->name('blog.store');
+    Route::get('blog/show', [BlogController::class, 'show'])->name('blog.show');
+    Route::get('blog/{id}/edit', [BlogController::class, 'edit'])->name('blog.edit');
+    Route::put('blog/{id}/update', [BlogController::class, 'update'])->name('blog.update');
+    Route::delete('blog/delete/{id}', [BlogController::class, 'destroy'])->name('blog.destroy');
+
+    Route::post('blog/{id}/accountBlog', [BlogController::class, 'activateBlog'])->name('accountsUser.activateBlog');
+    Route::post('blog/{id}/deactivateBlog', [BlogController::class, 'deactivateBlog'])->name('accountsUser.deactivateBlog');
+    //end blog
+    // ORDERS
+    Route::get('order/getList',[OrderController::class,'getList'])->name('order.getList');
+    Route::get('order/{id}', [OrderController::class, 'chitiet'])->name('order.chitiet');
+    Route::post('order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.update-status');
+    Route::get('order/index', [OrderController::class, 'index'])->name('order.index');
+    Route::get('order/in-hoadon/{id}', [OrderController::class, 'inhoadon'])->name('order.inHoaDon');
 
 });

@@ -5,12 +5,19 @@ namespace App\Http\Controllers\Client;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 
 class PaymentController extends Controller
 {
     public function confirmation()
     {
-        return view('client.payment-confirmation');
+        $categories = Category::with(relations: [
+            'children' => function ($query) {
+                $query->where('status', 1);
+            }
+        ])->where('status', 1)
+            ->whereNull('parent_id')->get();
+        return view('client.payment-confirmation',compact('categories'));
     }
     public function failure()
     {
