@@ -265,6 +265,13 @@ class CartController extends Controller
 
             // Cập nhật lại giỏ hàng vào session
             Session::put('cart', $cart);
+
+            // Trả về kết quả dưới dạng JSON
+            return response()->json([
+                'success' => true,
+                'message' => 'Product removed from cart',
+                'cart' => $cart
+            ]);
         }
 
     }

@@ -575,8 +575,6 @@
             });
         });
 
-
-
         function loadModalCart() {
             $.ajax({
                 url: '/cart/modal-cart', // Route API của phương thức getModalCart
@@ -638,7 +636,7 @@
                                                         </svg>
                                                     </span>
                                                     <!-- Trường nhập số lượng -->
-                                                    <input type="text" class="quantity-input" name="number"
+                                                    <input type="text" class="quantity-input quantity-input-cart" name="number"
                                                         value="${item.quantity}"
                                                         data-url="{{ route('cart.update') }}"
                                                         data-id="${item.product_id}"
@@ -675,9 +673,8 @@
                 const productId = $(this).data('id');
                 const colorId = $(this).data('color');
                 const sizeId = $(this).data('size');
-                loadModalCart();
                 removeFromCart(productId, colorId, sizeId); // Gọi hàm xóa
-                loadModalCart();
+
             });
 
         }
@@ -698,6 +695,8 @@
                     if (response.success) {
                         console.log("Response:", response); // Ghi log phản hồi từ server
                         alert(response.message);
+                        loadModalCart();
+
                         // Cập nhật lại giao diện nếu cần
                     } else {
                         console.error("Failed to remove product:", response);
@@ -741,7 +740,7 @@
             }
 
             // Gắn sự kiện click cho nút plus và minus
-            $(document).off('click', '.btn-quantity').on('click', '.btn-quantity', function(e) {
+            $(document).off('click', '.minus-btn-cart, .plus-btn-cart').on('click', '.minus-btn-cart, .plus-btn-cart', function(e) {
                 e.preventDefault();
 
                 let button = $(this);
@@ -767,7 +766,7 @@
             });
 
             // Gắn sự kiện change cho input
-            $(document).off('change', '.quantity-input').on('change', '.quantity-input', function() {
+            $(document).off('change', '.quantity-input-cart').on('change', '.quantity-input-cart', function() {
                 let inputField = $(this);
                 let productId = inputField.data('id');
                 let colorId = inputField.data('color');

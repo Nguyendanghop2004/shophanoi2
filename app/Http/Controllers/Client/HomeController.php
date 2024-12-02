@@ -106,20 +106,24 @@ class HomeController extends Controller
             return [$color->id => $randomImage];
         });
 
-        // Tạo danh sách size cho mỗi màu
+        // Tạo danh sách size và giá cho mỗi màu
         $colorSizes = [];
         foreach ($product->variants as $variant) {
             $colorId = $variant->color_id;
             $size = $variant->size;
+            $price = $variant->price;
 
             // Nếu chưa có màu này trong danh sách $colorSizes thì tạo mới
             if (!isset($colorSizes[$colorId])) {
                 $colorSizes[$colorId] = [];
             }
 
-            // Chỉ thêm size nếu chưa có
-            if (!in_array($size, $colorSizes[$colorId])) {
-                $colorSizes[$colorId][] = $size;
+            // Thêm size và giá nếu chưa có
+            if (!in_array($size, array_column($colorSizes[$colorId], 'size'))) {
+                $colorSizes[$colorId][] = [
+                    'size' => $size,
+                    'price' => $price,
+                ];
             }
         }
 

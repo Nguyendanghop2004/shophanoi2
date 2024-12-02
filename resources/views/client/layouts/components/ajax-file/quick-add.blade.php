@@ -15,8 +15,7 @@
             <!-- <div class="price-on-sale">$8.00</div>
             <div class="compare-at-price">$10.00</div>
             <div class="badges-on-sale"><span>20</span>% OFF</div> -->
-            <div class="price">${{ number_format($product->price, 2) }}</div>
-            <input type="hidden" name="price" value="{{ $product->price }}">
+            <div class="price ">${{ number_format($product->price, 2) }}</div>
         </div>
     </div>
 </div>
@@ -65,7 +64,8 @@
     <form class="">
         <a href="javascript:void(0);"
             class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Add
-                to cart -&nbsp;</span><span class="tf-qty-price">$18.00</span></a>
+                to cart -&nbsp;</span><span class="tf-qty-price"
+                data-price="{{ $product->price }}">${{ number_format($product->price, 2) }}</span></a>
         <div class="tf-product-btn-wishlist btn-icon-action">
             <i class="icon-heart"></i>
             <i class="icon-delete"></i>
@@ -100,6 +100,7 @@
             $('.btn-size').click(function() {
                 var sizeName = $(this).data('size-name');
                 $('#selected-size').text(sizeName);
+
             });
         });
 
@@ -125,21 +126,25 @@
         var sizeContainer = $('#size-options-container');
         sizeContainer.empty(); // Xóa các size cũ
 
-        sizes.forEach(function(size, index) { // Thêm tham số index
+        sizes.forEach(function(sizeInfo, index) { // Thêm tham số index
             if (index === 0) {
-                $('#selected-size').text(size.name);
+                $('#selected-size').text(sizeInfo.size.name);
             }
 
             var sizeElement = `
-                  <input type="radio" class="btn-size" name="size" id="values-${size.name}-${colorId}" data-size-name="${size.name}" data-size-id="${size.id}"
-                  ${index === 0 ? 'checked' : ''}>
-                  <label class="style-text" for="values-${size.name}-${colorId}" data-value="${size.name}">
-                  <p>${size.name}</p>
+                  <input type="radio" class="btn-size" name="size" id="values-${sizeInfo.size.name}-${colorId}" data-size-name="${sizeInfo.size.name}" data-size-id="${sizeInfo.size.id}"
+                  data-size-price="${sizeInfo.price}" ${index === 0 ? 'checked' : ''}>
+                  <label class="style-text" for="values-${sizeInfo.size.name}-${colorId}" data-value="${sizeInfo.size.name}">
+                  <p>${sizeInfo.size.name}</p>
                   </label>
                   `;
             sizeContainer.append(sizeElement); // Thêm các size vào container
         });
-
+        updateTotalPrice();
+           // Lắng nghe sự kiện thay đổi của các nút radio
+    $('input.btn-size').on('change', function() {
+        updateTotalPrice(); // Cập nhật giá trị khi lựa chọn thay đổi
+    });
     }
 </script>
 
@@ -191,6 +196,16 @@
 </script>
 
 <script>
+    function updateTotalPrice() {
+        // Tính tổng giá
+        let quantity = $('input[name="quantity_product"]').val();
+        let priceBonus = parseFloat($('input.btn-size:checked').data('size-price')) || 0;
+        let productPrice = parseFloat($('.tf-qty-price').data('price')); // Lấy giá sản phẩm từ data-price
+        console.log(quantity, priceBonus, productPrice)
+        const totalPrice = ((productPrice * 1 + priceBonus * 1) * quantity).toFixed(2); // Giữ 2 chữ số thập phân
+        $('.tf-qty-price').text(`$${totalPrice}`); // Cập nhật giá trị tổng tiền
+    }
+
     var btnQuantity = function() {
         $(".minus-btn").on("click", function(e) {
             e.preventDefault();
@@ -202,6 +217,7 @@
                 value = value - 1;
             }
             $input.val(value);
+            updateTotalPrice();
         });
 
         $(".plus-btn").on("click", function(e) {
@@ -214,6 +230,7 @@
                 value = value + 1;
             }
             $input.val(value);
+            updateTotalPrice();
         });
     };
     btnQuantity();
