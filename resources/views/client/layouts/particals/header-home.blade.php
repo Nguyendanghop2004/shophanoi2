@@ -81,7 +81,32 @@
                        </a>
                    </div>
 
+<<<<<<< HEAD
+
+                   <div class="col-xl-5 col-md-4 col-3">
+                    
+                       <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
+                           <li class="nav-search"><a href="#canvasSearch" data-bs-toggle="offcanvas"
+                                   aria-controls="offcanvasLeft" class="nav-icon-item"><i
+                                       class="icon icon-search"></i></a></li>
+                           @if (Auth::user())
+                            <a href="{{ route('accountUser.logout')}}">logout</a>
+                           @else
+                               <li class="">
+                                   <a href="{{route('accountUser.login')}}" class="nav-icon-item">
+                                       <i class="icon icon-account"></i>
+                                   </a>
+                               </li>
+                           @endif
+
+                           <li class="nav-wishlist"><a href="wishlist.html" class="nav-icon-item"><i
+                                       class="icon icon-heart"></i><span class="count-box">0</span></a></li>
+                           <li class="nav-cart"><a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item"><i
+                                       class="icon icon-bag"></i><span class="count-box">0</span></a></li>
+                       </ul>
+=======
                    @include('client.layouts.particals.navright')
+>>>>>>> 7f926c59d41326b58d373776f9d349e12732c333
 
 
                </div>

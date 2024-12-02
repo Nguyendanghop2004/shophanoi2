@@ -323,7 +323,11 @@
                 </div>
         </li>
         <li class="menu-item position-relative">
+<<<<<<< HEAD
+            <a href="{{route('blog.show')}}" class="item-link">Bài Viết</a>
+=======
             <a href="#" class="item-link">Bài Viết</a>
+>>>>>>> 7f926c59d41326b58d373776f9d349e12732c333
         </li>
 
         <li class="menu-item position-relative">

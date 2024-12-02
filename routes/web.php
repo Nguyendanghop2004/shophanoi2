@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\ShipperController;
 use App\Http\Controllers\Client\AboutUsController;
 use App\Http\Controllers\Client\AccountController;
+use App\Http\Controllers\Client\BlogController;
 use App\Http\Controllers\Client\BrandController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckOutController;
@@ -58,9 +59,13 @@ Route::get('payment-confirmation', [PaymentController::class, 'confirmation'])->
 Route::get('payment-failure', [PaymentController::class, 'failure'])->name('payment-failure');
 
 Route::get('/account/{section?}', [AccountController::class, 'acc'])->name('account');
+
 Route::post('/account/login', [AccountController::class, 'login'])->name('account.login');
+Route::get('/accountUser/login', [AccountController::class, 'loginIndex'])->name('accountUser.login');
+
 Route::get('/accountUser/logout', [AccountController::class, 'logout'])->name('accountUser.logout');
 Route::post('/accountUser/register', [AccountController::class, 'register'])->name('accountUser.register');
+Route::get('/accountUser/register', [AccountController::class, 'RegisterIndex'])->name('account.register');
 
 
 
@@ -71,6 +76,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+    //start blog
+    Route::get('/blog/show', [BlogController::class, 'show'])->name('blog.show');
+    Route::get('/blog/{id}/detail', [BlogController::class, 'detail'])->name('blog.detail');
+
+    //end blog
 
 // cart
 Route::get('/get-product-info', [HomeController::class, 'getProductInfo']);
