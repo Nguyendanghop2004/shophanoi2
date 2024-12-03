@@ -718,18 +718,19 @@
                                 <img class="lazyload img-product" data-src="images/products/orange-1.jpg" src="images/products/orange-1.jpg" alt="image-product" width="100px" height="100px">
                                 <img class="lazyload img-hover" data-src="images/products/white-1.jpg" src="images/products/white-1.jpg" alt="image-product">
                             </a>
+                            <div class="list-product-btn">
                             <form action="{{ route('wishlist.remove', $item->id) }}" method="POST" class="mt-2">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="list-product-btn type-wishlist">
+                                <button type="submit" class="box-icon bg_white quick-add tf-btn-loading">
                                     <span class="tooltip">Remove Wishlist</span>
                                     <span class="icon icon-delete"></span>
                                 </button>
                             </form>
 
                            
-                            <div class="list-product-btn">
-                             
+                         
+                            
                                 <a href="#quick_add" data-bs-toggle="modal" class="box-icon bg_white quick-add tf-btn-loading">
                                     <span class="icon icon-bag"></span>
                                     <span class="tooltip">Quick Add</span>
