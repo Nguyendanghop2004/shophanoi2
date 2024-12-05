@@ -6,10 +6,12 @@ use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\ShipperController;
 use App\Http\Controllers\Client\AboutUsController;
 use App\Http\Controllers\Client\AccountController;
+use App\Http\Controllers\Client\BlogController;
 use App\Http\Controllers\Client\BrandController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckOutController;
 use App\Http\Controllers\Client\FAQController;
+use App\Http\Controllers\client\OrderController;
 use App\Http\Controllers\Client\OutStoreController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProductDetailController;
@@ -59,9 +61,13 @@ Route::get('payment-confirmation', [PaymentController::class, 'confirmation'])->
 Route::get('payment-failure', [PaymentController::class, 'failure'])->name('payment-failure');
 
 Route::get('/account/{section?}', [AccountController::class, 'acc'])->name('account');
+
 Route::post('/account/login', [AccountController::class, 'login'])->name('account.login');
+Route::get('/accountUser/login', [AccountController::class, 'loginIndex'])->name('accountUser.login');
+
 Route::get('/accountUser/logout', [AccountController::class, 'logout'])->name('accountUser.logout');
 Route::post('/accountUser/register', [AccountController::class, 'register'])->name('accountUser.register');
+Route::get('/accountUser/register', [AccountController::class, 'RegisterIndex'])->name('account.register');
 
 
 
@@ -70,8 +76,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
 
+    //start blog
+    Route::get('/blog/show', [BlogController::class, 'show'])->name('blog.show');
+    Route::get('/blog/{id}/detail', [BlogController::class, 'detail'])->name('blog.detail');
+
+    //end blog
 
 // cart
 Route::get('/get-product-info', [HomeController::class, 'getProductInfo']);
@@ -88,7 +100,9 @@ Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->nam
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
 
-
+Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.donhang');
+Route::get('/order/donhang/{id}', [OrderController::class, 'show'])->name('client.orders.show');
+Route::post('order/cancel/{id}', [OrderController::class, 'cancel'])->name('client.orders.cancel');
 
 
 Route::get('/thanhtoanthanhcong', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');

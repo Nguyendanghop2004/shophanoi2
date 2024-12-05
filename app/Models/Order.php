@@ -19,5 +19,9 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
+    public function isCancellable()
+    {
+        return in_array($this->status, ['chờ_xác_nhận', 'đã_xác_nhận']);
+    }
    
 }

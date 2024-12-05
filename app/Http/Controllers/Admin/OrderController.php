@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\City;
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\Wards;
 use App\Models\Province;
-use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\OrderItem;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\File;
 
 class OrderController extends Controller
 {
@@ -40,7 +41,7 @@ class OrderController extends Controller
     }
 
     public function chitiet($id)
-    {
+    {   
         $order = Order::findOrFail($id);
         $orderitems = OrderItem::where('order_id',$order->id)->get();
         $city = City::where('matp', $order->city_id)->first();
@@ -49,6 +50,7 @@ class OrderController extends Controller
       
         return view('admin.order.chitiet', compact('order', 'city', 'province', 'ward','orderitems'));
     }
+
     public function inhoadon($id)
     {
         $order = Order::findOrFail($id);
@@ -57,9 +59,20 @@ class OrderController extends Controller
         $province = Province::where('maqh', $order->province_id)->first();
         $ward = Wards::where('xaid', $order->wards_id)->first();
     
+        // Tạo thư mục qr_codes nếu chưa tồn tại
+        $qrCodesDir = storage_path('app/public/qr_codes');
+        if (!File::exists($qrCodesDir)) {
+            File::makeDirectory($qrCodesDir, 0777, true);
+        }
+    
+        // Tạo mã QR và lưu vào tệp tạm thời
+        $qrCode = QrCode::size(150)->generate($order->id);  // Thay đổi kích thước tùy theo nhu cầu
+        $tempPath = $qrCodesDir . '/hoadon_' . $order->order_code . '.png';
+        file_put_contents($tempPath, $qrCode);
+    
         // Cấu hình DOMPDF để sử dụng font Unicode
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('admin.order.hoadon', compact('order', 'orderitems', 'city', 'province', 'ward'));
+        $pdf->loadView('admin.order.hoadon', compact('order', 'orderitems', 'city', 'province', 'ward', 'tempPath'));
     
         // Cấu hình để DOMPDF hỗ trợ font Unicode
         $options = [
@@ -69,20 +82,21 @@ class OrderController extends Controller
             'font_cache' => storage_path('fonts')
         ];
     
-       
         $pdf->setOptions($options);
     
-        
-        return $pdf->download('hoa_don_'.$order->order_code.'.pdf');
+        // Xóa tệp mã QR tạm thời sau khi sử dụng
+        unlink($tempPath);
+    
+        // Trả về file PDF
+        return $pdf->download('hoa_don_' . $order->order_code . '.pdf');
     }
-    
-    
     
 
     public function updateStatus(Request $request, $id)
 {
     $order = Order::find($id);
     $order->status = $request->input('status');
+    
     if ($order->status == 'hủy') {
         $order->reason = $request->input('reason');
     } else {
