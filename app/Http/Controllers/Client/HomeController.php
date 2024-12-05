@@ -19,16 +19,6 @@ class HomeController extends Controller
      */
     public function home()
     {
-        // Lấy danh mục với các danh mục con
-        $categories = Category::with([
-            'children' => function ($query) {
-                $query->where('status', 1);
-            }
-        ])->where('status', 1)
-          ->whereNull('parent_id')
-          ->get();
-
-        // Lấy bộ sưu tập
         $collections = Tag::where('type', 'collection')->get();
 
         // Lấy danh sách sản phẩm
@@ -61,7 +51,48 @@ class HomeController extends Controller
         // Lấy tags
         $tags = Tag::whereNotNull('background_image')->get();
 
-        return view('client.home', compact('categories', 'products', 'collections', 'tags'));
+// Xử lý sản phẩm
+$products = $products->map(function ($product) {
+    // Nhóm ảnh theo color_id
+    $imagesByColor = $product->images->groupBy('color_id');
+
+    // Gắn main_image và hover_image vào từng màu
+    $product->colors = $product->colors->map(function ($color) use ($imagesByColor) {
+        $images = $imagesByColor->get($color->id, collect());
+        $mainImage = $images->first()?->image_url ?? null; // Ảnh đầu tiên
+        $hoverImage = $images->skip(1)->first()?->image_url ?? null; // Ảnh thứ hai
+
+        return [
+            'id' => $color->id,
+            'name' => $color->name,
+            'sku_color' => $color->sku_color,
+            'main_image' => $mainImage,
+            'hover_image' => $hoverImage,
+        ];
+    });
+
+    // Thiết lập main_image_url và hover_main_image_url cho sản phẩm
+    $firstColor = $product->colors->first();
+    $product->main_image_url = $firstColor ? $firstColor['main_image'] : null;
+    $product->hover_main_image_url = $firstColor ? $firstColor['hover_image'] : null;
+
+    // Chỉ giữ lại các trường cần thiết
+    return [
+        'id' => $product->id,
+        'name' => $product->product_name,
+        'price' => $product->price,
+        'slug' => $product->slug,
+        'distinct_size_count' => $product->distinct_size_count,
+        'total_stock_quantity' => $product->total_stock_quantity,
+        'main_image_url' => $product->main_image_url,
+        'hover_main_image_url' => $product->hover_main_image_url,
+        'colors' => $product->colors,
+    ];
+});
+
+// Trả về view
+return view('client.home', compact( 'products', 'collections', 'tags'));
+
     }
 
     /**
