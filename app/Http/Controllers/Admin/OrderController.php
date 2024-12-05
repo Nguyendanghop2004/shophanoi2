@@ -100,7 +100,7 @@ class OrderController extends Controller
     if ($order->status == 'hủy') {
         $order->reason = $request->input('reason');
     } else {
-        $order->reason = null; // Đặt lại lý do hủy nếu trạng thái không phải là đã hủy
+        $order->reason = null; 
     }
     $order->save();
 

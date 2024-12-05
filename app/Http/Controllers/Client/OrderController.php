@@ -63,19 +63,31 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function cancel($id)
+    public function cancel(Request $request, $id)
     {
+        // Kiểm tra xem đơn hàng có tồn tại và thuộc về người dùng hiện tại hay không
         $order = Order::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
-    
+        
+        // Kiểm tra nếu đơn hàng có thể hủy
         if ($order->isCancellable()) {
-            $order->status = 'hủy';
-            $order->save();
+            // Xử lý lý do hủy
+            $request->validate([
+                'reason' => 'required|string|max:255', // Kiểm tra lý do hủy
+            ]);
             
+            // Cập nhật lý do hủy và trạng thái của đơn hàng
+            $order->reason = $request->input('reason');
+            $order->status = 'hủy'; // Cập nhật trạng thái đơn hàng thành 'hủy'
+            $order->save();
+    
+            // Redirect sau khi hủy đơn hàng thành công
             return redirect()->route('order.donhang')->with('success', 'Đơn hàng đã được hủy thành công.');
         }
     
+        // Nếu đơn hàng không thể hủy, trả về thông báo lỗi
         return redirect()->route('order.donhang')->with('error', 'Không thể hủy đơn hàng ở trạng thái hiện tại.');
     }
     
+   
     
 }

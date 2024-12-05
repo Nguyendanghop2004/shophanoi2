@@ -41,6 +41,7 @@
         align-items: center;
     }
 </style>
+
 <div class="container">
     <ul class="nav nav-tabs">
         <li class="nav-item">
@@ -86,10 +87,7 @@
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('client.orders.show', $order->id) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
                                     @if (in_array($order->status, ['chờ_xác_nhận', 'đã_xác_nhận']))
-                                        <form action="{{ route('client.orders.cancel', $order->id) }}" method="POST" class="ml-2">
-                                            @csrf
-                                            <button type="submit" class="btn btn-danger btn-sm">Hủy đơn hàng</button>
-                                        </form>
+                                    <button class="btn btn-danger cancelOrderBtn" data-order-id="{{ $order->id }}" data-action="{{ route('client.orders.cancel', $order->id) }}">Hủy đơn hàng</button>
                                     @endif
                                 </div>
                             </div>
@@ -102,4 +100,74 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelOrderModalLabel">Lý do hủy đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="cancelOrderForm" action="" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="cancelReason" class="form-label">Chọn lý do hủy đơn</label>
+                        <select class="form-select" id="cancelReason" name="reason" required>
+                            <option value="" disabled selected>Chọn lý do</option>
+                            <option value="Sản phẩm không đúng mô tả">Sản phẩm không đúng mô tả</option>
+                            <option value="Giá quá cao">Giá quá cao</option>
+                            <option value="Khó khăn trong việc thanh toán">Khó khăn trong việc thanh toán</option>
+                            <option value="Thay đổi quyết định">Thay đổi quyết định</option>
+                            <option value="Lý do khác">Lý do khác</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+   
+    document.querySelectorAll('.cancelOrderBtn').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); 
+
+         
+            const orderId = this.getAttribute('data-order-id');
+            const actionUrl = this.getAttribute('data-action');
+
+           
+            const cancelOrderForm = document.getElementById('cancelOrderForm');
+            cancelOrderForm.action = actionUrl;
+
+           
+            const modal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
+            modal.show(); 
+        });
+    });
+
+
+    document.getElementById('cancelOrderForm').addEventListener('submit', function(event) {
+        event.preventDefault(); 
+
+        const cancelReason = document.getElementById('cancelReason').value;
+        if (!cancelReason) {
+            alert('Vui lòng chọn lý do hủy đơn hàng.');
+            return;
+        }
+
+      
+        this.submit(); 
+    });
+});
+</script>
 @endsection
+
+
+
+
