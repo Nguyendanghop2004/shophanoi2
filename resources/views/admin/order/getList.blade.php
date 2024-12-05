@@ -48,7 +48,7 @@
                                 <th scope="col">ID Order</th>
                                 <th scope="col">UserName</th>
                                 <th scope="col">Email</th>
-                                <th scope="col">Thanh Toán</th>
+                            =
                                 <th scope="col">Price</th>
                                 <th scope="col">Mã Đơn Hàng</th>
                                 <th scope="col">Thanh toán</th>
@@ -62,7 +62,7 @@
                                 <td>{{ $order->id }}</td>
                                 <td>{{ $order->name }}</td>
                                 <td>{{ $order->email }}</td>
-                                <td>{{ $order->status }}</td>
+                            
                                 <td>{{ number_format($order->total_price, 0, ',', '.') }} VND</td>
                                 <td>{{ $order->order_code }}</td>
                                 <td>{{ $order->payment_status}}</td>

@@ -20,7 +20,7 @@ class OrderItem extends Model
 
     public function variant()
     {
-        return $this->belongsTo(ProductVariant::class); // Nếu có model Variant
+        return $this->belongsTo(ProductVariant::class, 'variant_id'); // Đảm bảo dùng đúng khóa ngoại 'variant_id'
     }
     public function product()
     {

@@ -55,37 +55,33 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Chào bạn {{ $order->name }}</h2>
-        <p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Đơn hàng của bạn đã được xác nhận.</p>
-        <div class="order-details">
-            <h3>Thông tin đơn hàng:</h3>
-            <ul>
-                <li><strong>Họ tên:</strong> {{ $order->name ?? '' }}</li>
-                <li><strong>Email:</strong> {{ $order->email ?? '' }}</li>
-                <li><strong>Mã đơn hàng:</strong> {{ $order->order_code ?? '' }}</li>
-                <li><strong>Tổng giá trị:</strong> {{ isset($order->total_price) ? number_format($order->total_price, 0, ',', '.') . ' VND' : '' }}</li>
-                <li><strong>Địa chỉ giao hàng:</strong> {{ $order->address ?? '' }}</li>
-                <li><strong>Số điện thoại:</strong> {{ $order->phone_number ?? '' }}</li>
-            </ul>
-        </div>
-        <div class="product-details">
-            <h4>Chi tiết sản phẩm:</h4>
-            <ul>
-                @foreach($orderItems as $item)
-                    <li>
-                        <span>{{ $item['quantity'] }} x {{ $item['product_name'] }}</span>
-                        <span>Màu: {{ $item['color_name'] }}, Size: {{ $item['size_name'] }}</span>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-        <p>Chúng tôi sẽ liên hệ với bạn để xác nhận đơn hàng và giao hàng trong thời gian sớm nhất.</p>
-        <p>Trân trọng,</p>
-        <p>Đội ngũ cửa hàng</p>
-        <div class="footer">
-            <p>&copy; 2024 Cửa hàng của chúng tôi. Tất cả các quyền được bảo lưu.</p>
-        </div>
-    </div>
+<<<<<<< HEAD
+    <h2>Chào bạn {{ $userName }}</h2>
+    <p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Đơn hàng của bạn đã được xác nhận.</p>
+    <h3>Thông tin đơn hàng:</h3>
+    <ul>
+        <li><strong>Mã đơn hàng:</strong> {{ $order->order_code }}</li>
+        <li><strong>Tổng giá trị:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VND</li>
+        <li><strong>Địa chỉ giao hàng:</strong> {{ $order->address }}</li>
+        <li><strong>Số điện thoại:</strong> {{ $order->phone_number }}</li>
+    </ul>
+
+    <h4>Chi tiết sản phẩm:</h4>
+    <ul>
+        @foreach($orderItems as $item)
+            <li>
+                <!-- Hiển thị hình ảnh sản phẩm -->
+                <img src="{{ Storage::url($item['image_url'])}}" style="width: 100px; height: 100px; object-fit: cover;">
+                <br>
+                {{ $item['quantity'] }} x {{ $item['product_name'] }} 
+                (Màu: {{ $item['color_name'] }}, Size: {{ $item['size_name'] }})
+            </li>
+        @endforeach
+    </ul>
+
+    <p>Chúng tôi sẽ liên hệ với bạn để xác nhận đơn hàng và giao hàng trong thời gian sớm nhất.</p>
+    <p>Trân trọng,</p>
+    <p>Đội ngũ cửa hàng</p>
+
 </body>
 </html>

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -95,11 +97,6 @@
             max-width: 50px;
             height: auto;
         }
-
-        .qr-code {
-            text-align: center;
-            margin-top: 20px;
-        }
     </style>
 </head>
 <body>
@@ -130,7 +127,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Ảnh Sản Phẩm</th>
                 <th>Tên Sản Phẩm</th>
                 <th>Số Lượng</th>
                 <th>Đơn Giá</th>
@@ -140,7 +136,6 @@
         <tbody>
             @foreach ($orderitems as $item)
                 <tr>
-                    <td><img src="{{ public_path('storage/' . $item->image_url) }}"></td>
                     <td>{{ $item->product_name }}</td>
                     <td>{{ $item->quantity }}</td>
                     <td>{{ number_format($item->price, 0, ',', '.') }} VNĐ</td>
@@ -153,12 +148,6 @@
     <div class="total">
         <p><strong>Tổng Tiền:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VNĐ</p>
     </div>
-
-    <div class="qr-code">
-        <p><strong>Mã QR:</strong></p>
-        <img src="{{ storage_path('app/public/qr_codes/hoadon_' . $order->order_code . '.png') }}" alt="QR Code">
-    </div>
-    
 
     <div class="footer">
         <p>Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi!</p>

@@ -41,7 +41,7 @@ class OrderController extends Controller
     }
 
     public function chitiet($id)
-    {
+    {   
         $order = Order::findOrFail($id);
         $orderitems = OrderItem::where('order_id',$order->id)->get();
         $city = City::where('matp', $order->city_id)->first();

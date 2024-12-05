@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Http\Requests\OrderRequest;
 use DB;
 use Mail;
 use Session;
@@ -128,7 +129,7 @@ class CheckOutController extends Controller
         }
     }
 
-    public function placeOrder(Request $request)
+    public function placeOrder(OrderRequest $request)
     {
         $paymentMethod = $request->input('payment'); 
         $cartDetails = $this->getCartDetails(); 
@@ -224,34 +225,41 @@ class CheckOutController extends Controller
 
     return ['items' => $cartDetails, 'totalPrice' => $totalPrice];
 }
-private function createOrder(Request $request, $cartDetails, $totalPrice, $orderCode, $paymentMethod)
+
+private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $orderCode, $paymentMethod)
 {
+    
     $order = Order::create([
-        'user_id' => auth()->id() ?? null,  
-        'order_code' => $orderCode,  
-        'total_price' => $totalPrice, 
-        'payment_method' => $paymentMethod,  
-        'phone_number' => $request->phone_number,  
-        'address' => $request->address,  
-        'city_id' => $request->city_id, 
-        'wards_id' => $request->wards_id, 
-        'province_id' => $request->province_id, 
-        'name' => $request->name, 
-        'email' => $request->email, 
-        'payment_status' => "chờ thanh toán",  
-        'status' => 1, 
+        'user_id' => auth()->id() ?? null,
+        'order_code' => $orderCode,
+        'total_price' => $totalPrice,
+        'payment_method' => $paymentMethod,
+        'phone_number' => $request->phone_number,
+        'address' => $request->address,
+        'city_id' => $request->city_id,
+        'wards_id' => $request->wards_id,
+        'province_id' => $request->province_id,
+        'name' => $request->name,
+        'email' => $request->email,
+        'note' => $request->note,
+        'payment_status' => "chờ thanh toán",
+        'status' => 1,
     ]);
 
+    
     foreach ($cartDetails as $detail) {
+       
         $order->OrderItems()->create([
-            'product_name' => $detail['product_name'], 
-            'image_url' => $detail['image_url'],  
-            'color_name' => $detail['color_name'],  
-            'size_name' => $detail['size_name'], 
-            'quantity' => $detail['quantity'],  
-            'price' => $detail['price'], 
+
+            'product_name' => $detail['product_name'],
+            'image_url' => $detail['image_url'],
+            'color_name' => $detail['color_name'],
+            'size_name' => $detail['size_name'],
+            'quantity' => $detail['quantity'],
+            'price' => $detail['price'],
         ]);
 
+   
         $variant = ProductVariant::where('product_id', $detail['product_id'])
             ->where('color_id', $detail['color_id'])
             ->where('size_id', $detail['size_id'])
@@ -262,8 +270,9 @@ private function createOrder(Request $request, $cartDetails, $totalPrice, $order
         }
     }
 
-    return $order;  
+    return $order;
 }
+
 
     private function handleCOD(Order $order)
     {
@@ -426,8 +435,14 @@ private function createOrder(Request $request, $cartDetails, $totalPrice, $order
 
 public function thanhtoanthanhcong(Request $request)
 {
+    $categories = Category::with(relations: [
+        'children' => function ($query) {
+            $query->where('status', 1);
+        }
+    ])->where('status', 1)
+        ->whereNull('parent_id')->get();
     $data = $request->all();
-    return view('client.thanhtoansuccess', compact('data'));
+    return view('client.thanhtoansuccess', compact('data','categories'));
    
 }
  

@@ -12,20 +12,30 @@
             <div class="tf-page-cart-wrap layout-2">
                 <div class="tf-page-cart-item">
                     <h5 class="fw-5 mb_20">Billing details</h5>
-                    <div class="box grid-2">
+                   
                         <fieldset class="fieldset">
                             <label for="first-name">Name</label>
                             <input name="name" type="text" id="first-name" 
                                 value="{{ auth()->check() ? auth()->user()->name : '' }}" 
-                                placeholder="Your Name" required>
+                                placeholder="Your Name" >
                         </fieldset>
+                        @error('name')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         <fieldset class="fieldset">
                             <label for="last-name">Email</label>
                             <input name="email" type="email" id="last-name" 
                                 value="{{ auth()->check() ? auth()->user()->email : '' }}" 
-                                required>
+                                >
                         </fieldset>
-                    </div>
+                        @error('email')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                    
     
                     <div class="form-group">
                         <label for="city">Chọn thành phố</label>
@@ -36,7 +46,11 @@
                             @endforeach
                         </select>
                     </div>
-                    
+                    @error('city_id')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                     <div class="form-group">
                         <label for="province">Chọn quận/huyện</label>
                         <select name="province_id" id="province" class="form-control province choose">
@@ -46,7 +60,11 @@
                             @endforeach
                         </select>
                     </div>
-                    
+                    @error('province_id')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                     <div class="form-group">
                         <label for="wards">Chọn xã/phường</label>
                         <select name="wards_id" id="wards" class="form-control wards">
@@ -56,22 +74,34 @@
                             @endforeach
                         </select>
                     </div>
-    
+                    @error('wards_id')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                     <!-- Địa chỉ cụ thể -->
                     <fieldset class="box fieldset">
                         <label for="address">Address</label>
                         <input name="address" type="text" id="address" 
                             value="{{ auth()->check() ? auth()->user()->address : '' }}" 
-                            required>
+                            >
                     </fieldset>
-    
+                    @error('address')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                     <fieldset class="box fieldset">
                         <label for="phone">Phone Number</label>
                         <input type="text" name="phone_number" id="phone" 
                             value="{{ auth()->check() ? auth()->user()->phone_number : '' }}" 
-                            required>
+                            >
                     </fieldset>
-    
+                    @error('phone_number')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                     <fieldset class="box fieldset">
                         <label for="note">Order notes (optional)</label>
                         <textarea name="note" id="note"></textarea>

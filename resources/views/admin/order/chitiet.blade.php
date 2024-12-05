@@ -112,6 +112,7 @@
             <a href="{{ route('admin.order.getList') }}" class="btn btn-primary">Quay Lại</a>
             <a href="{{ route('admin.order.inHoaDon', ['id' => $order->id]) }}" class="btn btn-success">In Hóa Đơn</a>
         </div>
+        
     </div>
 </section>
 @endsection
