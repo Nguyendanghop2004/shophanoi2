@@ -105,6 +105,7 @@ Route::get('/order/donhang/{id}', [OrderController::class, 'show'])->name('clien
 Route::post('order/cancel/{id}', [OrderController::class, 'cancel'])->name('client.orders.cancel');
 
 
-Route::get('/thanhtoanthanhcong', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
+
+Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
 Route::post('/select-address', [CheckoutController::class, 'select_address']);
 

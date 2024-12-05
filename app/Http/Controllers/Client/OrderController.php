@@ -53,9 +53,9 @@ class OrderController extends Controller
     {
         $order = Order::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
         $orderitems = $order->orderItems;
-        $city = $order->city;
-        $province = $order->province;
-        $ward = $order->ward;
+        $city = City::where('matp', $order->city_id)->first();
+       $province = Province::where('maqh', $order->province_id)->first();
+       $ward = Wards::where('xaid', $order->wards_id)->first();
 
         return view('client.orders.show', compact('order', 'orderitems', 'city', 'province', 'ward'));
     }
@@ -76,5 +76,6 @@ class OrderController extends Controller
     
         return redirect()->route('order.donhang')->with('error', 'Không thể hủy đơn hàng ở trạng thái hiện tại.');
     }
+    
     
 }
