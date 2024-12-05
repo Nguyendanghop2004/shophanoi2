@@ -50,6 +50,7 @@ Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('sho
 Route::get('check-out', [CheckOutController::class, 'checkout'])->name('check-out');
 Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnPayReturn'])->name('vnpay.return');
+Route::get('/out-of-stock', [CheckoutController::class, 'outOfStock'])->name('out-of-stock');
 
 // routes/web.php
 

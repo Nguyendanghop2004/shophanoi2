@@ -55,7 +55,7 @@
     </style>
 </head>
 <body>
-<<<<<<< HEAD
+
     <h2>Chào bạn {{ $userName }}</h2>
     <p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Đơn hàng của bạn đã được xác nhận.</p>
     <h3>Thông tin đơn hàng:</h3>

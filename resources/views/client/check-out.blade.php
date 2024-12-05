@@ -81,7 +81,7 @@
                             @enderror
                     <!-- Địa chỉ cụ thể -->
                     <fieldset class="box fieldset">
-                        <label for="address">Address</label>
+                        <label for="address">Địa chỉ cụ thể</label>
                         <input name="address" type="text" id="address" 
                             value="{{ auth()->check() ? auth()->user()->address : '' }}" 
                             >
