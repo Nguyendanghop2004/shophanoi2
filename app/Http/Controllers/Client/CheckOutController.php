@@ -277,6 +277,7 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
     
     foreach ($cartDetails as $detail) {
         $order->OrderItems()->create([
+
             'product_name' => $detail['product_name'],
             'image_url' => $detail['image_url'],
             'color_name' => $detail['color_name'],

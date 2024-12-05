@@ -23,12 +23,7 @@ class HomeController extends Controller
      */
     public function home()
     {
-        $categories = Category::with(relations: [
-            'children' => function ($query) {
-                $query->where('status', 1);
-            }
-        ])->where('status', 1)
-            ->whereNull('parent_id')->get();
+      
         $collections = Tag::where('type', 'collection')->get();
 
 
@@ -94,7 +89,7 @@ class HomeController extends Controller
 
         // return response()->json($products);
 
-        return view('client.home', compact('categories', 'products', 'collections'));
+        return view('client.home', compact( 'products', 'collections'));
     }
     public function getProductInfo(Request $request)
     {
