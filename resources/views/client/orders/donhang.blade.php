@@ -53,7 +53,7 @@
             <a class="nav-link {{ $status === 'đã_xác_nhận' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'đã_xác_nhận']) }}">Đã xác nhận</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'trả_hàng' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'đóng_hàng']) }}">Đóng hàng</a>
+            <a class="nav-link {{ $status === 'chờ_giao_hàng' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'chờ_giao_hàng']) }}">Chờ giao hàng</a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ $status === 'đã_giao' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'đang_giao_hàng']) }}">Đang giao hàng</a>

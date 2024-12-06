@@ -104,7 +104,7 @@ Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.don
 Route::get('/order/donhang/{id}', [OrderController::class, 'show'])->name('client.orders.show');
 Route::post('order/cancel/{id}', [OrderController::class, 'cancel'])->name('client.orders.cancel');
 Route::post('/orders/confirm/{id}', [OrderController::class, 'confirmOrder'])->name('orders.confirm');
-
+Route::get('/orders/search', [OrderController::class, 'search'])->name('order.search');
 
 Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
 Route::post('/select-address', [CheckoutController::class, 'select_address']);

@@ -94,6 +94,18 @@ class OrderController extends Controller
 
         return redirect()->back()->with('success', 'Đơn hàng đã được xác nhận thành công.');
     }
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $orders = Order::where('name', 'LIKE', "%{$query}%")
+            ->orWhere('order_code', 'LIKE', "%{$query}%")
+            ->orWhere('email', 'LIKE', "%{$query}%")
+            ->orWhere('phone_number', 'LIKE', "%{$query}%")
+            ->get();
+
+        return view('client.orders.search', compact('orders'));
+    }
     
    
     
