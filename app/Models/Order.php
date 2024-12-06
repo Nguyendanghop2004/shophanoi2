@@ -23,5 +23,9 @@ class Order extends Model
     {
         return in_array($this->status, ['chờ_xác_nhận', 'đã_xác_nhận']);
     }
+    public function confirm()
+    {
+        $this->update(['status' => 'đã_nhận_hàng']);
+    }
    
 }

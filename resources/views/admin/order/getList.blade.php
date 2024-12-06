@@ -76,13 +76,18 @@
                                                 <option value="hủy" {{ $order->status == '' ? 'selected' : '' }}>Hủy</option>
                                             @elseif($order->status == 'đã_xác_nhận')
                                                 <option value="đã_xác_nhận" {{ $order->status == 'đã_xác_nhận' ? 'selected' : '' }}>Đã Xác Nhận</option>
-                                                <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
+                                                <option value="chờ_giao_hàng" {{ $order->status == 'chờ_giao_hàng' ? 'selected' : '' }}>Chờ Giao Hàng</option>
                                                 <option value="hủy" {{ $order->status == 'hủy' ? 'selected' : '' }}>Hủy</option>
+                                            @elseif($order->status == 'chờ_giao_hàng')
+                                                <option value="chờ_giao_hàng" {{ $order->status == 'chờ_giao_hàng' ? 'selected' : '' }}>Chờ Giao Hàng</option>
+                                                <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
                                             @elseif($order->status == 'đang_giao_hàng')
                                                 <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
                                                 <option value="giao_hàng_thành_công" {{ $order->status == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
                                             @elseif($order->status == 'giao_hàng_thành_công')
                                                 <option value="giao_hàng_thành_công" {{ $order->status == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
+                                            @elseif($order->status == 'đã_nhận_hàng')
+                                            <option value="đã_nhận_hàng" {{ $order->status == 'đã_nhận_hàng' ? 'selected' : '' }}>Đã nhận hàng</option>
                                             @elseif($order->status == 'hủy')
                                                 <option value="hủy" {{ $order->status == 'hủy' ? 'selected' : '' }}>Hủy</option>
                                             @endif
@@ -101,7 +106,7 @@
                                             </select>
                                             <button type="button" class="btn btn-danger btn-sm mt-2 mx-2 close-btn" onclick="resetStatus(this)">X</button>
                                         </div>
-                                        @if($order->status != 'hủy' &&  $order->status != 'giao_hàng_thành_công')
+                                        @if($order->status != 'hủy' &&  $order->status != 'giao_hàng_thành_công' &&  $order->status != 'đã_nhận_hàng')
                                         <button type="submit" class="btn btn-success btn-sm mt-2">Cập Nhật</button>
                                         @endif
                                     </form>

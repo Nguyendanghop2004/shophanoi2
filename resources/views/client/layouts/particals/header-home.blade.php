@@ -81,6 +81,7 @@
                        </a>
                    </div>
 
+
                    <div class="col-xl-5 col-md-4 col-3">
                     @if (Auth::check())
                         <a href="{{ route('order.donhang') }}">Đơn hàng của tôi</a>
@@ -116,7 +117,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
            </div>
        </div>
        <div class="header-bottom line">
