@@ -137,6 +137,10 @@ class CartController extends Controller
             $color = $item->color;
             $size = $item->size;
             $image = $product->images->firstWhere('color_id', $color->id);
+            $variant = $product->variants()
+                ->where('color_id', $color->id ?? null)
+                ->where('size_id', $size->id ?? null)
+                ->first();
 
             return [
                 'product_id' => $product->id,
@@ -146,9 +150,10 @@ class CartController extends Controller
                 'color_name' => $color->name ?? 'N/A',
                 'size_name' => $size->name ?? 'N/A',
                 'quantity' => $item->quantity,
-                'price' => $item->price ?? $product->price,
+                'price' => $product->price ?? 0,
+                'pricebonus' => $variant->price ?? 0,
                 'image_url' => $image->image_url ?? '/default-image.jpg',
-                'subtotal' => ($item->price ?? $product->price) * $item->quantity,
+                'subtotal' => ($product->price +  $variant->price),
             ];
         })->toArray();
     }
@@ -167,12 +172,24 @@ class CartController extends Controller
             ->get()
             ->groupBy('product_id');
 
-        return array_map(function ($item) use ($products, $colors, $sizes, $images) {
+        // Lấy tất cả các variants tương ứng với sản phẩm, màu và kích thước
+        $variants = ProductVariant::whereIn('product_id', $productIds)
+            ->whereIn('color_id', $colorIds)
+            ->whereIn('size_id', $sizeIds)
+            ->get()
+            ->keyBy(function ($variant) {
+                return "{$variant->product_id}_{$variant->color_id}_{$variant->size_id}";
+            });
+
+        return array_map(function ($item) use ($products, $colors, $sizes, $images, $variants) {
             $product = $products[$item['product_id']] ?? null;
             $color = $colors[$item['color_id']] ?? null;
             $size = $sizes[$item['size_id']] ?? null;
             $image = $images[$item['product_id']]->firstWhere('color_id', $item['color_id']) ?? null;
 
+            // Tạo key để tra cứu variant
+            $variantKey = "{$item['product_id']}_{$item['color_id']}_{$item['size_id']}";
+            $variant = $variants[$variantKey] ?? null;
             return [
                 'product_id' => $item['product_id'],
                 'color_id' => $color->id ?? null,
@@ -182,20 +199,14 @@ class CartController extends Controller
                 'size_name' => $size->name ?? 'N/A',
                 'quantity' => $item['quantity'],
                 'price' => $item['price'] ?? $product->price,
+                'pricebonus' => $variant->price ?? 0,
                 'image_url' => $image->image_url ?? '/default-image.jpg',
-                'subtotal' => ($product->price ?? 0) * $item['quantity'],
+                'subtotal' => ($product->price + $variant->price ?? 0) ,
             ];
         }, $cart);
     }
     public function viewCart()
     {
-        // Lấy danh mục (categories)
-        $categories = Category::with([
-            'children' => function ($query) {
-                $query->where('status', 1);
-            }
-        ])->where('status', 1)->whereNull('parent_id')->get();
-
         $cartDetails = [];
 
         if (Auth::guard('web')->check()) {
@@ -225,7 +236,7 @@ class CartController extends Controller
         }
 
         // Trả về view với dữ liệu giỏ hàng
-        return view('client.shopping-cart', compact('cartDetails', 'categories'));
+        return view('client.shopping-cart', compact('cartDetails'));
     }
 
     public function removeFromCart(Request $request)
@@ -308,15 +319,9 @@ class CartController extends Controller
                 return response()->json(['success' => false, 'message' => 'Sản phẩm không tồn tại trong giỏ hàng']);
             }
 
-            // Tính tổng giá trị giỏ hàng
-            $totalPrice = $cart->cartItems->sum(function ($item) {
-                return $item->quantity * $item->price;
-            });
-
             return response()->json([
                 'success' => true,
                 'message' => 'Cập nhật thành công',
-                'total_price' => $totalPrice,
             ]);
         } else {
             // Người dùng chưa đăng nhập: cập nhật session
@@ -329,15 +334,9 @@ class CartController extends Controller
             }
             session()->put('cart', $cart);
 
-            // Tính tổng giá trị giỏ hàng
-            $totalPrice = array_sum(array_map(function ($item) {
-                return $item['quantity'] * $item['price'];
-            }, $cart));
-
             return response()->json([
                 'success' => true,
                 'message' => 'Cập nhật thành công',
-                'total_price' => $totalPrice,
             ]);
         }
     }

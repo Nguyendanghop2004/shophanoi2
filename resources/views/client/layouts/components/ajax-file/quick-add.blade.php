@@ -15,7 +15,7 @@
             <!-- <div class="price-on-sale">$8.00</div>
             <div class="compare-at-price">$10.00</div>
             <div class="badges-on-sale"><span>20</span>% OFF</div> -->
-            <div class="price ">${{ number_format($product->price, 2) }}</div>
+            <div class="price-product">${{ number_format($product->price, 2) }}</div>
         </div>
     </div>
 </div>
@@ -141,10 +141,10 @@
             sizeContainer.append(sizeElement); // Thêm các size vào container
         });
         updateTotalPrice();
-           // Lắng nghe sự kiện thay đổi của các nút radio
-    $('input.btn-size').on('change', function() {
-        updateTotalPrice(); // Cập nhật giá trị khi lựa chọn thay đổi
-    });
+        // Lắng nghe sự kiện thay đổi của các nút radio
+        $('input.btn-size').on('change', function() {
+            updateTotalPrice(); // Cập nhật giá trị khi lựa chọn thay đổi
+        });
     }
 </script>
 
@@ -185,6 +185,7 @@
             },
             success: function(response) {
                 console.log(response); // Xem phản hồi từ server
+                $("#shoppingCart").modal("show");
             },
             error: function(xhr, status, error) {
                 console.error('Lỗi Ajax:', error); // In ra chi tiết lỗi
@@ -203,7 +204,9 @@
         let productPrice = parseFloat($('.tf-qty-price').data('price')); // Lấy giá sản phẩm từ data-price
         console.log(quantity, priceBonus, productPrice)
         const totalPrice = ((productPrice * 1 + priceBonus * 1) * quantity).toFixed(2); // Giữ 2 chữ số thập phân
+        const Price = (productPrice * 1 + priceBonus * 1).toFixed(2); // Giữ 2 chữ số thập phân
         $('.tf-qty-price').text(`$${totalPrice}`); // Cập nhật giá trị tổng tiền
+        $('.price-product').text(`$${Price}`); // Cập nhật giá trị tổng tiền
     }
 
     var btnQuantity = function() {

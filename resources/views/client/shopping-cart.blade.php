@@ -9,10 +9,10 @@
     <section class="flat-spacing-11">
         <div class="container">
             <!-- <div class="tf-page-cart text-center mt_140 mb_200">
-                                                        <h5 class="mb_24">Your cart is empty</h5>
-                                                        <p class="mb_24">You may check out all the available products and buy some in the shop</p>
-                                                        <a href="shop-default.html" class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Return to shop<i class="icon icon-arrow1-top-left"></i></a>
-                                                    </div> -->
+                                                                <h5 class="mb_24">Your cart is empty</h5>
+                                                                <p class="mb_24">You may check out all the available products and buy some in the shop</p>
+                                                                <a href="shop-default.html" class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Return to shop<i class="icon icon-arrow1-top-left"></i></a>
+                                                            </div> -->
             <div class="tf-cart-countdown">
                 <div class="title-left">
                     <svg class="d-inline-block" xmlns="http://www.w3.org/2000/svg" width="16" height="24"
@@ -56,7 +56,8 @@
                                             </div>
                                         </td>
                                         <td class="tf-cart-item_price" cart-data-title="Price">
-                                            <div class="cart-price">${{ number_format($item['price'], 0, ',', '.') }}</div>
+                                            <div class="cart-price">${{ number_format($item['subtotal'], 0, ',', '.') }}
+                                            </div>
                                         </td>
                                         <td class="tf-cart-item_quantity" cart-data-title="Quantity">
                                             <div class="cart-quantity">
@@ -76,7 +77,7 @@
                                                     </span>
 
                                                     <!-- Trường nhập số lượng -->
-                                                    <input type="text" class="quantity-input" name="number"
+                                                    <input type="text" class="quantity-input quantity-input-update" name="number"
                                                         value="{{ $item['quantity'] }}"
                                                         data-url="{{ route('cart.update') }}"
                                                         data-id="{{ $item['product_id'] }}"
@@ -100,8 +101,8 @@
                                             </div>
                                         </td>
                                         <td class="tf-cart-item_total" cart-data-title="Total">
-                                            <div class="cart-total">
-                                                ${{ number_format((int) $item['quantity'] * (float) $item['price'], 0, ',', '.') }}
+                                            <div class="cart-total" data-price="{{ $item['subtotal'] }}"  >
+                                                ${{ number_format((int) $item['quantity'] * (float) $item['subtotal'], 0, ',', '.') }}
                                             </div>
                                         </td>
                                     </tr>
@@ -925,6 +926,23 @@
 
 @push('scripts')
     <script>
+        function updateCartTotal() {
+            $('.tf-cart-item').each(function() {
+                // Tìm phần tử có class "cart-total" trong mỗi "tf-cart-item_total"
+                var cartTotalDiv = $(this).find('.cart-total');
+
+                // Lấy giá trị từ data-price và data-quantity
+                var price = parseFloat(cartTotalDiv.data('price'));
+                var quantity = $(this).find('.quantity-input-update').val(); // Sửa ở đây
+                   console.log(quantity)
+                // Tính toán lại subtotal
+                var subtotal = price * quantity;
+
+                // Cập nhật lại giá trị subtotal trong "cart-total"
+                var formattedSubtotal = subtotal;
+                cartTotalDiv.text('$' + formattedSubtotal);
+            });
+        }
         // Xử lý khi nhấn nút xóa
         function removeFromCart(productId, colorId, sizeId) {
             // Ghi log dữ liệu đầu vào để kiểm tra
@@ -975,7 +993,9 @@
                     },
                     success: function(response) {
                         if (response.success) {
+                            updateCartTotal();
                             console.log('Cập nhật thành công');
+
                         } else {
                             alert(response.message || 'Đã xảy ra lỗi!');
                         }
@@ -1034,4 +1054,3 @@
         });
     </script>
 @endpush
- 

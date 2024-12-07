@@ -53,7 +53,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::get('accountsUser/change/{id}', [AccoutUserController::class, 'change'])->name('accountsUser.change');
     Route::post('accountsUser/change/{id}', [AccoutUserController::class, 'changeUser'])->name('accountsUser.changeUser');
     Route::get('accountsUser/show/{id}', [AccoutUserController::class, 'show'])->name('accountsUser.show');
-    // end crud user 
+    // end crud user
 
     // adress
     Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address']);
@@ -62,7 +62,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
 
 
     //start status user
-    
+
     Route::post('accountsUser/{id}/accountUser', [AccoutUserController::class, 'activateUser'])->name('accountsUser.activateUser')->middleware('permission:activate_Account');
     Route::post('accountsUser/{id}/deactivateUser', [AccoutUserController::class, 'deactivateUser'])->name('accountsUser.deactivateUser')->middleware('permission:deactivate_Account');
     //end  status user
@@ -94,8 +94,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::post('accounts/{id}/deactivate', [AccoutAdminController::class, 'deactivate'])->name('accounts.deactivate')->middleware('permission:deactivate_Account');
 
     // Quản lý thanh trượt
-    Route::get('slider/category/{category_id}', [SliderController::class, 'index'])->name('slider.index');
-    Route::resource('slider', SliderController::class)->except(['index']);
+    Route::resource('slider', SliderController::class);
     Route::post('slider/update-order', [SliderController::class, 'updateOrder'])->name('slider.updateOrder');
 
     Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
@@ -157,7 +156,7 @@ Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('di
     Route::get('tags/{tag}/edit', [TagController::class, 'edit'])->name('tags.edit');
     Route::put('tags/{tag}', [TagController::class, 'update'])->name('tags.update');
     Route::delete('/tags/{id}', [TagController::class, 'destroy'])->name('tags.destroy');
-    
+
     Route::get('sizes', [SizeController::class, 'index'])->name('sizes.index');
     Route::get('sizes/create', [SizeController::class, 'create'])->name('sizes.create');
     Route::post('sizes', [SizeController::class, 'store'])->name('sizes.store');

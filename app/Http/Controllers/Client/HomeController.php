@@ -89,7 +89,6 @@ class HomeController extends Controller
         });
 
         // return response()->json($products);
-
         return view('client.home', compact('products', 'collections'));
     }
     public function getProductInfo(Request $request)

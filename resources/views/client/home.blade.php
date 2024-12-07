@@ -619,7 +619,7 @@
                                             <a class="title link"
                                                 href="product-detail.html">${item.product_name}</a>
                                             <div class="meta-variant">${item.color_name} / ${item.size_name}</div>
-                                            <div class="price fw-6">${item.price}</div>
+                                            <div class="price fw-6" data-price="${item.price * item.quantity}">${item.price * item.quantity}</div>
                                             <div class="tf-mini-cart-btns">
                                                 <div class="wg-quantity small">
                                                     <!-- Nút giảm số lượng -->
@@ -676,7 +676,17 @@
                 removeFromCart(productId, colorId, sizeId); // Gọi hàm xóa
 
             });
+            // Lấy tất cả các phần tử <div> có class "price"
+            const priceDivs = document.querySelectorAll('.price');
 
+            // Tính tổng giá trị của tất cả các data-price
+            let total = 0;
+            priceDivs.forEach(div => {
+                const price = parseFloat(div.getAttribute('data-price')) ||
+                0; // Lấy giá trị data-price, mặc định là 0 nếu không tồn tại
+                total += price;
+            });
+            $('.tf-totals-total-value').text(total.toFixed(2));
         }
     </script>
     <script>
@@ -728,8 +738,10 @@
                     success: function(response) {
                         if (response.success) {
                             console.log('Cập nhật thành công');
+                            loadModalCart();
                         } else {
                             alert(response.message || 'Đã xảy ra lỗi!');
+                            loadModalCart();
                         }
                     },
                     error: function(xhr) {
@@ -740,30 +752,32 @@
             }
 
             // Gắn sự kiện click cho nút plus và minus
-            $(document).off('click', '.minus-btn-cart, .plus-btn-cart').on('click', '.minus-btn-cart, .plus-btn-cart', function(e) {
-                e.preventDefault();
+            $(document).off('click', '.minus-btn-cart, .plus-btn-cart').on('click',
+                '.minus-btn-cart, .plus-btn-cart',
+                function(e) {
+                    e.preventDefault();
 
-                let button = $(this);
-                let inputField = button.siblings('.quantity-input'); // Trường input
-                let productId = button.data('id');
-                let colorId = button.data('color');
-                let sizeId = button.data('size');
-                let url = button.data('url');
-                let currentQuantity = parseInt(inputField.val()) || 1;
+                    let button = $(this);
+                    let inputField = button.siblings('.quantity-input'); // Trường input
+                    let productId = button.data('id');
+                    let colorId = button.data('color');
+                    let sizeId = button.data('size');
+                    let url = button.data('url');
+                    let currentQuantity = parseInt(inputField.val()) || 1;
 
-                // Tăng hoặc giảm số lượng
-                if (button.hasClass('plus-btn-cart')) {
-                    currentQuantity += 1;
-                } else if (button.hasClass('minus-btn-cart') && currentQuantity > 1) {
-                    currentQuantity -= 1;
-                }
+                    // Tăng hoặc giảm số lượng
+                    if (button.hasClass('plus-btn-cart')) {
+                        currentQuantity += 1;
+                    } else if (button.hasClass('minus-btn-cart') && currentQuantity > 1) {
+                        currentQuantity -= 1;
+                    }
 
-                // Cập nhật số lượng trong input
-                inputField.val(currentQuantity);
+                    // Cập nhật số lượng trong input
+                    inputField.val(currentQuantity);
 
-                // Gửi AJAX cập nhật
-                updateQuantity(productId, colorId, sizeId, currentQuantity, url);
-            });
+                    // Gửi AJAX cập nhật
+                    updateQuantity(productId, colorId, sizeId, currentQuantity, url);
+                });
 
             // Gắn sự kiện change cho input
             $(document).off('change', '.quantity-input-cart').on('change', '.quantity-input-cart', function() {
