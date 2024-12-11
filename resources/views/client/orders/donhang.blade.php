@@ -79,11 +79,14 @@
                                     <span class="badge badge-success">{{ $order->status }}</span>
                                 </div>
                                 <p class="card-text mb-1">{{ $order->order_code }}</p>
-                                <p class="card-text mb-1"><small class="text-muted">{{ $order->created_at }}</small></p>
+                                <p class="card-text mb-1"><small class="text-muted">{{ $order->created_at->format('d-m-Y') }}</small></p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <p class="card-text mb-1"><strong>Giá: </strong> <span class="text-danger"> {{ number_format($order->total_price, 0, ',', '.') }} VND</span></p>
                                     <p class="card-text mb-1"><strong>Số tiền hoàn: </strong>{{ number_format($order->refund_amount, 0, ',', '.') }} VND</p>
                                 </div>
+                                @if ($order->status === 'hủy' && $order->reason)
+                        <p class="card-text"><strong>Lý do hủy: </strong>{{ $order->reason }}</p>
+                    @endif
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('client.orders.show', $order->id) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
                                     @if (in_array($order->status, ['chờ_xác_nhận', 'đã_xác_nhận']))
@@ -115,14 +118,26 @@
                         <label for="cancelReason" class="form-label">Chọn lý do hủy đơn</label>
                         <select class="form-select" id="cancelReason" name="reason" required>
                             <option value="" disabled selected>Chọn lý do</option>
-                            <option value="Sản phẩm không đúng mô tả">Sản phẩm không đúng mô tả</option>
-                            <option value="Giá quá cao">Giá quá cao</option>
-                            <option value="Khó khăn trong việc thanh toán">Khó khăn trong việc thanh toán</option>
-                            <option value="Thay đổi quyết định">Thay đổi quyết định</option>
+                            <option value="Không muốn mua nữa">Không muốn mua nữa</option>
+                            <option value="Thay đổi địa chỉ giao hàng">Thay đổi địa chỉ giao hàng</option>
+                            <option value="Sản phẩm không còn cần thiết">Sản phẩm không còn cần thiết</option>
+                            <option value="Tìm thấy giá rẻ hơn ở nơi khác">Tìm thấy giá rẻ hơn ở nơi khác</option>
+                            <option value="Quá trình giao hàng quá lâu">Quá trình giao hàng quá lâu</option>
+                            <option value="Phí vận chuyển quá cao">Phí vận chuyển quá cao</option>
+                            <option value="Đã đặt nhầm sản phẩm">Đã đặt nhầm sản phẩm</option>
+                            <option value="Đã mua sản phẩm từ cửa hàng khác">Đã mua sản phẩm từ cửa hàng khác</option>
+                            <option value="Sản phẩm không như mong đợi">Sản phẩm không như mong đợi</option>
+                            
+
                             <option value="Lý do khác">Lý do khác</option>
                         </select>
                     </div>
+                    <div class="mb-3" id="otherReasonDiv" style="display: none;">
+                        <label for="otherReason" class="form-label">Vui lòng nhập lý do khác</label>
+                        <textarea class="form-control" id="otherReason" name="reason" rows="3"></textarea>
+                    </div>
                     <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
+                   
                 </form>
             </div>
         </div>
@@ -131,7 +146,23 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function() {
+    const cancelReasonSelect = document.getElementById('cancelReason');
+    const otherReasonDiv = document.getElementById('otherReasonDiv');
+    const otherReasonInput = document.getElementById('otherReason');
+
+   
+    cancelReasonSelect.addEventListener('change', function() {
+        if (cancelReasonSelect.value === 'Lý do khác') {
+          
+            otherReasonDiv.style.display = 'block';
+        } else {
+         
+            otherReasonDiv.style.display = 'none';
+            otherReasonInput.value = ''; 
+        }
+    });
+});
    
     document.querySelectorAll('.cancelOrderBtn').forEach(button => {
         button.addEventListener('click', function(event) {
@@ -164,7 +195,7 @@
       
         this.submit(); 
     });
-});
+
 </script>
 @endsection
 

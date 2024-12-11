@@ -53,8 +53,8 @@ class OrderConfirmationMail extends Mailable
                     ->view('emails.order_confirmation')
                     ->with([
                         'order' => $this->order,
-                        'orderItems' => $orderItems,  // Gửi dữ liệu orderItems đã cập nhật vào view
-                        'userName' => $userName,  // Gửi tên người nhận vào view
+                        'orderItems' => $orderItems, 
+                        'userName' => $userName,  
                     ]);
     }
     

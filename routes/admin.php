@@ -184,7 +184,7 @@ Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('di
     Route::post('brands', [BrandController::class, 'store'])->name('brands.store');
     Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show');
     Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
-    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
+    Route::put('brands/{id}/edit', [BrandController::class, 'update'])->name('brands.update');
     Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
 
 

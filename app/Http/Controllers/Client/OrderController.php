@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\client;
 
+use App\Mail\OrderConfirmationMail;
 use App\Models\City;
 use App\Models\Order;
 use App\Models\Wards;
@@ -10,6 +11,7 @@ use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Mail;
 
 class OrderController extends Controller
 {
@@ -65,28 +67,76 @@ class OrderController extends Controller
      */
     public function cancel(Request $request, $id)
     {
-        // Kiểm tra xem đơn hàng có tồn tại và thuộc về người dùng hiện tại hay không
+       
         $order = Order::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
         
-        // Kiểm tra nếu đơn hàng có thể hủy
+       
         if ($order->isCancellable()) {
             // Xử lý lý do hủy
             $request->validate([
-                'reason' => 'required|string|max:255', // Kiểm tra lý do hủy
+                'reason' => 'required|string|max:255',
             ]);
             
-            // Cập nhật lý do hủy và trạng thái của đơn hàng
+           
             $order->reason = $request->input('reason');
-            $order->status = 'hủy'; // Cập nhật trạng thái đơn hàng thành 'hủy'
+            $order->status = 'hủy'; 
             $order->save();
     
-            // Redirect sau khi hủy đơn hàng thành công
+      
             return redirect()->route('order.donhang')->with('success', 'Đơn hàng đã được hủy thành công.');
         }
     
-        // Nếu đơn hàng không thể hủy, trả về thông báo lỗi
+     
         return redirect()->route('order.donhang')->with('error', 'Không thể hủy đơn hàng ở trạng thái hiện tại.');
     }
+    public function showCancelReasonForm($order_code)
+    {
+        
+        $order = Order::where('order_code', $order_code)->first();
+    
+        if (!$order) {
+            return redirect()->route('home')->with('error', 'Đơn hàng không tồn tại.');
+        }
+    
+     
+        $nonCancelableStatuses = ['đã_xác_nhận', 'đóng_hàng', 'đang_giao_hàng', 'giao_hàng_thành_công'];
+        if (in_array($order->status, $nonCancelableStatuses)) {
+            return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
+        }
+    
+        return view('emails.cancel_order', compact('order'));
+    }
+    public function cancelOrder(Request $request)
+{
+    $order_code = $request->order_code;
+    $reason = $request->reason;
+
+    
+    $order = Order::where('order_code', $order_code)->first();
+
+    if (!$order) {
+        return response()->json(['success' => false, 'message' => 'Đơn hàng không tồn tại.']);
+    }
+
+   
+    $nonCancelableStatuses = ['đã_xác_nhận', 'đóng_hàng', 'đang_giao_hàng', 'giao_hàng_thành_công'];
+
+    if (in_array($order->status, $nonCancelableStatuses)) {
+        return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
+    }
+
+   
+    $order->status = 'hủy';
+    $order->reason = $reason;
+    $order->save();
+
+ 
+    Mail::to($order->email)->send(new OrderConfirmationMail($order));
+    return redirect()->route('cart')->with('success', 'đơn hàng đã được hủy');
+  
+}
+
+    
     
    
     
