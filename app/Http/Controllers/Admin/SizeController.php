@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Color;
 use App\Models\Size;
 use Illuminate\Http\Request;
 
@@ -13,15 +14,21 @@ class SizeController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->input('search');
-
-        $sizes = Size::when($search, function ($query, $search) {
-            return $query->where('name', 'like', '%' . $search . '%');
-        })->paginate(10);
-
-        return view('admin.sizes.index', compact('sizes', 'search'));
+        $searchSize = $request->input('searchSize');
+        
+        $sizes = Size::when($searchSize, function ($query, $searchSize) {
+            return $query->where('name', 'like', '%' . $searchSize . '%');
+        })->paginate(5); // Phân trang với 10 bản ghi mỗi trang
+    
+        $searchColor = $request->input('searchColor');
+        
+        $colors = Color::when($searchColor, function ($query, $searchColor) {
+            return $query->where('name', 'like', '%' . $searchColor . '%');
+        })->paginate(5); // Phân trang với 10 bản ghi mỗi trang
+        // Truyền cả $colors và $sizes vào view
+        return view('admin.colors_sizes.index', compact( 'sizes', 'colors'));
     }
-
+    
     /**
      * Hiển thị form tạo kích thước mới.
      */
@@ -41,7 +48,7 @@ class SizeController extends Controller
 
         Size::create($request->only('name'));
 
-        return redirect()->route('admin.sizes.index')->with('success', 'Size created successfully.');
+        return redirect()->route('admin.colors_sizes.index')->with('success', 'Size created successfully.');
     }
 
     /**
@@ -67,7 +74,7 @@ class SizeController extends Controller
 
         $size->update($request->only('name'));
 
-        return redirect()->route('admin.sizes.index')->with('success', 'Size updated successfully.');
+        return redirect()->route('admin.colors_sizes.index')->with('success', 'Size updated successfully.');
     }
 
     /**
@@ -75,10 +82,19 @@ class SizeController extends Controller
      */
     public function destroy($id)
     {
-        $size = Size::findOrFail($id); // Tìm size theo ID
+        // Lấy kích thước theo ID
+        $size = Size::findOrFail($id);
 
+        // Kiểm tra xem kích thước này có đang được sử dụng trong bất kỳ biến thể sản phẩm nào không
+        if ($size->productVariants()->count() > 0) {
+            // Nếu kích thước được sử dụng trong ít nhất 1 biến thể sản phẩm
+            return redirect()->route('admin.colors_sizes.index')->with('error', 'Không thể xóa kích thước này vì nó đang được sử dụng trong nhiều sản phẩm. Bạn cần lí bên sản phẩm trước.');
+        }
+
+        // Nếu không có sản phẩm nào sử dụng kích thước này, tiến hành xóa
         $size->delete();
 
-        return redirect()->route('admin.sizes.index')->with('success', 'Size deleted successfully.');
+        return redirect()->route('admin.colors_sizes.index')->with('success', 'Kích thước đã được xóa thành công.');
     }
+
 }

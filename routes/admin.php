@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\DiscountCodeController;
 
 
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\ColorSizeController;
 use App\Http\Controllers\Admin\ContactMessageController;
 
 
@@ -184,10 +185,10 @@ Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('di
     Route::post('brands', [BrandController::class, 'store'])->name('brands.store');
     Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show');
     Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
-    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
     Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
 
-
+    Route::get('colors-sizes', [ColorSizeController::class, 'index'])->name('colors_sizes.index');
 
 
     Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address']);

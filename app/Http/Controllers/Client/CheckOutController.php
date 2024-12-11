@@ -250,12 +250,13 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
     foreach ($cartDetails as $detail) {
        
         $order->OrderItems()->create([
-            'product_name' => $detail['product_name'],
-            'image_url' => $detail['image_url'],
-            'color_name' => $detail['color_name'],
-            'size_name' => $detail['size_name'],
-            'quantity' => $detail['quantity'],
-            'price' => $detail['price'],
+        'product_name' => $detail['product_name'],
+        'image_url' => $detail['image_url'],
+        'color_name' => $detail['color_name'],
+        'size_name' => $detail['size_name'],
+        'quantity' => $detail['quantity'],
+        'price' => $detail['price'],
+
         ]);
 
    
