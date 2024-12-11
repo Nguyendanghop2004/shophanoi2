@@ -82,7 +82,6 @@
                    </div>
 
 
-                  
                    <div class="col-xl-5 col-md-4 col-3">
                     @if (Auth::check())
                         <a href="{{ route('order.donhang') }}">Đơn hàng của tôi</a>
@@ -118,8 +117,14 @@
                         </li>
                     </ul>
                 </div>
+
            </div>
        </div>
+       <form action="{{ route('order.search') }}" method="GET" class="search-form">
+        <input type="text" name="query" placeholder="Search orders..." required>
+        <button type="submit">Search</button>
+    </form>
+    
        <div class="header-bottom line">
            <div class="container-full px_15 lg-px_40">
                <div class="wrapper-header d-flex justify-content-center align-items-center">

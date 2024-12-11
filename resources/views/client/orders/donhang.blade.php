@@ -1,3 +1,5 @@
+<!-- resources/views/client/orders/index.blade.php -->
+
 @extends('client.layouts.master')
 
 @section('header-home')
@@ -51,7 +53,7 @@
             <a class="nav-link {{ $status === 'đã_xác_nhận' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'đã_xác_nhận']) }}">Đã xác nhận</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'trả_hàng' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'đóng_hàng']) }}">Đóng hàng</a>
+            <a class="nav-link {{ $status === 'chờ_giao_hàng' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'chờ_giao_hàng']) }}">Chờ giao hàng</a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ $status === 'đã_giao' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'đang_giao_hàng']) }}">Đang giao hàng</a>
@@ -59,6 +61,10 @@
         <li class="nav-item">
             <a class="nav-link {{ $status === 'đã_giao' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'giao_hàng_thành_công']) }}">Giao hàng thành công</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {{ $status === 'đã_nhận_hàng' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'đã_nhận_hàng']) }}">Xác nhận giao hàng thành công</a>
+        </li>
+        
         <li class="nav-item">
             <a class="nav-link {{ $status === 'đã_hủy' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'hủy']) }}">Đã hủy</a>
         </li>
@@ -89,6 +95,12 @@
                     @endif
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('client.orders.show', $order->id) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                    @if ($order->status === 'giao_hàng_thành_công')
+                                    <form action="{{ route('orders.confirm', $order->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success btn-sm">Xác nhận đơn hàng</button>
+                                    </form>
+                                    @endif
                                     @if (in_array($order->status, ['chờ_xác_nhận', 'đã_xác_nhận']))
                                     <button class="btn btn-danger cancelOrderBtn" data-order-id="{{ $order->id }}" data-action="{{ route('client.orders.cancel', $order->id) }}">Hủy đơn hàng</button>
                                     @endif
@@ -121,6 +133,7 @@
                             <option value="Không muốn mua nữa">Không muốn mua nữa</option>
                             <option value="Thay đổi địa chỉ giao hàng">Thay đổi địa chỉ giao hàng</option>
                             <option value="Sản phẩm không còn cần thiết">Sản phẩm không còn cần thiết</option>
+<<<<<<< HEAD
                             <option value="Tìm thấy giá rẻ hơn ở nơi khác">Tìm thấy giá rẻ hơn ở nơi khác</option>
                             <option value="Quá trình giao hàng quá lâu">Quá trình giao hàng quá lâu</option>
                             <option value="Phí vận chuyển quá cao">Phí vận chuyển quá cao</option>
@@ -129,6 +142,9 @@
                             <option value="Sản phẩm không như mong đợi">Sản phẩm không như mong đợi</option>
                             
 
+=======
+                            <option value="Thay đổi quyết định">Thay đổi quyết định</option>
+>>>>>>> f134978ecf0384f15bc53f5e34c6236162dbc182
                             <option value="Lý do khác">Lý do khác</option>
                         </select>
                     </div>
@@ -144,8 +160,8 @@
     </div>
 </div>
 
-
 <script>
+<<<<<<< HEAD
   document.addEventListener('DOMContentLoaded', function() {
     const cancelReasonSelect = document.getElementById('cancelReason');
     const otherReasonDiv = document.getElementById('otherReasonDiv');
@@ -167,20 +183,33 @@
     document.querySelectorAll('.cancelOrderBtn').forEach(button => {
         button.addEventListener('click', function(event) {
             event.preventDefault(); 
+=======
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.cancelOrderBtn').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); 
+>>>>>>> f134978ecf0384f15bc53f5e34c6236162dbc182
 
-         
-            const orderId = this.getAttribute('data-order-id');
-            const actionUrl = this.getAttribute('data-action');
+                const orderId = this.getAttribute('data-order-id');
+                const actionUrl = this.getAttribute('data-action');
 
-           
-            const cancelOrderForm = document.getElementById('cancelOrderForm');
-            cancelOrderForm.action = actionUrl;
+                const cancelOrderForm = document.getElementById('cancelOrderForm');
+                cancelOrderForm.action = actionUrl;
 
-           
-            const modal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
-            modal.show(); 
+                const modal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
+                modal.show(); 
+            });
+        });
+
+        document.getElementById('cancelOrderForm').addEventListener('submit', function (event) {
+            const reason = document.getElementById('cancelReason').value;
+            if (!reason) {
+                event.preventDefault();
+                alert('Vui lòng chọn lý do hủy đơn');
+            }
         });
     });
+<<<<<<< HEAD
 
 
     document.getElementById('cancelOrderForm').addEventListener('submit', function(event) {
@@ -196,9 +225,7 @@
         this.submit(); 
     });
 
+=======
+>>>>>>> f134978ecf0384f15bc53f5e34c6236162dbc182
 </script>
 @endsection
-
-
-
-

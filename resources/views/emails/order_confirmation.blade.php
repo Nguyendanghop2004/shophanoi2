@@ -63,6 +63,7 @@
     @endif
 </p>
 
+
         <p>Trân trọng,</p>
         <p>Đội ngũ cửa hàng</p>
     </div>
