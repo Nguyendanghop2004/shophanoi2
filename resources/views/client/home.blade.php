@@ -25,7 +25,6 @@
                                     </div>
                                 </div>
                             @endforeach
-
                         </div>
                         <div class="tf-shopall-wrap">
                             <div class="collection-item-circle tf-shopall">
@@ -43,7 +42,7 @@
         </div>
     </section>
     <!-- /categories -->
-    {{--
+
     <!-- slider -->
     <div class="tf-slideshow slider-women slider-effect-fade position-relative">
         <div class="swiper tf-sw-slideshow" data-preview="1" data-tablet="1" data-mobile="1" data-centered="false"
@@ -69,8 +68,6 @@
                         </div>
                     </div>
                 @endforeach
-
-
             </div>
         </div>
         <div class="wrap-pagination">
@@ -79,7 +76,7 @@
             </div>
         </div>
     </div>
-    <!-- /slider --> --}}
+    <!-- /slider -->
 
     {{-- <!-- Categories -->
     <section class="flat-spacing-5 pb_0">
@@ -194,7 +191,7 @@
                             <div class="swiper-slide" lazy="true">
                                 <div class="card-product">
                                     <div class="card-product-wrapper">
-                                        <a href="product-detail.html" class="product-img">
+                                        <a href="{{route('product-detail',$product['slug'])}}" class="product-img">
                                             <img class="lazyload img-product"
                                                 data-src="{{ asset('storage/' . $product['main_image_url']) }}"
                                                 src="{{ asset('storage/' . $product['main_image_url']) }}"
@@ -234,7 +231,7 @@
                                         </div>
                                     </div>
                                     <div class="card-product-info">
-                                        <a href="product-detail.html" class="title link">{{ $product['name'] }}</a>
+                                        <a href="{{route('product-detail',$product['slug'])}}" class="title link">{{ $product['name'] }}</a>
                                         <span class="price">${{ $product['price'] }}</span>
                                         <ul class="list-color-product">
                                             @foreach ($product['colors'] as $index => $color)

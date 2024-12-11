@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
 Route::post('admin/login', [LoginController::class, 'store'])->name('admin.post-login');
-Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus'])->group( function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus'])->group(function () {
     // Login admin
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
@@ -71,7 +71,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::get('accounts/profile/{id}', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('accounts/changePassword/{id}', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
     Route::post('accounts/change/{id}', [ProfileController::class, 'change'])->name('profile.change');
-//end  status  change
+    //end  status  change
 
     // Route::get('accounts/profile', [ProfileController::class, 'index'])->name('profile.index');
 
@@ -94,7 +94,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::post('accounts/{id}/deactivate', [AccoutAdminController::class, 'deactivate'])->name('accounts.deactivate')->middleware('permission:deactivate_Account');
 
     // Quản lý thanh trượt
-    Route::resource('slider', SliderController::class);
+    Route::resource('slider', SliderController::class)->except(['show']);
+    Route::get('slider/trash', [SliderController::class, 'trash'])->name('slider.trash');
+
     Route::post('slider/update-order', [SliderController::class, 'updateOrder'])->name('slider.updateOrder');
 
     Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
@@ -113,10 +115,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     // Quản lý sản phẩm
 // quản lí đơn hàng
 
-//end quản lí đơn hàng
+    //end quản lí đơn hàng
     Route::resource('product', ProductController::class);
-//quản lí coupons
-Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('discount_codes.index');
+    //quản lí coupons
+    Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('discount_codes.index');
 
     // Route để hiển thị form tạo mã giảm giá
     Route::get('discount-codes/create', [DiscountCodeController::class, 'create'])->name('discount_codes.create');

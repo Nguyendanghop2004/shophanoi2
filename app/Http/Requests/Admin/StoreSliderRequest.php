@@ -24,7 +24,6 @@ class StoreSliderRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'category_id' => ['required', Rule::exists('categories', 'id')->whereNull('parent_id'),],
             'short_description' => 'nullable|string|max:500',
             'image_path' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'link_url' => 'nullable|url|max:255',
@@ -39,9 +38,6 @@ class StoreSliderRequest extends FormRequest
             'title.required' => 'Tiêu đề là bắt buộc.',
             'title.string' => 'Tiêu đề phải là một chuỗi ký tự.',
             'title.max' => 'Tiêu đề không được vượt quá 255 ký tự.',
-
-            'category_id.required' => 'Danh mục là bắt buộc.',
-            'category_id.exists' => 'Danh mục không tồn tại hoặc không hợp lệ.',
 
             'short_description.string' => 'Mô tả ngắn phải là một chuỗi ký tự.',
             'short_description.max' => 'Mô tả ngắn không được vượt quá 500 ký tự.',

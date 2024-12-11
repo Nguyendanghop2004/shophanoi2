@@ -31,6 +31,8 @@ class HomeController extends Controller
 
         $collections = Tag::where('type', 'collection')->get();
 
+        $sliders = Slider::where('is_active', 1)->get();
+
         $products = Product::query()
             ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
             ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
@@ -87,9 +89,8 @@ class HomeController extends Controller
                 'colors' => $product->colors,
             ];
         });
-
         // return response()->json($products);
-        return view('client.home', compact('products', 'collections'));
+        return view('client.home', compact('products', 'collections','sliders'));
     }
     public function getProductInfo(Request $request)
     {
