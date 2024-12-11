@@ -19,17 +19,22 @@ class OrderController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    $user = Auth::user();
-
-    $status = $request->query('status', 'chờ_xác_nhận');
-
-    $orders = Order::where('user_id', $user->id)
-        ->where('status', $status)
-        ->paginate(10);
-
-    return view('client.orders.donhang', compact('orders', 'status'));
-}
+    {
+        $user = Auth::user();
+    
+        $status = $request->query('status', '');
+    
+        $query = Order::where('user_id', $user->id);
+    
+        if ($status !== '') {
+            $query->where('status', $status);
+        }
+    
+        $orders = $query->paginate(10);
+    
+        return view('client.orders.donhang', compact('orders', 'status'));
+    }
+    
 
 
     /**
@@ -77,7 +82,6 @@ class OrderController extends Controller
             $order->reason = $request->input('reason');
             $order->status = 'hủy'; 
             
-            $order->status_hủy_at = now(); 
             
             $order->save();
     
@@ -130,7 +134,7 @@ class OrderController extends Controller
         }
     
      
-        $nonCancelableStatuses = ['đã_xác_nhận', 'đóng_hàng', 'đang_giao_hàng', 'giao_hàng_thành_công'];
+        $nonCancelableStatuses = [ 'chờ_giao_hàng', 'đang_giao_hàng', 'giao_hàng_thành_công','đã_nhận_hàng'];
         if (in_array($order->status, $nonCancelableStatuses)) {
             return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
         }

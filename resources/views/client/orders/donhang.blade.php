@@ -47,6 +47,9 @@
 <div class="container">
     <ul class="nav nav-tabs">
         <li class="nav-item">
+            <a class="nav-link {{ $status === '' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => '']) }}">Tất cả đơn hàng</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link {{ $status === 'chờ_xác_nhận' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'chờ_xác_nhận']) }}">Chờ xác nhận</a>
         </li>
         <li class="nav-item">
@@ -85,14 +88,11 @@
                                     <span class="badge badge-success">{{ $order->status }}</span>
                                 </div>
                                 <p class="card-text mb-1">{{ $order->order_code }}</p>
-                                <p class="card-text mb-1"><small class="text-muted">{{ $order->created_at->format('d-m-Y') }}</small></p>
+                                <p class="card-text mb-1"><small class="text-muted">{{ $order->created_at }}</small></p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <p class="card-text mb-1"><strong>Giá: </strong> <span class="text-danger"> {{ number_format($order->total_price, 0, ',', '.') }} VND</span></p>
                                     <p class="card-text mb-1"><strong>Số tiền hoàn: </strong>{{ number_format($order->refund_amount, 0, ',', '.') }} VND</p>
                                 </div>
-                                @if ($order->status === 'hủy' && $order->reason)
-                        <p class="card-text"><strong>Lý do hủy: </strong>{{ $order->reason }}</p>
-                    @endif
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('client.orders.show', $order->id) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
                                     @if ($order->status === 'giao_hàng_thành_công')
@@ -103,7 +103,7 @@
                                     @endif
                                     @if (in_array($order->status, ['chờ_xác_nhận', 'đã_xác_nhận']))
                                     <button class="btn btn-danger cancelOrderBtn" data-order-id="{{ $order->id }}" data-action="{{ route('client.orders.cancel', $order->id) }}">Hủy đơn hàng</button>
-                                    @endif
+                                    @endif                         
                                 </div>
                             </div>
                         </div>
@@ -133,27 +133,11 @@
                             <option value="Không muốn mua nữa">Không muốn mua nữa</option>
                             <option value="Thay đổi địa chỉ giao hàng">Thay đổi địa chỉ giao hàng</option>
                             <option value="Sản phẩm không còn cần thiết">Sản phẩm không còn cần thiết</option>
-<<<<<<< HEAD
-                            <option value="Tìm thấy giá rẻ hơn ở nơi khác">Tìm thấy giá rẻ hơn ở nơi khác</option>
-                            <option value="Quá trình giao hàng quá lâu">Quá trình giao hàng quá lâu</option>
-                            <option value="Phí vận chuyển quá cao">Phí vận chuyển quá cao</option>
-                            <option value="Đã đặt nhầm sản phẩm">Đã đặt nhầm sản phẩm</option>
-                            <option value="Đã mua sản phẩm từ cửa hàng khác">Đã mua sản phẩm từ cửa hàng khác</option>
-                            <option value="Sản phẩm không như mong đợi">Sản phẩm không như mong đợi</option>
-                            
-
-=======
                             <option value="Thay đổi quyết định">Thay đổi quyết định</option>
->>>>>>> f134978ecf0384f15bc53f5e34c6236162dbc182
                             <option value="Lý do khác">Lý do khác</option>
                         </select>
                     </div>
-                    <div class="mb-3" id="otherReasonDiv" style="display: none;">
-                        <label for="otherReason" class="form-label">Vui lòng nhập lý do khác</label>
-                        <textarea class="form-control" id="otherReason" name="reason" rows="3"></textarea>
-                    </div>
                     <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
-                   
                 </form>
             </div>
         </div>
@@ -161,34 +145,10 @@
 </div>
 
 <script>
-<<<<<<< HEAD
-  document.addEventListener('DOMContentLoaded', function() {
-    const cancelReasonSelect = document.getElementById('cancelReason');
-    const otherReasonDiv = document.getElementById('otherReasonDiv');
-    const otherReasonInput = document.getElementById('otherReason');
-
-   
-    cancelReasonSelect.addEventListener('change', function() {
-        if (cancelReasonSelect.value === 'Lý do khác') {
-          
-            otherReasonDiv.style.display = 'block';
-        } else {
-         
-            otherReasonDiv.style.display = 'none';
-            otherReasonInput.value = ''; 
-        }
-    });
-});
-   
-    document.querySelectorAll('.cancelOrderBtn').forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault(); 
-=======
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.cancelOrderBtn').forEach(button => {
             button.addEventListener('click', function(event) {
                 event.preventDefault(); 
->>>>>>> f134978ecf0384f15bc53f5e34c6236162dbc182
 
                 const orderId = this.getAttribute('data-order-id');
                 const actionUrl = this.getAttribute('data-action');
@@ -209,23 +169,5 @@
             }
         });
     });
-<<<<<<< HEAD
-
-
-    document.getElementById('cancelOrderForm').addEventListener('submit', function(event) {
-        event.preventDefault(); 
-
-        const cancelReason = document.getElementById('cancelReason').value;
-        if (!cancelReason) {
-            alert('Vui lòng chọn lý do hủy đơn hàng.');
-            return;
-        }
-
-      
-        this.submit(); 
-    });
-
-=======
->>>>>>> f134978ecf0384f15bc53f5e34c6236162dbc182
 </script>
 @endsection
