@@ -28,6 +28,7 @@
                                 <option value="đã_xác_nhận" {{ request('status') == 'đã_xác_nhận' ? 'selected' : '' }}>Đã Xác Nhận</option>
                                 <option value="đang_giao_hàng" {{ request('status') == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
                                 <option value="giao_hàng_thành_công" {{ request('status') == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
+                                <option value="đã_nhận_hàng" {{ request('status') == 'đã_nhận_hàng' ? 'selected' : '' }}>Đã nhận hàng</option>
                                 <option value="hủy" {{ request('status') == 'hủy' ? 'selected' : '' }}>Hủy</option>
                             </select>
                             <select name="payment_method" class="form-control ml-2" onchange="this.form.submit()">

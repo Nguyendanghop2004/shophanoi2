@@ -65,28 +65,26 @@ class OrderController extends Controller
      */
     public function cancel(Request $request, $id)
     {
-        // Kiểm tra xem đơn hàng có tồn tại và thuộc về người dùng hiện tại hay không
         $order = Order::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
         
-        // Kiểm tra nếu đơn hàng có thể hủy
         if ($order->isCancellable()) {
-            // Xử lý lý do hủy
             $request->validate([
-                'reason' => 'required|string|max:255', // Kiểm tra lý do hủy
+                'reason' => 'required|string|max:255', 
             ]);
             
-            // Cập nhật lý do hủy và trạng thái của đơn hàng
             $order->reason = $request->input('reason');
-            $order->status = 'hủy'; // Cập nhật trạng thái đơn hàng thành 'hủy'
+            $order->status = 'hủy'; 
+            
+            $order->status_hủy_at = now(); 
+            
             $order->save();
     
-            // Redirect sau khi hủy đơn hàng thành công
             return redirect()->route('order.donhang')->with('success', 'Đơn hàng đã được hủy thành công.');
         }
-    
-        // Nếu đơn hàng không thể hủy, trả về thông báo lỗi
+        
         return redirect()->route('order.donhang', ['status' => 'hủy'])->with('error', 'Không thể hủy đơn hàng ở trạng thái hiện tại.');
     }
+    
     public function confirmOrder($id)
     {
         $order = Order::findOrFail($id);
@@ -97,15 +95,27 @@ class OrderController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query');
-
+    
+        // Tìm kiếm các đơn hàng dựa trên query
         $orders = Order::where('name', 'LIKE', "%{$query}%")
             ->orWhere('order_code', 'LIKE', "%{$query}%")
             ->orWhere('email', 'LIKE', "%{$query}%")
             ->orWhere('phone_number', 'LIKE', "%{$query}%")
             ->get();
-
+    
+        // Lấy thông tin thành phố, quận, phường cho từng đơn hàng
+        foreach ($orders as $order) {
+            $order->city = City::where('matp', $order->city_id)->first();
+            $order->province = Province::where('maqh', $order->province_id)->first();
+            $order->ward = Wards::where('xaid', $order->wards_id)->first();
+        }
+        
+    
+        // Trả về kết quả cho view
         return view('client.orders.search', compact('orders'));
     }
+    
+
     
    
     

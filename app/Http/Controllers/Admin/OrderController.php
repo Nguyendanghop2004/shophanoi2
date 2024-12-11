@@ -88,7 +88,7 @@ class OrderController extends Controller
         unlink($tempPath);
     
         // Trả về file PDF
-        return $pdf->download('hoa_don_' . $order->order_code . '.pdf');
+        return $pdf->download('hoa_don_' . 'HN CLOTHESSHOP' . '.pdf');
     }
     
 
