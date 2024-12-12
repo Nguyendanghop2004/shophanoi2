@@ -1,4 +1,4 @@
-<!-- resources/views/client/orders/index.blade.php -->
+
 
 @extends('client.layouts.master')
 
