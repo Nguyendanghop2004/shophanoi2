@@ -133,7 +133,7 @@
                             <option value="Không muốn mua nữa">Không muốn mua nữa</option>
                             <option value="Thay đổi địa chỉ giao hàng">Thay đổi địa chỉ giao hàng</option>
                             <option value="Sản phẩm không còn cần thiết">Sản phẩm không còn cần thiết</option>
-<<<<<<< HEAD
+
                             <option value="Tìm thấy giá rẻ hơn ở nơi khác">Tìm thấy giá rẻ hơn ở nơi khác</option>
                             <option value="Quá trình giao hàng quá lâu">Quá trình giao hàng quá lâu</option>
                             <option value="Phí vận chuyển quá cao">Phí vận chuyển quá cao</option>
@@ -142,9 +142,9 @@
                             <option value="Sản phẩm không như mong đợi">Sản phẩm không như mong đợi</option>
                             
 
-=======
+
                             <option value="Thay đổi quyết định">Thay đổi quyết định</option>
->>>>>>> f134978ecf0384f15bc53f5e34c6236162dbc182
+
                             <option value="Lý do khác">Lý do khác</option>
                         </select>
                     </div>
@@ -161,7 +161,7 @@
 </div>
 
 <script>
-<<<<<<< HEAD
+
   document.addEventListener('DOMContentLoaded', function() {
     const cancelReasonSelect = document.getElementById('cancelReason');
     const otherReasonDiv = document.getElementById('otherReasonDiv');
@@ -183,12 +183,7 @@
     document.querySelectorAll('.cancelOrderBtn').forEach(button => {
         button.addEventListener('click', function(event) {
             event.preventDefault(); 
-=======
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.cancelOrderBtn').forEach(button => {
-            button.addEventListener('click', function(event) {
-                event.preventDefault(); 
->>>>>>> f134978ecf0384f15bc53f5e34c6236162dbc182
+
 
                 const orderId = this.getAttribute('data-order-id');
                 const actionUrl = this.getAttribute('data-action');
@@ -209,7 +204,7 @@
             }
         });
     });
-<<<<<<< HEAD
+
 
 
     document.getElementById('cancelOrderForm').addEventListener('submit', function(event) {
@@ -225,7 +220,6 @@
         this.submit(); 
     });
 
-=======
->>>>>>> f134978ecf0384f15bc53f5e34c6236162dbc182
+
 </script>
 @endsection

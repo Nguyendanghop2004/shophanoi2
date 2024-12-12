@@ -4,6 +4,7 @@ namespace App\Http\Controllers\client;
 
 use App\Mail\OrderConfirmationMail;
 use App\Models\City;
+use App\Models\DiscountCode;
 use App\Models\Order;
 use App\Models\Wards;
 use App\Models\Province;
@@ -11,6 +12,7 @@ use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Mail;
 
 class OrderController extends Controller
@@ -120,22 +122,44 @@ class OrderController extends Controller
 
     
    
-    public function showCancelReasonForm($order_code)
+    public function showCancelReasonForm($order_code = null)
     {
-        
-        $order = Order::where('order_code', $order_code)->first();
-    
-        if (!$order) {
-            return redirect()->route('home')->with('error', 'Đơn hàng không tồn tại.');
+       
+        if (!$order_code) {
+            return redirect()->route('cart')->with('error', 'Mã đơn hàng không hợp lệ.');
         }
-    
-     
-        $nonCancelableStatuses = ['đã_xác_nhận', 'đóng_hàng', 'đang_giao_hàng', 'giao_hàng_thành_công'];
+
+        
+        $decodedOrderCode = Crypt::decryptString($order_code);
+        if (!$decodedOrderCode) {
+            return redirect()->route('cart')->with('error', 'Mã đơn hàng không hợp lệ.');
+        }
+       
+        $order = Order::where('order_code', $decodedOrderCode)->first();
+
+      
+        if (!$order) {
+            return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì không tồn tại.');
+        }
+
+        
+        $nonCancelableStatuses = ['đã_xác_nhận', 'đang_giao_hàng', 'giao_hàng_thành_công', 'đã_nhận_hàng', 'hủy'];
         if (in_array($order->status, $nonCancelableStatuses)) {
             return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
         }
-    
+
+      
         return view('emails.cancel_order', compact('order'));
+    }
+
+   
+    public function createCancelOrderUrl($order_code)
+    {
+        
+        $encodedOrderCode = Crypt::encryptString($order_code);
+        
+        
+        return route('cancel.order.page', ['order_code' => $encodedOrderCode]);
     }
     public function cancelOrder(Request $request)
 {
@@ -146,7 +170,7 @@ class OrderController extends Controller
     $order = Order::where('order_code', $order_code)->first();
 
     if (!$order) {
-        return response()->json(['success' => false, 'message' => 'Đơn hàng không tồn tại.']);
+        return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
     }
 
    
@@ -160,10 +184,28 @@ class OrderController extends Controller
     $order->status = 'hủy';
     $order->reason = $reason;
     $order->save();
-
- 
-    Mail::to($order->email)->send(new OrderConfirmationMail($order));
     return redirect()->route('cart')->with('success', 'đơn hàng đã được hủy');
   
 }
+public function showOrderDetail($encryptedOrderCode)
+{
+  
+    $order_code = Crypt::decryptString($encryptedOrderCode);
+
+   
+    $order = Order::where('order_code', $order_code)->first();
+
+    if (!$order) {
+        return redirect()->route('orders.index')->with('error', 'Đơn hàng không tồn tại.');
+    }
+
+ 
+    $city = City::where('matp', $order->city_id)->first();
+    $province = Province::where('maqh', $order->province_id)->first();
+    $orderitems = $order->orderItems;
+    $ward = Wards::where('xaid', $order->wards_id)->first();
+
+    return view('client.orders.detail', compact('order','city','province','ward','orderitems'));
+}
+
 }

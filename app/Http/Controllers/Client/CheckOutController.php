@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\OrderRequest;
+use App\Models\DiscountCode;
+use App\Models\UserDiscountCode;
+use Auth;
 use DB;
 use Mail;
 use Session;
@@ -135,7 +138,7 @@ class CheckOutController extends Controller
         $cartDetails = $this->getCartDetails();
         $totalPrice = $cartDetails['totalPrice'];
         $orderCode = 'HN' . strtoupper(uniqid());
-    
+       
         $outOfStockItems = []; 
     
         foreach ($cartDetails['items'] as $item) {
@@ -493,5 +496,8 @@ public function outOfStock()
     return view('client.error', compact('outOfStockItems', 'error'));
 }
  
+
+
+
 
 }

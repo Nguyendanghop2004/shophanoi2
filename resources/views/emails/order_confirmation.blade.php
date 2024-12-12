@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xác Nhận Đơn Hàng</title>
     <style>
-        /* Các styles như trước */
         .container {
             width: 80%;
             margin: auto;
@@ -29,7 +28,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Chào bạn {{ $userName }}</h2>
+        <h2>Chào bạn {{ $order->user_name }}</h2>
         <p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Đơn hàng của bạn đã được xác nhận.</p>
 
         <h3>Thông tin đơn hàng:</h3>
@@ -42,28 +41,29 @@
 
         <h4>Chi tiết sản phẩm:</h4>
         <ul>
-            @foreach($orderItems as $item)
+            @foreach($order->orderItems as $item)
                 <li>
-                    <img src="{{ Storage::url($item['image_url'])}}" style="width: 100px; height: 100px; object-fit: cover;">
+                    <img src="{{ Storage::url($item->image_url) }}" style="width: 100px; height: 100px; object-fit: cover;">
                     <br>
-                    {{ $item['quantity'] }} x {{ $item['product_name'] }} 
-                    (Màu: {{ $item['color_name'] }}, Size: {{ $item['size_name'] }})
+                    {{ $item->quantity }} x {{ $item->product_name }} 
+                    (Màu: {{ $item->color_name }}, Size: {{ $item->size_name }})
                 </li>
             @endforeach
         </ul>
 
         <p>Chúng tôi sẽ liên hệ với bạn để xác nhận đơn hàng và giao hàng trong thời gian sớm nhất.</p>
 
-        <!-- Nút hủy đơn -->
+       
         <p>
-    @if (is_null($order->user_id))
-        <a href="{{ route('cancel.order.page', ['order_code' => $order->order_code]) }}" class="cancel-order">
-            Hủy Đơn Hàng
-        </a>
-    @endif
-</p>
-
-
+            <a href="{{ route('cancel.order.page', ['order_code' => Crypt::encryptString($order->order_code)]) }}" class="cancel-order">
+                Hủy Đơn Hàng
+            </a>
+        </p>
+        <p>
+            <a href="{{ route('order.detail.page', ['order_code' => Crypt::encryptString($order->order_code)]) }}" class="cancel-order">
+                Xem Chi Tiết
+            </a>
+        </p>
         <p>Trân trọng,</p>
         <p>Đội ngũ cửa hàng</p>
     </div>

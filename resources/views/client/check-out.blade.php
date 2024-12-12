@@ -129,10 +129,7 @@
                             @endforeach
                         </ul>
     
-                        <div class="d-flex justify-content-between line pb_20">
-                            <h6 class="fw-5">Total</h6>
-                            <h6 class="total fw-5">${{ number_format($totalPrice, 2) }}</h6>
-                        </div>
+                     
     
                         <div class="wd-check-payment">
                             <div class="fieldset-radio mb_20">
@@ -160,10 +157,16 @@
                             Place order
                         </button>
                     </div>
+ 
                 </div>
+
+
+
             </div>
         </div>
     </form>
+   
+
 
 
 
@@ -171,6 +174,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+
    $(document).ready(function(){
     $('.choose').on('change', function(){
         var action = $(this).attr('id');

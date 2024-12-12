@@ -105,7 +105,7 @@ Route::get('/order/donhang/{id}', [OrderController::class, 'show'])->name('clien
 Route::post('order/cancel/{id}', [OrderController::class, 'cancel'])->name('client.orders.cancel');
 
 Route::get('/order/{order_code}/cancel', [OrderController::class, 'showCancelReasonForm'])->name('cancel.order.page');
-
+Route::get('/order/detail/{order_code}', [OrderController::class, 'showOrderDetail'])->name('order.detail.page');
 // Route để gửi yêu cầu hủy đơn hàng qua AJAX
 Route::post('/order/cancel', [OrderController::class, 'cancelOrder'])->name('cancel.order');
 
