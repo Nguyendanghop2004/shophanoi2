@@ -68,6 +68,20 @@
                 <h4 class="mb-0">Thêm Quyền</h4>
             </div>
             <div class="card-body">
+                @if(session('thong bao'))
+                    <div class="alert alert-success">
+                        {{ session('thong bao') }}
+                    </div>
+                @endif
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <form action="{{ url('admin/permissions/insertPermission') }}" method="POST">
                     @csrf
                     <div class="form-group">
@@ -77,6 +91,7 @@
                     <input type="submit" name="insertper" value="Thêm mới quyền" class="btn btn-danger mt-3">
                 </form>
             </div>
+            
         </div>
     </div>
 </section>

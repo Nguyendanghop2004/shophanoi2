@@ -90,10 +90,13 @@
                     @endif
                     <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
                         <li class="nav-search">
-                            <a href="#canvasSearch" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft" class="nav-icon-item">
-                                <i class="icon icon-search"></i>
-                            </a>
-                        </li>
+                            <form action="{{ route('order.search') }}" method="GET" class="search-form">
+                                <input type="text" name="query" placeholder="Search orders..." required>
+                                <button  data-bs-toggle="offcanvas" aria-controls="offcanvasLeft" class="nav-icon-item" type="submit"><i class="icon icon-search"></i></button>
+                            </form> 
+                         </li>
+                     
+                      
                         @if (Auth::check())
                             <a href="{{ route('accountUser.logout') }}">Logout</a>
                         @else
@@ -120,10 +123,7 @@
 
            </div>
        </div>
-       <form action="{{ route('order.search') }}" method="GET" class="search-form">
-        <input type="text" name="query" placeholder="Search orders..." required>
-        <button type="submit">Search</button>
-    </form>
+      
     
        <div class="header-bottom line">
            <div class="container-full px_15 lg-px_40">
