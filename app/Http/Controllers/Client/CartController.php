@@ -153,7 +153,7 @@ class CartController extends Controller
                 'price' => $product->price ?? 0,
                 'pricebonus' => $variant->price ?? 0,
                 'image_url' => $image->image_url ?? '/default-image.jpg',
-                'subtotal' => ($product->price +  $variant->price),
+                'subtotal' => ($product->price + $variant->price),
             ];
         })->toArray();
     }
@@ -201,7 +201,7 @@ class CartController extends Controller
                 'price' => $item['price'] ?? $product->price,
                 'pricebonus' => $variant->price ?? 0,
                 'image_url' => $image->image_url ?? '/default-image.jpg',
-                'subtotal' => ($product->price + $variant->price ?? 0) ,
+                'subtotal' => ($product->price + $variant->price ?? 0),
             ];
         }, $cart);
     }
@@ -294,10 +294,19 @@ class CartController extends Controller
         $sizeId = $request->input('size_id');
         $quantity = $request->input('quantity');
 
+        $productVariant = ProductVariant::where('product_id', $request->product_id)
+            ->where('color_id', $request->color_id)
+            ->where('size_id', $request->size_id)
+            ->first();
         if ($quantity < 1) {
             return response()->json(['success' => false, 'message' => 'Số lượng không hợp lệ']);
         }
-
+        if ($request->input('quantity') > $productVariant->stock_quantity) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Số lượng sản phẩm trong kho không đủ. Số lượng còn lại: ' . $productVariant->stock_quantity,
+            ]);
+        }
         if (Auth::check()) {
             // Người dùng đã đăng nhập
             $cart = Cart::firstOrCreate([

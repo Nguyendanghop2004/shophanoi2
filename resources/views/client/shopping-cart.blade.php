@@ -925,132 +925,137 @@
 @endsection
 
 @push('scripts')
-    <script>
-        function updateCartTotal() {
-            $('.tf-cart-item').each(function() {
-                // Tìm phần tử có class "cart-total" trong mỗi "tf-cart-item_total"
-                var cartTotalDiv = $(this).find('.cart-total');
+<script>
+    function updateCartTotal() {
+        $('.tf-cart-item').each(function() {
+            var cartTotalDiv = $(this).find('.cart-total');
+            var price = parseFloat(cartTotalDiv.data('price'));
+            var quantity = $(this).find('.quantity-input-update').val();
+            console.log(quantity);
 
-                // Lấy giá trị từ data-price và data-quantity
-                var price = parseFloat(cartTotalDiv.data('price'));
-                var quantity = $(this).find('.quantity-input-update').val(); // Sửa ở đây
-                   console.log(quantity)
-                // Tính toán lại subtotal
-                var subtotal = price * quantity;
+            // Tính toán lại subtotal
+            var subtotal = price * quantity;
 
-                // Cập nhật lại giá trị subtotal trong "cart-total"
-                var formattedSubtotal = subtotal;
-                cartTotalDiv.text('$' + formattedSubtotal);
-            });
-        }
-        // Xử lý khi nhấn nút xóa
-        function removeFromCart(productId, colorId, sizeId) {
-            // Ghi log dữ liệu đầu vào để kiểm tra
-            console.log("Input data:", {
+            // Định dạng lại subtotal (thêm dấu phân cách hàng nghìn và tiền tệ)
+            var formattedSubtotal = '$' + subtotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+            // Cập nhật giá trị subtotal cho mỗi sản phẩm
+            cartTotalDiv.text(formattedSubtotal);
+        });
+    }
+
+    function removeFromCart(productId, colorId, sizeId) {
+        console.log("Input data:", { product_id: productId, color_id: colorId, size_id: sizeId });
+        $.ajax({
+            url: '/remove-from-cart',
+            method: 'POST',
+            data: {
                 product_id: productId,
                 color_id: colorId,
-                size_id: sizeId
-            });
+                size_id: sizeId,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if (response.success) {
+                    console.log("Response:", response);
+                    alert(response.message);
+                    updateCartTotal(); // Cập nhật lại giỏ hàng
+                } else {
+                    console.error("Failed to remove product:", response);
+                    alert('Failed to remove product from cart');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", status, error, xhr.responseText);
+                alert('There was an error processing your request.');
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        let debounceTimer;
+
+        function updateQuantity(productId, colorId, sizeId, newQuantity, url, inputField) {
             $.ajax({
-                url: '/remove-from-cart', // URL tới route xóa sản phẩm
-                method: 'POST', // Chú ý: nên dùng POST thay vì GET cho hành động xóa
+                url: url,
+                method: 'POST',
                 data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
                     product_id: productId,
                     color_id: colorId,
                     size_id: sizeId,
-                    _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
+                    quantity: newQuantity
                 },
                 success: function(response) {
                     if (response.success) {
-                        console.log("Response:", response); // Ghi log phản hồi từ server
-                        alert(response.message);
-                        // Cập nhật lại giao diện nếu cần
+                        updateCartTotal();
+                        console.log('Cập nhật thành công');
                     } else {
-                        console.error("Failed to remove product:", response);
-                        alert('Failed to remove product from cart');
+                        // Nếu số lượng không hợp lệ, quay lại giá trị cũ
+                        inputField.val(inputField.data('oldQuantity'));
+                        alert(response.message || 'Đã xảy ra lỗi!');
                     }
                 },
-                error: function(xhr, status, error) {
-                    console.error("AJAX Error:", status, error, xhr.responseText); // Ghi log lỗi AJAX
-                    alert('There was an error processing your request.');
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                    alert('Không thể cập nhật số lượng. Vui lòng thử lại!');
                 }
             });
         }
-    </script>
-    <script>
-        $(document).ready(function() {
-            // Hàm gửi AJAX cập nhật số lượng
-            function updateQuantity(productId, colorId, sizeId, newQuantity, url) {
-                $.ajax({
-                    url: url,
-                    method: 'POST',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'), // CSRF Token
-                        product_id: productId,
-                        color_id: colorId,
-                        size_id: sizeId,
-                        quantity: newQuantity
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            updateCartTotal();
-                            console.log('Cập nhật thành công');
 
-                        } else {
-                            alert(response.message || 'Đã xảy ra lỗi!');
-                        }
-                    },
-                    error: function(xhr) {
-                        console.error(xhr.responseText);
-                        alert('Không thể cập nhật số lượng. Vui lòng thử lại!');
-                    }
-                });
+        $(document).off('click', '.btn-quantity').on('click', '.btn-quantity', function(e) {
+            e.preventDefault();
+
+            let button = $(this);
+            let inputField = button.siblings('.quantity-input');
+            let productId = button.data('id');
+            let colorId = button.data('color');
+            let sizeId = button.data('size');
+            let url = button.data('url');
+            let currentQuantity = parseInt(inputField.val()) || 1;
+
+            // Lưu lại giá trị hiện tại trước khi thay đổi
+            inputField.data('oldQuantity', currentQuantity);
+
+            if (button.hasClass('plus-btn-cart')) {
+                currentQuantity += 1;
+            } else if (button.hasClass('minus-btn-cart') && currentQuantity > 1) {
+                currentQuantity -= 1;
             }
 
-            // Gắn sự kiện click cho nút plus và minus
-            $(document).off('click', '.btn-quantity').on('click', '.btn-quantity', function(e) {
-                e.preventDefault();
+            inputField.val(currentQuantity);
 
-                let button = $(this);
-                let inputField = button.siblings('.quantity-input'); // Trường input
-                let productId = button.data('id');
-                let colorId = button.data('color');
-                let sizeId = button.data('size');
-                let url = button.data('url');
-                let currentQuantity = parseInt(inputField.val()) || 1;
-
-                // Tăng hoặc giảm số lượng
-                if (button.hasClass('plus-btn-cart')) {
-                    currentQuantity += 1;
-                } else if (button.hasClass('minus-btn-cart') && currentQuantity > 1) {
-                    currentQuantity -= 1;
-                }
-
-                // Cập nhật số lượng trong input
-                inputField.val(currentQuantity);
-
-                // Gửi AJAX cập nhật
-                updateQuantity(productId, colorId, sizeId, currentQuantity, url);
-            });
-
-            // Gắn sự kiện change cho input
-            $(document).off('change', '.quantity-input').on('change', '.quantity-input', function() {
-                let inputField = $(this);
-                let productId = inputField.data('id');
-                let colorId = inputField.data('color');
-                let sizeId = inputField.data('size');
-                let url = inputField.data('url');
-                let newQuantity = parseInt(inputField.val()) || 1;
-
-                // Đảm bảo số lượng tối thiểu là 1
-                if (newQuantity < 1) {
-                    newQuantity = 1;
-                    inputField.val(newQuantity);
-                }
-
-                // Gửi AJAX cập nhật
-                updateQuantity(productId, colorId, sizeId, newQuantity, url);
-            });
+            // Gửi AJAX cập nhật sau khi debounce
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(function() {
+                updateQuantity(productId, colorId, sizeId, currentQuantity, url, inputField);
+            }, 500); // 500ms debounce
         });
-    </script>
+
+        $(document).off('change', '.quantity-input').on('change', '.quantity-input', function() {
+            let inputField = $(this);
+            let productId = inputField.data('id');
+            let colorId = inputField.data('color');
+            let sizeId = inputField.data('size');
+            let url = inputField.data('url');
+            let newQuantity = parseInt(inputField.val()) || 1;
+
+            // Lưu lại giá trị cũ trước khi thay đổi
+            inputField.data('oldQuantity', newQuantity);
+
+            if (newQuantity < 1) {
+                newQuantity = 1;
+                inputField.val(newQuantity);
+            }
+
+            // Gửi AJAX cập nhật sau khi debounce
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(function() {
+                updateQuantity(productId, colorId, sizeId, newQuantity, url, inputField);
+            }, 500);
+        });
+    });
+</script>
+
 @endpush
+
