@@ -6,6 +6,7 @@ use App\Mail\OrderConfirmationMail;
 use App\Models\City;
 use App\Models\DiscountCode;
 use App\Models\Order;
+use App\Models\ProductVariant;
 use App\Models\Wards;
 use App\Models\Province;
 use App\Models\OrderItem;
@@ -73,25 +74,42 @@ class OrderController extends Controller
      * Show the form for editing the specified resource.
      */
     public function cancel(Request $request, $id)
-    {
-        $order = Order::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+{
+    $order = Order::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+
+    if ($order->isCancellable()) {
+        $request->validate([
+            'reason' => 'required|string|max:255',
+        ]);
+
         
-        if ($order->isCancellable()) {
-            $request->validate([
-                'reason' => 'required|string|max:255', 
-            ]);
-            
-            $order->reason = $request->input('reason');
-            $order->status = 'hủy'; 
-            
-            
-            $order->save();
-    
-            return redirect()->route('order.donhang')->with('success', 'Đơn hàng đã được hủy thành công.');
+        $order->reason = $request->input('reason');
+        $order->status = 'hủy';
+
+       
+        foreach ($order->orderItems as $orderItem) {
+            $productVariant = ProductVariant::where('product_id', $orderItem->product_id)
+                ->where('color_id', $orderItem->color_id)
+                ->where('size_id', $orderItem->size_id)
+                ->first();
+
+            if ($productVariant) {
+               
+                $productVariant->stock_quantity += $orderItem->quantity;
+                $productVariant->save();
+            }
         }
-        
-        return redirect()->route('order.donhang', ['status' => 'hủy'])->with('error', 'Không thể hủy đơn hàng ở trạng thái hiện tại.');
+
+      
+        $order->save();
+
+        return redirect()->route('order.donhang')->with('success', 'Đơn hàng đã được hủy thành công.');
     }
+
+    return redirect()->route('order.donhang', ['status' => 'hủy'])->with('error', 'Không thể hủy đơn hàng ở trạng thái hiện tại.');
+}
+
+    
     
     public function confirmOrder($id)
     {
@@ -104,14 +122,14 @@ class OrderController extends Controller
     {
         $query = $request->input('query');
     
-        // Tìm kiếm các đơn hàng dựa trên query
+      
         $orders = Order::where('name', 'LIKE', "%{$query}%")
             ->orWhere('order_code', 'LIKE', "%{$query}%")
             ->orWhere('email', 'LIKE', "%{$query}%")
             ->orWhere('phone_number', 'LIKE', "%{$query}%")
             ->get();
     
-        // Lấy thông tin thành phố, quận, phường cho từng đơn hàng
+       
         foreach ($orders as $order) {
             $order->city = City::where('matp', $order->city_id)->first();
             $order->province = Province::where('maqh', $order->province_id)->first();
@@ -119,7 +137,7 @@ class OrderController extends Controller
         }
         
     
-        // Trả về kết quả cho view
+       
         return view('client.orders.search', compact('orders'));
     }
     
@@ -169,31 +187,47 @@ class OrderController extends Controller
         return route('cancel.order.page', ['order_code' => $encodedOrderCode]);
     }
     public function cancelOrder(Request $request)
-{
-    $order_code = $request->order_code;
-    $reason = $request->reason;
-
+    {
+        $order_code = $request->order_code;
+        $reason = $request->reason;
     
-    $order = Order::where('order_code', $order_code)->first();
-
-    if (!$order) {
-        return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
+        
+        $order = Order::where('order_code', $order_code)->first();
+    
+        if (!$order) {
+            return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
+        }
+    
+       
+        $nonCancelableStatuses = ['đã_xác_nhận', 'đóng_hàng', 'đang_giao_hàng', 'giao_hàng_thành_công'];
+    
+        if (in_array($order->status, $nonCancelableStatuses)) {
+            return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
+        }
+    
+     
+        $order->status = 'hủy';
+        $order->reason = $reason;
+        $order->save();
+    
+       
+        foreach ($order->orderItems as $item) {
+         
+            $variant = ProductVariant::where('product_id', $item->product_id)
+                ->where('size_id', $item->size_id)  
+                ->where('color_id', $item->color_id) 
+                ->first();
+    
+          
+            if ($variant) {
+                $variant->stock_quantity += $item->quantity;  
+                $variant->save(); 
+            }
+        }
+    
+        return redirect()->route('cart')->with('success', 'Đơn hàng đã được hủy và số lượng sản phẩm đã được cộng lại.');
     }
-
-   
-    $nonCancelableStatuses = ['đã_xác_nhận', 'đóng_hàng', 'đang_giao_hàng', 'giao_hàng_thành_công'];
-
-    if (in_array($order->status, $nonCancelableStatuses)) {
-        return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
-    }
-
-   
-    $order->status = 'hủy';
-    $order->reason = $reason;
-    $order->save();
-    return redirect()->route('cart')->with('success', 'đơn hàng đã được hủy');
-  
-}
+    
 public function showOrderDetail($encryptedOrderCode)
 {
   

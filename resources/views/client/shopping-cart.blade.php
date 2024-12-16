@@ -85,10 +85,7 @@
 
                         </tbody>
                     </table>
-                    <div class="tf-page-cart-note">
-                        <label for="cart-note">Add Order Note</label>
-                        <textarea name="note" id="cart-note" placeholder="How can we help you?"></textarea>
-                    </div>
+                   
                 </form>
             </div>
             <div class="tf-page-cart-footer">

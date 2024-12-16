@@ -19,7 +19,10 @@
             <a href="{{route('index')}}" class="item-link">Giới Thiệu</a>
 
         </li>
-        <li class="menu-item"><a href="https://themeforest.net/item/ecomus-ultimate-html5-template/53417990?s_rank=3"
-                class="item-link">Buy now</a></li>
+        <li class="menu-item position-relative">
+            <a href="" class="item-link">Liên Hệ</a>
+
+        </li>
+       
     </ul>
 </nav>

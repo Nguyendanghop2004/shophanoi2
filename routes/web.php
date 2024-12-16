@@ -82,8 +82,8 @@ Route::middleware('auth')->group(function () {
 });
 
     //start blog
-    Route::get('/blog/show', [BlogController::class, 'show'])->name('blog.show');
-    Route::get('/blog/{id}/detail', [BlogController::class, 'detail'])->name('blog.detail');
+    Route::get('/blog', [BlogController::class, 'show'])->name('blog.show');
+    Route::get('/blog/{slug}/detail', [BlogController::class, 'detail'])->name('blog.detail');
 
     //end blog
 

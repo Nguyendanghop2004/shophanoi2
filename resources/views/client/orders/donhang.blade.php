@@ -142,15 +142,12 @@
                             <option value="Thay đổi địa chỉ giao hàng">Thay đổi địa chỉ giao hàng</option>
                             <option value="Sản phẩm không còn cần thiết">Sản phẩm không còn cần thiết</option>
                             <option value="Thay đổi quyết định">Thay đổi quyết định</option>
-                            <option value="Lý do khác">Lý do khác</option>
+                           
                         </select>
                     </div>
                     
                     <!-- Trường nhập lý do khác, ẩn mặc định -->
-                    <div class="mb-3" id="otherReasonInput" style="display: none;">
-                        <label for="otherReason" class="form-label">Vui lòng nhập lý do</label>
-                        <textarea class="form-control" id="otherReason" name="reason" rows="3" placeholder="Nhập lý do khác..."></textarea>
-                    </div>
+                   
 
                     <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
                 </form>
@@ -185,16 +182,7 @@
         });
     });
     // Lắng nghe sự kiện thay đổi của select lý do
-    document.getElementById('cancelReason').addEventListener('change', function () {
-        var reason = this.value;
-
-        // Kiểm tra nếu lý do là 'Lý do khác', hiển thị input để nhập lý do khác
-        if (reason === 'Lý do khác') {
-            document.getElementById('otherReasonInput').style.display = 'block';
-        } else {
-            document.getElementById('otherReasonInput').style.display = 'none';
-        }
-    });
+   
    
 
 </script>

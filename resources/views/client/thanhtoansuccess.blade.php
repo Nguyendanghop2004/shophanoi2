@@ -53,105 +53,113 @@
     </div>
 </section>
 <style>
-    /* Căn giữa toàn bộ container */
-    .container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
-
-    .order-summary {
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        padding: 30px;
-        margin: 20px 0;
-        width: 100%;
-        max-width: 800px;
-    }
-
-    .success-title {
-        color: #28a745;
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 15px;
-        text-align: center;
-    }
-
-    .thank-you-note {
-        color: #6c757d;
-        font-size: 16px;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    .order-info {
-        list-style: none;
-        padding: 0;
-        margin-bottom: 30px;
-        text-align: left;
-        font-size: 16px;
-    }
-
-    .order-info li {
-        margin-bottom: 10px;
-    }
-
-    .order-info li strong {
-        color: #333;
-    }
-
-    .order-detail-title {
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 15px;
-        text-align: center;
-    }
-
-    .order-detail-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 30px;
-    }
-
-    .order-detail-table th, .order-detail-table td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .order-detail-table th {
-        background-color: #f8f9fa;
-    }
-
-    .order-detail-table td.text-right {
-        text-align: right;
-    }
-
-    .continue-shopping {
-        margin-top: 30px;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 12px 25px;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-    .order-summary-total {
-    text-align: right;
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 20px;
+  /* Căn giữa toàn bộ container */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
+
+/* Thiết kế cho thông tin đơn hàng */
+.order-summary {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 50px; /* Tăng padding để các phần tử có không gian hơn */
+    margin: 40px 0;
+    width: 100%;
+    max-width: 1000px; /* Tăng chiều rộng của container */
+}
+
+/* Tiêu đề của phần thanh toán thành công */
+.success-title {
+    color: #28a745;
+    font-size: 32px; /* Tăng kích thước font */
+    font-weight: bold;
+    margin-bottom: 20px; /* Tăng khoảng cách dưới */
+    text-align: center;
+}
+
+/* Lời cảm ơn */
+.thank-you-note {
+    color: #6c757d;
+    font-size: 20px; /* Tăng kích thước font */
+    margin-bottom: 30px; /* Tăng khoảng cách dưới */
+    text-align: center;
+}
+
+/* Thông tin đơn hàng */
+.order-info {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 40px; /* Tăng khoảng cách dưới */
+    text-align: left;
+    font-size: 20px; /* Tăng kích thước font */
+}
+
+.order-info li {
+    margin-bottom: 15px; /* Tăng khoảng cách giữa các dòng */
+}
+
+.order-info li strong {
+    color: #333;
+    font-size: 22px; /* Tăng kích thước font cho phần tên */
+}
+
+/* Tiêu đề chi tiết đơn hàng */
+.order-detail-title {
+    font-size: 24px; /* Tăng kích thước font */
+    font-weight: bold;
+    margin-bottom: 20px; /* Tăng khoảng cách dưới */
+    text-align: center;
+}
+
+/* Bảng chi tiết đơn hàng */
+.order-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px; /* Tăng khoảng cách dưới */
+}
+
+.order-detail-table th, .order-detail-table td {
+    padding: 18px; /* Tăng padding cho các ô */
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 20px; /* Tăng kích thước font */
+}
+
+.order-detail-table th {
+    background-color: #f8f9fa;
+}
+
+/* Tổng tiền đơn hàng */
+.order-summary-total {
+    text-align: right;
+    font-size: 24px; /* Tăng kích thước font */
+    font-weight: bold;
+    margin-top: 30px; /* Tăng khoảng cách trên */
+}
+
+/* Nút quay lại trang chủ */
+.continue-shopping {
+    margin-top: 40px; /* Tăng khoảng cách trên */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 18px 30px; /* Tăng padding để nút to hơn */
+    border-radius: 8px; /* Làm cho nút tròn hơn */
+    font-size: 20px; /* Tăng kích thước font */
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
 </style>
 @endsection
 

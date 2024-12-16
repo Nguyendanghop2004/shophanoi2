@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\City;
 use App\Models\Order;
+use App\Models\ProductVariant;
 use App\Models\Wards;
 use App\Models\Province;
 use Illuminate\Http\Request;
@@ -93,18 +94,36 @@ class OrderController extends Controller
     
 
     public function updateStatus(Request $request, $id)
-{
-    $order = Order::find($id);
-    $order->status = $request->input('status');
+    {
+        $order = Order::find($id);
+        $order->status = $request->input('status');
+        
+        // Nếu trạng thái đơn hàng là 'hủy'
+        if ($order->status == 'hủy') {
+            $order->reason = $request->input('reason');
+            
+            // Cộng lại số lượng sản phẩm vào biến thể
+            foreach ($order->orderItems as $orderItem) {
+                // Lấy biến thể sản phẩm từ bảng product_variants
+                $variant = ProductVariant::where('product_id', $orderItem->product_id)
+                    ->where('color_id', $orderItem->color_id)  // Kiểm tra theo màu
+                    ->where('size_id', $orderItem->size_id)  // Kiểm tra theo size
+                    ->first();
+        
+                // Nếu tìm thấy biến thể, cộng lại số lượng vào stock_quantity
+                if ($variant) {
+                    $variant->stock_quantity += $orderItem->quantity;  // Cộng lại số lượng sản phẩm
+                    $variant->save();  // Lưu thay đổi
+                }
+            }
+        } else {
+            $order->reason = null; // Nếu trạng thái không phải 'hủy', xóa lý do
+        }
+        
+        $order->save();
     
-    if ($order->status == 'hủy') {
-        $order->reason = $request->input('reason');
-    } else {
-        $order->reason = null; 
+        return redirect()->route('admin.order.getList')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
     }
-    $order->save();
-
-    return redirect()->route('admin.order.getList')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
-}
+    
 
 }

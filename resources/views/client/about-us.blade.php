@@ -38,8 +38,8 @@ một tủ đồ hiện đại và bền vững.
         <div class="container">
             <div class="tf-grid-layout md-col-2 tf-img-with-text style-4">
                 <div class="tf-image-wrap">
-                    <img class="lazyload w-100" data-src="{{asset('client/assets/images/collections/collection-69.jpg') }}"
-                        src="{{ asset('client/assets/images/collections/collection-69.jpg') }}" alt="ảnh bộ sưu tập">
+                    <img class="lazyload w-100" data-src="{{asset('client/assets/images/collections/logo.jpg') }}"
+                        src="{{ asset('client/assets/images/collections/logo.jpg') }}" alt="ảnh bộ sưu tập">
                 </div>
                 <div class="tf-content-wrap px-0 d-flex justify-content-center w-100">
                     <div>
@@ -185,4 +185,5 @@ Cửa hàng đầu tiên được mở tại một thị trấn nhỏ, nhanh ch�
         </div>
     </section>
     <!-- /Đánh giá -->
+
 @endsection

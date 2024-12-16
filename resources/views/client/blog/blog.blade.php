@@ -44,10 +44,10 @@
                             </div>
                             <div class="article-content">
                                 <div class="article-title">
-                                    <a href="blog-detail.html" class="">{{ $item->title }}</a>
+                                    <a href="{{route('blog.detail',$item->slug)  }}" class="">{{ $item->title }}</a>
                                 </div>
                                 <div class="article-btn">
-                                    <a href="{{route('blog.detail',$item->id)  }}" class="tf-btn btn-line fw-6">Read more<i
+                                    <a href="{{route('blog.detail',$item->slug)  }}" class="tf-btn btn-line fw-6">Xêm Thêm<i
                                             class="icon icon-arrow1-top-left"></i></a>
                                 </div>
                             </div>
