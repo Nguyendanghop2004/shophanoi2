@@ -99,6 +99,91 @@ class CartController extends Controller
                 'cart' => $cart, // Gửi giỏ hàng hiện tại về để frontend xử lý
             ]);
         }
+<<<<<<< HEAD
+=======
+
+        if (!$found) {
+            $cart[] = $newItem;
+        }
+
+        Session::put('cart', $cart);
+    }
+
+    private function getCartDetails($cartItems)
+    {
+        return $cartItems->map(function ($item) {
+            $product = $item->product;
+            $color = $item->color;
+            $size = $item->size;
+            $image = $product->images->firstWhere('color_id', $color->id);
+            $variant = $product->variants()
+                ->where('color_id', $color->id ?? null)
+                ->where('size_id', $size->id ?? null)
+                ->first();
+
+            return [
+                'product_id' => $product->id,
+                'color_id' => $color->id ?? null,
+                'size_id' => $size->id ?? null,
+                'product_name' => $product->product_name ?? 'N/A',
+                'color_name' => $color->name ?? 'N/A',
+                'size_name' => $size->name ?? 'N/A',
+                'quantity' => $item->quantity,
+                'price' => $product->price ?? 0,
+                'pricebonus' => $variant->price ?? 0,
+                'image_url' => $image->image_url ?? '/default-image.jpg',
+                'subtotal' => ($product->price + $variant->price),
+            ];
+        })->toArray();
+    }
+
+    private function getCartDetailsFromSession($cart)
+    {
+        $productIds = array_column($cart, 'product_id');
+        $colorIds = array_column($cart, 'color_id');
+        $sizeIds = array_column($cart, 'size_id');
+
+        $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
+        $colors = Color::whereIn('id', $colorIds)->get()->keyBy('id');
+        $sizes = Size::whereIn('id', $sizeIds)->get()->keyBy('id');
+        $images = ProductImage::whereIn('product_id', $productIds)
+            ->whereIn('color_id', $colorIds)
+            ->get()
+            ->groupBy('product_id');
+
+        // Lấy tất cả các variants tương ứng với sản phẩm, màu và kích thước
+        $variants = ProductVariant::whereIn('product_id', $productIds)
+            ->whereIn('color_id', $colorIds)
+            ->whereIn('size_id', $sizeIds)
+            ->get()
+            ->keyBy(function ($variant) {
+                return "{$variant->product_id}_{$variant->color_id}_{$variant->size_id}";
+            });
+
+        return array_map(function ($item) use ($products, $colors, $sizes, $images, $variants) {
+            $product = $products[$item['product_id']] ?? null;
+            $color = $colors[$item['color_id']] ?? null;
+            $size = $sizes[$item['size_id']] ?? null;
+            $image = $images[$item['product_id']]->firstWhere('color_id', $item['color_id']) ?? null;
+
+            // Tạo key để tra cứu variant
+            $variantKey = "{$item['product_id']}_{$item['color_id']}_{$item['size_id']}";
+            $variant = $variants[$variantKey] ?? null;
+            return [
+                'product_id' => $item['product_id'],
+                'color_id' => $color->id ?? null,
+                'size_id' => $size->id ?? null,
+                'product_name' => $product->product_name ?? 'N/A',
+                'color_name' => $color->name ?? 'N/A',
+                'size_name' => $size->name ?? 'N/A',
+                'quantity' => $item['quantity'],
+                'price' => $item['price'] ?? $product->price,
+                'pricebonus' => $variant->price ?? 0,
+                'image_url' => $image->image_url ?? '/default-image.jpg',
+                'subtotal' => ($product->price + $variant->price ?? 0),
+            ];
+        }, $cart);
+>>>>>>> 696546089058e165075c0968a6c0b72b4a1e8092
     }
     public function viewCart()
     {
@@ -243,10 +328,19 @@ class CartController extends Controller
         $sizeId = $request->input('size_id');
         $quantity = $request->input('quantity');
 
+        $productVariant = ProductVariant::where('product_id', $request->product_id)
+            ->where('color_id', $request->color_id)
+            ->where('size_id', $request->size_id)
+            ->first();
         if ($quantity < 1) {
             return response()->json(['success' => false, 'message' => 'Số lượng không hợp lệ']);
         }
-
+        if ($request->input('quantity') > $productVariant->stock_quantity) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Số lượng sản phẩm trong kho không đủ. Số lượng còn lại: ' . $productVariant->stock_quantity,
+            ]);
+        }
         if (Auth::check()) {
             // Người dùng đã đăng nhập
             $cart = Cart::firstOrCreate([

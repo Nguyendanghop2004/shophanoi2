@@ -126,236 +126,132 @@
             <div class="tf-row-flex">
                 <div class="tf-shop-sidebar wrap-sidebar-mobile">
                     <div class="widget-facet wd-categories">
-                        <div class="facet-title" data-bs-target="#categories" data-bs-toggle="collapse" aria-expanded="true"
-                            aria-controls="categories">
+                        <div class="facet-title d-flex justify-content-between align-items-center" 
+                             data-bs-target="#categories" 
+                             data-bs-toggle="collapse" 
+                             aria-expanded="true" 
+                             aria-controls="categories">
                             <span>Product categories</span>
-                            <span class="icon icon-arrow-up"></span>
+                            <span class="icon">
+                                <i class="fas fa-chevron-up"></i>
+                            </span>
                         </div>
                         <div id="categories" class="collapse show">
-                            <ul class="list-categoris current-scrollbar mb_36">
-                                <li class="cate-item current"><a href="#"><span>Fashion</span></a></li>
-                                <li class="cate-item"><a href="#"><span>Men</span></a></li>
-                                <li class="cate-item"><a href="#"><span>Women</span></a></li>
-                                <li class="cate-item"><a href="#"><span>Denim</span></a></li>
-                                <li class="cate-item"><a href="#"><span>Dress</span></a></li>
+                            <ul class="list-categories current-scrollbar mb_36">
+                                @foreach ($categories as $category)
+                                    <li class="cate-item {{ request('category') == $category->id ? 'current' : '' }}">
+                                        <a href="{{ route('shop-collection.index', ['category' => $category->id]) }}">
+                                            <span>{{ $category->name }}</span>
+                                        </a>
+                                    </li>
+                                    @if ($category->children->isNotEmpty())
+                                        <ul class="sub-categories">
+                                            @foreach ($category->children as $child)
+                                                <li class="cate-item {{ request('category') == $child->id ? 'current' : '' }}">
+                                                    <a href="{{ route('shop-collection.index', ['category' => $child->id]) }}">
+                                                        <span>{{ $child->name }}</span>
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                @endforeach
                             </ul>
                         </div>
-                    </div>
+                    </div>                    
                     <form action="#" id="facet-filter-form" class="facet-filter-form">
-                        <div class="widget-facet">
+                        {{-- <div class="widget-facet">
                             <div class="facet-title" data-bs-target="#availability" data-bs-toggle="collapse"
                                 aria-expanded="true" aria-controls="availability">
                                 <span>Availability</span>
                                 <span class="icon icon-arrow-up"></span>
                             </div>
                             <div id="availability" class="collapse show">
-                                <ul class="tf-filter-group current-scrollbar mb_36">
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="radio" name="availability" class="tf-check" id="availability-1">
-                                        <label for="availability-1" class="label"><span>In
-                                                stock</span>&nbsp;<span>(14)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="radio" name="availability" class="tf-check" id="availability-2">
-                                        <label for="availability-2" class="label"><span>Out of
-                                                stock</span>&nbsp;<span>(2)</span></label>
-                                    </li>
-                                </ul>
+                                <form id="availability-filter" method="GET" action="{{ route('shop-collection.index') }}">
+                                    <ul class="tf-filter-group current-scrollbar mb_36">
+                                        <li class="list-item d-flex gap-12 align-items-center">
+                                            <input type="radio" name="availability" class="tf-check" id="availability-1" value="in-stock"
+                                                {{ request('availability') === 'in-stock' ? 'checked' : '' }}>
+                                            <label for="availability-1" class="label">
+                                                <span>In stock</span>&nbsp;<span>({{ $inStockCount }})</span>
+                                            </label>
+                                        </li>
+                                        <li class="list-item d-flex gap-12 align-items-center">
+                                            <input type="radio" name="availability" class="tf-check" id="availability-2" value="out-of-stock"
+                                                {{ request('availability') === 'out-of-stock' ? 'checked' : '' }}>
+                                            <label for="availability-2" class="label">
+                                                <span>Out of stock</span>&nbsp;<span>({{ $outOfStockCount }})</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </form>
                             </div>
-                        </div>
-                        <div class="widget-facet wrap-price">
-                            <div class="facet-title" data-bs-target="#price" data-bs-toggle="collapse" aria-expanded="true"
-                                aria-controls="price">
+                        </div> --}}
+                                                
+                        <div id="filter-price" class="widget-facet wrap-price">
+                            <div class="facet-title">
                                 <span>Price</span>
-                                <span class="icon icon-arrow-up"></span>
                             </div>
-                            <div id="price" class="collapse show">
-                                <div class="widget-price filter-price">
-                                    <div class="tow-bar-block">
-                                        <div class="progress-price"></div>
-                                    </div>
-                                    <div class="range-input">
-                                        <input class="range-min" type="range" min="0" max="300"
-                                            value="0" />
-                                        <input class="range-max" type="range" min="0" max="300"
-                                            value="300" />
-                                    </div>
-                                    <div class="box-title-price">
-                                        <span class="title-price">Price :</span>
-                                        <div class="caption-price">
-                                            <div>
-                                                <span>$</span>
-                                                <span class="min-price">0</span>
-                                            </div>
-                                            <span>-</span>
-                                            <div>
-                                                <span>$</span>
-                                                <span class="max-price">300</span>
-                                            </div>
-                                        </div>
+                            <div class="filter-price">
+                                <div class="range-input">
+                                    <input id="price-min" class="range-min" type="range" min="0" max="5000" value="0" />
+                                    <input id="price-max" class="range-max" type="range" min="0" max="5000" value="5000" />
+                                </div>
+                                <div class="box-title-price">
+                                    <span>Price:</span>
+                                    <div>
+                                        $<span id="display-min">0</span> - $<span id="display-max">5000</span>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
+                        
                         <div class="widget-facet">
-                            <div class="facet-title" data-bs-target="#brand" data-bs-toggle="collapse"
-                                aria-expanded="true" aria-controls="brand">
+                            <div class="facet-title" data-bs-target="#brand" data-bs-toggle="collapse" aria-expanded="true" aria-controls="brand">
                                 <span>Brand</span>
                                 <span class="icon icon-arrow-up"></span>
                             </div>
                             <div id="brand" class="collapse show">
                                 <ul class="tf-filter-group current-scrollbar mb_36">
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="radio" name="brand" class="tf-check" id="brand-1">
-                                        <label for="brand-1"
-                                            class="label"><span>Ecomus</span>&nbsp;<span>(8)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="radio" name="brand" class="tf-check" id="brand-2">
-                                        <label for="brand-2"
-                                            class="label"><span>M&H</span>&nbsp;<span>(8)</span></label>
-                                    </li>
+                                    @foreach ($brands as $brand)
+                                        <li class="list-item d-flex gap-12 align-items-center">
+                                            <input type="radio" name="brand" class="tf-check" id="brand-{{ $brand->id }}" data-brand-id="{{ $brand->id }}">
+                                            <label for="brand-{{ $brand->id }}" class="label">
+                                                <span>{{ $brand->name }}</span>&nbsp;<span>({{ $brand->products_count }})</span>
+                                            </label>
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
+                        
+
+
                         <div class="widget-facet">
-                            <div class="facet-title" data-bs-target="#color" data-bs-toggle="collapse"
-                                aria-expanded="true" aria-controls="color">
+                            <div class="facet-title" data-bs-target="#color" data-bs-toggle="collapse" aria-expanded="true" aria-controls="color">
                                 <span>Color</span>
                                 <span class="icon icon-arrow-up"></span>
                             </div>
                             <div id="color" class="collapse show">
                                 <ul class="tf-filter-group filter-color current-scrollbar mb_36">
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_beige"
-                                            id="beige" value="beige">
-                                        <label for="beige"
-                                            class="label"><span>Beige</span>&nbsp;<span>(3)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_dark"
-                                            id="black" value="black">
-                                        <label for="black"
-                                            class="label"><span>Black</span>&nbsp;<span>(18)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_blue-2"
-                                            id="blue" value="blue">
-                                        <label for="blue"
-                                            class="label"><span>Blue</span>&nbsp;<span>(3)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_brown"
-                                            id="brown" value="brown">
-                                        <label for="brown"
-                                            class="label"><span>Brown</span>&nbsp;<span>(3)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_cream"
-                                            id="cream" value="cream">
-                                        <label for="cream"
-                                            class="label"><span>Cream</span>&nbsp;<span>(1)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_dark-beige"
-                                            id="dark-beige" value="dark-beige">
-                                        <label for="dark-beige" class="label"><span>Dark
-                                                Beige</span>&nbsp;<span>(1)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_dark-blue"
-                                            id="dark-blue" value="dark-blue">
-                                        <label for="dark-blue" class="label"><span>Dark
-                                                Blue</span>&nbsp;<span>(3)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_dark-green"
-                                            id="dark-green" value="dark-green">
-                                        <label for="dark-green" class="label"><span>Dark
-                                                Green</span>&nbsp;<span>(1)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_dark-grey"
-                                            id="dark-grey" value="dark-grey">
-                                        <label for="dark-grey" class="label"><span>Dark
-                                                Grey</span>&nbsp;<span>(1)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_grey"
-                                            id="grey" value="grey">
-                                        <label for="grey"
-                                            class="label"><span>Grey</span>&nbsp;<span>(2)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_light-blue"
-                                            id="light-blue" value="light-blue">
-                                        <label for="light-blue" class="label"><span>Light
-                                                Blue</span>&nbsp;<span>(5)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_light-green"
-                                            id="light-green" value="light-green">
-                                        <label for="light-green" class="label"><span>Light
-                                                Green</span>&nbsp;<span>(3)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_light-grey"
-                                            id="light-grey" value="light-grey">
-                                        <label for="light-grey" class="label"><span>Light
-                                                Grey</span>&nbsp;<span>(1)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_light-pink"
-                                            id="light-pink" value="light-pink">
-                                        <label for="light-pink" class="label"><span>Light
-                                                Pink</span>&nbsp;<span>(2)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_purple"
-                                            id="light-purple" value="light-purple">
-                                        <label for="light-purple" class="label"><span>Light
-                                                Purple</span>&nbsp;<span>(2)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_light-yellow"
-                                            id="light-yellow" value="light-yellow">
-                                        <label for="light-yellow" class="label"><span>Light
-                                                Yellow</span>&nbsp;<span>(1)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_orange"
-                                            id="orange" value="orange">
-                                        <label for="orange"
-                                            class="label"><span>Orange</span>&nbsp;<span>(1)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_pink"
-                                            id="pink" value="pink">
-                                        <label for="pink"
-                                            class="label"><span>Pink</span>&nbsp;<span>(2)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_taupe"
-                                            id="taupe" value="taupe">
-                                        <label for="taupe"
-                                            class="label"><span>Taupe</span>&nbsp;<span>(1)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_white"
-                                            id="white" value="white">
-                                        <label for="white"
-                                            class="label"><span>White</span>&nbsp;<span>(14)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="checkbox" name="color" class="tf-check-color bg_yellow"
-                                            id="yellow" value="yellow">
-                                        <label for="yellow"
-                                            class="label"><span>Yellow</span>&nbsp;<span>(1)</span></label>
-                                    </li>
+                                    @foreach ($colors as $color)
+                                        <li class="list-item d-flex gap-12 align-items-center">
+                                            <input type="checkbox" name="color[]" class="tf-check-color bg_{{ strtolower($color->name) }}" id="color-{{ $color->id }}" value="{{ $color->id }}">
+                                            <label for="color-{{ $color->id }}" class="label d-flex align-items-center">
+                                                <!-- Hiển thị ô màu với màu nền từ sku_color -->
+                                                <span class="color-swatch" style="background-color: {{ $color->sku_color }};"></span>
+                                                <span>{{ $color->name }}</span>&nbsp;<span>({{ $color->products_count }})</span>
+                                            </label> 
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
+                        
+                        
+                        
+
+                        
                         <div class="widget-facet">
                             <div class="facet-title" data-bs-target="#size" data-bs-toggle="collapse"
                                 aria-expanded="true" aria-controls="size">
@@ -364,186 +260,33 @@
                             </div>
                             <div id="size" class="collapse show">
                                 <ul class="tf-filter-group current-scrollbar">
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="radio" name="size" class="tf-check tf-check-size"
-                                            value="s" id="s">
-                                        <label for="s" class="label"><span>S</span>&nbsp;<span>(7)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="radio" name="size" class="tf-check tf-check-size"
-                                            value="m" id="m">
-                                        <label for="m" class="label"><span>M</span>&nbsp;<span>(8)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="radio" name="size" class="tf-check tf-check-size"
-                                            value="l" id="l">
-                                        <label for="l" class="label"><span>L</span>&nbsp;<span>(8)</span></label>
-                                    </li>
-                                    <li class="list-item d-flex gap-12 align-items-center">
-                                        <input type="radio" name="size" class="tf-check tf-check-size"
-                                            value="xl" id="xl">
-                                        <label for="xl" class="label"><span>XL</span>&nbsp;<span>(6)</span></label>
-                                    </li>
+                                    @foreach ($sizes as $size)
+                                        <li class="list-item d-flex gap-12 align-items-center">
+                                            <input type="radio" name="size" class="tf-check tf-check-size" value="{{ $size->id }}" id="size-{{ $size->id }}">
+                                            <label for="size-{{ $size->id }}" class="label">
+                                                <span>{{ $size->name }}</span> 
+                                                &nbsp;<span>({{ $size->productVariants->count() }})</span> <!-- Số lượng sản phẩm liên quan -->
+                                            </label>
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
+                        
+
+
+                        <button type="button" id="reset-filters" class="btn btn-sm btn-secondary">Reset</button>
+
                     </form>
                 </div>
-                <div class="tf-shop-content wrapper-control-shop">
-                    <div class="meta-filter-shop"></div>
-                    <div class="grid-layout wrapper-shop" data-grid="grid-3">
-
-                        {{-- <!-- card product 5 -->
-                        <div class="card-product" data-price="114.95" data-size="s m l xl" data-color="brown white">
-                            <div class="card-product-wrapper">
-                                <a href="product-detail.html" class="product-img">
-                                    <img class="lazyload img-product" data-src="images/products/brown-2.jpg"
-                                        src="images/products/brown-2.jpg" alt="image-product">
-                                    <img class="lazyload img-hover" data-src="images/products/brown-3.jpg"
-                                        src="images/products/brown-3.jpg" alt="image-product">
-                                </a>
-                                <div class="size-list">
-                                    <span>S</span>
-                                    <span>M</span>
-                                    <span>L</span>
-                                    <span>XL</span>
-                                </div>
-                                <div class="list-product-btn">
-                                    <a href="#quick_add" data-bs-toggle="modal"
-                                        class="box-icon bg_white quick-add tf-btn-loading">
-                                        <span class="icon icon-bag"></span>
-                                        <span class="tooltip">Quick Add</span>
-                                    </a>
-                                    <a href="javascript:void(0);" class="box-icon bg_white wishlist btn-icon-action">
-                                        <span class="icon icon-heart"></span>
-                                        <span class="tooltip">Add to Wishlist</span>
-                                        <span class="icon icon-delete"></span>
-                                    </a>
-                                    <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                        class="box-icon bg_white compare btn-icon-action">
-                                        <span class="icon icon-compare"></span>
-                                        <span class="tooltip">Add to Compare</span>
-                                        <span class="icon icon-check"></span>
-                                    </a>
-                                    <a href="#quick_view" data-bs-toggle="modal"
-                                        class="box-icon bg_white quickview tf-btn-loading">
-                                        <span class="icon icon-view"></span>
-                                        <span class="tooltip">Quick View</span>
-                                    </a>
-                                </div>
+                    <div class="tf-shop-content wrapper-control-shop">
+                        <div class="meta-filter-shop">
+                            <div class="grid-layout wrapper-shop" data-grid="grid-3">
+                                    @include('client.partials.product_list', ['products' => $products])
                             </div>
-                            <div class="card-product-info">
-                                <a href="product-detail.html" class="title link">V-neck linen T-shirt</a>
-                                <span class="price">$114.95</span>
-                                <ul class="list-color-product">
-                                    <li class="list-color-item color-swatch active">
-                                        <span class="tooltip">Brown</span>
-                                        <span class="swatch-value bg_brown"></span>
-                                        <img class="lazyload" data-src="images/products/brown-2.jpg"
-                                            src="images/products/brown-2.jpg" alt="image-product">
-                                    </li>
-                                    <li class="list-color-item color-swatch">
-                                        <span class="tooltip">White</span>
-                                        <span class="swatch-value bg_white"></span>
-                                        <img class="lazyload" data-src="images/products/white-5.jpg"
-                                            src="images/products/white-5.jpg" alt="image-product">
-                                    </li>
-                                </ul>
-                            </div>
-                        </div> --}}
-                        @foreach ($products as $product)
-                            <div class="card-product">
-                                <div class="card-product-wrapper">
-                                    <a href="product-detail.html" class="product-img">
-                                        <img class="lazyload img-product"
-                                            data-src="{{ asset('storage/' . $product['main_image_url']) }}"
-                                            src="{{ asset('storage/' . $product['main_image_url']) }}"
-                                            alt="image-product">
-                                        <img class="lazyload img-hover"
-                                            data-src="{{ asset('storage/' . $product['hover_main_image_url']) }}"
-                                            src="{{ asset('storage/' . $product['hover_main_image_url']) }}"
-                                            alt="image-product">
-                                    </a>
-                                    <div class="list-product-btn">
-                                        <a href="#quick_add" data-bs-toggle="modal"
-                                            data-product-id="{{ $product['id'] }}"
-                                            class="box-icon bg_white quick-add tf-btn-loading">
-                                            <span class="icon icon-bag"></span>
-                                            <span class="tooltip">Quick Add</span>
-                                        </a>
-                                        <a href="javascript:void(0);" class="box-icon bg_white wishlist btn-icon-action">
-                                            <span class="icon icon-heart"></span>
-                                            <span class="tooltip">Add to Wishlist</span>
-                                            <span class="icon icon-delete"></span>
-                                        </a>
-                                        <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                            class="box-icon bg_white compare btn-icon-action">
-                                            <span class="icon icon-compare"></span>
-                                            <span class="tooltip">Add to Compare</span>
-                                            <span class="icon icon-check"></span>
-                                        </a>
-                                        <a href="#quick_view" data-bs-toggle="modal"
-                                            class="box-icon bg_white quickview tf-btn-loading">
-                                            <span class="icon icon-view"></span>
-                                            <span class="tooltip">Quick View</span>
-                                        </a>
-                                    </div>
-                                    <div class="size-list">
-                                        <span>{{ $product['distinct_size_count'] }} sizes available</span>
-                                    </div>
-                                </div>
-                                <div class="card-product-info">
-                                    <a href="product-detail.html" class="title link">{{ $product['name'] }}</a>
-                                    <span class="price">${{ $product['price'] }}</span>
-                                    <ul class="list-color-product">
-                                        @foreach ($product['colors'] as $color)
-                                            <li class="list-color-item color-swatch active">
-                                                <span class="tooltip">{{ $color['name'] }}</span>
-                                                <span class="swatch-value"
-                                                    style="background-color: {{ $color['sku_color'] }}"></span>
-                                                <img class="lazyload image-product"
-                                                    data-src="{{ asset('storage/' . $color['main_image']) }}"
-                                                    src="{{ asset('storage/' . $color['main_image']) }}"
-                                                    alt="image-product">
-                                                <img class="lazyload hover-image-product"
-                                                    data-src="{{ asset('storage/' . $color['hover_image']) }}"
-                                                    src="{{ asset('storage/' . $color['hover_image']) }}"
-                                                    alt="image-product">
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
-                        @endforeach
+                        </div>
                     </div>
-                    <!-- pagination -->
-                    <ul class="tf-pagination-wrap tf-pagination-list tf-pagination-btn">
-                        <!-- Nút Previous -->
-                        <li>
-                            <a href="{{ $products->previousPageUrl() }}"
-                                class="pagination-link animate-hover-btn {{ $products->onFirstPage() ? 'disabled' : '' }}">
-                                <span class="icon icon-arrow-left"></span>
-                            </a>
-                        </li>
-
-                        <!-- Liệt kê các trang -->
-                        @for ($i = 1; $i <= $products->lastPage(); $i++)
-                            <li class="{{ $i == $products->currentPage() ? 'active' : '' }}">
-                                <a href="{{ $products->url($i) }}" class="pagination-link">{{ $i }}</a>
-                            </li>
-                        @endfor
-
-                        <!-- Nút Next -->
-                        <li>
-                            <a href="{{ $products->nextPageUrl() }}"
-                                class="pagination-link animate-hover-btn {{ $products->currentPage() == $products->lastPage() ? 'disabled' : '' }}">
-                                <span class="icon icon-arrow-right"></span>
-                            </a>
-                        </li>
-                    </ul>
-
                 </div>
-            </div>
         </div>
     </section>
 
@@ -555,4 +298,226 @@
             </button>
         </a>
     </div>
+
+    <script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    const elements = {
+        rangeMin: document.getElementById('price-min'),
+        rangeMax: document.getElementById('price-max'),
+        displayMin: document.getElementById('display-min'),
+        displayMax: document.getElementById('display-max'),
+        productList: document.querySelector('.wrapper-shop'),
+        brandFilters: document.querySelectorAll('input[name="brand"]'),
+        colorFilters: document.querySelectorAll('input[name="color[]"]'),
+        sizeFilters: document.querySelectorAll('input[name="size"]'), // Bộ lọc kích thước
+    };
+
+    // Cập nhật giá trị hiển thị
+    const updatePrices = () => {
+        elements.displayMin.textContent = elements.rangeMin.value;
+        elements.displayMax.textContent = elements.rangeMax.value;
+    };
+
+    // Hàm gửi yêu cầu AJAX để lọc sản phẩm
+    const filterProducts = debounce(() => {
+        const url = new URL(window.location.href);
+
+        // Lấy giá trị bộ lọc
+        url.searchParams.set('price_min', elements.rangeMin.value);
+        url.searchParams.set('price_max', elements.rangeMax.value);
+
+        const selectedBrand = document.querySelector('input[name="brand"]:checked');
+        if (selectedBrand) {
+            url.searchParams.set('brand', selectedBrand.dataset.brandId);
+        } else {
+            url.searchParams.delete('brand');
+        }
+
+        const selectedColors = Array.from(elements.colorFilters)
+            .filter(input => input.checked)
+            .map(input => input.value);
+        if (selectedColors.length > 0) {
+            url.searchParams.set('color', selectedColors.join(','));
+        } else {
+            url.searchParams.delete('color');
+        }
+
+        const selectedSize = document.querySelector('input[name="size"]:checked');
+        if (selectedSize) {
+            url.searchParams.set('size', selectedSize.value);
+        } else {
+            url.searchParams.delete('size');
+        }
+
+        // Gửi yêu cầu AJAX
+        fetch(url.toString(), {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        })
+            .then(response => response.text())
+            .then(html => {
+                if (elements.productList) {
+                    elements.productList.innerHTML = html;
+                }
+            })
+            .catch(error => console.error('Lỗi:', error));
+    }, 300);
+
+    // Xử lý sự kiện thanh trượt
+    const handleRangeInput = (isMin) => {
+        const minValue = parseInt(elements.rangeMin.value);
+        const maxValue = parseInt(elements.rangeMax.value);
+
+        if (isMin && minValue > maxValue) {
+            elements.rangeMin.value = maxValue;
+        } else if (!isMin && maxValue < minValue) {
+            elements.rangeMax.value = minValue;
+        }
+
+        updatePrices();
+        filterProducts(); // Lọc sản phẩm sau khi thay đổi giá
+    };
+
+    // Gắn sự kiện cho các thanh trượt
+    elements.rangeMin.addEventListener('input', () => handleRangeInput(true));
+    elements.rangeMax.addEventListener('input', () => handleRangeInput(false));
+
+    // Lọc sản phẩm theo thương hiệu
+    elements.brandFilters.forEach(input => {
+        input.addEventListener('change', filterProducts);
+    });
+
+    // Lọc sản phẩm theo màu sắc
+    elements.colorFilters.forEach(input => {
+        input.addEventListener('change', filterProducts);
+    });
+
+    // Lọc sản phẩm theo kích thước
+    elements.sizeFilters.forEach(input => {
+        input.addEventListener('change', filterProducts);
+    });
+
+    // Khởi tạo giá trị ban đầu
+    updatePrices();
+});
+
+// Hàm debounce để giới hạn số lần gửi yêu cầu
+function debounce(func, wait) {
+    let timeout;
+    return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
+}
+
+document.getElementById('reset-filters').addEventListener('click', function() {
+        // Reset tất cả các input radio, checkbox và range
+        const radios = document.querySelectorAll('#facet-filter-form input[type="radio"], #facet-filter-form input[type="checkbox"]');
+        radios.forEach(function(radio) {
+            radio.checked = false;
+        });
+
+        const rangeInputs = document.querySelectorAll('#facet-filter-form input[type="range"]');
+        rangeInputs.forEach(function(input) {
+            input.value = input.defaultValue;
+        });
+
+        // Cập nhật lại hiển thị giá trị range (nếu có)
+        document.getElementById('display-min').innerText = document.getElementById('price-min').value;
+        document.getElementById('display-max').innerText = document.getElementById('price-max').value;
+
+        // Gửi lại form để lọc lại kết quả sau khi reset
+        document.getElementById('facet-filter-form').submit();
+    });
+    </script>
+    
+    
+    
+    
+    <style>
+        .widget-facet {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.widget-facet .facet-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.widget-facet .facet-title .icon i {
+    transition: transform 0.3s ease;
+}
+
+.widget-facet .facet-title[aria-expanded="true"] .icon i {
+    transform: rotate(180deg);
+}
+
+.list-categories {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.cate-item {
+    margin: 5px 0;
+    padding-left: 10px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.cate-item.current > a {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.cate-item a {
+    text-decoration: none;
+    color: #333;
+}
+
+.cate-item:hover > a {
+    color: #0056b3;
+}
+
+.sub-categories {
+    margin-left: 20px;
+    border-left: 2px solid #ddd;
+    padding-left: 10px;
+}
+
+.sub-categories .cate-item {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.sub-categories .cate-item:hover > a {
+    color: #007bff;
+}
+.color-swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%; /* Tùy chọn nếu bạn muốn ô màu tròn */
+    display: inline-block;
+    margin-right: 8px;
+}
+/* Kiểu cho dấu tick */
+input[type="checkbox"]:checked + label .color-swatch {
+    border: 2px solid #000; /* Bạn có thể thay đổi màu sắc của đường viền để hiển thị dấu tick */
+}
+
+/* Tạo hiệu ứng khi hover */
+input[type="checkbox"]:hover + label .color-swatch {
+    opacity: 0.8;
+}
+
+
+
+    </style>
 @endsection

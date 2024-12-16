@@ -39,7 +39,7 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
-Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
+Route::get('shop-collection', [ShopCollectionController::class, 'index'])->name('shop-collection');
 Route::get('product-detail/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
 Route::get('brand', [BrandController::class, 'index'])->name('brand');
 Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
@@ -76,6 +76,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 
 });
 
@@ -118,3 +120,6 @@ Route::get('/orders/search', [OrderController::class, 'search'])->name('order.se
 Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
 Route::post('/select-address', [CheckoutController::class, 'select_address']);
 
+Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
+Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
+Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');

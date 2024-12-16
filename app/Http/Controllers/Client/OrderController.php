@@ -30,7 +30,7 @@ class OrderController extends Controller
             $query->where('status', $status);
         }
     
-        $orders = $query->paginate(10);
+        $orders = $query->orderBy('created_at', 'desc')->paginate(10);
     
         return view('client.orders.donhang', compact('orders', 'status'));
     }
@@ -99,27 +99,28 @@ class OrderController extends Controller
         return redirect()->back()->with('success', 'Đơn hàng đã được xác nhận thành công.');
     }
     public function search(Request $request)
-    {
-        $query = $request->input('query');
-    
-        // Tìm kiếm các đơn hàng dựa trên query
-        $orders = Order::where('name', 'LIKE', "%{$query}%")
-            ->orWhere('order_code', 'LIKE', "%{$query}%")
-            ->orWhere('email', 'LIKE', "%{$query}%")
-            ->orWhere('phone_number', 'LIKE', "%{$query}%")
-            ->get();
-    
-        // Lấy thông tin thành phố, quận, phường cho từng đơn hàng
-        foreach ($orders as $order) {
-            $order->city = City::where('matp', $order->city_id)->first();
-            $order->province = Province::where('maqh', $order->province_id)->first();
-            $order->ward = Wards::where('xaid', $order->wards_id)->first();
-        }
-        
-    
-        // Trả về kết quả cho view
-        return view('client.orders.search', compact('orders'));
+{
+    $query = $request->input('query');
+
+    if (empty($query)) {
+        return redirect()->back()->with('error', 'Vui lòng nhập từ khóa tìm kiếm.');
     }
+
+    $orders = Order::where('name', 'LIKE', "%{$query}%")
+        ->orWhere('order_code', 'LIKE', "%{$query}%")
+        ->orWhere('email', 'LIKE', "%{$query}%")
+        ->orWhere('phone_number', 'LIKE', "%{$query}%")
+        ->get();
+
+    foreach ($orders as $order) {
+        $order->city = City::where('matp', $order->city_id)->first();
+        $order->province = Province::where('maqh', $order->province_id)->first();
+        $order->ward = Wards::where('xaid', $order->wards_id)->first();
+    }
+
+    return view('client.orders.search', compact('orders'));
+}
+
     
 
     
