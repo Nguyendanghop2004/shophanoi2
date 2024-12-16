@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('carts', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->timestamps();
+        // Schema::create('carts', function (Blueprint $table) {
+        //     $table->bigIncrements('id');
+        //     $table->unsignedBigInteger('user_id')->nullable();
+        //     $table->timestamps();
 
-            // Foreign key
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
+        //     // Foreign key
+        //     $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        // });
     }
 
     /**

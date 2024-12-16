@@ -696,14 +696,4 @@
         </div>
     </div>
 </section>
-
-
 @endsection
-
-@push('scripts')
-<script>
-
-</script>
-@endpush
-
-

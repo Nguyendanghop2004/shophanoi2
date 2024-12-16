@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AccoutAdminController;
 use App\Http\Controllers\Admin\AccoutUserController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriesController;
 
@@ -10,11 +11,13 @@ use App\Http\Controllers\Admin\DiscountCodeController;
 
 
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\ColorSizeController;
 use App\Http\Controllers\Admin\ContactMessageController;
 
 
 use App\Http\Controllers\Admin\HistoryController;
 
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -56,17 +59,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     // end crud user
 
     // adress
-    Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address']);
 
     // end crud user
 
 
     //start status user
-
     Route::post('accountsUser/{id}/accountUser', [AccoutUserController::class, 'activateUser'])->name('accountsUser.activateUser')->middleware('permission:activate_Account');
     Route::post('accountsUser/{id}/deactivateUser', [AccoutUserController::class, 'deactivateUser'])->name('accountsUser.deactivateUser')->middleware('permission:deactivate_Account');
     //end  status user
 
+
+
+    //start status change
 
     Route::get('accounts/profile/{id}', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('accounts/changePassword/{id}', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
@@ -93,14 +97,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::post('accounts/{id}/activate', [AccoutAdminController::class, 'activate'])->name('accounts.activate')->middleware('permission:activate_Account');
     Route::post('accounts/{id}/deactivate', [AccoutAdminController::class, 'deactivate'])->name('accounts.deactivate')->middleware('permission:deactivate_Account');
 
-    // Quản lý thanh trượt
-    Route::resource('slider', SliderController::class)->except(['show']);
-    Route::get('slider/trash', [SliderController::class, 'trash'])->name('slider.trash');
+ // Quản lý thanh trượt
+ Route::resource('slider', SliderController::class)->except(['show']);
+ Route::get('slider/trash', [SliderController::class, 'trash'])->name('slider.trash');
 
-    Route::post('slider/update-order', [SliderController::class, 'updateOrder'])->name('slider.updateOrder');
+ Route::post('slider/update-order', [SliderController::class, 'updateOrder'])->name('slider.updateOrder');
 
-    Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
-    Route::delete('sliders/{id}/force-delete', [SliderController::class, 'forceDelete'])->name('slider.forceDelete');
+ Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
+ Route::delete('sliders/{id}/force-delete', [SliderController::class, 'forceDelete'])->name('slider.forceDelete');
 
     // Quản lý danh mục
     Route::get('categories', [CategoriesController::class, 'list'])->name('categories.list')->middleware('permission:listCategories');
@@ -115,10 +119,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     // Quản lý sản phẩm
 // quản lí đơn hàng
 
-    //end quản lí đơn hàng
+//end quản lí đơn hàng
     Route::resource('product', ProductController::class);
-    //quản lí coupons
-    Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('discount_codes.index');
+//quản lí coupons
+Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('discount_codes.index');
 
     // Route để hiển thị form tạo mã giảm giá
     Route::get('discount-codes/create', [DiscountCodeController::class, 'create'])->name('discount_codes.create');
@@ -182,10 +186,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::post('brands', [BrandController::class, 'store'])->name('brands.store');
     Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show');
     Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
-    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
+    Route::put('brands/{id}/edit', [BrandController::class, 'update'])->name('brands.update');
     Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
 
-
+    Route::get('colors-sizes', [ColorSizeController::class, 'index'])->name('colors_sizes.index');
 
 
     Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address']);
@@ -194,5 +199,22 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::get('history/show/{id}', [HistoryController::class, 'show'])->name('show');
     Route::delete('history/delete/{id}', [HistoryController::class, 'delete'])->name('delete');
 
+    //start blog
+    Route::get('blog/index', [BlogController::class, 'index'])->name('blog.index');
+    Route::post('blog/store', [BlogController::class, 'store'])->name('blog.store');
+    Route::get('blog/show', [BlogController::class, 'show'])->name('blog.show');
+    Route::get('blog/{id}/edit', [BlogController::class, 'edit'])->name('blog.edit');
+    Route::put('blog/{id}/update', [BlogController::class, 'update'])->name('blog.update');
+    Route::delete('blog/delete/{id}', [BlogController::class, 'destroy'])->name('blog.destroy');
+
+    Route::post('blog/{id}/accountBlog', [BlogController::class, 'activateBlog'])->name('accountsUser.activateBlog');
+    Route::post('blog/{id}/deactivateBlog', [BlogController::class, 'deactivateBlog'])->name('accountsUser.deactivateBlog');
+    //end blog
+    // ORDERS
+    Route::get('order/getList',[OrderController::class,'getList'])->name('order.getList');
+    Route::get('order/{id}', [OrderController::class, 'chitiet'])->name('order.chitiet');
+    Route::post('order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.update-status');
+    Route::get('order/index', [OrderController::class, 'index'])->name('order.index');
+    Route::get('order/in-hoadon/{id}', [OrderController::class, 'inhoadon'])->name('order.inHoaDon');
 
 });

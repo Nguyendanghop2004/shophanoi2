@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreSliderRequest extends FormRequest
+class UpdateSliderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,25 +25,20 @@ class StoreSliderRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'short_description' => 'nullable|string|max:500',
-            'image_path' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'link_url' => 'nullable|url|max:255',
             'is_active' => 'boolean',
         ];
-
+        ;
     }
 
     public function messages(): array
     {
         return [
-            'title.required' => 'Tiêu đề là bắt buộc.',
-            'title.string' => 'Tiêu đề phải là một chuỗi ký tự.',
-            'title.max' => 'Tiêu đề không được vượt quá 255 ký tự.',
-
             'short_description.string' => 'Mô tả ngắn phải là một chuỗi ký tự.',
             'short_description.max' => 'Mô tả ngắn không được vượt quá 500 ký tự.',
 
-            'image_path.required' => 'Hình ảnh là bắt buộc.',
-            'image_path.image' => 'Tệp tải lên phải là một hình ảnh.',
+            'image_path.image' => 'Tệp tải lên phải là hình ảnh.',
             'image_path.mimes' => 'Hình ảnh phải có định dạng: jpeg, png, jpg, gif, hoặc svg.',
             'image_path.max' => 'Kích thước hình ảnh không được vượt quá 2MB.',
 
@@ -53,5 +48,4 @@ class StoreSliderRequest extends FormRequest
             'is_active.boolean' => 'Trạng thái kích hoạt phải là true hoặc false.',
         ];
     }
-
 }

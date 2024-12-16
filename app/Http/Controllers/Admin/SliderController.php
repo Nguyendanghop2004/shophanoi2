@@ -12,17 +12,26 @@ use Illuminate\Support\Facades\DB;
 
 class SliderController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, $category_id)
     {
         $search = $request->input('search');
-        $sliders = Slider::with('category')
-            ->when($search, function ($query) use ($search) {
-                $query->where('title', 'like', "%{$search}%");
-            })
-            ->orderBy('position', 'asc')
-            ->paginate(10);
-        return view('admin.slider.index', compact('sliders', 'search'));
-
+        if ($category_id != 'trash') {
+            $sliders = Slider::with('category')
+                ->where('category_id', $category_id)
+                ->when($search, function ($query) use ($search) {
+                    $query->where('title', 'like', "%{$search}%");
+                })
+                ->orderBy('position', 'asc')
+                ->paginate(10);
+            return view('admin.slider.index', compact('sliders', 'search', 'category_id'));
+        } else {
+            $sliders = Slider::onlyTrashed()
+                ->when($search, function ($query) use ($search) {
+                    $query->where('title', 'like', "%{$search}%");
+                })
+                ->paginate(10);
+            return view('admin.slider.trash', compact('sliders', 'search', 'category_id'));
+        }
 
 
     }
@@ -30,15 +39,21 @@ class SliderController extends Controller
     public function updateOrder(Request $request)
     {
         $order = $request->input('order');
+        $category_id = $request->input('category_id');
 
-        if (!$order) {
+        if (!$order || !$category_id) {
             return response()->json(['message' => 'Dữ liệu không hợp lệ'], 400);
         }
-        DB::transaction(function () use ($order) {
 
-            Slider::query()->update(['position' => null]);
+        $category = Category::findOrFail($category_id);
+
+
+        DB::transaction(function () use ($order, $category_id) {
+
+            Slider::where('category_id', $category_id)->update(['position' => null]);
             foreach ($order as $position => $id) {
                 Slider::where('id', $id)
+                    ->where('category_id', $category_id)
                     ->update(['position' => $position + 1]);
             }
         });
@@ -49,7 +64,8 @@ class SliderController extends Controller
 
     public function create()
     {
-        return view('admin.slider.create');
+        $categories = Category::whereNull('parent_id')->get();
+        return view('admin.slider.create', compact('categories'));
     }
 
     public function store(StoreSliderRequest $request)
@@ -58,19 +74,21 @@ class SliderController extends Controller
 
         $validated['image_path'] = $this->handleImageUpload($request);
 
-        $maxPosition = Slider::max('position');
+        $maxPosition = Slider::where('category_id', $validated['category_id'])->max('position');
         $validated['position'] = $maxPosition ? $maxPosition + 1 : 1;
 
         Slider::create($validated);
 
-        return redirect()->route('admin.slider.index')
+        return redirect()->route('admin.slider.index', ['category_id' => $validated['category_id']])
             ->with('success', 'Slider đã được tạo thành công!');
     }
 
     public function edit($id)
     {
         $slider = Slider::findOrFail($id);
-        return view('admin.slider.edit', compact('slider'));
+
+        $categories = Category::whereNull('parent_id')->get();
+        return view('admin.slider.edit', compact('slider', 'categories'));
     }
 
     public function update(UpdateSliderRequest $request, $id)
@@ -82,7 +100,7 @@ class SliderController extends Controller
 
         $slider->update($validated);
 
-        return redirect()->route('admin.slider.index')
+        return redirect()->route('admin.slider.index', ['category_id' => $validated['category_id']])
             ->with('success', 'Slider đã được cập nhật thành công!');
     }
 
@@ -118,7 +136,7 @@ class SliderController extends Controller
             $this->reorderPositions($slider->category_id);
         });
 
-        return redirect()->route('admin.slider.index')
+        return redirect()->route('admin.slider.index', ['category_id' => $slider->category_id])
             ->with('success', 'Slider đã được xóa và vị trí đã được cập nhật.');
     }
 
@@ -126,6 +144,7 @@ class SliderController extends Controller
     {
 
         $sliders = Slider::whereNull('deleted_at')
+            ->where('category_id', $category_id)
             ->orderBy('position')
             ->get();
 
@@ -134,41 +153,32 @@ class SliderController extends Controller
             $slider->save();
         }
     }
-    public function trash(Request $request)
-    {
-        $search = $request->input('search');
 
-        $sliders = Slider::onlyTrashed()
-            ->when($search, function ($query) use ($search) {
-                $query->where('title', 'like', "%{$search}%");
-            })
-            ->paginate(10);
-        return view('admin.slider.trash', compact('sliders', 'search'));
-
-    }
     public function restore($id)
     {
         $slider = Slider::onlyTrashed()->findOrFail($id);
         $slider->restore();
-        $maxPosition = Slider::max('position');
+        $maxPosition = Slider::where('category_id', $slider->category_id)->max('position');
         $slider->position = $maxPosition ? $maxPosition + 1 : 1;
         $slider->save();
-        return redirect()->route('admin.slider.index')
+        return redirect()->route('admin.slider.index', ['category_id' => "trash"])
             ->with('success', 'Slider đã được khôi phục!');
     }
 
 
     public function forceDelete($id)
     {
+
         $slider = Slider::onlyTrashed()->findOrFail($id);
-
-        if ($slider->image_path) {
-            Storage::disk('public')->delete($slider->image_path);
-        }
-
         $slider->forceDelete();
+        // Xóa ảnh trên hệ thống tệp (đảm bảo đường dẫn ảnh đúng)
+        $imagePath = storage_path('app/public/' . $slider->image_path); // Đảm bảo đường dẫn chính xác
 
-        return redirect()->route('admin.slider.index')
+        if (file_exists($imagePath)) {
+            // Xóa file ảnh thực tế
+            unlink($imagePath); // Xóa ảnh khỏi hệ thống tệp
+        }
+        return redirect()->route('admin.slider.index', ['category_id' => 'trash'])
             ->with('success', 'Slider đã bị xóa vĩnh viễn!');
     }
 

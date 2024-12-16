@@ -306,7 +306,7 @@ class ProductController extends Controller
         $product = Product::with([
             'colors' => function ($query) {
                 $query->select('colors.id', 'colors.name', 'colors.sku_color') // Sử dụng tên bảng để tránh mơ hồ
-                    ->whereHas('variants'); // Lọc màu sắc có ít nhất một biến thể
+                    ->whereHas('productvariants'); // Lọc màu sắc có ít nhất một biến thể
             },
             'variants' => function ($query) {
                 $query->select('id', 'product_id', 'color_id', 'size_id', 'product_code', 'status', 'price', 'stock_quantity') // Đảm bảo không có xung đột cột

@@ -43,12 +43,27 @@
             </form>
         </div>
     </div>
-
     <div class="card card-primary mt-4">
         <div class="card-header bg-primary text-white">
             <h4 class="mb-0">Thêm Vai trò</h4>
         </div>
         <div class="card-body">
+            @if(session('thong_bao'))
+                <div class="alert alert-success">
+                    {{ session('thong_bao') }}
+                </div>
+            @endif
+    
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+    
             <form action="{{ url('admin/permissions/insertRoles') }}" method="POST">
                 @csrf
                 <div class="form-group">
@@ -61,6 +76,7 @@
             </form>
         </div>
     </div>
+    
 </section>
 @endsection
 

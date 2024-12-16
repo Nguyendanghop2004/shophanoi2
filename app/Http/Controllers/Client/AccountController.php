@@ -28,7 +28,9 @@ class AccountController extends Controller
 
     public function login(Request $request)
     {
-        
+
+   
+
         // dd($request->all());
         $credentials = $request->only('email', 'password');
 
@@ -37,7 +39,7 @@ class AccountController extends Controller
             $request->session()->regenerate();
             return redirect()->route('home');
         }
-        return redirect()->route('home');
+        return redirect()->route('accountUser.login') ->with('error', 'Mật khẩu hoặc Email không đúng');
     }
     public function logout(Request $request)
     {
@@ -48,7 +50,7 @@ class AccountController extends Controller
     }
     public function Register(RegisterRequest $request)
     {
-        
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -58,5 +60,21 @@ class AccountController extends Controller
         auth()->login($user);
 
         return redirect()->route('home');
+    }
+    public function loginIndex()
+    {
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+    
+        return response()->view('client.login')
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
+    }
+
+    public function RegisterIndex()
+    {
+        return view('client.register');
     }
 }

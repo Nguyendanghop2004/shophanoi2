@@ -34,13 +34,14 @@
                             <th scope="col">#</th>
                             <th scope="col">Tên Tag</th>
                             <th scope="col">Loại</th>
+                            <th scope="col">Ảnh Nền</th>
                             <th scope="col">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if($tags->isEmpty())
                             <tr>
-                                <td colspan="4" class="text-center text-danger">Không có tags nào.</td>
+                                <td colspan="5" class="text-center text-danger">Không có tags nào.</td>
                             </tr>
                         @else
                             @foreach ($tags as $index => $tag)
@@ -48,6 +49,13 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $tag->name }}</td>
                                     <td>{{ $tag->type }}</td>
+                                    <td>
+                                        @if ($tag->background_image)
+                                            <img src="{{ asset('storage/' . $tag->background_image) }}" alt="Ảnh nền" style="width: 100px; height: auto; object-fit: cover;">
+                                        @else
+                                            <span class="text-muted">Không có ảnh</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="d-flex justify-content-start">
                                             <a href="{{ route('admin.tags.edit', $tag->id) }}" class="btn btn-warning ml-2"><i class="fas fa-edit"></i></a>

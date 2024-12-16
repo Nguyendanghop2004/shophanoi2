@@ -16,24 +16,17 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('name');
             $table->string('email');
-            
             $table->string('payment_method')->nullable(); 
-            
-            
-            $table->enum('payment_status', ['pending', 'paid', 'failed'])
-                  ->default('pending');
-            
-          
+            $table->enum('payment_status', ['chờ thanh toán', 'đã thanh toán', 'thất bại'])
+                  ->default('chờ thanh toán');
+            $table->string('reason')->nullable();
             $table->decimal('total_price', 10, 2); 
             $table->string('address'); 
             $table->string('phone_number'); 
             $table->string('order_code'); 
             $table->text('note')->nullable(); 
-            
-           
-            $table->enum('status', ['   chờ_xác_nhận', 'đã_xác_nhận', 'đang_giao_hàng', 'giao_hàng_thành_công', 'đã_hủy'])
+            $table->enum('status', ['chờ_xác_nhận','đã_xác_nhận','chờ_giao_hàng', 'đang_giao_hàng', 'giao_hàng_thành_công','đã_nhận_hàng', 'hủy'])
                   ->default('chờ_xác_nhận'); 
-            
             $table->timestamps();
         });
     }

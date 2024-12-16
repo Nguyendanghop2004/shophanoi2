@@ -23,7 +23,7 @@
                     <a href="#" class="search-close"><i class="fas fa-times"></i></a>
                 </div>
                 <div class="search-item">
-                    <a href="">#Stisla</a>
+                    <a href="">#hanoiclothesshop</a>
                     <a href="#" class="search-close"><i class="fas fa-times"></i></a>
                 </div>
                 <div class="search-header">
@@ -251,18 +251,29 @@
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-columns"></i> <span>Thanh Trượt</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="{{ route('admin.slider.index') }}">Danh sách Thanh Trượt</a></li>
-                    <li><a class="nav-link" href="{{ route('admin.slider.trash') }}">Thùng
+                    {{-- @foreach ($parentCategories as $category)
+                        <li><a class="nav-link"
+                                href="{{ route('admin.slider.index', $category->id) }}">{{ $category->name }}</a></li>
+                    @endforeach --}}
+                    <li><a class="nav-link" href="{{ route('admin.slider.index', ['category_id' => 'trash']) }}">Thùng
                             Rác<i class="fas fa-recycle"></i></a></li>
 
                 </ul>
             </li>
 
 
-            <li><a class="nav-link" href="blank.html"><i class="fas fa-file-alt"></i> <span>Bài Viết</span></a></li>
+            <li class="dropdown">
+                <a href="{{ route('admin.blog.index') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                        class="fas fa-folder"></i>
+                    <span>Bài Viết</span></a>
+                <ul class="dropdown-menu">
 
 
+                    <li><a class="nav-link" href="{{ route('admin.blog.show') }}"><span>Danh Sách Bài viết</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.blog.index') }}"><span>Thêm Mới Bài viết</span></a></li>
 
+                </ul>
+            </li>
             <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
             <li><a class="nav-link" href="{{ route('admin.contact.index') }}"><i class="fas fa-envelope"></i>
                     <span>Liên
@@ -287,18 +298,19 @@
                     </ul>
                 </li>
             @endcan
-
+               
             @can('order')
-                <li class="menu-header">Quản Lí Đơn Hàng</li>
+            <li class="menu-header">Quản Lí Đơn Hàng</li>
                 <li class="dropdown">
-                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                    <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
                         <span>Đơn Hàng</span></a>
                     <ul class="dropdown-menu">
 
-                        <li><a class="nav-link" href=""><span>Danh Sách Đơn Hàng</span></a></li>
-
+                        <li><a class="nav-link" href="{{route('admin.order.getList')}}"><span>Danh Sách Đơn Hàng</span></a></li>
+                       
                     </ul>
                 </li>
+                
             @endcan
             @can('product')
                 <li class="menu-header">Quản Lí Sản Phẩm</li>
@@ -316,40 +328,37 @@
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i>
                         <span>Quản lí Biển Thể</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="{{ route('admin.colors.index') }}"><span>Quản Màu Sắc</span></a>
-                        </li>
-                        <li><a class="nav-link" href="{{ route('admin.sizes.index') }}"><span>Quản Lí Số Đo</span></a>
-                        </li>
-                        <li><a class="nav-link" href="{{ route('admin.brands.index') }}"><span>Quản Lí Thương
-                                    Hiệu</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.colors.index') }}"><span>Quản Màu Sắc</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.sizes.index') }}"><span>Quản Lí Số Đo</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.brands.index') }}"><span>Quản Lí Thương Hiệu</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.tags.index') }}"><span>Quản lí Thẻ</span></a></li>
                     </ul>
                 </li>
             @endcan
 
             @can('Acount')
-                <li class="menu-header">Quản Lí tài khoản</li>
+            <li class="menu-header">Quản Lí tài khoản</li>
 
-                <li class="dropdown">
+            <li class="dropdown">
 
-                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
-                        <span>Account</span></a>
-                    <ul class="dropdown-menu">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                    <span>Account</span></a>
+                <ul class="dropdown-menu">
 
-                        <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Tài khoản
-                                    Admin</span></a></li>
-                        <li><a class="nav-link" href="{{ route('admin.history') }}">
-                                <span>Lịch sử Admin</span></a></li>
-                        <li><a class="nav-link" href=""><span>Tài khoản User</span></a></li>
-                        <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Phân quyền và vai
-                                    trò</span></a></li>
-
-                    </ul>
-                </li>
+                    <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Tài khoản
+                                Admin</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.history') }}">
+                            <span>Lịch sử Admin</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.accountsUser.accountUser') }}"><span>Tài khoản User</span></a></li>
+                    <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Phân quyền và vai
+                                trò</span></a></li>
+                    
+                </ul>
+            </li>
             @endcan
 
 
-
+         
 
 
     </aside>

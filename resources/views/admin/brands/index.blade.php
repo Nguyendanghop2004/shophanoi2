@@ -10,7 +10,7 @@
         <div class="card-header">
             <h4>Danh Sách Thương Hiệu</h4>
             <div class="card-header-action">
-                <a href="{{ route('admin.brands.create') }}" class="btn btn-primary">Thêm Thương Hiệu</a>
+                <a href="{{ route('admin.brands.create') }}" class="btn btn-primary">Thêm Thương Hiệu Mới</a>
             </div>
         </div>
 
@@ -33,19 +33,27 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Tên Thương Hiệu</th>
+                            <th scope="col">Ảnh Thương Hiệu</th>
                             <th scope="col">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if($brands->isEmpty())
                             <tr>
-                                <td colspan="3" class="text-center text-danger">Không có thương hiệu nào.</td>
+                                <td colspan="4" class="text-center text-danger">Không có thương hiệu nào.</td>
                             </tr>
                         @else
                             @foreach ($brands as $index => $brand)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $brand->name }}</td>
+                                    <td>
+                                        @if ($brand->image_brand_url)
+                                            <img src="{{ asset('storage/' . $brand->image_brand_url) }}" alt="Ảnh thương hiệu" style="width: 100px; height: auto; object-fit: cover;">
+                                        @else
+                                            <span class="text-muted">Không có ảnh</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="d-flex justify-content-start">
                                             <a href="{{ route('admin.brands.edit', $brand->id) }}" class="btn btn-warning ml-2"><i class="fas fa-edit"></i></a>

@@ -6,10 +6,12 @@ use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\ShipperController;
 use App\Http\Controllers\Client\AboutUsController;
 use App\Http\Controllers\Client\AccountController;
+use App\Http\Controllers\Client\BlogController;
 use App\Http\Controllers\Client\BrandController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckOutController;
 use App\Http\Controllers\Client\FAQController;
+use App\Http\Controllers\client\OrderController;
 use App\Http\Controllers\Client\OutStoreController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProductDetailController;
@@ -30,6 +32,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
@@ -45,8 +48,8 @@ Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('sho
 //thanh toán
 Route::get('check-out', [CheckOutController::class, 'checkout'])->name('check-out');
 Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
-
-
+Route::get('/vnpay/return', [CheckoutController::class, 'vnPayReturn'])->name('vnpay.return');
+Route::get('/out-of-stock', [CheckoutController::class, 'outOfStock'])->name('out-of-stock');
 
 // routes/web.php
 
@@ -55,9 +58,13 @@ Route::get('payment-confirmation', [PaymentController::class, 'confirmation'])->
 Route::get('payment-failure', [PaymentController::class, 'failure'])->name('payment-failure');
 
 Route::get('/account/{section?}', [AccountController::class, 'acc'])->name('account');
+
 Route::post('/account/login', [AccountController::class, 'login'])->name('account.login');
+Route::get('/accountUser/login', [AccountController::class, 'loginIndex'])->name('accountUser.login');
+
 Route::get('/accountUser/logout', [AccountController::class, 'logout'])->name('accountUser.logout');
 Route::post('/accountUser/register', [AccountController::class, 'register'])->name('accountUser.register');
+Route::get('/accountUser/register', [AccountController::class, 'RegisterIndex'])->name('account.register');
 
 
 
@@ -66,8 +73,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
+
 });
 
+    //start blog
+    Route::get('/blog/show', [BlogController::class, 'show'])->name('blog.show');
+    Route::get('/blog/{id}/detail', [BlogController::class, 'detail'])->name('blog.detail');
+
+    //end blog
 
 // cart
 Route::get('/get-product-info', [HomeController::class, 'getProductInfo']);
@@ -84,9 +99,24 @@ Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->nam
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::get('/cart/modal-cart', [CartController::class, 'getModalCart'])->name('cart.modal');
 
+Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.donhang');
+Route::get('/order/donhang/{id}', [OrderController::class, 'show'])->name('client.orders.show');
+Route::post('order/cancel/{id}', [OrderController::class, 'cancel'])->name('client.orders.cancel');
+
+Route::get('/order/{order_code}/cancel', [OrderController::class, 'showCancelReasonForm'])->name('cancel.order.page');
+
+// Route để gửi yêu cầu hủy đơn hàng qua AJAX
+Route::post('/order/cancel', [OrderController::class, 'cancelOrder'])->name('cancel.order');
 
 
 
-Route::get('/thanhtoanthanhcong', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
-Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/orders/confirm/{id}', [OrderController::class, 'confirmOrder'])->name('orders.confirm');
+Route::get('/orders/search', [OrderController::class, 'search'])->name('order.search');
 
+
+Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
+Route::post('/select-address', [CheckoutController::class, 'select_address']);
+
+Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
+Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
+Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
