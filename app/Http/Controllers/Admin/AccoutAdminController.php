@@ -74,19 +74,29 @@ class AccoutAdminController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(AdminStoreRequest $request)
-    {
-        $data = $request->except('image_path');
-        $data['password'] = Hash::make($request->password);
+{
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:admins,email',
+        'password' => 'required|string|min:8|confirmed',
+        'image_path' => 'nullable|image|max:2048',
+    ]);
 
-        if ($request->hasFile('image_path')) {
-            $data['image_path'] = Storage::put('public/images/admin', $request->file('image_path'));
-        }
+    $data = $request->except('image_path');
+    $data['password'] = Hash::make($request->password);
 
-        Admin::create($data);
-
-        return redirect()->route('admin.accounts.account')->with('success', 'Thêm mới thành công');
+    if ($request->hasFile('image_path')) {
+        $data['image_path'] = Storage::put('public/images/admin', $request->file('image_path'));
     }
 
+    if (Admin::where('email', $data['email'])->exists()) {
+        return redirect()->back()->withErrors(['email' => 'Email này đã được sử dụng.'])->withInput();
+    }
+
+    Admin::create($data);
+
+    return redirect()->route('admin.accounts.account')->with('success', 'Thêm mới thành công');
+}
 
     /**
      * Display the specified resource.
@@ -104,7 +114,8 @@ class AccoutAdminController extends Controller
     public function edit(string $id)
     {
         $admin = Admin::findOrFail($id);
-        return view(('admin.accounts.edit'), compact('admin'));
+        $isAdmin = $admin->hasRole('admin');
+        return view(('admin.accounts.edit'), compact('admin','isAdmin'));
     }
 
     /**
@@ -112,24 +123,27 @@ class AccoutAdminController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        DB::transaction(function () use ($request, $id) {
-            $dataAdmin = Admin::query()->findOrFail($id);
+        $dataAdmin = Admin::query()->findOrFail($id);
+    
+       
+    
+        DB::transaction(function () use ($request, $id, $dataAdmin) {
             $data = $request->except('image_path');
-            $data = [
-                'name' => $request->name,
-                "email" => $request->email,
-
-            ];
+            $data['name'] = $request->name;
+    
+            // Kiểm tra và gán lại mật khẩu
             if ($request->password == '') {
                 $data['password'] = $dataAdmin->password;
             } else {
-                // dd(21);
-                $data['password'] =  Hash::make($request->password);
+                $data['password'] = Hash::make($request->password);
             }
+    
+            // Xử lý ảnh nếu có tải lên
             if ($request->hasFile('image_path')) {
                 $data['image_path'] = Storage::put('public/images/admin', $request->file('image_path'));
             }
-            // dd($data);
+    
+            // Lưu lịch sử cập nhật
             HistorieAdmins::create([
                 'admin_id' => auth()->id(), // Người thực hiện hành động
                 'action' => 'update', // Hành động (update, create, delete)
@@ -137,15 +151,20 @@ class AccoutAdminController extends Controller
                 'model_id' => $dataAdmin->id, // ID của model
                 'changes' => array_diff($dataAdmin->getAttributes(), $data),
             ]);
-
-            $img =  $dataAdmin->image_path;
+    
+            // Cập nhật dữ liệu admin
+            $img = $dataAdmin->image_path;
             $dataAdmin->update($data);
+    
+            // Xóa ảnh cũ nếu có ảnh mới
             if ($img && Storage::exists($img) && $request->hasFile('image_path')) {
                 Storage::delete($img);
             }
         });
+    
         return back()->with('success', 'Sửa thành công');
     }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -173,7 +192,7 @@ class AccoutAdminController extends Controller
         $admin = Admin::find($id);
         $all_column_roles = $admin->roles->first();
         $permission = Permission::orderBy('id', 'DESC')->get();
-        $role = Role::orderBy('id', 'DESC')->get();
+        $role = Role::orderBy('id', 'DESC')->get(); 
         return view('admin.permissions.phanvaitro', compact('admin', 'role', 'all_column_roles', 'permission'));
     }
     public function phanquyen($id)
@@ -201,7 +220,6 @@ class AccoutAdminController extends Controller
         $currentUser = auth()->user();
         $currentUserRole = $currentUser->roles->first();
 
-        // Kiểm tra nếu người đang thực hiện có vai trò 'admin' và người được cấp quyền cũng có vai trò 'admin'
         if ($currentUserRole && $currentUserRole->name != 'admin' && $admin->hasRole('admin')) {
             return redirect()->back()->with('error', 'Bạn không thể cấp vai trò này.');
         }
@@ -243,7 +261,7 @@ class AccoutAdminController extends Controller
             $role = Role::find($role_id);
             $role->syncPermissions([]);
 
-            return redirect()->back()->with('cancel', 'Đã loại bỏ hết quyền của ' . $admin->name);
+            return redirect()->back()->with('cancel', 'Đã loại bỏ hết quyền của ' . $role->name);
         }
 
         $role = Role::find($role_id);
@@ -254,24 +272,47 @@ class AccoutAdminController extends Controller
 
     // Thêm quyền
 
-    public function  insertPermission(Request $request)
-    {
-        $data = $request->all();
-        $permission = new Permission();
-        $permission->name = $data['permission'];
-        $permission->save();
-        return redirect()->back()->with('thong bao', 'thêm thành công');
-    }
+    public function insertPermission(Request $request)
+{
+    $request->validate([
+        'permission' => 'required|string|max:255|unique:permissions,name',
+    ], [
+        'permission.required' => 'Tên quyền là bắt buộc.',
+        'permission.string' => 'Tên quyền phải là một chuỗi ký tự.',
+        'permission.max' => 'Tên quyền không được vượt quá 255 ký tự.',
+        'permission.unique' => 'Quyền này đã tồn tại.',
+    ]);
+
+    $data = $request->all();
+    $permission = new Permission();
+    $permission->name = $data['permission'];
+    $permission->save();
+
+    return redirect()->back()->with('thong bao', 'Thêm thành công');
+}
     // thêm roles
 
-    public function  insertRoles(Request $request)
+   
+    
+    public function insertRoles(Request $request)
     {
+        $request->validate([
+            'roles' => 'required|string|max:255|unique:roles,name',
+        ], [
+            'roles.required' => 'Tên vai trò là bắt buộc.',
+            'roles.string' => 'Tên vai trò phải là một chuỗi ký tự.',
+            'roles.max' => 'Tên vai trò không được vượt quá 255 ký tự.',
+            'roles.unique' => 'Vai trò này đã tồn tại.',
+        ]);
+    
         $data = $request->all();
         $role = new Role();
         $role->name = $data['roles'];
         $role->save();
-        return redirect()->back()->with('thong bao', 'thêm thành công');
+    
+        return redirect()->back()->with('thong_bao', 'Thêm thành công');
     }
+    
     // Trang thái người dùng
     public function activate($id)
     {

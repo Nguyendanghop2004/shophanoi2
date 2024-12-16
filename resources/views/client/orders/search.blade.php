@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
-
+@section('header-home')
+    @include('client.layouts.particals.header-home')
+@endsection
 @section('content')
 <style>
     .custom-card {

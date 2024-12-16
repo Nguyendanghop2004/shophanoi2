@@ -410,70 +410,55 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
    }
    public function vnpayReturn(Request $request)
    {
-       $vnp_HashSecret = "RJVBT58452T7DZK0UOOM0EY10SVH79VS"; 
-       $inputData = $request->all();  
-   
-       $vnp_SecureHash = $inputData['vnp_SecureHash'];  
-       unset($inputData['vnp_SecureHash'], $inputData['vnp_SecureHashType']); 
-   
-       ksort($inputData);
-       $hashData = urldecode(http_build_query($inputData));
-       $checkHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
-   
-       if ($checkHash === $vnp_SecureHash) {
-           if ($inputData['vnp_ResponseCode'] === '00') {
-               // Thanh toán thành công
-               $orderCode = $inputData['vnp_OrderInfo'];  
-               $order = Order::where('order_code', $orderCode)->first();
-   
-               if ($order) {
-                   $order->payment_status = 'Đã thanh toán'; 
-                   $order->save(); 
-                   Mail::to($order->email)->send(new OrderConfirmationMail($order));
-   
-                   // Xóa giỏ hàng sau khi thanh toán thành công
-                   if (auth()->check()) {  
-                       Cart::where('user_id', auth()->id())->delete();
-                   } else {
-                       session()->forget('cart');
-                   }
-   
-                   // Chuyển hướng đến trang thông báo thanh toán thành công và hiển thị thông tin đơn hàng
-                   return redirect()->route('thanhtoanthanhcong', ['id' => $order->id]);
-   
-               } else {
-                   return redirect()->route('home')->with('error', 'Không tìm thấy đơn hàng');
-               }
-           } else {
-               // Thanh toán thất bại
-               $orderCode = $inputData['vnp_OrderInfo'];  
-               $order = Order::where('order_code', $orderCode)->first();
-   
-               if ($order) {
-                   $order->payment_status = 'Thất bại'; 
-                   $order->save();
-   
-                   // Hoàn lại số lượng sản phẩm nếu thanh toán thất bại
-                   foreach ($order->orderItems as $orderItem) {
-                       $productVariant = ProductVariant::where('product_id', $orderItem->product_id)
-                           ->where('color_id', $orderItem->color_id)
-                           ->where('size_id', $orderItem->size_id)
-                           ->first();
-   
-                       if ($productVariant) {
-                           $productVariant->stock_quantity += $orderItem->quantity; 
-                           $productVariant->save(); 
-                       }
-                   }
-   
-                   $order->delete(); // Xóa đơn hàng nếu thanh toán thất bại
-               }
-   
-               return redirect()->route('home')->with('error', 'Thanh toán thất bại, đơn hàng đã bị hủy và xóa');
-           }
-       } else {
-           return redirect()->route('home')->with('error', 'Lỗi bảo mật, vui lòng thử lại');
-       }
+    $vnp_HashSecret = "RJVBT58452T7DZK0UOOM0EY10SVH79VS"; 
+    $inputData = $request->all();  
+
+    $vnp_SecureHash = $inputData['vnp_SecureHash'];  
+    unset($inputData['vnp_SecureHash'], $inputData['vnp_SecureHashType']); 
+
+    ksort($inputData);
+    $hashData = urldecode(http_build_query($inputData));
+    $checkHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
+
+    if ($checkHash === $vnp_SecureHash) {
+        if ($inputData['vnp_ResponseCode'] === '00') {
+            // Nếu thanh toán bị hủy hoặc không thành công, xử lý số lượng sản phẩm
+            $orderCode = $inputData['vnp_OrderInfo'];  
+            $order = Order::where('order_code', $orderCode)->first();
+
+            if ($order) {
+                // Cập nhật trạng thái thanh toán là đã hủy
+                $order->payment_status = 'Đã hủy'; 
+                $order->save();
+
+                // Cộng lại số lượng sản phẩm vào biến thể nếu thanh toán bị hủy
+                foreach ($order->orderItems as $orderItem) {
+                    $productVariant = ProductVariant::where('product_id', $orderItem->product_id)
+                        ->where('color_id', $orderItem->color_id)
+                        ->where('size_id', $orderItem->size_id)
+                        ->first();
+
+                    if ($productVariant) {
+                        // Cộng lại số lượng sản phẩm cho biến thể tương ứng
+                        $productVariant->stock_quantity += $orderItem->quantity; 
+                        $productVariant->save(); 
+                    }
+                }
+
+                // Xóa đơn hàng nếu thanh toán hủy
+                $order->delete(); // Xóa đơn hàng sau khi hủy
+
+                // Trả về thông báo khi thanh toán bị hủy
+                return redirect()->route('home')->with('error', 'Thanh toán đã bị hủy và đơn hàng đã được xóa');
+            } else {
+                return redirect()->route('home')->with('error', 'Không tìm thấy đơn hàng');
+            }
+        } else {
+            return redirect()->route('home')->with('error', 'Lỗi bảo mật hoặc yêu cầu hủy không hợp lệ');
+        }
+    } else {
+        return redirect()->route('home')->with('error', 'Lỗi bảo mật, vui lòng thử lại');
+    }
    }
    
    // Hàm hiển thị thông tin đơn hàng khi thanh toán thành công

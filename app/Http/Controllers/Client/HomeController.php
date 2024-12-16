@@ -143,4 +143,7 @@ class HomeController extends Controller
         // Trả về một view partial chứa thông tin sản phẩm, ảnh ngẫu nhiên, và các size theo màu
         return view('client.layouts.components.ajax-file.quick-add', compact('product', 'randomImages', 'colorSizes'))->render();
     }
+    public function gioithieu(){
+        
+    }
 }

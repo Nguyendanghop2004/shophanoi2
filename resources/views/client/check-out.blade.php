@@ -13,98 +13,100 @@
                 <div class="tf-page-cart-item">
                     <h5 class="fw-5 mb_20">Billing details</h5>
                    
-                        <fieldset class="fieldset">
-                            <label for="first-name">Name</label>
-                            <input name="name" type="text" id="first-name" 
-                                value="{{ auth()->check() ? auth()->user()->name : '' }}" 
-                                placeholder="Your Name" >
-                        </fieldset>
-                        @error('name')
-                                <div class="invalid-feedback" style="display: block;">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        <fieldset class="fieldset">
-                            <label for="last-name">Email</label>
-                            <input name="email" type="email" id="last-name" 
-                                value="{{ auth()->check() ? auth()->user()->email : '' }}" 
-                                >
-                        </fieldset>
-                        @error('email')
-                                <div class="invalid-feedback" style="display: block;">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                    <fieldset class="fieldset">
+                        <label for="first-name">Name</label>
+                        <input name="name" type="text" id="first-name" 
+                            value="{{ old('name', auth()->check() ? auth()->user()->name : '') }}" 
+                            placeholder="Your Name" >
+                    </fieldset>
+                    @error('name')
+                        <div class="invalid-feedback" style="display: block;">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                    <fieldset class="fieldset">
+                        <label for="last-name">Email</label>
+                        <input name="email" type="email" id="last-name" 
+                            value="{{ old('email', auth()->check() ? auth()->user()->email : '') }}" >
+                    </fieldset>
+                    @error('email')
+                        <div class="invalid-feedback" style="display: block;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                     
-    
                     <div class="form-group">
                         <label for="city">Chọn thành phố</label>
                         <select name="city_id" id="city" class="form-control choose city">
                             <option value="" disabled selected>Chọn thành phố</option>
                             @foreach($cities as $city)
-                                <option value="{{ $city->matp }}" {{ auth()->check() && auth()->user()->city_id == $city->matp ? 'selected' : '' }}>{{ $city->name_thanhpho }}</option>
+                                <option value="{{ $city->matp }}" {{ old('city_id', auth()->check() ? auth()->user()->city_id : '') == $city->matp ? 'selected' : '' }}>{{ $city->name_thanhpho }}</option>
                             @endforeach
                         </select>
                     </div>
                     @error('city_id')
-                                <div class="invalid-feedback" style="display: block;">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                        <div class="invalid-feedback" style="display: block;">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
                     <div class="form-group">
                         <label for="province">Chọn quận/huyện</label>
                         <select name="province_id" id="province" class="form-control province choose">
-                            <option value="" >Chọn quận/huyện</option>
+                            <option value="">Chọn quận/huyện</option>
                             @foreach($provinces as $province)
-                                <option value="{{ $province->maqh }}" {{ auth()->check() && auth()->user()->province_id == $province->maqh ? 'selected' : '' }}>{{ $province->name_quanhuyen }} </option>
+                                <option value="{{ $province->maqh }}" {{ old('province_id', auth()->check() ? auth()->user()->province_id : '') == $province->maqh ? 'selected' : '' }}>{{ $province->name_quanhuyen }} </option>
                             @endforeach
                         </select>
                     </div>
                     @error('province_id')
-                                <div class="invalid-feedback" style="display: block;">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                        <div class="invalid-feedback" style="display: block;">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
                     <div class="form-group">
                         <label for="wards">Chọn xã/phường</label>
                         <select name="wards_id" id="wards" class="form-control wards">
-                            <option value="" >Chọn xã/phường</option>
+                            <option value="">Chọn xã/phường</option>
                             @foreach($wards as $ward)
-                                <option value="{{ $ward->xaid }}" {{ auth()->check() && auth()->user()->wards_id == $ward->xaid ? 'selected' : '' }}>{{ $ward->name_xaphuong }}</option>
+                                <option value="{{ $ward->xaid }}" {{ old('wards_id', auth()->check() ? auth()->user()->wards_id : '') == $ward->xaid ? 'selected' : '' }}>{{ $ward->name_xaphuong }}</option>
                             @endforeach
                         </select>
                     </div>
                     @error('wards_id')
-                                <div class="invalid-feedback" style="display: block;">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                        <div class="invalid-feedback" style="display: block;">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
                     <!-- Địa chỉ cụ thể -->
                     <fieldset class="box fieldset">
                         <label for="address">Địa chỉ cụ thể</label>
                         <input name="address" type="text" id="address" 
-                            value="{{ auth()->check() ? auth()->user()->address : '' }}" 
-                            >
+                            value="{{ old('address', auth()->check() ? auth()->user()->address : '') }}" >
                     </fieldset>
                     @error('address')
-                                <div class="invalid-feedback" style="display: block;">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                        <div class="invalid-feedback" style="display: block;">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
                     <fieldset class="box fieldset">
                         <label for="phone">Phone Number</label>
                         <input type="text" name="phone_number" id="phone" 
-                            value="{{ auth()->check() ? auth()->user()->phone_number : '' }}" 
-                            >
+                            value="{{ old('phone_number', auth()->check() ? auth()->user()->phone_number : '') }}" >
                     </fieldset>
                     @error('phone_number')
-                                <div class="invalid-feedback" style="display: block;">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                        <div class="invalid-feedback" style="display: block;">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
                     <fieldset class="box fieldset">
                         <label for="note">Order notes (optional)</label>
-                        <textarea name="note" id="note"></textarea>
+                        <textarea name="note" id="note">{{ old('note') }}</textarea>
                     </fieldset>
                 </div>
     
@@ -128,8 +130,6 @@
                                 </li>
                             @endforeach
                         </ul>
-    
-                     
     
                         <div class="wd-check-payment">
                             <div class="fieldset-radio mb_20">
@@ -157,24 +157,15 @@
                             Place order
                         </button>
                     </div>
- 
                 </div>
-
-
-
             </div>
         </div>
     </form>
-   
-
-
-
-
 </section>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-
    $(document).ready(function(){
     $('.choose').on('change', function(){
         var action = $(this).attr('id');
@@ -217,7 +208,5 @@
         }
     });
 });
-
 </script>
-<!-- page-cart -->
 @endsection

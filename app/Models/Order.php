@@ -27,5 +27,17 @@ class Order extends Model
     {
         $this->update(['status' => 'đã_nhận_hàng']);
     }
-   
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
+    }
+    public function province()
+{
+    return $this->belongsTo(Province::class, 'province_id');
+}
+
+public function ward()
+{
+    return $this->belongsTo(Wards::class, 'wards_id');
+}
 }

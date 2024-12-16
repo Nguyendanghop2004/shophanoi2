@@ -21,17 +21,22 @@ class OrderController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    $user = Auth::user();
-
-    $status = $request->query('status', 'chờ_xác_nhận');
-
-    $orders = Order::where('user_id', $user->id)
-        ->where('status', $status)
-        ->paginate(10);
-
-    return view('client.orders.donhang', compact('orders', 'status'));
-}
+    {
+        $user = Auth::user();
+    
+        $status = $request->query('status', '');
+    
+        $query = Order::where('user_id', $user->id);
+    
+        if ($status !== '') {
+            $query->where('status', $status);
+        }
+    
+        $orders = $query->paginate(10);
+    
+        return view('client.orders.donhang', compact('orders', 'status'));
+    }
+    
 
 
     /**
@@ -79,7 +84,6 @@ class OrderController extends Controller
             $order->reason = $request->input('reason');
             $order->status = 'hủy'; 
             
-            $order->status_hủy_at = now(); 
             
             $order->save();
     
@@ -129,6 +133,7 @@ class OrderController extends Controller
             return redirect()->route('cart')->with('error', 'Mã đơn hàng không hợp lệ.');
         }
 
+
         
         $decodedOrderCode = Crypt::decryptString($order_code);
         if (!$decodedOrderCode) {
@@ -144,6 +149,8 @@ class OrderController extends Controller
 
         
         $nonCancelableStatuses = ['đã_xác_nhận', 'đang_giao_hàng', 'giao_hàng_thành_công', 'đã_nhận_hàng', 'hủy'];
+    
+     
         if (in_array($order->status, $nonCancelableStatuses)) {
             return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
         }
@@ -195,9 +202,7 @@ public function showOrderDetail($encryptedOrderCode)
    
     $order = Order::where('order_code', $order_code)->first();
 
-    if (!$order) {
-        return redirect()->route('orders.index')->with('error', 'Đơn hàng không tồn tại.');
-    }
+
 
  
     $city = City::where('matp', $order->city_id)->first();
