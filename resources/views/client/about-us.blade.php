@@ -6,57 +6,51 @@
     <section class="tf-slideshow about-us-page position-relative">
         <div class="banner-wrapper">
             <img class="lazyload" src="{{ asset('client/assets/images/slider/about-banner-01.jpg') }}"
-                data-src="{{asset('client/assets/images/slider/about-banner-01.jpg') }}" alt="image-collection">
+                data-src="{{asset('client/assets/images/slider/about-banner-01.jpg') }}" alt="hình ảnh bộ sưu tập">
             <div class="box-content text-center">
                 <div class="container">
-                    <div class="text text-white">Empowering women to achieve <br class="d-xl-block d-none"> fitness goals
-                        with style</div>
+                    <div class="text text-white">Trao quyền cho phụ nữ để đạt được <br class="d-xl-block d-none"> mục tiêu thể hình với phong cách</div>
                 </div>
             </div>
         </div>
     </section>
     <!-- /Slider -->
-    <!-- flat-title -->
+    <!-- Tiêu đề -->
     <section class="flat-spacing-9">
         <div class="container">
             <div class="flat-title my-0">
-                <span class="title">We are Ecomus</span>
+                <span class="title">Chúng tôi là Hanoiclothesshop</span>
                 <p class="sub-title text_black-2">
-                    Welcome to our classic women's clothing store, where we believe <br class="d-xl-block d-none">
-                    that timeless style never goes out of fashion. Our collection features classic <br
-                        class="d-xl-block d-none">
-                    pieces that are both stylish and versatile, perfect for building a <br class="d-xl-block d-none">
-                    wardrobe that will last for years.
+                Chào mừng đến với cửa hàng thời trang nam nữ trẻ trung của chúng tôi, nơi chúng tôi tin rằng <br class="d-xl-block d-none">
+phong cách vượt thời gian luôn luôn tươi mới. Bộ sưu tập của chúng tôi bao gồm những sản phẩm cổ điển <br class="d-xl-block d-none">
+vừa phong cách vừa linh hoạt, hoàn hảo để tạo dựng <br class="d-xl-block d-none">
+một tủ đồ hiện đại và bền vững.
                 </p>
             </div>
         </div>
     </section>
-    <!-- /flat-title -->
+    <!-- /Tiêu đề -->
     <div class="container">
         <div class="line"></div>
     </div>
-    <!-- image-text -->
+    <!-- hình ảnh và nội dung -->
     <section class="flat-spacing-23 flat-image-text-section">
         <div class="container">
             <div class="tf-grid-layout md-col-2 tf-img-with-text style-4">
                 <div class="tf-image-wrap">
                     <img class="lazyload w-100" data-src="{{asset('client/assets/images/collections/collection-69.jpg') }}"
-                        src="{{ asset('client/assets/images/collections/collection-69.jpg') }}" alt="collection-img">
+                        src="{{ asset('client/assets/images/collections/collection-69.jpg') }}" alt="ảnh bộ sưu tập">
                 </div>
                 <div class="tf-content-wrap px-0 d-flex justify-content-center w-100">
                     <div>
-                        <div class="heading">Established - 1995</div>
+                        <div class="heading">Thành lập - 2024</div>
                         <div class="text">
-                            Ecomus was founded in 1995 by Jane Smith, a fashion lover with a <br class="d-xl-block d-none">
-                            passion for timeless style. Jane had always been drawn to classic <br
-                                class="d-xl-block d-none">
-                            pieces that could be worn season after season, and she believed that <br
-                                class="d-xl-block d-none">
-                            there was a gap in the market for a store that focused solely on classic <br
-                                class="d-xl-block d-none">
-                            women's clothing. She opened the first store in a small town in New <br
-                                class="d-xl-block d-none">
-                            England, where it quickly became a local favorite.
+                        HanoiClothesshop được thành lập vào năm 2024 bởi một nhóm bạn trẻ tại Việt Nam, những người yêu thời trang với <br class="d-xl-block d-none">
+niềm đam mê phong cách vượt thời gian. Họ luôn bị cuốn hút bởi những sản phẩm thời trang trẻ trung <br class="d-xl-block d-none">
+có thể mặc qua nhiều mùa, và tin rằng <br class="d-xl-block d-none">
+thị trường còn thiếu một cửa hàng tập trung vào trang phục nữ cổ điển. <br class="d-xl-block d-none">
+Cửa hàng đầu tiên được mở tại một thị trấn nhỏ, nhanh chóng trở thành lựa chọn yêu thích của người dân địa phương.
+
                         </div>
                     </div>
                 </div>
@@ -68,15 +62,12 @@
             <div class="tf-grid-layout md-col-2 tf-img-with-text style-4">
                 <div class="tf-content-wrap px-0 d-flex justify-content-center w-100">
                     <div>
-                        <div class="heading">Our mission</div>
+                        <div class="heading">Sứ mệnh của chúng tôi</div>
                         <div class="text">
-                            Our mission is to empower people through sustainable fashion. <br class="d-xl-block d-none">
-                            We want everyone to look and feel good, while also doing our part to <br
-                                class="d-xl-block d-none">
-                            help the environment.We believe that fashion should be stylish, <br class="d-xl-block d-none">
-                            affordable and accessible to everyone. Body positivity and inclusivity <br
-                                class="d-xl-block d-none">
-                            are values that are at the heart of our brand.
+                            Sứ mệnh của chúng tôi là trao quyền cho mọi người thông qua thời trang bền vững. <br class="d-xl-block d-none">
+                            Chúng tôi muốn mọi người trông đẹp và cảm thấy tuyệt vời, đồng thời đóng góp vào việc <br class="d-xl-block d-none">
+                            bảo vệ môi trường. Chúng tôi tin rằng thời trang cần phong cách, <br class="d-xl-block d-none">
+                            giá cả phải chăng và dễ tiếp cận với mọi người. Giá trị về sự tích cực và đa dạng là nền tảng của thương hiệu chúng tôi.
                         </div>
                     </div>
                 </div>
@@ -84,31 +75,29 @@
                     <div class="tf-image-wrap box-img item-1">
                         <div class="img-style">
                             <img class="lazyload" src="{{ asset('client/assets/images/collections/collection-71.jpg') }}"
-                                data-src="{{asset('client/assets/images/collections/collection-71.jpg') }}" alt="img-slider">
+                                data-src="{{asset('client/assets/images/collections/collection-71.jpg') }}" alt="ảnh bộ sưu tập">
                         </div>
                     </div>
                     <div class="tf-image-wrap box-img item-2">
                         <div class="img-style">
                             <img class="lazyload" src="{{ asset('client/assets/images/collections/collection-70.jpg') }}"
-                                data-src="{{asset('client/assets/images/collections/collection-70.jpg') }}" alt="img-slider">
+                                data-src="{{asset('client/assets/images/collections/collection-70.jpg') }}" alt="ảnh bộ sưu tập">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- /image-text -->
-    <!-- iconbox -->
+    <!-- /hình ảnh và nội dung -->
+    <!-- Hộp icon -->
     <section>
         <div class="container">
             <div class="bg_grey-2 radius-10 flat-wrap-iconbox">
                 <div class="flat-title lg">
-                    <span class="title fw-5">Quality is our priority</span>
+                    <span class="title fw-5">Chất lượng là ưu tiên của chúng tôi</span>
                     <div>
-                        <p class="sub-title text_black-2">Our talented stylists have put together outfits that are perfect
-                            for the season.</p>
-                        <p class="sub-title text_black-2">They've variety of ways to inspire your next fashion-forward
-                            look.</p>
+                        <p class="sub-title text_black-2">Đội ngũ stylist tài năng đã tạo ra những bộ trang phục hoàn hảo cho mùa này.</p>
+                        <p class="sub-title text_black-2">Họ đã nghĩ ra nhiều cách để truyền cảm hứng cho phong cách thời trang hiện đại của bạn.</p>
                     </div>
                 </div>
                 <div class="flat-iconbox-v3 lg">
@@ -121,10 +110,8 @@
                                             <i class="icon-materials"></i>
                                         </div>
                                         <div class="content">
-                                            <div class="title">High-Quality Materials</div>
-                                            <p class="text_black-2">Crafted with precision and excellence, our activewear
-                                                is meticulously engineered using premium materials to ensure unmatched
-                                                comfort and durability.</p>
+                                            <div class="title">Chất liệu cao cấp</div>
+                                            <p class="text_black-2">Sản phẩm được chế tác tỉ mỉ từ các chất liệu cao cấp, mang lại sự thoải mái và bền bỉ vượt trội.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -134,9 +121,8 @@
                                             <i class="icon-design"></i>
                                         </div>
                                         <div class="content">
-                                            <div class="title">Laconic Design</div>
-                                            <p class="text_black-2">Simplicity refined. Our activewear embodies the essence
-                                                of minimalistic design, delivering effortless style that speaks volumes.</p>
+                                            <div class="title">Thiết kế tối giản</div>
+                                            <p class="text_black-2">Sự tinh tế từ đơn giản. Sản phẩm của chúng tôi mang đến phong cách tối giản mà vẫn nổi bật.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -146,14 +132,11 @@
                                             <i class="icon-sizes"></i>
                                         </div>
                                         <div class="content">
-                                            <div class="title">Various Sizes</div>
-                                            <p class="text_black-2">Designed for every body and anyone, our activewear
-                                                embraces diversity with a wide range of sizes and shapes, celebrating the
-                                                beauty of individuality.</p>
+                                            <div class="title">Đa dạng kích cỡ</div>
+                                            <p class="text_black-2">Dành cho mọi dáng người, sản phẩm của chúng tôi tôn vinh vẻ đẹp cá nhân với nhiều kích cỡ đa dạng.</p>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div class="sw-dots style-2 sw-pagination-mb justify-content-center"></div>
@@ -162,8 +145,8 @@
             </div>
         </div>
     </section>
-    <!-- /iconbox -->
-    <!-- Testimonial -->
+    <!-- /Hộp icon -->
+    <!-- Đánh giá -->
     <section class="flat-testimonial-v2 flat-spacing-24">
         <div class="container">
             <div class="wrapper-thumbs-testimonial-v2 flat-thumbs-testimonial">
@@ -172,7 +155,7 @@
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
                                 <div class="testimonial-item lg lg-2">
-                                    <h4 class="mb_40">Our customer’s reviews</h4>
+                                    <h4 class="mb_40">Đánh giá của khách hàng</h4>
                                     <div class="icon">
                                         <img class="lazyload" data-src="{{asset('client/assets/images/item/quote.svg') }}" alt=""
                                             src="{{ asset('client/assets/images/item/quote.svg') }}">
@@ -185,151 +168,21 @@
                                         <i class="icon-start"></i>
                                     </div>
                                     <p class="text">
-                                        "I have been shopping with this web fashion site for over a year now and I can
-                                        confidently say it is the best online fashion site out there.The shipping is always
-                                        fast and the customer service team is friendly and helpful. I highly recommend this
-                                        site to anyone looking for affordable clothing."
+                                        "Tôi đã mua sắm trên trang này hơn một năm và tôi có thể tự tin nói rằng đây là trang thời trang online tốt nhất. Giao hàng luôn nhanh và đội ngũ hỗ trợ thân thiện. Tôi rất khuyên mọi người nên thử!"
                                     </p>
                                     <div class="author box-author">
-                                        <div class="box-img d-md-none rounded-0">
-                                            <img class="lazyload img-product" data-src="{{asset('client/assets/images/item/tets3.jpg') }}"
-                                                src="{{ asset('client/assets/images/item/tets3.jpg') }}"
-                                                alt="image-product">
-                                        </div>
                                         <div class="content">
-                                            <div class="name">Robert smith</div>
+                                            <div class="name">Robert Smith</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="swiper-slide">
-                                <div class="testimonial-item lg lg-2">
-                                    <h4 class="mb_40">Our customer’s reviews</h4>
-                                    <div class="icon">
-                                        <img class="lazyload" data-src="{{asset('client/assets/images/item/quote.svg') }}" alt=""
-                                            src="{{ asset('client/assets/images/item/quote.svg') }}">
-                                    </div>
-                                    <div class="rating">
-                                        <i class="icon-start"></i>
-                                        <i class="icon-start"></i>
-                                        <i class="icon-start"></i>
-                                        <i class="icon-start"></i>
-                                        <i class="icon-start"></i>
-                                    </div>
-                                    <p class="text">
-                                        "I have been shopping with this web fashion site for over a year now and I can
-                                        confidently say it is the best online fashion site out there.The shipping is always
-                                        fast and the customer service team is friendly and helpful. I highly recommend this
-                                        site to anyone looking for affordable clothing."
-                                    </p>
-                                    <div class="author box-author">
-                                        <div class="box-img d-md-none rounded-0">
-                                            <img class="lazyload img-product" data-src="{{asset('client/assets/images/item/tets4.jpg') }}"
-                                                src="{{ asset('client/assets/images/item/tets4.jpg') }}"
-                                                alt="image-product">
-                                        </div>
-                                        <div class="content">
-                                            <div class="name">Jenifer Unix</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-md-flex d-none box-sw-navigation">
-                        <div class="nav-sw nav-next-slider nav-next-tes-2"><span class="icon icon-arrow-left"></span>
-                        </div>
-                        <div class="nav-sw nav-prev-slider nav-prev-tes-2"><span class="icon icon-arrow-right"></span>
-                        </div>
-                    </div>
-                    <div class="d-md-none sw-dots style-2 sw-pagination-tes-2"></div>
-                </div>
-                <div class="box-right">
-                    <div class="swiper tf-thumb-tes" data-preview="1" data-space="30">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="img-sw-thumb">
-                                    <img class="lazyload img-product" data-src="{{asset('client/assets/images/item/tets3.jpg') }}"
-                                        src="{{ asset('client/assets/images/item/tets3.jpg') }}" alt="image-product">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="img-sw-thumb">
-                                    <img class="lazyload img-product" data-src="{{asset('client/assets/images/item/tets4.jpg') }}"
-                                        src="{{ asset('client/assets/images/item/tets4.jpg') }}" alt="image-product">
-                                </div>
-                            </div>
+                            <!-- Thêm đánh giá khác tại đây -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- /Testimonial -->
-    <div class="container">
-        <div class="line"></div>
-    </div>
-    <!-- Shop Gram -->
-    <section class="flat-spacing-1">
-        <div class="container">
-            <div class="flat-title">
-                <span class="title">Shop Gram</span>
-                <p class="sub-title">Inspire and let yourself be inspired, from one unique fashion to another.</p>
-            </div>
-            <div class="wrap-shop-gram">
-                <div class="swiper tf-sw-shop-gallery" data-preview="5" data-tablet="3" data-mobile="2"
-                    data-space-lg="7" data-space-md="7">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <div class="gallery-item hover-img">
-                                <div class="img-style">
-                                    <img class="lazyload img-hover" data-src="{{asset('client/assets/images/shop/gallery/gallery-7.jpg') }}"
-                                        src="{{ asset('client/assets/images/shop/gallery/gallery-7.jpg') }}"
-                                        alt="image-gallery">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="gallery-item hover-img">
-                                <div class="img-style">
-                                    <img class="lazyload img-hover" data-src="{{asset('client/assets/images/shop/gallery/gallery-3.jpg') }}"
-                                        src="{{ asset('client/assets/images/shop/gallery/gallery-3.jpg') }}"
-                                        alt="image-gallery">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="gallery-item hover-img">
-                                <div class="img-style">
-                                    <img class="lazyload img-hover" data-src="{{asset('client/assets/images/shop/gallery/gallery-5.jpg') }}"
-                                        src="{{ asset('client/assets/images/shop/gallery/gallery-5.jpg') }}"
-                                        alt="image-gallery">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="gallery-item hover-img">
-                                <div class="img-style">
-                                    <img class="lazyload img-hover" data-src="{{asset('client/assets/images/shop/gallery/gallery-8.jpg') }}"
-                                        src="{{ asset('client/assets/images/shop/gallery/gallery-8.jpg') }}"
-                                        alt="image-gallery">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="gallery-item hover-img">
-                                <div class="img-style">
-                                    <img class="lazyload img-hover" data-src="{{asset('client/assets/images/shop/gallery/gallery-6.jpg') }}"
-                                        src="{{ asset('client/assets/images/shop/gallery/gallery-6.jpg') }}"
-                                        alt="image-gallery">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="sw-dots sw-pagination-gallery justify-content-center"></div>
-            </div>
-        </div>
-    </section>
-    <!-- /Shop Gram -->
+    <!-- /Đánh giá -->
 @endsection

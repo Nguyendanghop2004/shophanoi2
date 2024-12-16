@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Client\ContactController;
+use App\Http\Controllers\client\GioithieuController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\ShipperController;
@@ -37,6 +38,7 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 
 
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
+Route::get('gioithieu', [AboutUsController::class, 'index'])->name('index');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
 Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
