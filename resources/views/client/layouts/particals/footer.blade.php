@@ -152,7 +152,7 @@
                     <div class="col-12">
                         <div
                             class="footer-bottom-wrap d-flex gap-20 flex-wrap justify-content-between align-items-center">
-                            <div class="footer-menu_item">© 2024 Ecomus Store. Bảo lưu tất cả quyền</div>
+                            <div class="footer-menu_item">© 2024 HanoiClothesshop. Bảo lưu tất cả quyền</div>
                             <div class="tf-payment">
                                 <img src="images/payments/visa.png" alt="">
                                 <img src="images/payments/img-1.png" alt="">
