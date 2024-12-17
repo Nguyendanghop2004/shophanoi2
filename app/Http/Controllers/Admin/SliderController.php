@@ -1,14 +1,14 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Slider;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Admin\StoreSliderRequest;
 use App\Http\Requests\Admin\UpdateSliderRequest;
-use App\Models\Category;
-use App\Models\Slider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 
 class SliderController extends Controller
 {

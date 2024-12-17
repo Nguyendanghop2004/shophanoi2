@@ -27,5 +27,8 @@ class Order extends Model
     {
         $this->update(['status' => 'đã_nhận_hàng']);
     }
-   
+    public function assignedShipper()
+    {
+        return $this->belongsTo(Admin::class, 'assigned_shipper_id');
+    }
 }

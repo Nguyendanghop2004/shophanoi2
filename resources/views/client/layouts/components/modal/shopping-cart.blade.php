@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="header">
-                <div class="title fw-5">Shopping cart</div>
+                <div class="title fw-5">Giỏ Hàng</div>
                 <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
             </div>
             <div class="wrap">
@@ -20,54 +20,14 @@
                         </span>
                     </div>
                     <div class="tf-progress-msg">
-                        Buy <span class="price fw-6">$75.00</span> more to enjoy <span class="fw-6">Free
-                            Shipping</span>
+                        Mua <span class="price fw-6">300.000 VNĐ</span> trở lên <span class="fw-6"> Miễn Phí Ship</span>
                     </div>
                 </div>
                 <div class="tf-mini-cart-wrap">
                     <div class="tf-mini-cart-main">
                         <div class="tf-mini-cart-sroll">
                             <div class="tf-mini-cart-items">
-                                <div class="tf-mini-cart-item">
-                                    <div class="tf-mini-cart-image">
-                                        <a href="product-detail.html">
-                                            <img src="images/products/white-2.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="tf-mini-cart-info">
-                                        <a class="title link" href="product-detail.html">T-shirt</a>
-                                        <div class="meta-variant">Light gray</div>
-                                        <div class="price fw-6">$25.00</div>
-                                        <div class="tf-mini-cart-btns">
-                                            <div class="wg-quantity small">
-                                                <span class="btn-quantity minus-btn">-</span>
-                                                <input type="text" name="number" value="1">
-                                                <span class="btn-quantity plus-btn">+</span>
-                                            </div>
-                                            <div class="tf-mini-cart-remove">Remove</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tf-mini-cart-item">
-                                    <div class="tf-mini-cart-image">
-                                        <a href="product-detail.html">
-                                            <img src="images/products/white-3.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="tf-mini-cart-info">
-                                        <a class="title link" href="product-detail.html">Oversized Motif
-                                            T-shirt</a>
-                                        <div class="price fw-6">$25.00</div>
-                                        <div class="tf-mini-cart-btns">
-                                            <div class="wg-quantity small">
-                                                <span class="btn-quantity minus-btn">-</span>
-                                                <input type="text" name="number" value="1">
-                                                <span class="btn-quantity plus-btn">+</span>
-                                            </div>
-                                            <div class="tf-mini-cart-remove">Remove</div>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                             <div class="tf-minicart-recommendations">
                                 <div class="tf-minicart-recommendations-heading">
@@ -103,8 +63,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="tf-minicart-recommendations-item-infos flex-grow-1">
-                                                    <a class="title" href="product-detail.html">Loose Fit
-                                                        Hoodie</a>
+                                                    <a class="title" href="product-detail.html">Loose Fit Hoodie</a>
                                                     <div class="price">$25.00</div>
                                                 </div>
                                                 <div class="tf-minicart-recommendations-item-quickview">
@@ -151,11 +110,11 @@
                         </div>
                         <div class="tf-mini-cart-bottom-wrap">
                             <div class="tf-cart-totals-discounts">
-                                <div class="tf-cart-total">Subtotal</div>
+                                <div class="tf-cart-total">Tổng Tiền</div>
                                 <div class="tf-totals-total-value fw-6">$49.99 USD</div>
                             </div>
-                            <div class="tf-cart-tax">Taxes and <a href="#">shipping</a> calculated at
-                                checkout</div>
+                            <div class="tf-cart-tax">Taxes and <a href="#">shipping</a> calculated at checkout
+                            </div>
                             <div class="tf-mini-cart-line"></div>
                             <div class="tf-cart-checkbox">
                                 <div class="tf-checkbox-wrapp">
@@ -171,9 +130,8 @@
                                 </label>
                             </div>
                             <div class="tf-mini-cart-view-checkout">
-                                <a href="view-cart.html"
-                                    class="tf-btn btn-outline radius-3 link w-100 justify-content-center">View
-                                    cart</a>
+                                <a href="{{ route('cart') }}"
+                                    class="tf-btn btn-outline radius-3 link w-100 justify-content-center">View cart</a>
                                 <a href="checkout.html"
                                     class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Check
                                         out</span></a>
@@ -199,8 +157,7 @@
                             </label>
                             <textarea name="note" id="Cart-note" placeholder="How can we help you?"></textarea>
                             <div class="tf-cart-tool-btns justify-content-center">
-                                <div
-                                    class="tf-mini-cart-tool-primary text-center w-100 fw-6 tf-mini-cart-tool-close">
+                                <div class="tf-mini-cart-tool-primary text-center w-100 fw-6 tf-mini-cart-tool-close">
                                     Close</div>
                             </div>
                         </div>
@@ -320,8 +277,7 @@
                             <div class="tf-cart-tool-btns">
                                 <a href="#"
                                     class="tf-btn fw-6 justify-content-center btn-fill w-100 animate-hover-btn radius-3"><span>Estimate</span></a>
-                                <div
-                                    class="tf-mini-cart-tool-primary text-center fw-6 w-100 tf-mini-cart-tool-close">
+                                <div class="tf-mini-cart-tool-primary text-center fw-6 w-100 tf-mini-cart-tool-close">
                                     Cancel</div>
                             </div>
                         </div>
