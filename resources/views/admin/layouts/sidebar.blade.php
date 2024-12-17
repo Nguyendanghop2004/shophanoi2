@@ -247,15 +247,13 @@
             <li class="dropdown ">
             <li class="menu-header">Quản Lí</li>
 
+            
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-columns"></i> <span>Thanh Trượt</span></a>
                 <ul class="dropdown-menu">
-                    {{-- @foreach ($parentCategories as $category)
-                        <li><a class="nav-link"
-                                href="{{ route('admin.slider.index', $category->id) }}">{{ $category->name }}</a></li>
-                    @endforeach --}}
-                    <li><a class="nav-link" href="{{ route('admin.slider.index', ['category_id' => 'trash']) }}">Thùng
+                    <li><a class="nav-link" href="{{ route('admin.slider.index') }}">Danh sách Thanh Trượt</a></li>
+                    <li><a class="nav-link" href="{{ route('admin.slider.trash') }}">Thùng
                             Rác<i class="fas fa-recycle"></i></a></li>
 
                 </ul>

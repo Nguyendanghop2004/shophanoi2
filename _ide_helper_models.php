@@ -180,8 +180,6 @@ namespace App\Models{
  * @property-read int|null $products_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $productss
  * @property-read int|null $productss_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Slider> $sliders
- * @property-read int|null $sliders_count
  * @method static \Illuminate\Database\Eloquent\Builder|Category newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Category newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Category onlyTrashed()
@@ -680,7 +678,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \App\Models\Category|null $category
  * @method static \Illuminate\Database\Eloquent\Builder|Slider newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Slider newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Slider onlyTrashed()
