@@ -56,7 +56,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::get('accountsUser/change/{id}', [AccoutUserController::class, 'change'])->name('accountsUser.change');
     Route::post('accountsUser/change/{id}', [AccoutUserController::class, 'changeUser'])->name('accountsUser.changeUser');
     Route::get('accountsUser/show/{id}', [AccoutUserController::class, 'show'])->name('accountsUser.show');
-    // end crud user 
+    // end crud user
 
     // adress
 
@@ -97,13 +97,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::post('accounts/{id}/activate', [AccoutAdminController::class, 'activate'])->name('accounts.activate')->middleware('permission:activate_Account');
     Route::post('accounts/{id}/deactivate', [AccoutAdminController::class, 'deactivate'])->name('accounts.deactivate')->middleware('permission:deactivate_Account');
 
-    // Quản lý thanh trượt
-    Route::get('slider/category/{category_id}', [SliderController::class, 'index'])->name('slider.index');
-    Route::resource('slider', SliderController::class)->except(['index']);
-    Route::post('slider/update-order', [SliderController::class, 'updateOrder'])->name('slider.updateOrder');
+ // Quản lý thanh trượt
+ Route::resource('slider', SliderController::class)->except(['show']);
+ Route::get('slider/trash', [SliderController::class, 'trash'])->name('slider.trash');
 
-    Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
-    Route::delete('sliders/{id}/force-delete', [SliderController::class, 'forceDelete'])->name('slider.forceDelete');
+ Route::post('slider/update-order', [SliderController::class, 'updateOrder'])->name('slider.updateOrder');
+
+ Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
+ Route::delete('sliders/{id}/force-delete', [SliderController::class, 'forceDelete'])->name('slider.forceDelete');
 
     // Quản lý danh mục
     Route::get('categories', [CategoriesController::class, 'list'])->name('categories.list')->middleware('permission:listCategories');
@@ -215,5 +216,10 @@ Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('di
     Route::post('order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.update-status');
     Route::get('order/index', [OrderController::class, 'index'])->name('order.index');
     Route::get('order/in-hoadon/{id}', [OrderController::class, 'inhoadon'])->name('order.inHoaDon');
+
+
+    Route::get('orders/assign', [OrderController::class, 'showAssignShipperForm'])->name('order.assign');
+    Route::post('order/assign/{id}', [OrderController::class, 'assignShipper'])->name('order.assignShipper');
+    Route::get('orders/danhsachgiaohang', [OrderController::class, 'danhsachgiaohang'])->name('order.danhsachgiaohang');
 
 });

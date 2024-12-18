@@ -18,9 +18,8 @@ class Product extends Model
     }
     public function brand()
     {
-        return $this->belongsTo(Brand::class, 'brand_id');
+        return $this->belongsTo(Brand::class);
     }
-    
 
     public function variants()
     {
@@ -48,18 +47,11 @@ class Product extends Model
     {
         return $this->hasMany(ProductImage::class, 'product_id', 'id'); // Thay đổi tên model và các khóa ngoại nếu cần
     }
-    public function orderItems()
-    {
-        return $this->hasMany(OrderItem::class);
-    }
     // App\Models\Product.php
     public function sizes()
     {
         return $this->belongsToMany(Size::class, 'product_variants', 'product_id', 'size_id');
     }
-    public function productVariants()
-    {
-        return $this->hasMany(ProductVariant::class);
-    }
+
 
 }

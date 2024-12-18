@@ -11,34 +11,45 @@ class ProductDetailController extends Controller
 {
     public function index($slug)
     {
-
-        $categories = Category::with(['children' => function ($query) {
-            $query->where('status', 1);
-        }])->where('status', 1)
-        ->whereNull('parent_id')
-        ->get();
-    
-        
+        // Lấy thông tin sản phẩm với các mối quan hệ liên quan
         $product = Product::with([
-            'variants.color',   
-            'variants.size',   
-            'images',          
-            'categories'         
-        ])
-        ->where('slug', $slug)
-        ->where('status', 1) 
-        ->firstOrFail();
-       
-        $base_price = $product->price;
-        $variants = $product->variants;
-        $total_stock_quantity = $variants->sum('stock_quantity');
-        $variant = $variants->first();
-        $additional_price = $variant ? $variant->price : 0;
-        $final_price = $base_price + $additional_price;
-        
-        return view('client.product-detail', compact('categories', 'product', 'base_price', 'additional_price', 'final_price', 'total_stock_quantity', 'variants'));
+            'brand',
+            'variants.color',
+            'variants.size',
+            'images'
+        ])->where('slug', $slug)->first();
+
+        // Kiểm tra nếu không tìm thấy sản phẩm
+        if (!$product) {
+            return response()->json([
+                'message' => 'Product not found'
+            ], 404);
+        }
+
+       // Tạo danh sách size và giá cho mỗi màu
+       $colorSizes = [];
+       foreach ($product->variants as $variant) {
+           $colorId = $variant->color_id;
+           $size = $variant->size;
+           $price = $variant->price;
+
+           // Nếu chưa có màu này trong danh sách $colorSizes thì tạo mới
+           if (!isset($colorSizes[$colorId])) {
+               $colorSizes[$colorId] = [];
+           }
+
+           // Thêm size và giá nếu chưa có
+           if (!in_array($size, array_column($colorSizes[$colorId], 'size'))) {
+               $colorSizes[$colorId][] = [
+                   'size' => $size,
+                   'price' => $price,
+               ];
+           }
+       }
+
+        return view('client.product-detail', compact('product',  'colorSizes'));
     }
-    
+
 
 
 }

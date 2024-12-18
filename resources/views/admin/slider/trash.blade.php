@@ -15,7 +15,7 @@
                     <div class="section-title mt-0">
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                        <form class="form-inline" method="GET" action="{{ route('admin.slider.index', $category_id) }}">
+                        <form class="form-inline" method="GET" action="{{ route('admin.slider.index') }}">
                             <div class="search-element">
                                 <input class="form-control" name="search" type="search" placeholder="Search"
                                     aria-label="Search" data-width="250" value="{{ request()->input('search') }}">
@@ -33,7 +33,6 @@
                                     <th scope="col">Ảnh Thanh Trượt</th>
                                     <th scope="col">Tiêu Đề</th>
                                     <th scope="col">Mô tả ngắn</th>
-                                    <th scope="col">Danh mục</th>
                                     <th scope="col">Đường dẫn Thanh trượt</th>
                                     <th scope="col">Trạng Thái</th>
                                     <th scope="col">Hành động</th>
@@ -46,7 +45,6 @@
                                         <td><div style="padding: 5px;"><img src="{{ asset('storage/' . $slider->image_path) }}" style="max-height: 100px;max-width: 100px" alt=""></div></td>
                                         <td>{{ $slider->title }}</td>
                                         <td>{{ $slider->short_description }}</td>
-                                        <td>{{ $slider->category_id }}</td>
                                         <td>{{ $slider->link_url }}</td>
                                         <td>
 

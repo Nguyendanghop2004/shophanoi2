@@ -19,21 +19,26 @@ class OrderController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $user = Auth::user();
-    
-        $status = $request->query('status', '');
-    
-        $query = Order::where('user_id', $user->id);
-    
-        if ($status !== '') {
-            $query->where('status', $status);
-        }
-    
-        $orders = $query->orderBy('created_at', 'desc')->paginate(10);
-    
-        return view('client.orders.donhang', compact('orders', 'status'));
+{
+    if (!Auth::check()) {
+        return redirect('/');
     }
+
+    $user = Auth::user();
+    
+    $status = $request->query('status', '');
+    
+    $query = Order::where('user_id', $user->id);
+    
+    if ($status !== '') {
+        $query->where('status', $status);
+    }
+    
+    $orders = $query->orderBy('created_at', 'desc')->paginate(10);
+    
+    return view('client.orders.donhang', compact('orders', 'status'));
+}
+
     
 
 

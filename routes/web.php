@@ -32,15 +32,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
-
-
-Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
-
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
-Route::get('shop-collection', [ShopCollectionController::class, 'index'])->name('shop-collection');
-Route::get('product-detail/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
+Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
+Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
 Route::get('brand', [BrandController::class, 'index'])->name('brand');
 Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
 Route::get('faq', [FAQController::class, 'index'])->name('faq');
@@ -100,7 +97,8 @@ Route::get('/debug-cart', function () {
 });
 Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::get('/cart/modal-cart', [CartController::class, 'getModalCart'])->name('cart.modal');
+
 
 Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.donhang');
 Route::get('/order/donhang/{id}', [OrderController::class, 'show'])->name('client.orders.show');
