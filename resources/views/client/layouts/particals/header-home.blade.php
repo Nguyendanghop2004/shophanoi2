@@ -1,4 +1,50 @@
    <!-- announcement-bar -->
+   <style>
+    /* Custom search form styles */
+.search-form {
+    position: relative;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    width: 100%;
+    max-width: 400px;
+    height: 40px;
+    padding: 0 15px; 
+    border-radius: 5px; 
+    border: 1px solid #ccc; 
+}
+
+.search-button {
+    position: absolute;
+    right: 30px; 
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.icon-search {
+    font-size: 20px;
+    color: #333; 
+}
+#searchError {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+
+   </style>
    <div class="announcement-bar bg_dark">
        <div class="wrap-announcement-bar">
            <div class="box-sw-announcement-bar">
@@ -75,39 +121,64 @@
                            </svg>
                        </a>
                    </div>
-                   <div class="col-xl-2 col-md-4 col-6 text-center">
+                   <div class="col-xl-2 col-md-4 col-6 text-center" style="max-width:80%;">
                        <a href="home-multi-brand.html" class="logo-header">
-                           <img src="{{asset('client/assets/images/logo/women-logo.svg')}}" alt="logo" class="logo">
+                           <img src="{{asset('client/assets/images/logo/logo.png')}}" alt="logo" class="logo">
                        </a>
                    </div>
 
 
                    <div class="col-xl-5 col-md-4 col-3">
-                    
-                       <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
-                           <li class="nav-search"><a href="#canvasSearch" data-bs-toggle="offcanvas"
-                                   aria-controls="offcanvasLeft" class="nav-icon-item"><i
-                                       class="icon icon-search"></i></a></li>
-                           @if (Auth::user())
-                            <a href="{{ route('accountUser.logout')}}">logout</a>
-                           @else
-                               <li class="">
-                                   <a href="{{route('accountUser.login')}}" class="nav-icon-item">
-                                       <i class="icon icon-account"></i>
-                                   </a>
-                               </li>
-                           @endif
+                    @if (Auth::check())
+                        <a href="{{ route('order.donhang') }}">Đơn hàng của tôi</a>
+                    @else
+                        <a href="{{ route('accountUser.login') }}">Đơn hàng của tôi</a>
+                    @endif
+                    <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
+                        <li class="nav-search">
+                            <form action="{{ route('order.search') }}" method="GET"  class="search-form" onsubmit="return validateSearchForm()">
+                                <div class="search-input-wrapper">
+                                    <input type="text" name="query" id="searchQuery" placeholder="Search orders..." class="search-input">
+                                    <button class="nav-icon-item search-button" type="submit">
+                                        <i class="icon icon-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </li>
+                        
+                        <!-- Thông báo lỗi -->
+                        <div id="searchError" class="alert alert-danger" style="display: none;">
+                            Vui lòng nhập từ khóa tìm kiếm
+                        </div>
+                        @if (Auth::check())
+                            <a href="{{ route('accountUser.logout') }}">Logout</a>
+                        @else
+                            <li>
+                                <a href="{{ route('accountUser.login') }}" class="nav-icon-item">
+                                    <i class="icon icon-account"></i>
+                                </a>
+                            </li>
+                        @endif
+                        <li class="nav-wishlist">
+                            <a href="wishlist.html" class="nav-icon-item">
+                                <i class="icon icon-heart"></i>
+                                <span class="count-box">0</span>
+                            </a>
+                        </li>
+                        <li class="nav-cart">
+                            <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
+                                <i class="icon icon-bag"></i>
+                                <span class="count-box">0</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
 
-                           <li class="nav-wishlist"><a href="wishlist.html" class="nav-icon-item"><i
-                                       class="icon icon-heart"></i><span class="count-box">0</span></a></li>
-                           <li class="nav-cart"><a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item"><i
-                                       class="icon icon-bag"></i><span class="count-box">0</span></a></li>
-                       </ul>
-                   @include('client.layouts.particals.navright')
-
-               </div>
            </div>
        </div>
+      
+    
        <div class="header-bottom line">
            <div class="container-full px_15 lg-px_40">
                <div class="wrapper-header d-flex justify-content-center align-items-center">
@@ -125,3 +196,24 @@
 
    </header>
    <!-- /header -->
+   <script>
+    function validateSearchForm() {
+        var query = document.getElementById('searchQuery').value.trim();
+        if (query === '') {
+            showError('Vui lòng nhập từ khóa tìm kiếm');
+            return false;
+        }
+        return true;
+    }
+
+    function showError(message) {
+        var errorDiv = document.getElementById('searchError');
+        errorDiv.innerHTML = message;
+        errorDiv.style.display = 'block';
+
+        // Tự động ẩn thông báo sau 3 giây
+        setTimeout(function() {
+            errorDiv.style.display = 'none';
+        }, 3000);
+    }
+</script>

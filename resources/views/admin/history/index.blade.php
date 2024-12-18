@@ -1,9 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('content')
-    @extends('admin.layouts.master')
 
-@section('content')
     <section class="section">
         <div class="section-header">
             <h1>Lịch sử </h1>
@@ -50,14 +48,7 @@
                                                 class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.delete', $admin->id) }}" method="POST"
-                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger ml-2">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </form>
+                                     
                                            
 
                                           
@@ -95,6 +86,5 @@
             @endif
         });
     </script>
-@endsection
 
 @endsection

@@ -1,7 +1,10 @@
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
 <<<<<<< HEAD
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hóa Đơn - Đơn Hàng #{{ $order->id }}</title>
@@ -19,6 +22,8 @@
             width: 100%;
             max-width: 800px;  /* Giới hạn chiều rộng của container */
 =======
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Hóa Đơn - Đơn Hàng #{{ $order->id }}</title>
     <style>
@@ -38,7 +43,10 @@
         .container {
             width: 100%;
             max-width: 800px;
+<<<<<<< HEAD
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
             margin: 0 auto;
             padding: 20px;
             border: 1px solid #ddd;
@@ -46,9 +54,12 @@
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* Định dạng phần tiêu đề */
 =======
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -59,9 +70,12 @@
             font-size: 28px;
             font-weight: bold;
 <<<<<<< HEAD
+<<<<<<< HEAD
             font-family: 'Arial', sans-serif;
 =======
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
         }
 
         .header p {
@@ -70,9 +84,12 @@
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* Định dạng thông tin đơn hàng */
 =======
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
         .order-details {
             display: flex;
             justify-content: space-between;
@@ -89,9 +106,12 @@
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* Định dạng bảng hiển thị sản phẩm */
 =======
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -109,9 +129,12 @@
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* Định dạng tổng tiền */
 =======
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
         .total {
             text-align: right;
             font-size: 16px;
@@ -119,9 +142,12 @@
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* Định dạng phần footer */
 =======
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
         .footer {
             text-align: center;
             font-size: 14px;
@@ -134,13 +160,17 @@
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* Đảm bảo hình ảnh sản phẩm không bị lệch hoặc vỡ bố cục */
 =======
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
         .table img {
             max-width: 50px;
             height: auto;
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 
@@ -149,15 +179,20 @@
             margin-top: 20px;
         }
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
     </style>
 </head>
 <body>
 
 <div class="container">
 <<<<<<< HEAD
+<<<<<<< HEAD
     <!-- Header -->
 =======
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
     <div class="header">
         <h1>Hóa Đơn Mua Hàng</h1>
         <p>Đơn hàng #{{ $order->id }}</p>
@@ -165,9 +200,12 @@
     </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     <!-- Order Details -->
 =======
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
     <div class="order-details">
         <div class="customer-info">
             <h3>Thông Tin Khách Hàng</h3>
@@ -185,13 +223,15 @@
     </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     <!-- Order Items Table -->
 =======
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
     <table class="table">
         <thead>
             <tr>
-                <th>Ảnh Sản Phẩm</th>
                 <th>Tên Sản Phẩm</th>
                 <th>Số Lượng</th>
                 <th>Đơn Giá</th>
@@ -202,10 +242,13 @@
             @foreach ($orderitems as $item)
                 <tr>
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <td><img src="{{ Storage::url($item->image_url) }}"></td>
 =======
                     <td><img src="{{ public_path('storage/' . $item->image_url) }}"></td>
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
                     <td>{{ $item->product_name }}</td>
                     <td>{{ $item->quantity }}</td>
                     <td>{{ number_format($item->price, 0, ',', '.') }} VNĐ</td>
@@ -216,13 +259,17 @@
     </table>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     <!-- Total Amount -->
 =======
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
     <div class="total">
         <p><strong>Tổng Tiền:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VNĐ</p>
     </div>
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     <!-- Footer -->
 =======
@@ -233,6 +280,8 @@
     
 
 >>>>>>> d01f4155e95f4a43c18a3d3b3ea4c26fbe41b21e
+=======
+>>>>>>> 88d588b8ad2bb414a4549b625abb90f224128b3e
     <div class="footer">
         <p>Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi!</p>
     </div>

@@ -12,7 +12,7 @@
         <div class="section-body">
             <h2 class="section-title">{{ $dataAdmin->name }}</h2>
             <p class="section-lead">
-                Change information about yourself on this page.
+              
             </p>
 
             <div class="row mt-sm-4">
@@ -36,7 +36,7 @@
                             @endforeach
                         </div>
                         <div class="card-footer text-center">
-                            <div class="font-weight-bold mb-2">Follow Ujang On</div>
+                            <div class="font-weight-bold mb-2"></div>
                             <a href="#" class="btn btn-social-icon btn-facebook mr-1">
                                 <i class="fab fa-facebook-f"></i>
                             </a>

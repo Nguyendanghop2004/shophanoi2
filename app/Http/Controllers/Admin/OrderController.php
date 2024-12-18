@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\City;
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\Wards;
 use App\Models\Province;
-use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\OrderItem;
@@ -43,7 +41,7 @@ class OrderController extends Controller
     }
 
     public function chitiet($id)
-    {
+    {   
         $order = Order::findOrFail($id);
         $orderitems = OrderItem::where('order_id',$order->id)->get();
         $city = City::where('matp', $order->city_id)->first();
@@ -52,35 +50,6 @@ class OrderController extends Controller
       
         return view('admin.order.chitiet', compact('order', 'city', 'province', 'ward','orderitems'));
     }
-    public function inhoadon($id)
-    {
-        $order = Order::findOrFail($id);
-        $orderitems = OrderItem::where('order_id', $order->id)->get();
-        $city = City::where('matp', $order->city_id)->first();
-        $province = Province::where('maqh', $order->province_id)->first();
-        $ward = Wards::where('xaid', $order->wards_id)->first();
-    
-        // Cấu hình DOMPDF để sử dụng font Unicode
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView('admin.order.hoadon', compact('order', 'orderitems', 'city', 'province', 'ward'));
-    
-        // Cấu hình để DOMPDF hỗ trợ font Unicode
-        $options = [
-            'isHtml5ParserEnabled' => true,  
-            'isPhpEnabled' => true,        
-            'font_dir' => storage_path('fonts'),  
-            'font_cache' => storage_path('fonts')
-        ];
-    
-       
-        $pdf->setOptions($options);
-    
-        
-        return $pdf->download('hoa_don_'.$order->order_code.'.pdf');
-    }
-    
-    
-    
 
     public function inhoadon($id)
     {
@@ -119,7 +88,7 @@ class OrderController extends Controller
         unlink($tempPath);
     
         // Trả về file PDF
-        return $pdf->download('hoa_don_' . $order->order_code . '.pdf');
+        return $pdf->download('hoa_don_' . 'HN CLOTHESSHOP' . '.pdf');
     }
     
 
@@ -131,7 +100,7 @@ class OrderController extends Controller
     if ($order->status == 'hủy') {
         $order->reason = $request->input('reason');
     } else {
-        $order->reason = null; // Đặt lại lý do hủy nếu trạng thái không phải là đã hủy
+        $order->reason = null; 
     }
     $order->save();
 

@@ -16,17 +16,35 @@
                     @method('PUT')
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-12">
+                            @if(session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+                        
+                            @if($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                        
                             <div class="form-group">
                                 <label for="name">Tên</label>
-                                <input type="text" name="name" class="form-control"
-                                    value="{{ old('name', $admin->name) }}">
+                                <input type="text" name="name" class="form-control" value="{{ old('name', $admin->name) }}">
                             </div>
+                            
+                            @if(!$isAdmin)
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" name="email" class="form-control"
-                                    value="{{ old('email', $admin->email) }}">
+                                <label for="password">Password</label>
+                                <input type="password" name="password" class="form-control" value="">
                             </div>
+                        @endif
                         </div>
+                        
                         <div class="col-lg-6 col-md-6 col-12">
                             <div id="image-preview" class="image-preview mx-auto"
                                 @error('image_path') style="border:2px dashed red" @enderror>

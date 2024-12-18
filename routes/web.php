@@ -11,6 +11,7 @@ use App\Http\Controllers\Client\BrandController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckOutController;
 use App\Http\Controllers\Client\FAQController;
+use App\Http\Controllers\client\OrderController;
 use App\Http\Controllers\Client\OutStoreController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProductDetailController;
@@ -51,6 +52,7 @@ Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('sho
 Route::get('check-out', [CheckOutController::class, 'checkout'])->name('check-out');
 Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnPayReturn'])->name('vnpay.return');
+Route::get('/out-of-stock', [CheckoutController::class, 'outOfStock'])->name('out-of-stock');
 
 // routes/web.php
 
@@ -100,10 +102,22 @@ Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->nam
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
 
+Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.donhang');
+Route::get('/order/donhang/{id}', [OrderController::class, 'show'])->name('client.orders.show');
+Route::post('order/cancel/{id}', [OrderController::class, 'cancel'])->name('client.orders.cancel');
+
+Route::get('/order/{order_code}/cancel', [OrderController::class, 'showCancelReasonForm'])->name('cancel.order.page');
+
+// Route để gửi yêu cầu hủy đơn hàng qua AJAX
+Route::post('/order/cancel', [OrderController::class, 'cancelOrder'])->name('cancel.order');
 
 
 
-Route::get('/thanhtoanthanhcong', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
+Route::post('/orders/confirm/{id}', [OrderController::class, 'confirmOrder'])->name('orders.confirm');
+Route::get('/orders/search', [OrderController::class, 'search'])->name('order.search');
+
+
+Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
 Route::post('/select-address', [CheckoutController::class, 'select_address']);
 
 Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
