@@ -86,42 +86,9 @@
                         </tbody>
                     </table>
 
-                    <h4>Danh Sách Đơn Hàng Được Giao Cho Shipper</h4>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Mã Đơn Hàng</th>
-                                <th scope="col">Tên Khách Hàng</th>
-                                <th scope="col">Địa Chỉ</th>
-                                <th scope="col">Shipper</th>
-                                <th scope="col">Trạng Thái</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($orders as $order)
-                                <tr>
-                                    <th scope="row">{{ $order->id }}</th>
-                                    <td>{{ $order->order_code }}</td>
-                                    <td>{{ $order->customer_name }}</td>
-                                    <td>{{ $order->address }}</td>
-                                    <td>{{ $order->shipper->name ?? 'Chưa giao' }}</td>
-                                    <td>
-                                        @if ($order->status == 'completed')
-                                            <span class="badge badge-success">Đã hoàn thành</span>
-                                        @elseif ($order->status == 'pending')
-                                            <span class="badge badge-warning">Đang chờ</span>
-                                        @else
-                                            <span class="badge badge-danger">Đã hủy</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                  
                 </div>
 
-                {{ $orders->links() }}
                 {{ $admins->links() }}
             </div>
         </div>

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -110,10 +111,11 @@ class OrderController extends Controller
 }
 public function showAssignShipperForm()
 {
-    // Lấy danh sách các đơn hàng chưa có shipper
-    $orders = Order::whereNull('assigned_shipper_id')->get();
+    $orders = Order::whereNull('assigned_shipper_id')
+                   ->whereIn('status', ['đã_xác_nhận'])
+                   ->get();
 
-    // Lấy danh sách Admin có vai trò 'Shipper'
+  
     $shippers = Admin::whereHas('roles', function ($query) {
         $query->where('name', 'Shipper');
     })->get();
@@ -121,23 +123,67 @@ public function showAssignShipperForm()
     return view('admin.order.assign', compact('orders', 'shippers'));
 }
 
+
 public function assignShipper(Request $request, Order $order ,$id)
 {
+    $request->validate([
+        'assigned_shipper_id' => 'required|exists:admins,id'
+    ], [
+        'assigned_shipper_id' => 'Vui lòng chọn shipper.',
+    ]);
     $order = Order::find($id);
         $order->assigned_shipper_id = $request->assigned_shipper_id;
         $order->save();
 
-        return redirect()->back()->with('success', 'Shipper assigned successfully.');
+        return redirect()->back()->with('success', 'Đã cấp đơn hàng cho shipper.');
 }
 public function danhsachgiaohang()
 {
-    // Lấy danh sách shipper đã nhận đơn hàng
-    $orders = Order::whereNull('assigned_shipper_id')->get();
+    $orders = Order::whereNotNull('assigned_shipper_id')->where('status', '!=', 'hủy')->get();
+    $user = Auth::user(); 
+
+    if ($user->hasRole('admin')) {
+        $shippers = Admin::whereHas('roles', function ($query) {
+            $query->where('name', 'Shipper');
+        })->get();
+    } else {
+        $orders = Order::where('assigned_shipper_id', $user->id)->where('status', '!=', 'hủy')->get();
+    }
+
     $shippers = Admin::whereHas('roles', function ($query) {
         $query->where('name', 'Shipper');
     })->get();
-    return view('admin.order.danhsachgiaohang', compact('orders','shippers'));
+    return view('admin.order.danhsachgiaohang', compact('orders', 'shippers'));
 }
+public function removeShipper($orderId)
+{
+    $order = Order::findOrFail($orderId);
+
+    if ($order->assigned_shipper_id) {
+        $order->assigned_shipper_id = null;
+        $order->save();
+
+        return redirect()->route('admin.order.danhsachgiaohang')->with('success', 'Đã loại bỏ đơn hàng.');
+    }
+
+    return redirect()->route('admin.order.danhsachgiaohang')->with('error', 'Đơn hàng không có shipper.');
+}
+public function updateStatusShip(Request $request, $id)
+{
+    $order = Order::find($id);
+    $order->status = $request->input('status');
+    
+    if ($order->status == 'hủy') {
+        $order->reason = $request->input('reason');
+    } else {
+        $order->reason = null; 
+    }
+    $order->save();
+
+    return redirect()->route('admin.order.danhsachgiaohang')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+}
+
+
 
 
 

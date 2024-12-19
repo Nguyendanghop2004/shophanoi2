@@ -41,37 +41,65 @@
 
     .align-items-center {
         align-items: center;
-    }
+    }.nav-tabs .nav-item .nav-link {
+    margin: 5px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #8a2387, #e94057, #f27121); 
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-tabs .nav-item .nav-link.active {
+    background: linear-gradient(135deg, #8a2387, #e94057, #f27121); 
+    color: white;
+}
+
+.nav-tabs .nav-item .nav-link:hover {
+    background: linear-gradient(135deg, #f27121, #e94057, #8a2387); 
+    color: white;
+}
+
+
 </style>
 
 <div class="container">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link {{ $status === '' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => '']) }}">Tất cả đơn hàng</a>
+            <button class="nav-link btn {{ $status === '' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => '']) }}'">Tất cả đơn hàng</button>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'chờ_xác_nhận' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'chờ_xác_nhận']) }}">Chờ xác nhận</a>
+            <button class="nav-link btn {{ $status === 'chờ_xác_nhận' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'chờ_xác_nhận']) }}'">Chờ xác nhận</button>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'đã_xác_nhận' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'đã_xác_nhận']) }}">Đã xác nhận</a>
+            <button class="nav-link btn {{ $status === 'đã_xác_nhận' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'đã_xác_nhận']) }}'">Đã xác nhận</button>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'chờ_giao_hàng' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'chờ_giao_hàng']) }}">Chờ giao hàng</a>
+            <button class="nav-link btn {{ $status === 'ship_đã_nhận' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'ship_đã_nhận']) }}'">Ship đã nhận</button>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'đã_giao' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'đang_giao_hàng']) }}">Đang giao hàng</a>
+            <button class="nav-link btn {{ $status === 'chờ_giao_hàng' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'chờ_giao_hàng']) }}'">Chờ giao hàng</button>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'đã_giao' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'giao_hàng_thành_công']) }}">Giao hàng thành công</a>
+            <button class="nav-link btn {{ $status === 'đang_giao_hàng' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'đang_giao_hàng']) }}'">Đang giao hàng</button>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'đã_nhận_hàng' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'đã_nhận_hàng']) }}">Xác nhận giao hàng thành công</a>
+            <button class="nav-link btn {{ $status === 'giao_hàng_thành_công' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'giao_hàng_thành_công']) }}'">Giao hàng thành công</button>
         </li>
-        
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'đã_hủy' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'hủy']) }}">Đã hủy</a>
+            <button class="nav-link btn {{ $status === 'đã_nhận_hàng' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'đã_nhận_hàng']) }}'">Xác nhận giao hàng thành công</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link btn {{ $status === 'hủy' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'hủy']) }}'">Đã hủy</button>
         </li>
     </ul>
+    
+    
     
     <div class="tab-content mt-3">
         <div class="tab-pane fade show active" id="trahang">
