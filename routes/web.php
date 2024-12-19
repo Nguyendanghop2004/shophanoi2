@@ -86,6 +86,8 @@ Route::middleware('auth')->group(function () {
 
 // cart
 Route::get('/get-product-info', [HomeController::class, 'getProductInfo']);
+Route::get('/get-product-info-quick-view', [HomeController::class, 'getProductInfoQuickView']);
+
 Route::post('/add-to-cart', [CartController::class, 'addToCart']);
 Route::get('/cart', [CartController::class, 'viewCart'])->name('cart');
 Route::get('/debug-cart', function () {

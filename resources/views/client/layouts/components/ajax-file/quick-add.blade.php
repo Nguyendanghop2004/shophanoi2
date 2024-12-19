@@ -15,8 +15,7 @@
             <!-- <div class="price-on-sale">$8.00</div>
             <div class="compare-at-price">$10.00</div>
             <div class="badges-on-sale"><span>20</span>% OFF</div> -->
-            <div class="price-product">{{ number_format($product->price, 0) }} VNĐ</div>
-
+            <div class="price-product">{{ $product->price }} VNĐ</div>
         </div>
     </div>
 </div>
@@ -25,7 +24,7 @@
     <div class="variant-picker-item">
         <div class="variant-picker-label">
             <div class="variant-picker-label">
-                Màu sắc: <span class="fw-6 variant-picker-label-value" id="selected-color">Mặc Định</span>
+                Màu sắc: <span class="fw-6 variant-picker-label-value" id="selected-color">Không </span>
             </div>
         </div>
         <div class="variant-picker-values">
@@ -44,7 +43,7 @@
 
     <div class="variant-picker-item">
         <div class="variant-picker-label">
-            Kích thước: <span class="fw-6 variant-picker-label-value" id="selected-size">Chưa Chọn</span>
+            Kích thước: <span class="fw-6 variant-picker-label-value" id="selected-size">Không </span>
         </div>
         <div class="variant-picker-values" id="size-options-container">
             <!-- Các kích thước sẽ được thêm vào đây bằng JavaScript khi chọn màu -->
@@ -64,9 +63,8 @@
 <div class="tf-product-info-buy-button">
     <form class="">
         <a href="javascript:void(0);"
-            class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Add
-                to cart -&nbsp;</span><span class="tf-qty-price"
-                data-price="{{ $product->price }}">${{ number_format($product->price, 2) }}</span></a>
+            class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Thêm vào giỏ -&nbsp;</span><span class="tf-qty-price"
+                data-price="{{ $product->price }}">{{ $product->price }} VNĐ</span></a>
         <div class="tf-product-btn-wishlist btn-icon-action">
             <i class="icon-heart"></i>
             <i class="icon-delete"></i>
@@ -77,8 +75,8 @@
             <span class="icon icon-check"></span>
         </a>
         <div class="w-100">
-            <a href="#" class="btns-full">Buy with <img src="images/payments/paypal.png" alt=""></a>
-            <a href="#" class="payment-more-option">More payment options</a>
+            <a href="#" class="btns-full">Mua với <img src="/storage/uploads/vnpay-logo-inkythuatso__2_-01-removebg-preview.png" alt="" style="max-width: 100px;"></a>
+            <a href="#" class="payment-more-option">Nhiều lựa chọn hơn</a>
         </div>
     </form>
 </div>
@@ -147,7 +145,7 @@
             var quantity = $('input[name="quantity_product"]').val();
 
             if (!sizeId) {
-                alert('Vui lòng chọn kích thước!');
+                toastr.warning('Vui lòng chọn kích thước trước khi thêm giỏ', 'Lưu ý ');
                 return;
             }
 
@@ -166,29 +164,27 @@
                         // Nếu thành công, hiển thị modal giỏ hàng
                         $("#shoppingCart").modal("show");
                     } else {
-                        // Nếu không thành công, hiển thị thông báo lỗi
-                        alert('Đã có lỗi xảy ra: ' + response
-                        .message); // Giả sử server trả về thông điệp lỗi trong response.message
+                        toastr.error('Thêm giỏ hàng thất bại!', 'Cảnh báo');
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Lỗi Ajax:', error);
-                    console.log(xhr.responseText);
+                    toastr.error('Thêm giỏ hàng thất bại!', 'Cảnh báo');
+                    // console.error('Lỗi Ajax:', error);
+                    // console.log(xhr.responseText);
                 }
             });
         });
 
         // Cập nhật giá trị tổng tiền
         function updateTotalPrice() {
-            var quantity = $('input[name="quantity_product"]').val();
-            var priceBonus = parseFloat($('input.btn-size:checked').data('size-price')) ||
-                0; // Lấy giá cộng thêm của size đã chọn
-            var productPrice = parseFloat($('.tf-qty-price').data('price'));
-            var totalPrice = ((productPrice + priceBonus) * quantity).toFixed(2);
-            var price = (productPrice + priceBonus).toFixed(2);
+            var quantity = parseInt($('input[name="quantity_product"]').val()) || 0;
+            var priceBonus = parseFloat($('input.btn-size:checked').data('size-price')) || 0;
+            var productPrice = parseFloat($('.tf-qty-price').data('price')) || 0;
+            var totalPrice = (productPrice + priceBonus) * quantity;
+            var price = productPrice + priceBonus;
 
-            $('.tf-qty-price').text(`$${totalPrice}`);
-            $('.price-product').text(`$${price}`);
+            $('.tf-qty-price').text(`${totalPrice} VNĐ`);
+            $('.price-product').text(`${price} VNĐ`);
         }
 
         // Cập nhật kích thước cho màu đã chọn

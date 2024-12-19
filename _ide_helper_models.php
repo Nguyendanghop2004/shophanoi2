@@ -483,8 +483,9 @@ namespace App\Models{
  * @property string $slug
  * @property string $product_name
  * @property string $sku
- * @property string $price
+ * @property int $price
  * @property int $status
+ * @property string|null $short_description
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -513,6 +514,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereProductName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereShortDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereSku($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereStatus($value)
@@ -562,7 +564,7 @@ namespace App\Models{
  * @property int $size_id
  * @property string $product_code
  * @property int $stock_quantity
- * @property string $price
+ * @property int $price
  * @property int $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
