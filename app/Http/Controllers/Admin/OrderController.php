@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\City;
+use App\Models\Admin;
 use App\Models\Order;
 use App\Models\ProductVariant;
 use App\Models\Wards;
+use App\Models\Shipper;
 use App\Models\Province;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\OrderItem;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\File;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class OrderController extends Controller
 {
@@ -124,6 +126,38 @@ class OrderController extends Controller
     
         return redirect()->route('admin.order.getList')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
     }
-    
+
+public function showAssignShipperForm()
+{
+    // Lấy danh sách các đơn hàng chưa có shipper
+    $orders = Order::whereNull('assigned_shipper_id')->get();
+
+    // Lấy danh sách Admin có vai trò 'Shipper'
+    $shippers = Admin::whereHas('roles', function ($query) {
+        $query->where('name', 'Shipper');
+    })->get();
+
+    return view('admin.order.assign', compact('orders', 'shippers'));
+}
+
+public function assignShipper(Request $request, Order $order ,$id)
+{
+    $order = Order::find($id);
+        $order->assigned_shipper_id = $request->assigned_shipper_id;
+        $order->save();
+
+        return redirect()->back()->with('success', 'Shipper assigned successfully.');
+}
+public function danhsachgiaohang()
+{
+    // Lấy danh sách shipper đã nhận đơn hàng
+    $orders = Order::whereNull('assigned_shipper_id')->get();
+    $shippers = Admin::whereHas('roles', function ($query) {
+        $query->where('name', 'Shipper');
+    })->get();
+    return view('admin.order.danhsachgiaohang', compact('orders','shippers'));
+}
+
+
 
 }

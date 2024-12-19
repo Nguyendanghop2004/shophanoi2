@@ -40,4 +40,8 @@ public function ward()
 {
     return $this->belongsTo(Wards::class, 'wards_id');
 }
+    public function assignedShipper()
+    {
+        return $this->belongsTo(Admin::class, 'assigned_shipper_id');
+    }
 }

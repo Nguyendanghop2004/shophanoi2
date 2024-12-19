@@ -1,19 +1,9 @@
 @extends('client.layouts.master')
 
 @section('content')
-
+@include('client.layouts.particals.page-title')
     <!-- Slider -->
-    <section class="tf-slideshow about-us-page position-relative">
-        <div class="banner-wrapper">
-            <img class="lazyload" src="{{ asset('client/assets/images/slider/about-banner-01.jpg') }}"
-                data-src="{{asset('client/assets/images/slider/about-banner-01.jpg') }}" alt="hình ảnh bộ sưu tập">
-            <div class="box-content text-center">
-                <div class="container">
-                    <div class="text text-white">Trao quyền cho phụ nữ để đạt được <br class="d-xl-block d-none"> mục tiêu thể hình với phong cách</div>
-                </div>
-            </div>
-        </div>
-    </section>
+  
     <!-- /Slider -->
     <!-- Tiêu đề -->
     <section class="flat-spacing-9">

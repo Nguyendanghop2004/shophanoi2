@@ -251,11 +251,8 @@
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-columns"></i> <span>Thanh Trượt</span></a>
                 <ul class="dropdown-menu">
-                    {{-- @foreach ($parentCategories as $category)
-                        <li><a class="nav-link"
-                                href="{{ route('admin.slider.index', $category->id) }}">{{ $category->name }}</a></li>
-                    @endforeach --}}
-                    <li><a class="nav-link" href="{{ route('admin.slider.index', ['category_id' => 'trash']) }}">Thùng
+                    <li><a class="nav-link" href="{{ route('admin.slider.index') }}">Danh sách Thanh Trượt</a></li>
+                    <li><a class="nav-link" href="{{ route('admin.slider.trash') }}">Thùng
                             Rác<i class="fas fa-recycle"></i></a></li>
 
                 </ul>
@@ -307,11 +304,27 @@
                     <ul class="dropdown-menu">
 
                         <li><a class="nav-link" href="{{route('admin.order.getList')}}"><span>Danh Sách Đơn Hàng</span></a></li>
+                        <li><a class="nav-link" href="{{route('admin.order.assign')}}"><span>Gán shipper</span></a></li>
+
+
                        
                     </ul>
                 </li>
-                
             @endcan
+        @can('Shipper')
+                <li class="menu-header">Shipper</li>
+                <li class="dropdown">
+                    <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                        <span>Đơn hàng của ship</span></a>
+                    <ul class="dropdown-menu">
+
+                        <li><a class="nav-link" href="{{route('admin.order.danhsachgiaohang')}}"><span>Danh sách giao hàng</span></a></li>
+
+
+                       
+                    </ul>
+                </li>
+                @endcan
             @can('product')
                 <li class="menu-header">Quản Lí Sản Phẩm</li>
                 <li class="dropdown">
@@ -328,12 +341,9 @@
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i>
                         <span>Quản lí Biển Thể</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="{{ route('admin.colors.index') }}"><span>Quản Màu Sắc</span></a>
-                        </li>
-                        <li><a class="nav-link" href="{{ route('admin.sizes.index') }}"><span>Quản Lí Số Đo</span></a>
-                        </li>
-                        <li><a class="nav-link" href="{{ route('admin.brands.index') }}"><span>Quản Lí Thương
-                                    Hiệu</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.colors.index') }}"><span>Quản Màu Sắc</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.sizes.index') }}"><span>Quản Lí Số Đo</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.brands.index') }}"><span>Quản Lí Thương Hiệu</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.tags.index') }}"><span>Quản lí Thẻ</span></a></li>
                     </ul>
                 </li>

@@ -22,21 +22,26 @@ class OrderController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $user = Auth::user();
-    
-        $status = $request->query('status', '');
-    
-        $query = Order::where('user_id', $user->id);
-    
-        if ($status !== '') {
-            $query->where('status', $status);
-        }
-    
-        $orders = $query->paginate(10);
-    
-        return view('client.orders.donhang', compact('orders', 'status'));
+{
+    if (!Auth::check()) {
+        return redirect('/');
     }
+
+    $user = Auth::user();
+    
+    $status = $request->query('status', '');
+    
+    $query = Order::where('user_id', $user->id);
+    
+    if ($status !== '') {
+        $query->where('status', $status);
+    }
+    
+    $orders = $query->orderBy('created_at', 'desc')->paginate(10);
+    
+    return view('client.orders.donhang', compact('orders', 'status'));
+}
+
     
 
 
@@ -119,27 +124,29 @@ class OrderController extends Controller
         return redirect()->back()->with('success', 'Đơn hàng đã được xác nhận thành công.');
     }
     public function search(Request $request)
-    {
-        $query = $request->input('query');
-    
-      
-        $orders = Order::where('name', 'LIKE', "%{$query}%")
-            ->orWhere('order_code', 'LIKE', "%{$query}%")
-            ->orWhere('email', 'LIKE', "%{$query}%")
-            ->orWhere('phone_number', 'LIKE', "%{$query}%")
-            ->get();
-    
-       
-        foreach ($orders as $order) {
-            $order->city = City::where('matp', $order->city_id)->first();
-            $order->province = Province::where('maqh', $order->province_id)->first();
-            $order->ward = Wards::where('xaid', $order->wards_id)->first();
-        }
-        
-    
-       
-        return view('client.orders.search', compact('orders'));
+
+{
+    $query = $request->input('query');
+
+    if (empty($query)) {
+        return redirect()->back()->with('error', 'Vui lòng nhập từ khóa tìm kiếm.');
     }
+
+    $orders = Order::where('name', 'LIKE', "%{$query}%")
+        ->orWhere('order_code', 'LIKE', "%{$query}%")
+        ->orWhere('email', 'LIKE', "%{$query}%")
+        ->orWhere('phone_number', 'LIKE', "%{$query}%")
+        ->get();
+
+    foreach ($orders as $order) {
+        $order->city = City::where('matp', $order->city_id)->first();
+        $order->province = Province::where('maqh', $order->province_id)->first();
+        $order->ward = Wards::where('xaid', $order->wards_id)->first();
+    }
+
+    return view('client.orders.search', compact('orders'));
+}
+
     
 
     

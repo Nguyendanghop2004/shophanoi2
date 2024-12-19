@@ -110,6 +110,9 @@ class CheckOutController extends Controller
         return view('client.check-out', compact('cartDetails', 'totalPrice', 'cities', 'provinces', 'wards', 'user','categories'));
     }
     
+
+    
+    
      public function select_address(Request $request)
     {
         $data = $request->all();

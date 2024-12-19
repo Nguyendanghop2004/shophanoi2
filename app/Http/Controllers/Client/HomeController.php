@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\Slider;
 
 use App\Models\Category;
+use App\Models\Color;
+use App\Models\Size;
 use App\Models\Tag;
-
+use Auth;
 use DB;
 
 use Illuminate\Http\Request;
+use Log;
+use Session;
 
 class HomeController extends Controller
 {
@@ -23,9 +28,10 @@ class HomeController extends Controller
      */
     public function home()
     {
-      
+
         $collections = Tag::where('type', 'collection')->get();
 
+        $sliders = Slider::where('is_active', 1)->get();
 
         $products = Product::query()
             ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
@@ -83,13 +89,8 @@ class HomeController extends Controller
                 'colors' => $product->colors,
             ];
         });
-
-
-
-
         // return response()->json($products);
-
-        return view('client.home', compact( 'products', 'collections'));
+        return view('client.home', compact('products', 'collections','sliders'));
     }
     public function getProductInfo(Request $request)
     {
@@ -104,44 +105,30 @@ class HomeController extends Controller
 
             return [$color->id => $randomImage];
         });
-        if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
-        }
-        // Tạo danh sách size cho mỗi màu
+
+        // Tạo danh sách size và giá cho mỗi màu
         $colorSizes = [];
         foreach ($product->variants as $variant) {
             $colorId = $variant->color_id;
             $size = $variant->size;
-
-            if (!isset($colorSizes[$colorId])) {
-                $colorSizes[$colorId] = [];
-            }
-
-            // Chỉ thêm size nếu chưa có
-            if (!in_array($size, $colorSizes[$colorId])) {
-                $colorSizes[$colorId][] = $size;
-            }
-        }
-
-        // Tạo danh sách size cho mỗi màu
-        $colorSizes = [];
-        foreach ($product->variants as $variant) {
-            $colorId = $variant->color_id;
-            $size = $variant->size;
+            $price = $variant->price;
 
             // Nếu chưa có màu này trong danh sách $colorSizes thì tạo mới
             if (!isset($colorSizes[$colorId])) {
                 $colorSizes[$colorId] = [];
             }
 
-            // Chỉ thêm size nếu chưa có
-            if (!in_array($size, $colorSizes[$colorId])) {
-                $colorSizes[$colorId][] = $size;
+            // Thêm size và giá nếu chưa có
+            if (!in_array($size, array_column($colorSizes[$colorId], 'size'))) {
+                $colorSizes[$colorId][] = [
+                    'size' => $size,
+                    'price' => $price,
+                ];
             }
         }
 
         // Trả về một view partial chứa thông tin sản phẩm, ảnh ngẫu nhiên, và các size theo màu
         return view('client.layouts.components.ajax-file.quick-add', compact('product', 'randomImages', 'colorSizes'))->render();
     }
- 
+
 }

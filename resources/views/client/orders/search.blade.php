@@ -127,6 +127,16 @@
         background-color: #ff6600;
         border-color: #ff6600;
     }
+    .alert {
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 15px;
+}
+
+.alert i {
+    margin-right: 10px;
+}
+
 </style>
 
 <div class="container mt-5">
@@ -134,8 +144,10 @@
     <br>
     <p style="color: red; text-align: center">Mong bạn thông cảm! Vì hệ thống đang cao điểm nên việc giao hàng có thể chậm hơn dự kiến</p>
     @if($orders->isEmpty())
-        <h3>Không tìm thấy đơn hàng.</h3>
-    @else
+    <div class="alert alert-warning text-center" role="alert">
+        <i class="icon icon-warning"></i> Không tìm thấy đơn hàng.
+    </div>
+@else
         @foreach($orders as $order)
             <div class="custom-card">
                 <div class="order-info">

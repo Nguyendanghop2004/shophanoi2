@@ -84,7 +84,7 @@
                             </div>
                             <div class="col-9">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title mb-1">{{ $order->orderItems->first()->product_name }} - {{ $order->orderItems->first()->product_description }}</h5>
+                                    <h5 class="card-title mb-1">{{ $order->orderItems->first()->product_name }}  </h5>
                                     <span class="badge badge-success">{{ $order->status }}</span>
                                 </div>
                                 <p class="card-text mb-1">{{ $order->order_code }}</p>

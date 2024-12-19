@@ -38,6 +38,21 @@
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
+                                        <div class="d-flex justify-content-start"> <label>Tiêu đề</label>
+                                            <div class="text-danger ml-2">*</div>
+                                        </div>
+                                        <input type="text" name="title"
+                                            class="form-control  @error('title') is-invalid  @enderror"
+                                            value="{{ $slider->title }}">
+                                        @error('title')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-12">
+                                    <div class="form-group">
                                         <label>Status</label>
                                         <select name="is_active"
                                             class="form-control @error('is_active') is-invalid  @enderror">
@@ -51,40 +66,8 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <div class="form-group ">
-                                        <div class="d-flex justify-content-start"> <label>Danh Mục</label>
-                                            <div class="text-danger ml-2">*</div>
-                                        </div>
-                                        <select class="form-control @error('category_id') is-invalid  @enderror"
-                                            name="category_id">
-                                            <option>Chọn Danh Mục</option>
-                                            @foreach ($categories as $category)
-                                                <option @selected($slider->category_id == $category->id) value="{{ $category->id }}">
-                                                    {{ $category->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('category_id')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
                             </div>
-                            <div class="form-group">
-                                <div class="d-flex justify-content-start"> <label>Tiêu đề</label>
-                                    <div class="text-danger ml-2">*</div>
-                                </div>
-                                <input type="text" name="title"
-                                    class="form-control  @error('title') is-invalid  @enderror"
-                                    value="{{ $slider->title }}">
-                                @error('title')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
+
                             <div class="form-group">
                                 <label>Mô tả ngắn</label>
                                 <textarea name="short_description" class="form-control @error('short_description') is-invalid  @enderror">{{ $slider->short_description }}</textarea>

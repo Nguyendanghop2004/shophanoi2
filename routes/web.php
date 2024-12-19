@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
 
@@ -42,7 +43,7 @@ Route::get('gioithieu', [AboutUsController::class, 'index'])->name('index');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
 Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
-Route::get('product-detail/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
+Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
 Route::get('brand', [BrandController::class, 'index'])->name('brand');
 Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
 Route::get('faq', [FAQController::class, 'index'])->name('faq');
@@ -51,7 +52,12 @@ Route::get('time-line', [TimeLineController::class, 'index'])->name('time-line')
 Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping-cart');
 
 //thanh toán
-Route::get('check-out', [CheckOutController::class, 'checkout'])->name('check-out');
+Route::get('check-out', [CheckOutController::class, 'checkout'])->name('checkout');
+Route::post('/apply-discount', [CheckOutController::class, 'applyDiscount'])->name('apply.discount');
+
+
+
+
 Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnPayReturn'])->name('vnpay.return');
 Route::get('/out-of-stock', [CheckoutController::class, 'outOfStock'])->name('out-of-stock');
@@ -79,6 +85,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
+
 });
 
     //start blog
@@ -100,7 +108,9 @@ Route::get('/debug-cart', function () {
 });
 Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::get('/cart/modal-cart', [CartController::class, 'getModalCart'])->name('cart.modal');
+
+
 
 Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.donhang');
 Route::get('/order/donhang/{id}', [OrderController::class, 'show'])->name('client.orders.show');
@@ -120,3 +130,6 @@ Route::get('/orders/search', [OrderController::class, 'search'])->name('order.se
 Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
 Route::post('/select-address', [CheckoutController::class, 'select_address']);
 
+Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
+Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
+Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');

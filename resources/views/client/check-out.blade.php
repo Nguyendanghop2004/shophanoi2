@@ -5,16 +5,25 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- page-cart -->
+ <style>
+  .small-total-price {
+    font-size: 20px;  /* Giảm kích thước chữ */
+    text-align: right; /* Đẩy sang bên phải */
+    color: #000;       /* Màu chữ (tùy chỉnh) */
+    font-weight: bold;
+    margin-top: 10px;  /* Tùy chọn: thêm khoảng cách trên nếu cần */
+}  /* Màu chữ */
+
+ </style>
 <section class="flat-spacing-11">
     <form action="{{ route('order.place') }}" method="POST" class="tf-page-cart-checkout widget-wrap-checkout">
         @csrf
         <div class="container">
             <div class="tf-page-cart-wrap layout-2">
                 <div class="tf-page-cart-item">
-                    <h5 class="fw-5 mb_20">Billing details</h5>
-                   
+                    <h5 class="fw-5 mb_20">Thông Tin Chi Tiết</h5>
                     <fieldset class="fieldset">
-                        <label for="first-name">Name</label>
+                        <label for="first-name">Tên</label>
                         <input name="name" type="text" id="first-name" 
                             value="{{ old('name', auth()->check() ? auth()->user()->name : '') }}" 
                             placeholder="Your Name" >
@@ -35,7 +44,7 @@
                             {{ $message }}
                         </div>
                     @enderror
-                    
+
                     <div class="form-group">
                         <label for="city">Chọn thành phố</label>
                         <select name="city_id" id="city" class="form-control choose city">
@@ -94,7 +103,7 @@
                     @enderror
 
                     <fieldset class="box fieldset">
-                        <label for="phone">Phone Number</label>
+                        <label for="phone">Số Điện Thoại</label>
                         <input type="text" name="phone_number" id="phone" 
                             value="{{ old('phone_number', auth()->check() ? auth()->user()->phone_number : '') }}" >
                     </fieldset>
@@ -105,16 +114,20 @@
                     @enderror
 
                     <fieldset class="box fieldset">
-                        <label for="note">Order notes (optional)</label>
+                        <label for="note">Ghi Chú</label>
                         <textarea name="note" id="note">{{ old('note') }}</textarea>
                     </fieldset>
                 </div>
-    
+
                 <div class="tf-page-cart-footer">
                     <div class="tf-cart-footer-inner">
-                        <h5 class="fw-5 mb_20">Your order</h5>
+                        <h5 class="fw-5 mb_20">Đơn hàng của bạn</h5>
                         <ul class="wrap-checkout-product">
+                            @php $totalPrice = 0; @endphp
                             @foreach ($cartDetails as $item)
+                                @php 
+                                    $totalPrice += $item['price'] * $item['quantity']; 
+                                @endphp
                                 <li class="checkout-product-item">
                                     <figure class="img-product">
                                         <img src="{{ asset('storage/' . $item['image_url']) }}" alt="img-product">
@@ -125,37 +138,47 @@
                                             <p class="name">{{ $item['product_name'] }}</p>
                                             <span class="variant">{{ $item['color_name'] }} / {{ $item['size_name'] }}</span>
                                         </div>
-                                        <span class="price">${{ number_format($item['price'], 2) }}</span>
+                                        <span class="price">${{ number_format($item['price'], 0, ',', '.') }} VNĐ</span>
                                     </div>
                                 </li>
                             @endforeach
                         </ul>
-    
+                        <hr>
+                        
+                        <h4 class="fw-5 mb_20 small-total-price">Tổng tiền: {{ number_format($totalPrice, 0, ',', '.') }} VND</h4>
+
                         <div class="wd-check-payment">
                             <div class="fieldset-radio mb_20">
                                 <input type="radio" name="payment" id="bank" class="tf-check" value="vnpay" checked>
-                                <label for="bank">Direct bank transfer (VNPay)</label>
+                                <label for="bank">Chuyển khoản ngân hàng trực tiếp (VNPay)</label>
                             </div>
                             <div class="fieldset-radio mb_20">
                                 <input type="radio" name="payment" id="delivery" class="tf-check" value="cod">
-                                <label for="delivery">Cash on delivery (COD)</label>
+                                <label for="delivery">Thanh toán khi nhận hàng (COD)</label>
                             </div>
                             <p class="text_black-2 mb_20">
-                                Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our 
-                                <a href="privacy-policy.html" class="text-decoration-underline">privacy policy</a>.
+                                Dữ liệu cá nhân của bạn sẽ được sử dụng để xử lý đơn hàng, hỗ trợ trải nghiệm của bạn trong suốt website này, và cho các mục đích khác theo mô tả trong 
+                                <a href="privacy-policy.html" class="text-decoration-underline">chính sách bảo mật</a>.
                             </p>
                             <div class="box-checkbox fieldset-radio mb_20">
                                 <input type="checkbox" id="check-agree" class="tf-check" required>
                                 <label for="check-agree" class="text_black-2">
-                                    I have read and agree to the website 
-                                    <a href="terms-conditions.html" class="text-decoration-underline">terms and conditions</a>.
+                                    Tôi đã đọc và đồng ý với 
+                                    <a href="terms-conditions.html" class="text-decoration-underline">điều khoản và điều kiện</a> của website.
                                 </label>
                             </div>
                         </div>
-    
-                        <button type="submit" name="redirect" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center ">
-                            Place order
+
+                       
+
+                        <button type="submit" name="redirect" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">
+                            Đặt hàng
                         </button>
+
+                        <!-- Nút Tiếp tục mua hàng -->
+                        <a href="{{ route('home') }}" class="tf-btn radius-3 btn-outline btn-icon animate-hover-btn justify-content-center mt_20">
+                            Tiếp tục mua hàng
+                        </a>
                     </div>
                 </div>
             </div>
