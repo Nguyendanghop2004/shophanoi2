@@ -86,15 +86,17 @@
                                     </div>
                                 </div> --}}
                                 <div class="tf-product-info-price">
-                                    <div class="price-on-sale">${{ $product->price }}</div>
-                                    <div class="compare-at-price">$10.00</div>
+                                    {{-- <div class="price-on-sale">${{ $product->price }}</div>
+                                    <div class="compare-at-price">$10.00</div> --}}
+                                    <div class="price">{{ $product->price }} VNĐ</div>
+
                                     {{-- <div class="badges-on-sale"><span>20</span>% OFF</div> --}}
                                 </div>
-                                <div class="tf-product-info-liveview">
+                                {{-- <div class="tf-product-info-liveview">
                                     <div class="liveview-count">20</div>
                                     <p class="fw-6">People are viewing this right now</p>
-                                </div>
-                                <div class="tf-product-info-countdown">
+                                </div> --}}
+                                {{-- <div class="tf-product-info-countdown">
                                     <div class="countdown-wrap">
                                         <div class="countdown-title">
                                             <i class="icon-time tf-ani-tada"></i>
@@ -105,23 +107,25 @@
                                                 data-labels="Days :,Hours :,Mins :,Secs"></div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="tf-product-info-variant-picker">
                                     <div class="variant-picker-item">
                                         <div class="variant-picker-label">
-                                            Color: <span class="fw-6 variant-picker-label-value" id="selected-color">Mặc
-                                                định</span>
+                                            Màu sắc: <span class="fw-6 variant-picker-label-value selected-color">Không
+                                                có</span>
                                         </div>
                                         <div class="variant-picker-values">
 
                                             @foreach ($product->colors as $color)
-                                                <input id="values-{{ $color->name }}" type="radio" name="color1"
+                                                <input id="values-{{ $color->name }}" type="radio" name="color-1"
                                                     class="btn-color" data-color-id="{{ $color->id }}"
                                                     data-color-name="{{ $color->name }}"
                                                     {{ $loop->first ? 'checked' : '' }}>
-                                                <label class="hover-tooltip radius-60" for="values-{{ $color->name }}"
-                                                    data-value="{{ $color->name }}">
-                                                    <span class="btn-checkbox bg-color-{{ $color->name }}"
+                                                <label
+                                                    class="hover-tooltip
+                                                radius-60"
+                                                    for="values-{{ $color->name }}" data-value="{{ $color->name }}">
+                                                    <span class="btn-checkbox"
                                                         style="background-color: {{ $color->sku_color }}"></span>
                                                     <span class="tooltip">{{ $color->name }}</span>
                                                 </label>
@@ -132,24 +136,19 @@
                                     <div class="variant-picker-item">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="variant-picker-label">
-                                                Size: <span class="fw-6 variant-picker-label-value" id="selected-size">Mặc
-                                                    định</span>
+                                                Kích thước: <span
+                                                    class="fw-6 variant-picker-label-value selected-size">Không có</span>
                                             </div>
                                             <a href="#find_size" data-bs-toggle="modal" class="find-size fw-6">Find your
                                                 size</a>
                                         </div>
                                         <div class="variant-picker-values" id="size-options-container">
-
-                                            {{-- <input type="radio" name="size1" id="values-s" checked>
-                                            <label class="style-text" for="values-s" data-value="S">
-                                                <p>S</p>
-                                            </label> --}}
-
+                                            <!-- Các kích thước sẽ được thêm vào đây bằng JavaScript khi chọn màu -->
                                         </div>
                                     </div>
                                 </div>
                                 <div class="tf-product-info-quantity">
-                                    <div class="quantity-title fw-6">Quantity</div>
+                                    <div class="quantity-title fw-6">Số lượng</div>
                                     <div class="wg-quantity">
                                         <span class="btn-quantity minus-btn">-</span>
                                         <input type="text" name="quantity_product" value="1">
@@ -159,8 +158,10 @@
                                 <div class="tf-product-info-buy-button">
                                     <form class="">
                                         <a href="javascript:void(0);"
-                                            class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Add
-                                                to cart -&nbsp;</span><span class="tf-qty-price">$8.00</span></a>
+                                            class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Thêm
+                                                vào giỏ -&nbsp;</span><span class="tf-qty-price"
+                                                data-price="{{ $product->price }}">0
+                                                VNĐ</span></a>
                                         <a href="javascript:void(0);"
                                             class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
                                             <span class="icon icon-heart"></span>
@@ -1552,70 +1553,57 @@
 @endsection
 
 @push('scripts')
-    <script>
-        function updateSizeOptions(colorId) {
-            var sizeOptions = @json($colorSizes); // Lấy dữ liệu từ server (size của các màu)
-            var sizes = sizeOptions[colorId] || []; // Lấy danh sách kích thước của màu được chọn
-            var sizeContainer = $('#size-options-container');
-            sizeContainer.empty(); // Xóa các kích thước cũ
-
-            sizes.forEach(function(sizeInfo, index) {
-                if (index === 0) {
-                    $('#selected-size').text(sizeInfo.size.name); // Hiển thị kích thước mặc định (đầu tiên)
-                }
-
-                var sizeElement = `
-            <input type="radio" class="btn-size" name="size"
-                   id="values-${sizeInfo.size.name}-${colorId}"
-                   data-size-name="${sizeInfo.size.name}"
-                   data-size-id="${sizeInfo.size.id}"
-                   data-size-price="${sizeInfo.price}"
-                   ${index === 0 ? 'checked' : ''}>
-            <label class="style-text" for="values-${sizeInfo.size.name}-${colorId}" data-value="${sizeInfo.size.name}">
-                <p>${sizeInfo.size.name}</p>
-            </label>
-        `;
-                sizeContainer.append(sizeElement); // Thêm kích thước vào container
-            });
-        }
-    </script>
-    <script>
-        // Khi người dùng chọn màu
+<script>
+    $(document).ready(function() {
         $('.btn-color').click(function() {
-            var colorName = $(this).data('color-name');
-            $('#selected-color').text(colorName);
-            var selectedColorId = $(this).data('color-id');
-            // Cập nhật các kích thước tương ứng với màu được chọn
+            let colorName = $(this).data('color-name');
+            let selectedColorId = $(this).data('color-id');
+
+            // Cập nhật màu sắc đã chọn
+            $('.selected-color').text(colorName);
+
             updateSizeOptions(selectedColorId);
 
             $('.btn-size').click(function() {
                 var sizeName = $(this).data('size-name');
-                $('#selected-size').text(sizeName);
-
+                $('.selected-size').text(sizeName);
+                updateTotalPrice();
             });
         });
-        // Hiển thị màu và ảnh mặc định khi tải trang
-        var defaultColorId = $('.btn-color:checked').data('color-id');
-        $('#selected-color').text($('.btn-color:checked').data('color-name'));
-        $('.product-image[data-color-id="' + defaultColorId + '"]').show();
-        updateSizeOptions(defaultColorId);
-    </script>
 
-    <script>
+        // Mặc định màu sắc và ảnh khi tải trang
+        var defaultColorId = $('.btn-color:checked').data('color-id');
+        $('.selected-color').text($('.btn-color:checked').data('color-name'));
+        updateSizeOptions(defaultColorId);
+        updateTotalPrice();
+
+
+
+
+
+        // Thêm vào giỏ hàng
         $('.btn-add-to-cart').click(function(e) {
             e.preventDefault();
 
-            var productId = {{ $product->id }}; // ID sản phẩm
-            var colorId = $('.btn-color:checked').data('color-id'); // ID màu sắc đã chọn
-            var sizeId = $('input[name="size"]:checked').data('size-id'); // Kích thước đã chọn
-            var quantity = $('input[name="quantity_product"]').val(); // Số lượng
-            // Kiểm tra xem tất cả thông tin có hợp lệ không
+            var productId = {{ $product->id }};
+            var colorId = $('.btn-color:checked').data('color-id');
+            var sizeId = $('input[name="size"]:checked').data('size-id');
+            var quantity = $('input[name="quantity_product"]').val();
+
             if (!sizeId) {
-                alert('Vui lòng chọn kích thước!');
+                toastr.warning('Vui lòng chọn kích thước trước khi thêm giỏ', 'Lưu ý ');
+                return;
+            }
+            if (!colorId) {
+                toastr.warning('Vui lòng chọn kích thước trước khi thêm giỏ', 'Lưu ý ');
+                return;
+            }
+            var stock = getStockQuantity(colorId, sizeId); // Lấy số lượng tồn kho từ hàm
+            if (quantity > stock) {
+                toastr.warning(`Hiện tại sản phẩm chỉ còn ${stock} chiếc trong kho.`, 'Lưu ý');
                 return;
             }
 
-            // Gửi yêu cầu Ajax đến route xử lý thêm vào giỏ hàng
             $.ajax({
                 url: '/add-to-cart',
                 type: 'POST',
@@ -1624,290 +1612,128 @@
                     color_id: colorId,
                     size_id: sizeId,
                     quantity: quantity,
-
-                    _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
+                    _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                    console.log(response); // Xem phản hồi từ server
-                    $("#shoppingCart").modal("show");
+                    if (response.success === true) {
+                        // Nếu thành công, hiển thị modal giỏ hàng
+                        $("#shoppingCart").modal("show");
+                    } else {
+                        toastr.error(response.message, 'Cảnh báo');
+                    }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Lỗi Ajax:', error); // In ra chi tiết lỗi
-                    console.log(xhr.responseText); // Xem thông báo lỗi chi tiết từ server
+                    toastr.error('Thêm giỏ hàng thất bại!', 'Cảnh báo');
+                    // console.error('Lỗi Ajax:', error);
+                    // console.log(xhr.responseText);
                 }
             });
-
         });
-    </script>
 
 
 
+        // Hàm lấy tồn kho (đã có trong code trước đó)
+        function getStockQuantity(colorId, sizeId) {
+            let stockQuantity = 0; // Mặc định là 0 nếu không tìm thấy
+            var colorSizes = @json($colorSizes);
+            if (colorSizes[colorId]) {
+                colorSizes[colorId].forEach(function(variant) {
+                    if (variant.size.id === sizeId) {
+                        stockQuantity = variant.stock_quantity;
+                    }
+                });
+            }
 
+            return stockQuantity;
+        }
 
+        // Cập nhật giá trị tổng tiền
+        function updateTotalPrice() {
+            let quantity = parseInt($('input[name="quantity_product"]').val()) || 0;
+            let priceBonus = parseInt($('input.btn-size:checked').data('size-price')) || 0;
+            let productPrice = parseInt($('.tf-qty-price').data('price')) || 0;
+            let totalPrice = (productPrice + priceBonus) * quantity;
+            let price = productPrice + priceBonus;
 
+            $('.tf-qty-price').text(`${totalPrice} VNĐ`);
+            // $('.price-product').text(`${price} VNĐ`);
+        }
 
+        // sự kiện tăng giảm số lượng
+        var btnQuantity = function() {
+            const validateValue = ($input) => {
+                let value = parseInt($input.val(), 10);
+                // Kiểm tra nếu giá trị không hợp lệ hoặc nhỏ hơn 1
+                if (isNaN(value) || value < 1) {
+                    value = 1; // Đặt giá trị mặc định
+                }
+                $input.val(value); // Cập nhật lại giá trị hợp lệ
+                return value;
+            };
 
-
-    <script>
-        $(document).ready(function() {
-            // Bắt sự kiện click vào nút Quick Add
-            $(".quick-add").on("click", function(e) {
+            $(".minus-btn").on("click", function(e) {
                 e.preventDefault();
+                var $this = $(this);
+                var $input = $this.closest("div").find("input");
+                var value = validateValue($input);
 
-                // Lấy ID sản phẩm từ thuộc tính data
-                let productId = $(this).data("product-id");
-
-                // Gửi yêu cầu AJAX
-                $.ajax({
-                    url: "/get-product-info", // Đường dẫn API xử lý
-                    method: "GET",
-                    data: {
-                        id: productId
-                    },
-                    success: function(response) {
-                        // Chèn nội dung nhận được vào modal
-                        $("#product-modal-content").html(response);
-                        // Hiển thị modal
-                        $("#quick_add").modal("show");
-                    },
-                    error: function() {
-                        alert("Sản Phẩm Không Tồn Tại, Hãy Thử Tải Lại Trang!");
-                    },
-                });
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            // Khi modal mở, gọi API để cập nhật giỏ hàng
-            $('#shoppingCart').on('show.bs.modal', function() {
-                loadModalCart(); // Hàm gọi API để lấy thông tin giỏ hàng
-            });
-        });
-
-        function loadModalCart() {
-            $.ajax({
-                url: '/cart/modal-cart', // Route API của phương thức getModalCart
-                method: 'GET',
-                success: function(response) {
-                    if (response.success) {
-                        renderModalCart(response.cart); // Cập nhật lại nội dung modal giỏ hàng
-
-                    } else {
-                        alert(response.message || 'Failed to load cart details.');
-                    }
-                },
-                error: function(error) {
-                    console.error('Error loading cart details:', error);
-                    alert('An error occurred while loading the cart.');
-                }
-            });
-        }
-
-
-
-        // Hàm hiển thị lại nội dung modal giỏ hàng
-        function renderModalCart(cartDetails) {
-            const modalCartContainer = $('.tf-mini-cart-items'); // Container của modal cart
-            modalCartContainer.empty(); // Xóa nội dung cũ trước khi cập nhật mới
-
-            if (cartDetails.length === 0) {
-                modalCartContainer.append('<p>Your cart is empty.</p>');
-                return;
-            }
-
-            // Thêm từng sản phẩm vào modal
-            cartDetails.forEach(item => {
-                modalCartContainer.append(`
-                                <div class="tf-mini-cart-item">
-                                    <div class="tf-mini-cart-image">
-                                        <a href="product-detail.html">
-                                            <img src="storage/${item.image_url}" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="tf-mini-cart-info">
-                                        <a class="title link"
-                                            href="product-detail.html">${item.product_name}</a>
-                                        <div class="meta-variant">${item.color_name} / ${item.size_name}</div>
-                                        <div class="price fw-6" data-price="${item.price * item.quantity}">${item.price * item.quantity}</div>
-                                        <div class="tf-mini-cart-btns">
-                                            <div class="wg-quantity small">
-                                                <!-- Nút giảm số lượng -->
-                                                <span class="btn-quantity minus-btn-cart"
-                                                    data-url="{{ route('cart.update') }}"
-                                                    data-id="${item.product_id}"
-                                                    data-color="${item.color_id}"
-                                                    data-size="${item.size_id}">
-                                                    <svg class="d-inline-block" width="9" height="1"
-                                                        viewBox="0 0 9 1" fill="currentColor">
-                                                        <path
-                                                            d="M9 1H5.14286H3.85714H0V1.50201e-05H3.85714L5.14286 0L9 1.50201e-05V1Z">
-                                                        </path>
-                                                    </svg>
-                                                </span>
-                                                <!-- Trường nhập số lượng -->
-                                                <input type="text" class="quantity-input quantity-input-cart" name="number"
-                                                    value="${item.quantity}"
-                                                    data-url="{{ route('cart.update') }}"
-                                                    data-id="${item.product_id}"
-                                                    data-color="${item.color_id}"
-                                                    data-size="${item.size_id}">
-
-                                                <!-- Nút tăng số lượng -->
-                                                <span class="btn-quantity plus-btn-cart"
-                                                    data-url="{{ route('cart.update') }}"
-                                                    data-id="${item.product_id}"
-                                                    data-color="${item.color_id}"
-                                                    data-size="${item.size_id}">
-                                                    <svg class="d-inline-block" width="9" height="9"
-                                                        viewBox="0 0 9 9" fill="currentColor">
-                                                        <path
-                                                            d="M9 5.14286H5.14286V9H3.85714V5.14286H0V3.85714H3.85714V0H5.14286V3.85714H9V5.14286Z">
-                                                        </path>
-                                                    </svg>
-                                                </span>
-                                            </div>
-                                              <div class="tf-mini-cart-remove"
-                                                data-id="${item.product_id}"
-                                                data-color="${item.color_id}"
-                                                data-size="${item.size_id}">
-                                                          Remove
-                                              </div>
-                                        </div>
-                                    </div>
-                                </div>
-         `);
-            });
-            // Gắn sự kiện click cho nút "Remove"
-            $('.tf-mini-cart-remove').off('click').on('click', function() {
-                const productId = $(this).data('id');
-                const colorId = $(this).data('color');
-                const sizeId = $(this).data('size');
-                removeFromCart(productId, colorId, sizeId); // Gọi hàm xóa
-
-            });
-            // Lấy tất cả các phần tử <div> có class "price"
-            const priceDivs = document.querySelectorAll('.price');
-
-            // Tính tổng giá trị của tất cả các data-price
-            let total = 0;
-            priceDivs.forEach(div => {
-                const price = parseFloat(div.getAttribute('data-price')) ||
-                    0; // Lấy giá trị data-price, mặc định là 0 nếu không tồn tại
-                total += price;
-            });
-            $('.tf-totals-total-value').text(total.toFixed(2));
-        }
-    </script>
-    <script>
-        // Xử lý khi nhấn nút xóa
-        function removeFromCart(productId, colorId, sizeId) {
-            $.ajax({
-                url: '/remove-from-cart', // URL tới route xóa sản phẩm
-                method: 'POST', // Chú ý: nên dùng POST thay vì GET cho hành động xóa
-                data: {
-                    product_id: productId,
-                    color_id: colorId,
-                    size_id: sizeId,
-                    _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
-                },
-                success: function(response) {
-                    if (response.success) {
-                        console.log("Response:", response); // Ghi log phản hồi từ server
-                        alert(response.message);
-                        loadModalCart();
-
-                        // Cập nhật lại giao diện nếu cần
-                    } else {
-                        console.error("Failed to remove product:", response);
-                        alert('Failed to remove product from cart');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error("AJAX Error:", status, error, xhr.responseText); // Ghi log lỗi AJAX
-                    alert('There was an error processing your request.');
-                }
-            });
-
-        }
-    </script>
-    <script>
-        $(document).ready(function() {
-            // Hàm gửi AJAX cập nhật số lượng
-            function updateQuantity(productId, colorId, sizeId, newQuantity, url) {
-                $.ajax({
-                    url: url,
-                    method: 'POST',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'), // CSRF Token
-                        product_id: productId,
-                        color_id: colorId,
-                        size_id: sizeId,
-                        quantity: newQuantity
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            console.log('Cập nhật thành công');
-                            loadModalCart();
-                        } else {
-                            alert(response.message || 'Đã xảy ra lỗi!');
-                            loadModalCart();
-                        }
-                    },
-                    error: function(xhr) {
-                        console.error(xhr.responseText);
-                        alert('Không thể cập nhật số lượng. Vui lòng thử lại!');
-                    }
-                });
-            }
-
-            // Gắn sự kiện click cho nút plus và minus
-            $(document).off('click', '.minus-btn-cart, .plus-btn-cart').on('click',
-                '.minus-btn-cart, .plus-btn-cart',
-                function(e) {
-                    e.preventDefault();
-
-                    let button = $(this);
-                    let inputField = button.siblings('.quantity-input'); // Trường input
-                    let productId = button.data('id');
-                    let colorId = button.data('color');
-                    let sizeId = button.data('size');
-                    let url = button.data('url');
-                    let currentQuantity = parseInt(inputField.val()) || 1;
-
-                    // Tăng hoặc giảm số lượng
-                    if (button.hasClass('plus-btn-cart')) {
-                        currentQuantity += 1;
-                    } else if (button.hasClass('minus-btn-cart') && currentQuantity > 1) {
-                        currentQuantity -= 1;
-                    }
-
-                    // Cập nhật số lượng trong input
-                    inputField.val(currentQuantity);
-
-                    // Gửi AJAX cập nhật
-                    updateQuantity(productId, colorId, sizeId, currentQuantity, url);
-                });
-
-            // Gắn sự kiện change cho input
-            $(document).off('change', '.quantity-input-cart').on('change', '.quantity-input-cart', function() {
-                let inputField = $(this);
-                let productId = inputField.data('id');
-                let colorId = inputField.data('color');
-                let sizeId = inputField.data('size');
-                let url = inputField.data('url');
-                let newQuantity = parseInt(inputField.val()) || 1;
-
-                // Đảm bảo số lượng tối thiểu là 1
-                if (newQuantity < 1) {
-                    newQuantity = 1;
-                    inputField.val(newQuantity);
+                if (value > 1) {
+                    $input.val(value - 1);
                 }
 
-                // Gửi AJAX cập nhật
-                updateQuantity(productId, colorId, sizeId, newQuantity, url);
+                updateTotalPrice();
             });
-        });
-    </script>
+
+            $(".plus-btn").on("click", function(e) {
+                e.preventDefault();
+                var $this = $(this);
+                var $input = $this.closest("div").find("input");
+                var value = validateValue($input);
+
+                $input.val(value + 1);
+
+                updateTotalPrice();
+            });
+
+            // Xử lý sự kiện khi người dùng nhập trực tiếp vào input
+            $("input[name='quantity_product']").on("input", function() {
+                validateValue($(this));
+                updateTotalPrice();
+            });
+
+            // Đảm bảo giá trị hợp lệ khi rời khỏi ô input
+            $("input[name='quantity_product']").on("blur", function() {
+                validateValue($(this));
+                updateTotalPrice();
+            });
+        };
+
+        btnQuantity();
+        // Cập nhật kích thước cho màu đã chọn
+        function updateSizeOptions(colorId) {
+            var sizeOptions = @json($colorSizes);
+            var sizes = sizeOptions[colorId] || [];
+
+            var sizeContainer = $('#size-options-container');
+            sizeContainer.empty();
+
+            sizes.forEach(function(sizeInfo, index) {
+                if (index === 0) {
+                    $('.selected-size').text(sizeInfo.size.name);
+                }
+
+                var sizeElement = `
+                <input type="radio" class="btn-size" name="size" id="values-${sizeInfo.size.name}-${colorId}"
+                    data-size-name="${sizeInfo.size.name}" data-size-id="${sizeInfo.size.id}"
+                    data-size-price="${sizeInfo.price}" ${index === 0 ? 'checked' : ''}>
+                <label class="style-text" for="values-${sizeInfo.size.name}-${colorId}" data-value="${sizeInfo.size.name}">
+                    <p>${sizeInfo.size.name}</p>
+                </label>
+            `;
+                sizeContainer.append(sizeElement);
+            });
+            updateTotalPrice();
+        }
+    });
+</script>
 @endpush
