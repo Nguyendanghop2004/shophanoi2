@@ -3,6 +3,12 @@
 @section('content')
     <!-- categories -->
     <section class="flat-spacing-20">
+        @if (session('warning'))
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ session('warning') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -29,8 +35,8 @@
                                                 name="password" @error('password') is-invalid @enderror>
                                             <label class="tf-field-label" for="">Password *</label>
                                             @error('password')
-                                            <p style="color: red; font-size: 14px;">{{ $message }}</p>
-                                        @enderror
+                                                <p style="color: red; font-size: 14px;">{{ $message }}</p>
+                                            @enderror
                                         </div>
                                         <div>
                                             <a href="#forgotPassword" data-bs-toggle="modal" class="btn-link link">Forgot
@@ -44,7 +50,7 @@
                                                         in</span></button>
                                             </div>
                                             <div class="w-100">
-                                                <a href="{{route('account.register')}}" class="btn-link fw-6 w-100 link">
+                                                <a href="{{ route('account.register') }}" class="btn-link fw-6 w-100 link">
                                                     New customer? Create your account
                                                     <i class="icon icon-arrow1-top-left"></i>
                                                 </a>
@@ -59,28 +65,40 @@
             </div>
         </div>
     </section>
-
 @endsection
-   
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            @if (session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Thành công!',
-                    text: '{{ session('success') }}',
-                    showConfirmButton: false,
-                    timer: 5000
-                });
-            @elseif (session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi!',
-                    text: '{{ session('error') }}',
-                    showConfirmButton: false,
-                    timer: 5000
-                });
-            @endif
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 5000
+            });
+        @elseif (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: '{{ session('error') }}',
+                showConfirmButton: false,
+                timer: 5000
+            });
+        @endif
+
+
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.classList.add('fade');
+                alert.classList.remove('show');
+            }, 5000); // 5 giây
         });
-    </script>
+    });
+</script>

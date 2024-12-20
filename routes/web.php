@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/', [HomeController::class, 'home'])->name('home')->middleware('checkPassword');
 
 
 
@@ -77,7 +77,7 @@ Route::middleware('auth')->group(function () {
 });
 
     //start blog
-    Route::get('/blog/show', [BlogController::class, 'show'])->name('blog.show');
+    Route::get('/blog/show', [BlogController::class, 'show'])->name('blog.show')->middleware('checkPassword');
     Route::get('/blog/{id}/detail', [BlogController::class, 'detail'])->name('blog.detail');
 
     //end blog

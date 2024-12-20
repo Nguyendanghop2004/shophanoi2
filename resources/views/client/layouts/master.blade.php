@@ -78,7 +78,7 @@
     <!-- /toolbarShopmb -->
 
     <!-- modal login -->
-    @include('client.layouts.components.modal.modal-login')
+    {{-- @include('client.layouts.components.modal.modal-login') --}}
     <!-- /modal login -->
 
     <!-- shoppingCart -->
