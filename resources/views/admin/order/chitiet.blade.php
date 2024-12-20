@@ -110,7 +110,7 @@
         </div>
         <div class="card-footer text-right">
             <a href="{{ route('admin.order.getList') }}" class="btn btn-primary">Quay Lại</a>
-            <a href="{{ route('admin.order.inHoaDon', ['id' => $order->id]) }}" class="btn btn-success">In Hóa Đơn</a>
+            <a href="{{ route('admin.order.inHoaDon', ['id' => Crypt::encryptString($order->id)]) }}" class="btn btn-success">In Hóa Đơn</a>
         </div>
         
     </div>

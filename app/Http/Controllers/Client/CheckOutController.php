@@ -28,15 +28,11 @@ class CheckOutController extends Controller
 {
     public function checkout()
     {
+      
         $cartDetails = [];
         $totalPrice = 0;
         $user = auth()->user();
-        $categories = Category::with(relations: [
-            'children' => function ($query) {
-                $query->where('status', 1);
-            }
-        ])->where('status', 1)
-            ->whereNull('parent_id')->get();
+     
         if (auth()->check()) {
             $cart = Cart::where('user_id', $user->id)
                 ->with(['cartItems.product.images', 'cartItems.color', 'cartItems.size'])
@@ -107,7 +103,7 @@ class CheckOutController extends Controller
                 $wards = Wards::where('maqh', $user->province_id)->orderBy('name_xaphuong', 'ASC')->get();
             }
     
-        return view('client.check-out', compact('cartDetails', 'totalPrice', 'cities', 'provinces', 'wards', 'user','categories'));
+        return view('client.check-out', compact('cartDetails', 'totalPrice', 'cities', 'provinces', 'wards', 'user'));
     }
     
 

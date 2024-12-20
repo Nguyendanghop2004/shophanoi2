@@ -10,10 +10,15 @@ use App\Models\Wards;
 use App\Models\Shipper;
 use App\Models\Province;
 use App\Models\OrderItem;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -43,56 +48,77 @@ class OrderController extends Controller
         return view('admin.order.getList', compact('orders'));
     }
 
-    public function chitiet($id)
-    {   
-        $order = Order::findOrFail($id);
-        $orderitems = OrderItem::where('order_id',$order->id)->get();
-        $city = City::where('matp', $order->city_id)->first();
-        $province = Province::where('maqh', $order->province_id)->first();
-        $ward = Wards::where('xaid', $order->wards_id)->first();
-      
-        return view('admin.order.chitiet', compact('order', 'city', 'province', 'ward','orderitems'));
-    }
-
-    public function inhoadon($id)
+    public function chitiet($encryptedId)
     {
-        $order = Order::findOrFail($id);
-        $orderitems = OrderItem::where('order_id', $order->id)->get();
-        $city = City::where('matp', $order->city_id)->first();
-        $province = Province::where('maqh', $order->province_id)->first();
-        $ward = Wards::where('xaid', $order->wards_id)->first();
-    
-        // Tạo thư mục qr_codes nếu chưa tồn tại
-        $qrCodesDir = storage_path('app/public/qr_codes');
-        if (!File::exists($qrCodesDir)) {
-            File::makeDirectory($qrCodesDir, 0777, true);
+        try {
+         
+            $id = Crypt::decryptString($encryptedId);
+            
+            
+            $order = Order::findOrFail($id);
+            
+      
+            $orderitems = OrderItem::where('order_id', $order->id)->get();
+            $city = City::where('matp', $order->city_id)->first();
+            $province = Province::where('maqh', $order->province_id)->first();
+            $ward = Wards::where('xaid', $order->wards_id)->first();
+            
+           
+            return view('admin.order.chitiet', compact('order', 'city', 'province', 'ward', 'orderitems'));
+        } catch (DecryptException $e) {
+           
+            return redirect()->route('admin.error')->with('error', 'Dữ liệu không hợp lệ!');
+        } catch (ModelNotFoundException $e) {
+           
+            return redirect()->route('admin.error')->with('error', 'Không tìm thấy đơn hàng!');
         }
-    
-        // Tạo mã QR và lưu vào tệp tạm thời
-        $qrCode = QrCode::size(150)->generate($order->id);  // Thay đổi kích thước tùy theo nhu cầu
-        $tempPath = $qrCodesDir . '/hoadon_' . $order->order_code . '.png';
-        file_put_contents($tempPath, $qrCode);
-    
-        // Cấu hình DOMPDF để sử dụng font Unicode
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView('admin.order.hoadon', compact('order', 'orderitems', 'city', 'province', 'ward', 'tempPath'));
-    
-        // Cấu hình để DOMPDF hỗ trợ font Unicode
-        $options = [
-            'isHtml5ParserEnabled' => true,  
-            'isPhpEnabled' => true,        
-            'font_dir' => storage_path('fonts'),  
-            'font_cache' => storage_path('fonts')
-        ];
-    
-        $pdf->setOptions($options);
-    
-        // Xóa tệp mã QR tạm thời sau khi sử dụng
-        unlink($tempPath);
-    
-        // Trả về file PDF
-        return $pdf->download('hoa_don_' . 'HN CLOTHESSHOP' . '.pdf');
     }
+    
+
+    public function inhoadon($encryptedOrderId)
+    {
+        try {
+            // Giải mã mã đơn hàng từ URL
+            $orderId = Crypt::decryptString($encryptedOrderId);
+    
+            // Tìm đơn hàng theo ID đã giải mã
+            $order = Order::findOrFail($orderId);
+    
+            // Lấy các mục trong đơn hàng
+            $orderitems = OrderItem::where('order_id', $order->id)->get();
+    
+            // Lấy thông tin địa chỉ giao hàng
+            $city = City::where('matp', $order->city_id)->first();
+            $province = Province::where('maqh', $order->province_id)->first();
+            $ward = Wards::where('xaid', $order->wards_id)->first();
+    
+            // Tạo file PDF từ view 'admin.order.hoadon'
+            $pdf = Pdf::loadView('admin.order.hoadon', compact('order', 'orderitems', 'city', 'province', 'ward'));
+    
+            // Cấu hình để hỗ trợ Unicode (nếu cần)
+            $options = [
+                'isHtml5ParserEnabled' => true,
+                'isPhpEnabled' => true,
+                'font_dir' => storage_path('fonts'),
+                'font_cache' => storage_path('fonts'),
+            ];
+    
+            $pdf->setOptions($options);
+    
+            // Trả về file PDF để tải xuống
+            return $pdf->download('hoa_don_' . $order->order_code . '.pdf');
+        } catch (DecryptException $e) {
+           
+            return redirect()->route('admin.error');
+        } catch (ModelNotFoundException $e) {
+          
+            return redirect()->route('admin.error');
+        } catch (\Exception $e) {
+           
+            return redirect()->route('admin.error');
+        }
+    }
+    
     
 
     public function updateStatus(Request $request, $id)
@@ -129,10 +155,11 @@ class OrderController extends Controller
 
 public function showAssignShipperForm()
 {
-    // Lấy danh sách các đơn hàng chưa có shipper
-    $orders = Order::whereNull('assigned_shipper_id')->get();
+    $orders = Order::whereNull('assigned_shipper_id')
+                   ->whereIn('status', ['đã_xác_nhận'])
+                   ->get();
 
-    // Lấy danh sách Admin có vai trò 'Shipper'
+  
     $shippers = Admin::whereHas('roles', function ($query) {
         $query->where('name', 'Shipper');
     })->get();
@@ -140,23 +167,74 @@ public function showAssignShipperForm()
     return view('admin.order.assign', compact('orders', 'shippers'));
 }
 
+
 public function assignShipper(Request $request, Order $order ,$id)
 {
+    $request->validate([
+        'assigned_shipper_id' => 'required|exists:admins,id'
+    ], [
+        'assigned_shipper_id' => 'Vui lòng chọn shipper.',
+    ]);
     $order = Order::find($id);
         $order->assigned_shipper_id = $request->assigned_shipper_id;
         $order->save();
 
-        return redirect()->back()->with('success', 'Shipper assigned successfully.');
+        return redirect()->back()->with('success', 'Đã cấp đơn hàng cho shipper.');
 }
 public function danhsachgiaohang()
 {
-    // Lấy danh sách shipper đã nhận đơn hàng
-    $orders = Order::whereNull('assigned_shipper_id')->get();
+    $orders = Order::whereNotNull('assigned_shipper_id')->where('status', '!=', 'hủy')->get();
+    $user = Auth::user(); 
+
+    if ($user->hasRole('admin')) {
+        $shippers = Admin::whereHas('roles', function ($query) {
+            $query->where('name', 'Shipper');
+        })->get();
+    } else {
+        $orders = Order::where('assigned_shipper_id', $user->id)->where('status', '!=', 'hủy')->get();
+    }
+
     $shippers = Admin::whereHas('roles', function ($query) {
         $query->where('name', 'Shipper');
     })->get();
-    return view('admin.order.danhsachgiaohang', compact('orders','shippers'));
+    return view('admin.order.danhsachgiaohang', compact('orders', 'shippers'));
 }
+public function removeShipper($orderId)
+{
+    $order = Order::findOrFail($orderId);
+
+    if ($order->assigned_shipper_id) {
+        $order->assigned_shipper_id = null;
+        $order->save();
+
+        return redirect()->route('admin.order.danhsachgiaohang')->with('success', 'Đã loại bỏ đơn hàng.');
+    }
+
+    return redirect()->route('admin.order.danhsachgiaohang')->with('error', 'Đơn hàng không có shipper.');
+}
+public function updateStatusShip(Request $request, $id)
+{
+    $order = Order::find($id);
+    $order->status = $request->input('status');
+    
+    if ($order->status == 'hủy') {
+        $order->reason = $request->input('reason');
+    } else {
+        $order->reason = null; 
+    }
+    $order->save();
+
+    return redirect()->route('admin.order.danhsachgiaohang')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+}
+public function getOrders()
+{
+    // Lấy danh sách đơn hàng với trạng thái
+    $orders = Order::all();
+
+    // Trả về dữ liệu dưới dạng JSON
+    return response()->json($orders);
+}
+
 
 
 

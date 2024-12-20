@@ -62,7 +62,7 @@
                 </div>
               </form>
               <div class="mt-3">
-                <a href="/dashboard">Back to Home</a>
+                <a href="{{route('admin.dashboard')}}">Back to Home</a>
               </div>
             </div>
           </div>

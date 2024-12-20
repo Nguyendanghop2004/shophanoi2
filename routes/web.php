@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Client\ContactController;
+use App\Http\Controllers\client\ErrorController;
 use App\Http\Controllers\client\GioithieuController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\ContactMessageController;
@@ -40,6 +41,7 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 Route::get('gioithieu', [AboutUsController::class, 'index'])->name('index');
+Route::get('error', [ErrorController::class, 'error'])->name('error');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
 Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
@@ -133,3 +135,6 @@ Route::post('/select-address', [CheckoutController::class, 'select_address']);
 Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
 Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
 Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
+// Route::get('/orders', function () {
+//     return view('orders'); // Đảm bảo tên file view là 'orders'
+// });

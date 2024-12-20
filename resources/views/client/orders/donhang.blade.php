@@ -41,37 +41,65 @@
 
     .align-items-center {
         align-items: center;
-    }
+    }.nav-tabs .nav-item .nav-link {
+    margin: 5px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #8a2387, #e94057, #f27121); 
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-tabs .nav-item .nav-link.active {
+    background: linear-gradient(135deg, #8a2387, #e94057, #f27121); 
+    color: white;
+}
+
+.nav-tabs .nav-item .nav-link:hover {
+    background: linear-gradient(135deg, #f27121, #e94057, #8a2387); 
+    color: white;
+}
+
+
 </style>
 
 <div class="container">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link {{ $status === '' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => '']) }}">Tất cả đơn hàng</a>
+            <button class="nav-link btn {{ $status === '' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => '']) }}'">Tất cả đơn hàng</button>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'chờ_xác_nhận' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'chờ_xác_nhận']) }}">Chờ xác nhận</a>
+            <button class="nav-link btn {{ $status === 'chờ_xác_nhận' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'chờ_xác_nhận']) }}'">Chờ xác nhận</button>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'đã_xác_nhận' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'đã_xác_nhận']) }}">Đã xác nhận</a>
+            <button class="nav-link btn {{ $status === 'đã_xác_nhận' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'đã_xác_nhận']) }}'">Đã xác nhận</button>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'chờ_giao_hàng' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'chờ_giao_hàng']) }}">Chờ giao hàng</a>
+            <button class="nav-link btn {{ $status === 'ship_đã_nhận' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'ship_đã_nhận']) }}'">Ship đã nhận</button>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'đã_giao' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'đang_giao_hàng']) }}">Đang giao hàng</a>
+            <button class="nav-link btn {{ $status === 'chờ_giao_hàng' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'chờ_giao_hàng']) }}'">Chờ giao hàng</button>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'đã_giao' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'giao_hàng_thành_công']) }}">Giao hàng thành công</a>
+            <button class="nav-link btn {{ $status === 'đang_giao_hàng' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'đang_giao_hàng']) }}'">Đang giao hàng</button>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'đã_nhận_hàng' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'đã_nhận_hàng']) }}">Xác nhận giao hàng thành công</a>
+            <button class="nav-link btn {{ $status === 'giao_hàng_thành_công' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'giao_hàng_thành_công']) }}'">Giao hàng thành công</button>
         </li>
-        
         <li class="nav-item">
-            <a class="nav-link {{ $status === 'đã_hủy' ? 'active' : '' }}" href="{{ route('order.donhang', ['status' => 'hủy']) }}">Đã hủy</a>
+            <button class="nav-link btn {{ $status === 'đã_nhận_hàng' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'đã_nhận_hàng']) }}'">Xác nhận giao hàng thành công</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link btn {{ $status === 'hủy' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'hủy']) }}'">Đã hủy</button>
         </li>
     </ul>
+    
+    <!-- <div id="orders"></div> -->
     
     <div class="tab-content mt-3">
         <div class="tab-pane fade show active" id="trahang">
@@ -102,7 +130,7 @@
                                     
                                 </div>
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ route('client.orders.show', $order->id) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                    <a href="{{ route('client.orders.show', ['id' => Crypt::encryptString($order->id)]) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
                                     @if ($order->status === 'giao_hàng_thành_công')
                                     <form action="{{ route('orders.confirm', $order->id) }}" method="POST">
                                         @csrf
@@ -186,6 +214,64 @@
    
 
 </script>
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+<!-- <script>
+    // Hàm tải lại dữ liệu đơn hàng
+    function reloadOrderData() {
+        $.ajax({
+            url: '/api/orders/status',  // API của bạn lấy dữ liệu đơn hàng
+            method: 'GET',
+            success: function(data) {
+                // Cập nhật lại danh sách đơn hàng
+                let ordersHtml = '';
+                data.forEach(function(order) {
+                    ordersHtml += `
+                        <div class="card mb-3 custom-card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-3 custom-img-col">
+                                        <img src="${order.image_url}" alt="Product Image" class="img-fluid custom-img">
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h5 class="card-title mb-1">${order.product_name}</h5>
+                                            <span class="badge badge-success">${order.status}</span>
+                                        </div>
+                                        <p class="card-text mb-1">${order.order_code}</p>
+                                        <p class="card-text mb-1"><small class="text-muted">${order.created_at}</small></p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <p class="card-text mb-1"><strong>Giá: </strong> <span class="text-danger">${order.total_price} VND</span></p>
+                                            <p class="card-text mb-1"><strong>Số tiền hoàn: </strong>${order.refund_amount} VND</p>
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <a href="${order.details_url}" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                            <button class="btn btn-danger cancelOrderBtn" data-order-id="${order.id}" data-action="${order.cancel_url}">Hủy đơn hàng</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Thay thế nội dung trong thẻ #orders với dữ liệu mới
+                $('#orders').html(ordersHtml);
+            },
+            error: function() {
+                console.error('Có lỗi khi tải lại dữ liệu đơn hàng');
+            }
+        });
+    }
+
+    // Gọi hàm reloadOrderData mỗi 5 giây để cập nhật dữ liệu mà không reload trang
+    $(document).ready(function() {
+        // Tải dữ liệu lần đầu tiên khi trang tải
+        reloadOrderData();
+
+        // Tải lại dữ liệu mỗi 5 giây
+        setInterval(reloadOrderData, 5000);
+    });
+</script> -->
 
 
 @endsection

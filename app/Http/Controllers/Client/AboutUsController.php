@@ -11,4 +11,5 @@ class AboutUsController extends Controller
     {
             return view('client.about-us');
     }
+  
 }

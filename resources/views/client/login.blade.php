@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
-
+@section('header-home')
+    @include('client.layouts.particals.header-home')
+@endsection
 @section('content')
     <!-- categories -->
     <section class="flat-spacing-20">
