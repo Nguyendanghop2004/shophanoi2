@@ -77,13 +77,14 @@
                    </div>
                    <div class="col-xl-2 col-md-4 col-6 text-center">
                        <a href="home-multi-brand.html" class="logo-header">
-                           <img src="{{asset('client/assets/images/logo/women-logo.svg')}}" alt="logo" class="logo">
+                           <img src="{{ asset('client/assets/images/logo/women-logo.svg') }}" alt="logo"
+                               class="logo">
                        </a>
                    </div>
 
 
                    <div class="col-xl-5 col-md-4 col-3">
-                    
+                       {{--                     
                        <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
                            <li class="nav-search"><a href="#canvasSearch" data-bs-toggle="offcanvas"
                                    aria-controls="offcanvasLeft" class="nav-icon-item"><i
@@ -102,26 +103,27 @@
                                        class="icon icon-heart"></i><span class="count-box">0</span></a></li>
                            <li class="nav-cart"><a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item"><i
                                        class="icon icon-bag"></i><span class="count-box">0</span></a></li>
-                       </ul>
-                   @include('client.layouts.particals.navright')
+                       </ul> --}}
+                       @include('client.layouts.particals.navright')
+
+                   </div>
 
                </div>
            </div>
-       </div>
-       <div class="header-bottom line">
-           <div class="container-full px_15 lg-px_40">
-               <div class="wrapper-header d-flex justify-content-center align-items-center">
-                   <!-- list menu -->
-                   @include('client.layouts.particals.menu')
-                   <!-- list menu -->
-                   <ul class="header-list-categories tf-lg-hidden">
-                       <!-- cate -->
-                       @include('client.layouts.particals.navleft')
-                       <!-- cate -->
-                   </ul>
+           <div class="header-bottom line">
+               <div class="container-full px_15 lg-px_40">
+                   <div class="wrapper-header d-flex justify-content-center align-items-center">
+                       <!-- list menu -->
+                       @include('client.layouts.particals.menu')
+                       <!-- list menu -->
+                       <ul class="header-list-categories tf-lg-hidden">
+                           <!-- cate -->
+                           @include('client.layouts.particals.navleft')
+                           <!-- cate -->
+                       </ul>
+                   </div>
                </div>
            </div>
-       </div>
 
    </header>
    <!-- /header -->

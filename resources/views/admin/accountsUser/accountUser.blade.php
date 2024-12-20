@@ -42,7 +42,7 @@
                                     </td>
 
                                     <td>
-                                        @if ($user->status)
+                                        @if (!$user->status)
                                             <span class="badge badge-success">Hoạt động</span>
                                         @else
                                             <span class="badge badge-danger">Không hoạt động</span>

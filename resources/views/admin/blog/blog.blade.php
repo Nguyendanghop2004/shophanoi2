@@ -33,7 +33,8 @@
                                 <tr>
                                     <th scope="row">{{ $admin->id }}</th>
                                    
-                                    <td>{{ $admin->title }}</td>
+                                    <td>{{ \Illuminate\Support\Str::words($admin->title, 5, '...') }}</td>
+
                                     <td>{{ $admin->unique }}</td>
                                     <td>
                                         <img src="{{ Storage::url($admin->image) }}" alt="Ảnh quản trị viên"

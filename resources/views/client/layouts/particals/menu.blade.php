@@ -285,26 +285,7 @@
         </li>
 
 
-        <li class="menu-item">
-
-            <a href="#" class="item-link">Sản Phẩm<i class="icon icon-arrow-down"></i></a>
-            <div class="sub-menu mega-menu">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-2">
-                            <div class="mega-menu-item">
-                                <div class="menu-heading">Product layouts</div>
-                                <ul class="menu-list">
-
-                                    <li><a href="" class="menu-link-text link">Product description
-                                            vertical</a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-        </li>
+        
         <li class="menu-item position-relative">
             <a href="{{route('blog.show')}}" class="item-link">Bài Viết</a>
         </li>
