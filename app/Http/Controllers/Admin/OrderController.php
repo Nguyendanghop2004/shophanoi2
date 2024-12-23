@@ -222,10 +222,14 @@ public function updateStatusShip(Request $request, $id)
     } else {
         $order->reason = null; 
     }
+    if ($order->status == 'giao_hàng_thành_công') {
+        $order->payment_status = 'đã thanh toán'; 
+    }
     $order->save();
 
     return redirect()->route('admin.order.danhsachgiaohang')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
 }
+
 
 
 
