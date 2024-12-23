@@ -32,7 +32,7 @@
                     <div class="col-xl-4 col-md-6 col-12">
                         <div class="blog-article-item">
                             <div class="article-thumb">
-                                <a href="blog-detail.html">
+                                <a href="{{route('blog.detail',$item->slug)  }}">
                                     <img class="lazyload" src="{{ Storage::url($item->image) }} "
                                         style="width: 366px; height: 235px;" alt="img-blog">
                                 </a>

@@ -252,7 +252,7 @@ class OrderController extends Controller
             }
         }
     
-        return redirect()->route('cart')->with('success', 'Đơn hàng đã được hủy và số lượng sản phẩm đã được cộng lại.');
+        return redirect()->route('home')->with('success', 'Đơn hàng đã được hủy và số lượng sản phẩm đã được cộng lại.');
     }
     
     public function showOrderDetail($encryptedOrderCode)

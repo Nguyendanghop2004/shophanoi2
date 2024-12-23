@@ -1,3 +1,4 @@
+
 @extends('admin.layouts.master')
 
 @section('content')
@@ -20,14 +21,13 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div class="section-title mt-0"></div>
                 <div class="card-header-action">
-                <form class="form-inline" method="GET" action="{{ route('admin.categories.list') }}">
+                    <form class="form-inline" method="GET" action="{{ route('admin.categories.list') }}">
                         <div class="search-element">
                             <input class="form-control" type="search" placeholder="Tìm kiếm..." aria-label="Search"
                                 name="name" value="{{ $searchs }}" data-width="250">
                             <button class="btn" type="submit"><i class="fas fa-search"></i></button>
                         </div>
                     </form>
-                    
                 </div>
             </div>
             <div class="card-body p-0">
@@ -70,7 +70,7 @@
                                                     <form action="{{ route('admin.categories.toggleStatus', $cate->id) }}" method="POST"
                                                         style="display: inline;">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-info ml-2">
+                                                        <button type="button" class="btn btn-info ml-2" onclick="confirmStatusChange('{{ $cate->id }}')">
                                                             @if($cate->status == 1)
                                                                 <i class="fas fa-eye" style="color: green;"></i>
                                                             @else
@@ -79,10 +79,9 @@
                                                         </button>
                                                     </form>
                                                 @else
-                                                    <form action="{{ route('admin.categories.toggleStatus', $cate->id) }}" method="POST"
-                                                        style="display: inline;">
+                                                    <form action="{{ route('admin.categories.toggleStatus', $cate->id) }}" method="POST" style="display: inline;">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-info ml-2">
+                                                        <button type="button" class="btn btn-info ml-2" onclick="confirmStatusChange('{{ $cate->id }}')">
                                                             @if($cate->status == 1)
                                                                 <i class="fas fa-eye" style="color: green;"></i>
                                                             @else
@@ -90,26 +89,20 @@
                                                             @endif
                                                         </button>
                                                     </form>
-                                                    <a href="{{ route('admin.categories.edit', $cate->id) }}" class="btn btn-warning ml-2">
+
+                                                    <a href="{{ route('admin.categories.edit', ['id' => Crypt::encryptString($cate->id)]) }}" class="btn btn-warning ml-2">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                 
- 
-                                                    <form action="{{ route('admin.categories.delete', $cate->id) }}"
-                                                        method="post"
-                                                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                                    
+                                                    <form action="{{ route('admin.categories.delete', $cate->id) }}" method="post" style="display: inline;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger ml-2"><i
-                                                                class="fas fa-trash" style="color: #ffffff;"></i></button>
+                                                        <button type="button" class="btn btn-danger ml-2" onclick="confirmDelete('{{ $cate->id }}')">
+                                                            <i class="fas fa-trash" style="color: #ffffff;"></i>
+                                                        </button>
                                                     </form>
                                                 </div>
-       
-    </div>
-
-
-                                                @endif
-                                            </div>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -149,28 +142,72 @@
         </div>
     </div>
 </section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    $(document).ready(function () {
-        toastr.options = {
-            "closeButton": false,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-        };
+  
+    function confirmStatusChange(categoryId) {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn thay đổi trạng thái danh mục này?',
+            text: "Bạn không thể hoàn tác thay đổi này!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đồng ý',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+         
+                const form = document.querySelector(`form[action="{{ route('admin.categories.toggleStatus', '') }}/${categoryId}"]`);
+                form.submit();
+            }
+        });
+    }
 
-        @if(session('success'))
-            toastr.success("{{ session('success') }}");
-        @endif
+ 
+    function confirmDelete(categoryId) {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn xóa danh mục này?',
+            text: "Danh mục sẽ bị xóa vĩnh viễn!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+             
+                const form = document.querySelector(`form[action="{{ route('admin.categories.delete', '') }}/${categoryId}"]`);
+                form.submit();
+            }
+        });
+    }
+</script>
 
-        @if(session('error'))
-            toastr.error("{{ session('error') }}");
-        @endif
-    });
+
+<script>
+     document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+        });
 
    
 </script>

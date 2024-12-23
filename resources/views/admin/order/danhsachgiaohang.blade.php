@@ -57,51 +57,65 @@
                                             <td>
                                                 @if(!in_array($order->status, ['ship_đã_nhận','chờ_giao_hàng','đang_giao_hàng', 'giao_hàng_thành_công', 'đã_nhận_hàng','giao_hàng_không_thành_công']))
                                                 <form action="{{ route('admin.order.removeShipper', $order->id) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-danger">Không nhận đơn</button>
-                                                </form>
+    @csrf
+    <button 
+    type="button" 
+    class="btn btn-danger btn-sm mt-2" 
+    onclick="confirmUpdateForm(this)">
+Không nhận</button>
+</form>
+
                                             @endif
                                             @if(in_array($order->status, ['đã_xác_nhận']))
                                             <form action="{{ route('admin.order.update-updateStatusShip', $order->id) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                <input type="hidden" name="status" value="ship_đã_nhận">
-                                                <button type="submit" class="btn btn-primary">Nhận đơn</button>
-                                            </form>
-                                        @endif
-                                                <form action="{{ route('admin.order.update-updateStatusShip', $order->id) }}" method="POST">
-                                                    @csrf
-                                                    <select name="status" class="form-control " onchange="showReasonField(this)">
-                                                        @if($order->status == 'chờ_xác_nhận')
-                                                            <option value="chờ_xác_nhận" {{ $order->status == 'chờ_xác_nhận' ? 'selected' : '' }}>Chờ Xác Nhận</option>
-                                                        @elseif($order->status == 'đã_xác_nhận')
-                                                            <option value="đã_xác_nhận" {{ $order->status == 'đã_xác_nhận' ? 'selected' : '' }}>Đã Xác Nhận</option>
-                                                        @elseif($order->status == 'ship_đã_nhận')
-                                                            <option value="ship_đã_nhận" {{ $order->status == 'ship_đã_nhận' ? 'selected' : '' }}>Ship đã nhận</option>
-                                                            <option value="chờ_giao_hàng" {{ $order->status == 'chờ_giao_hàng' ? 'selected' : '' }}>Chờ Giao Hàng</option>
+    @csrf
+    <input type="hidden" name="status" value="ship_đã_nhận">
+    <button 
+    type="button" 
+    class="btn btn-success btn-sm mt-2" 
+    onclick="confirmUpdateForms(this)">
+nhận đợn</button>
+</form>
 
-                                                        @elseif($order->status == 'chờ_giao_hàng')
-                                                            <option value="chờ_giao_hàng" {{ $order->status == 'chờ_giao_hàng' ? 'selected' : '' }}>Chờ Giao Hàng</option>
-                                                            <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
-                                                        @elseif($order->status == 'đang_giao_hàng')
-                                                            <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
-                                                            <option value="giao_hàng_thành_công" {{ $order->status == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
-                                                            <option value="giao_hàng_không_thành_công" {{ $order->status == 'giao_hàng_không_thành_công' ? 'selected' : '' }}>Giao Hàng Không Thành Công</option>
-                                                        @elseif($order->status == 'giao_hàng_thành_công')
-                                                            <option value="giao_hàng_thành_công" {{ $order->status == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
-                                                            @elseif($order->status == 'giao_hàng_không_thành_công')
-                                                            <option value="giao_hàng_không_thành_công" {{ $order->status == 'giao_hàng_không_thành_công' ? 'selected' : '' }}>Giao Hàng Không Thành Công</option>
-                                                        @elseif($order->status == 'đã_nhận_hàng')
-                                                        <option value="đã_nhận_hàng" {{ $order->status == 'đã_nhận_hàng' ? 'selected' : '' }}>Đã nhận hàng</option>
-                                                        @elseif($order->status == 'hủy')
-                                                            <option value="hủy" {{ $order->status == 'hủy' ? 'selected' : '' }}>Hủy</option>
-                                                        @endif
-                                                    </select>
-                                                    @if($order->status != 'hủy' &&  $order->status != 'giao_hàng_thành_công' &&  $order->status != 'đã_nhận_hàng' &&  $order->status != 'giao_hàng_không_thành_công'
-                                                    &&  $order->status != 'chờ_xác_nhận'  &&  $order->status != 'đã_xác_nhận'
-                                                    )
-                                                    <button type="submit" class="btn btn-success btn-sm mt-2">Cập Nhật</button>
-                                                    @endif
-                                                </form>
+                                        @endif
+                                        <form action="{{ route('admin.order.update-updateStatusShip', $order->id) }}" method="POST">
+    @csrf
+    <select name="status" class="form-control" onchange="showReasonField(this)">
+        @if($order->status == 'chờ_xác_nhận')
+            <option value="chờ_xác_nhận" {{ $order->status == 'chờ_xác_nhận' ? 'selected' : '' }}>Chờ Xác Nhận</option>
+        @elseif($order->status == 'đã_xác_nhận')
+            <option value="đã_xác_nhận" {{ $order->status == 'đã_xác_nhận' ? 'selected' : '' }}>Đã Xác Nhận</option>
+        @elseif($order->status == 'ship_đã_nhận')
+            <option value="ship_đã_nhận" {{ $order->status == 'ship_đã_nhận' ? 'selected' : '' }}>Ship đã nhận</option>
+            <option value="chờ_giao_hàng" {{ $order->status == 'chờ_giao_hàng' ? 'selected' : '' }}>Chờ Giao Hàng</option>
+        @elseif($order->status == 'chờ_giao_hàng')
+            <option value="chờ_giao_hàng" {{ $order->status == 'chờ_giao_hàng' ? 'selected' : '' }}>Chờ Giao Hàng</option>
+            <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
+        @elseif($order->status == 'đang_giao_hàng')
+            <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
+            <option value="giao_hàng_thành_công" {{ $order->status == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
+            <option value="giao_hàng_không_thành_công" {{ $order->status == 'giao_hàng_không_thành_công' ? 'selected' : '' }}>Giao Hàng Không Thành Công</option>
+        @elseif($order->status == 'giao_hàng_thành_công')
+            <option value="giao_hàng_thành_công" {{ $order->status == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
+        @elseif($order->status == 'giao_hàng_không_thành_công')
+            <option value="giao_hàng_không_thành_công" {{ $order->status == 'giao_hàng_không_thành_công' ? 'selected' : '' }}>Giao Hàng Không Thành Công</option>
+        @elseif($order->status == 'đã_nhận_hàng')
+            <option value="đã_nhận_hàng" {{ $order->status == 'đã_nhận_hàng' ? 'selected' : '' }}>Đã nhận hàng</option>
+        @elseif($order->status == 'hủy')
+            <option value="hủy" {{ $order->status == 'hủy' ? 'selected' : '' }}>Hủy</option>
+        @endif
+    </select>
+    
+    @if($order->status != 'hủy' && $order->status != 'giao_hàng_thành_công' && $order->status != 'đã_nhận_hàng' && $order->status != 'giao_hàng_không_thành_công'
+    && $order->status != 'chờ_xác_nhận' && $order->status != 'đã_xác_nhận')
+    <button 
+    type="button" 
+    class="btn btn-primary btn-sm mt-2" 
+    onclick="confirmUpdateFormss(this)">
+cập nhật</button>
+    @endif
+</form>
+
                                             </td>
                                        
                                     </tr>
@@ -114,28 +128,83 @@
         </div>
     </div>
 </section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    $(document).ready(function () {
-        toastr.options = {
-            "closeButton": false,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-        };
+    function confirmUpdateForm(button) {
+        Swal.fire({
+            title: 'Bạn muốn hủy nhận đơn hàng này?',
+            text: "bạn có chắc không!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Cập nhật!',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Nếu xác nhận, gửi form
+                button.closest('form').submit();
+            }
+        });
+    }
+    function confirmUpdateForms(button) {
+        Swal.fire({
+            title: 'Bạn có muốn nhận đơn hàng này?',
+            text: "bạn có chắc không!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Cập nhật!',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Nếu xác nhận, gửi form
+                button.closest('form').submit();
+            }
+        });
+    }
+    function confirmUpdateFormss(button) {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn cập nhật trạng thái đơn hàng này?',
+            text: "Bạn không thể hoàn tác thay đổi này!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Cập nhật!',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Nếu xác nhận, gửi form
+                button.closest('form').submit();
+            }
+        });
+    }
+</script>
 
-        @if(session('success'))
-            toastr.success("{{ session('success') }}");
-        @endif
 
-        @if(session('error'))
-            toastr.error("{{ session('error') }}");
-        @endif
-    });
+<script>
+       document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+        });
 
    
 </script>

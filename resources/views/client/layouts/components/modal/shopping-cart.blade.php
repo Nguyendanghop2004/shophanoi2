@@ -20,7 +20,8 @@
                         </span>
                     </div>
                     <div class="tf-progress-msg">
-                        Mua <span class="price fw-6">300.000 VNĐ</span> trở lên <span class="fw-6"> Miễn Phí Ship</span>
+                        {{-- Mua <span class="price fw-6">300.000 VNĐ</span> trở lên <span class="fw-6"> Miễn Phí Ship</span> --}}
+                        Mua <span class="price fw-6">Sản Phẩm </span> ở Cửa Hàng tất cả đểu <span class="fw-6"> Miễn Phí Ship</span>
                     </div>
                 </div>
                 <div class="tf-mini-cart-wrap">
@@ -29,7 +30,7 @@
                             <div class="tf-mini-cart-items">
 
                             </div>
-                            <div class="tf-minicart-recommendations">
+                            {{-- <div class="tf-minicart-recommendations">
                                 <div class="tf-minicart-recommendations-heading">
                                     <div class="tf-minicart-recommendations-title">You may also like</div>
                                     <div class="sw-dots small style-2 cart-slide-pagination"></div>
@@ -75,7 +76,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="tf-mini-cart-bottom">
@@ -91,7 +92,7 @@
                                     </path>
                                 </svg>
                             </div>
-                            <div class="tf-mini-cart-tool-btn btn-add-gift">
+                            {{-- <div class="tf-mini-cart-tool-btn btn-add-gift">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="18"
                                     viewBox="0 0 17 18" fill="currentColor">
                                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -106,15 +107,15 @@
                                         d="M0 0.811989C0 0.36354 0.36354 0 0.811989 0H15.4278C15.8763 0 16.2398 0.36354 16.2398 0.811989V3.10596H21.0144C23.6241 3.10596 25.8643 5.05894 25.8643 7.61523V14.6414C25.8643 15.0899 25.5007 15.4534 25.0523 15.4534H23.545C23.2139 16.9115 21.9098 18 20.3514 18C18.7931 18 17.4889 16.9115 17.1578 15.4534H8.69534C8.36423 16.9115 7.0601 18 5.50175 18C3.9434 18 2.63927 16.9115 2.30815 15.4534H0.811989C0.36354 15.4534 0 15.0899 0 14.6414V0.811989ZM2.35089 13.8294C2.74052 12.4562 4.00366 11.4503 5.50175 11.4503C6.99983 11.4503 8.26298 12.4562 8.6526 13.8294H14.6158V1.62398H1.62398V13.8294H2.35089ZM16.2398 4.72994V7.95749H24.2403V7.61523C24.2403 6.08759 22.8649 4.72994 21.0144 4.72994H16.2398ZM24.2403 9.58147H16.2398V13.8294H17.2006C17.5902 12.4562 18.8533 11.4503 20.3514 11.4503C21.8495 11.4503 23.1126 12.4562 23.5023 13.8294H24.2403V9.58147ZM5.50175 13.0743C4.58999 13.0743 3.85087 13.8134 3.85087 14.7251C3.85087 15.6369 4.58999 16.376 5.50175 16.376C6.41351 16.376 7.15263 15.6369 7.15263 14.7251C7.15263 13.8134 6.41351 13.0743 5.50175 13.0743ZM20.3514 13.0743C19.4397 13.0743 18.7005 13.8134 18.7005 14.7251C18.7005 15.6369 19.4397 16.376 20.3514 16.376C21.2632 16.376 22.0023 15.6369 22.0023 14.7251C22.0023 13.8134 21.2632 13.0743 20.3514 13.0743Z">
                                     </path>
                                 </svg>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="tf-mini-cart-bottom-wrap">
                             <div class="tf-cart-totals-discounts">
                                 <div class="tf-cart-total">Tổng Tiền</div>
-                                <div class="tf-totals-total-value fw-6">0 VNĐ</div>
+                                <div class="tf-totals-total-value fw-6">$49.99 USD</div>
                             </div>
-                            <div class="tf-cart-tax">Thuế và <a href="#">phí vận chuyển</a> sẽ được tính tại thanh toán
-                            </div>
+                            {{-- <div class="tf-cart-tax">Taxes and <a href="#">shipping</a> calculated at checkout
+                            </div> --}}
                             <div class="tf-mini-cart-line"></div>
                             <div class="tf-cart-checkbox">
                                 <div class="tf-checkbox-wrapp">
@@ -125,15 +126,16 @@
                                     </div>
                                 </div>
                                 <label for="CartDrawer-Form_agree">
-                                Tôi đồng ý với
-                                    <a href="#" title="Terms of Service">mọi điều khoản và điều kiện</a>
+                                    Tôi đồng ý với
+                                    <a href="#" title="Terms of Service">điều khoản và điều kiện</a>
                                 </label>
                             </div>
                             <div class="tf-mini-cart-view-checkout">
                                 <a href="{{ route('cart') }}"
-                                    class="tf-btn btn-outline radius-3 link w-100 justify-content-center">Giỏ Hàng</a>
-                <a href="{{route('checkout')}}"
-                                    class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Thanh Toán</span></a>
+                                    class="tf-btn btn-outline radius-3 link w-100 justify-content-center">View cart</a>
+                                <a href="checkout.html"
+                                    class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Check
+                                        out</span></a>
                             </div>
                         </div>
                     </div>
@@ -161,7 +163,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tf-mini-cart-tool-openable add-gift">
+                    {{-- <div class="tf-mini-cart-tool-openable add-gift">
                         <div class="overplay tf-mini-cart-tool-close"></div>
                         <form class="tf-product-form-addgift">
                             <div class="tf-mini-cart-tool-content">
@@ -280,7 +282,7 @@
                                     Cancel</div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

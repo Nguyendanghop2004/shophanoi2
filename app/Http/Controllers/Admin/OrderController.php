@@ -78,24 +78,24 @@ class OrderController extends Controller
     public function inhoadon($encryptedOrderId)
     {
         try {
-            // Giải mã mã đơn hàng từ URL
+       
             $orderId = Crypt::decryptString($encryptedOrderId);
     
-            // Tìm đơn hàng theo ID đã giải mã
+           
             $order = Order::findOrFail($orderId);
     
-            // Lấy các mục trong đơn hàng
+       
             $orderitems = OrderItem::where('order_id', $order->id)->get();
     
-            // Lấy thông tin địa chỉ giao hàng
+           
             $city = City::where('matp', $order->city_id)->first();
             $province = Province::where('maqh', $order->province_id)->first();
             $ward = Wards::where('xaid', $order->wards_id)->first();
     
-            // Tạo file PDF từ view 'admin.order.hoadon'
+        
             $pdf = Pdf::loadView('admin.order.hoadon', compact('order', 'orderitems', 'city', 'province', 'ward'));
     
-            // Cấu hình để hỗ trợ Unicode (nếu cần)
+            
             $options = [
                 'isHtml5ParserEnabled' => true,
                 'isPhpEnabled' => true,
@@ -105,7 +105,7 @@ class OrderController extends Controller
     
             $pdf->setOptions($options);
     
-            // Trả về file PDF để tải xuống
+    
             return $pdf->download('hoa_don_' . $order->order_code . '.pdf');
         } catch (DecryptException $e) {
            
@@ -126,26 +126,26 @@ class OrderController extends Controller
         $order = Order::find($id);
         $order->status = $request->input('status');
         
-        // Nếu trạng thái đơn hàng là 'hủy'
+       
         if ($order->status == 'hủy') {
             $order->reason = $request->input('reason');
             
-            // Cộng lại số lượng sản phẩm vào biến thể
+           
             foreach ($order->orderItems as $orderItem) {
-                // Lấy biến thể sản phẩm từ bảng product_variants
+               
                 $variant = ProductVariant::where('product_id', $orderItem->product_id)
-                    ->where('color_id', $orderItem->color_id)  // Kiểm tra theo màu
-                    ->where('size_id', $orderItem->size_id)  // Kiểm tra theo size
+                    ->where('color_id', $orderItem->color_id) 
+                    ->where('size_id', $orderItem->size_id)  
                     ->first();
         
-                // Nếu tìm thấy biến thể, cộng lại số lượng vào stock_quantity
+             
                 if ($variant) {
-                    $variant->stock_quantity += $orderItem->quantity;  // Cộng lại số lượng sản phẩm
-                    $variant->save();  // Lưu thay đổi
+                    $variant->stock_quantity += $orderItem->quantity;  
+                    $variant->save();  
                 }
             }
         } else {
-            $order->reason = null; // Nếu trạng thái không phải 'hủy', xóa lý do
+            $order->reason = null; 
         }
         
         $order->save();
@@ -225,14 +225,6 @@ public function updateStatusShip(Request $request, $id)
     $order->save();
 
     return redirect()->route('admin.order.danhsachgiaohang')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
-}
-public function getOrders()
-{
-    // Lấy danh sách đơn hàng với trạng thái
-    $orders = Order::all();
-
-    // Trả về dữ liệu dưới dạng JSON
-    return response()->json($orders);
 }
 
 

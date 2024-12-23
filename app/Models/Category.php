@@ -25,10 +25,6 @@ class Category extends Model
 
 }
 
-    public function sliders()
-    {
-        return $this->hasMany(Slider::class, 'category_id');
-    }
     public function children()
     {
         return $this->hasMany(Category::class, 'parent_id');

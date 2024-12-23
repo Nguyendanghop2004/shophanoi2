@@ -199,6 +199,7 @@
             <a href="{{ route('cancel.order.page', ['order_code' => Crypt::encryptString($order->order_code)]) }}" class="cancel-order">
                 Hủy Đơn Hàng
             </a>
+            
         </p>
         
         <div class="footer">

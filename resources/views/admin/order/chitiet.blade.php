@@ -110,9 +110,55 @@
         </div>
         <div class="card-footer text-right">
             <a href="{{ route('admin.order.getList') }}" class="btn btn-primary">Quay Lại</a>
-            <a href="{{ route('admin.order.inHoaDon', ['id' => Crypt::encryptString($order->id)]) }}" class="btn btn-success">In Hóa Đơn</a>
+            <a href="{{ route('admin.order.inHoaDon', ['id' => Crypt::encryptString($order->id)]) }}" 
+   class="btn btn-success" 
+   onclick="confirmPrintInvoice(event)">
+    In Hóa Đơn
+</a>
         </div>
         
     </div>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmPrintInvoice(event) {
+        event.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
+        Swal.fire({
+            title: 'Bạn có muốn in hóa đơn này?',
+            text: "Bạn không thể hoàn tác thay đổi này!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'In Hóa Đơn',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Nếu xác nhận, chuyển hướng tới URL in hóa đơn
+                window.location.href = event.target.href;
+            }
+        });
+    }
+</script>
+<script>
+         document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+        });
+</script>
 @endsection

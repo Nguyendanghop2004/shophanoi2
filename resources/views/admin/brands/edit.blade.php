@@ -11,7 +11,7 @@
             <h4>Chỉnh Sửa Thương Hiệu</h4>
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.brands.update', $brand->id) }}" method="POST" enctype="multipart/form-data">
+            <form id="brand-update-form" action="{{ route('admin.brands.update', $brand->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -56,7 +56,7 @@
 
                         <!-- Nút Lưu -->
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                            <button type="button" id="update-btn" class="btn btn-primary">Cập Nhật</button>
                         </div>
                     </div>
                 </div>
@@ -65,21 +65,33 @@
     </div>
 </section>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Thêm thư viện SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    $(document).ready(function () {
-        // Hiển thị ảnh đã chọn
-        $('#image-upload').change(function (e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    $('#image-preview img').attr('src', event.target.result).parent().show();
-                    $('#image-label').text(file.name);
-                }
-                reader.readAsDataURL(file);
-            }
-        });
+    document.addEventListener('DOMContentLoaded', function () {
+        // Khi nhấn nút cập nhật
+        const updateBtn = document.getElementById('update-btn');
+
+        if (updateBtn) {
+            updateBtn.addEventListener('click', function () {
+                // Hiển thị SweetAlert confirm
+                Swal.fire({
+                    title: 'Bạn có chắc chắn muốn cập nhật thương hiệu này?',
+                    text: "Các thay đổi sẽ được lưu lại!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Cập Nhật',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Nếu người dùng chọn "Cập Nhật", gửi form
+                        document.getElementById('brand-update-form').submit();
+                    }
+                });
+            });
+        }
     });
 </script>
 @endsection

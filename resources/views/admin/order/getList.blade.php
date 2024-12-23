@@ -115,8 +115,14 @@
                                             <button type="button" class="btn btn-danger btn-sm mt-2 mx-2 close-btn" onclick="resetStatus(this)">X</button>
                                         </div>
                                         @if($order->status != 'hủy' &&  $order->status != 'giao_hàng_thành_công'  &&  $order->status != 'giao_hàng_không_thành_công' &&  $order->status != 'đã_nhận_hàng')
-                                        <button type="submit" class="btn btn-success btn-sm mt-2">Cập Nhật</button>
-                                        @endif
+                                        <button 
+    type="button" 
+    class="btn btn-success btn-sm mt-2" 
+    onclick="confirmUpdateForm(this)">
+    Cập Nhật
+</button>
+@endif
+
                                     </form>
                                 </td>   
                                 <td>
@@ -134,7 +140,27 @@
         </div>
     </div>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+    function confirmUpdateForm(button) {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn cập nhật trạng thái đơn hàng này?',
+            text: "Bạn không thể hoàn tác thay đổi này!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Cập nhật!',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Nếu xác nhận, gửi form
+                button.closest('form').submit();
+            }
+        });
+    }
+</script>
 <script>
     let originalStatus = '';
 
@@ -162,4 +188,27 @@
     }
 </script>
 
+
+<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+        });
+
+</script>
 @endsection

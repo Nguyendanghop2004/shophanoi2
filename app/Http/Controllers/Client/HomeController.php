@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\BlogClient;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -28,7 +29,7 @@ class HomeController extends Controller
      */
     public function home()
     {
-
+        $data = BlogClient::where('status', 1)->get();
         $collections = Tag::where('type', 'collection')->get();
 
         $sliders = Slider::where('is_active', 1)->get();
@@ -89,8 +90,9 @@ class HomeController extends Controller
                 'colors' => $product->colors,
             ];
         });
+        
         // return response()->json($products);
-        return view('client.home', compact('products', 'collections','sliders'));
+        return view('client.home', compact('products', 'collections', 'sliders','data'));
     }
     public function getProductInfo(Request $request)
     {
@@ -130,5 +132,46 @@ class HomeController extends Controller
         // Trả về một view partial chứa thông tin sản phẩm, ảnh ngẫu nhiên, và các size theo màu
         return view('client.layouts.components.ajax-file.quick-add', compact('product', 'randomImages', 'colorSizes'))->render();
     }
+    public function getProductInfoQuickView(Request $request)
+    {
+        // Lấy thông tin sản phẩm với các mối quan hệ liên quan
+        $product = Product::with([
+            'brand',
+            'variants.color',
+            'variants.size',
+            'images'
+        ])->where('id', $request->id)->first();
 
+        // Kiểm tra nếu không tìm thấy sản phẩm
+        if (!$product) {
+            return response()->json([
+                'message' => 'Product not found'
+            ], 404);
+        }
+
+        // Tạo danh sách size và giá cho mỗi màu
+        $colorSizes = [];
+        foreach ($product->variants as $variant) {
+            $colorId = $variant->color_id;
+            $size = $variant->size;
+            $price = $variant->price;
+            $stockQuantity = $variant->stock_quantity;
+            
+            // Nếu chưa có màu này trong danh sách $colorSizes thì tạo mới
+            if (!isset($colorSizes[$colorId])) {
+                $colorSizes[$colorId] = [];
+            }
+
+            // Thêm size và giá nếu chưa có
+            if (!in_array($size, array_column($colorSizes[$colorId], 'size'))) {
+                $colorSizes[$colorId][] = [
+                    'size' => $size,
+                    'price' => $price,
+                    'stock_quantity' => $stockQuantity
+                ];
+            }
+        }
+        // Trả về một view partial chứa thông tin sản phẩm, ảnh ngẫu nhiên, và các size theo màu
+        return view('client.layouts.components.ajax-file.quick-view', compact('product', 'colorSizes'))->render();
+    }
 }
