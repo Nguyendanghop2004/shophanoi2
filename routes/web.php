@@ -46,7 +46,7 @@ Route::get('time-line', [TimeLineController::class, 'index'])->name('time-line')
 Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping-cart');
 
 //thanh toán
-Route::get('check-out', [CheckOutController::class, 'checkout'])->name('check-out');
+Route::get('check-out', [CheckOutController::class, 'checkout'])->name('checkout');
 Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnPayReturn'])->name('vnpay.return');
 Route::get('/out-of-stock', [CheckoutController::class, 'outOfStock'])->name('out-of-stock');
@@ -100,6 +100,9 @@ Route::get('/debug-cart', function () {
 Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::get('/cart/modal-cart', [CartController::class, 'getModalCart'])->name('cart.modal');
+
+Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+
 
 Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.donhang');
 Route::get('/order/donhang/{id}', [OrderController::class, 'show'])->name('client.orders.show');

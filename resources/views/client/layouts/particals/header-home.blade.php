@@ -168,7 +168,7 @@
                         <li class="nav-cart">
                             <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
                                 <i class="icon icon-bag"></i>
-                                <span class="count-box">0</span>
+                                <span class="count-box cart-count">0</span>
                             </a>
                         </li>
                     </ul>

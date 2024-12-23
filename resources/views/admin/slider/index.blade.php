@@ -48,7 +48,11 @@
                                 @foreach ($sliders as $slider)
                                     <tr data-id="{{ $slider->id }}">
                                         <th scope="row">{{ $slider->id }}</th>
-                                        <td><div style="padding: 5px;"><img src="{{ asset('storage/' . $slider->image_path) }}" alt="" style="max-height: 100px"></div></td>
+                                        <td>
+                                            <div style="padding: 5px;"><img
+                                                    src="{{ asset('storage/' . $slider->image_path) }}" alt=""
+                                                    style="max-height: 100px"></div>
+                                        </td>
                                         <td>{{ $slider->title }}</td>
                                         <td>{{ $slider->short_description }}</td>
                                         <td>{{ $slider->position }}</td>
@@ -86,6 +90,8 @@
                     </div>
                 </div>
             </div>
+            <p class="section-lead text-warning mb-2">
+                Lưu ý ảnh nên ở kích thước 2000 x 732 </p>
             <div class="card-body mx-auto">
                 <div class="buttons">
                     <nav aria-label="Page navigation example">
