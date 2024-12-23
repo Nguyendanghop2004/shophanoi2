@@ -11,7 +11,7 @@
                 <h4>Sửa Blog</h4>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.blog.update', $data->id) }}" method="POST" enctype="multipart/form-data">
+                <form id="blog-form" action="{{ route('admin.blog.update', $data->id) }}" method="POST" enctype="multipart/form-data">
                     @method('put')
                     @csrf
                     <div class="col-lg-6 col-md-6 col-12">
@@ -70,13 +70,18 @@
                                     style="width: 50%; height: 100px;" cols="30" rows="5"> {{ old('content') }} {{ $data->content }}</textarea>
                             </div>
                         </div>
-                        <input type="submit" class="btn btn-primary" value="Tạo mới sản phẩm ở đây ">
+                        <input type="submit" id="submit-btn" class="btn btn-primary" value="Cập nhật">
                 </form>
             </div>
         </div>
         </div>
         </div>
     </section>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <script>
         $(document).ready(function() {
             const oldDescription = "{{ old('content') }}"; // Lấy dữ liệu cũ từ Laravel
@@ -98,52 +103,34 @@
 
             // Đặt nội dung cũ vào Summernote
             if (oldDescription) {
-                $('.summernote').summernote(oldDescription);
+                $('.summernote').summernote('code', oldDescription);
             }
 
             // Cập nhật giá trị của textarea ẩn trước khi gửi form
             $('form').on('submit', function() {
                 const summernoteContent = $('.summernote').summernote('code');
-                $(this).find('textarea[name="description"]').val(summernoteContent);
+                $(this).find('textarea[name="content"]').val(summernoteContent);
             });
-        });
-    </script>
-       <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            @if (session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Thành công!',
-                    text: '{{ session('success') }}',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            @elseif (session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi!',
-                    text: '{{ session('error') }}',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            @endif
 
-            // Thêm sự kiện thay đổi cho input file
-            const imageUpload = document.getElementById('image-upload');
-            const imagePreviewImg = document.getElementById('image-preview-img');
+            // Thêm sự kiện xác nhận khi nhấn nút Cập Nhật
+            $('#submit-btn').click(function(e) {
+                e.preventDefault(); // Ngừng việc gửi form mặc định
 
-            imageUpload.addEventListener('change', function() {
-                const file = this.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        imagePreviewImg.setAttribute('src', e.target.result);
-                        imagePreviewImg.style.display = 'block';
+                Swal.fire({
+                    title: 'Bạn có chắc chắn muốn cập nhật blog này?',
+                    text: "Blog sẽ được cập nhật ngay sau khi bạn xác nhận!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Có, cập nhật!',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Nếu người dùng xác nhận, gửi form
+                        $('#blog-form').submit();
                     }
-                    reader.readAsDataURL(file);
-                } else {
-                    imagePreviewImg.style.display = 'none';
-                }
+                });
             });
         });
     </script>

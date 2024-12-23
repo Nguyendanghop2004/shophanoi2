@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\OrderRequest;
+use App\Models\DiscountCode;
+use App\Models\UserDiscountCode;
+use Auth;
 use DB;
 use Mail;
 use Session;
@@ -28,26 +31,39 @@ class CheckOutController extends Controller
         $cartDetails = [];
         $totalPrice = 0;
         $user = auth()->user();
-        $categories = Category::with(relations: [
-            'children' => function ($query) {
-                $query->where('status', 1);
-            }
-        ])->where('status', 1)
-            ->whereNull('parent_id')->get();
+    
         if (auth()->check()) {
             $cart = Cart::where('user_id', $user->id)
                 ->with(['cartItems.product.images', 'cartItems.color', 'cartItems.size'])
                 ->first();
     
             if ($cart && $cart->cartItems->isNotEmpty()) {
-                $cartDetails = $cart->cartItems->map(function ($item) {
+                foreach ($cart->cartItems as $item) {
+                    $variant = ProductVariant::where([
+                        ['product_id', $item->product_id],
+                        ['color_id', $item->color_id],
+                        ['size_id', $item->size_id],
+                    ])->first();
+    
+                    if (!$variant) {
+                        return redirect()->route('cart')->with('error', "Không tìm thấy biến thể sản phẩm.");
+                    }
+    
+                    // Kiểm tra tồn kho
+                    if ($item->quantity > $variant->stock_quantity) {
+                        return redirect()->route('cart')->with(
+                            'error',
+                            "Sản phẩm '{$item->product->product_name}' chỉ còn lại {$variant->stock_quantity} trong kho."
+                        );
+                    }
+    
                     $product = $item->product;
                     $color = $item->color;
                     $size = $item->size;
                     $image = $product->images->firstWhere('color_id', $color->id);
                     $imageUrl = $image ? $image->image_url : '/default-image.jpg';
     
-                    return [
+                    $cartDetails[] = [
                         'product_id' => $product->id,
                         'color_id' => $color->id ?? null,
                         'size_id' => $size->id ?? null,
@@ -59,20 +75,39 @@ class CheckOutController extends Controller
                         'image_url' => $imageUrl,
                         'subtotal' => ($item->price ?? $product->price) * $item->quantity,
                     ];
-                });
+                }
     
-                $totalPrice = $cartDetails->sum('subtotal');
+                $totalPrice = collect($cartDetails)->sum('subtotal');
+            } else {
+                return redirect()->route('cart')->with('error', 'Giỏ hàng của bạn hiện tại không có sản phẩm.');
             }
         } else {
             $cart = session()->get('cart', []);
     
             if (!empty($cart)) {
                 foreach ($cart as $item) {
+                    $variant = ProductVariant::where([
+                        ['product_id', $item['product_id']],
+                        ['color_id', $item['color_id']],
+                        ['size_id', $item['size_id']],
+                    ])->first();
+    
+                    if (!$variant) {
+                        return redirect()->route('cart')->with('error', "Không tìm thấy biến thể sản phẩm.");
+                    }
+    
+                    // Kiểm tra tồn kho
+                    if ($item['quantity'] > $variant->stock_quantity) {
+                        return redirect()->route('cart')->with(
+                            'error',
+                            "Sản phẩm '{$item['product_name']}' chỉ còn lại {$variant->stock_quantity} trong kho."
+                        );
+                    }
+    
                     $product = Product::find($item['product_id']);
                     $color = Color::find($item['color_id']);
                     $size = Size::find($item['size_id']);
                     $image = $product->images->firstWhere('color_id', $color->id);
-    
                     $imageUrl = $image ? $image->image_url : '/default-image.jpg';
     
                     $cartDetails[] = [
@@ -90,22 +125,28 @@ class CheckOutController extends Controller
                 }
     
                 $totalPrice = array_sum(array_column($cartDetails, 'subtotal'));
+            } else {
+                return redirect()->route('cart')->with('error', 'Giỏ hàng của bạn hiện tại không có sản phẩm.');
             }
         }
-        
-        
-            $cities = City::orderBy('name_thanhpho', 'ASC')->get();
-            $provinces = collect();
-            $wards = collect();
-        
-            if (auth()->check()) {
-                $user = auth()->user();
-                $provinces = Province::where('matp', $user->city_id)->orderBy('name_quanhuyen', 'ASC')->get();
-                $wards = Wards::where('maqh', $user->province_id)->orderBy('name_xaphuong', 'ASC')->get();
-            }
     
-        return view('client.check-out', compact('cartDetails', 'totalPrice', 'cities', 'provinces', 'wards', 'user','categories'));
+        $cities = City::orderBy('name_thanhpho', 'ASC')->get();
+        $provinces = collect();
+        $wards = collect();
+    
+        if (auth()->check()) {
+            $provinces = Province::where('matp', $user->city_id)->orderBy('name_quanhuyen', 'ASC')->get();
+            $wards = Wards::where('maqh', $user->province_id)->orderBy('name_xaphuong', 'ASC')->get();
+        }
+    
+        return view('client.check-out', compact('cartDetails', 'totalPrice', 'cities', 'provinces', 'wards', 'user'));
     }
+    
+    
+    
+    
+
+    
     
      public function select_address(Request $request)
     {
@@ -135,7 +176,7 @@ class CheckOutController extends Controller
         $cartDetails = $this->getCartDetails();
         $totalPrice = $cartDetails['totalPrice'];
         $orderCode = 'HN' . strtoupper(uniqid());
-    
+       
         $outOfStockItems = []; 
     
         foreach ($cartDetails['items'] as $item) {
@@ -277,7 +318,9 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
     
     foreach ($cartDetails as $detail) {
         $order->OrderItems()->create([
-
+            'product_id' => $detail['product_id'],
+            'color_id' => $detail['color_id'],
+            'size_id' => $detail['size_id'],
             'product_name' => $detail['product_name'],
             'image_url' => $detail['image_url'],
             'color_name' => $detail['color_name'],
@@ -495,3 +538,7 @@ public function outOfStock()
  
 
 }
+
+
+
+

@@ -11,7 +11,7 @@
             <h4>Chỉnh Sửa Tag</h4>
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.tags.update', $tag->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.tags.update', $tag->id) }}" method="POST" enctype="multipart/form-data" id="edit-form">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -76,7 +76,7 @@
 
                         <!-- Nút Lưu -->
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                            <button type="button" class="btn btn-primary" onclick="confirmUpdate()">Cập Nhật</button>
                         </div>
                     </div>
                 </div>
@@ -86,9 +86,10 @@
 </section>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    // Hiển thị ảnh đã chọn
     $(document).ready(function () {
-        // Hiển thị ảnh đã chọn
         $('#image-upload').change(function (e) {
             const file = e.target.files[0];
             if (file) {
@@ -101,5 +102,24 @@
             }
         });
     });
+
+  
+    function confirmUpdate() {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn cập nhật tag này?',
+            text: "Các thay đổi sẽ được lưu lại!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Cập Nhật',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+              
+                document.getElementById('edit-form').submit();
+            }
+        });
+    }
 </script>
 @endsection

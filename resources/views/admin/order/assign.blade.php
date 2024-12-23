@@ -35,18 +35,23 @@
                                 @if ($errors->has('assigned_shipper_id'))
                                 <span class="text-danger">{{ $errors->first('assigned_shipper_id') }}</span>
                                   @endif
-                                <form action="{{ route('admin.order.assignShipper', $order->id) }}" method="POST">
-                                    @csrf
-                                    <select name="assigned_shipper_id" class="form-control">
-                                        <option>Chọn Shipper</option>
-                                        @foreach ($shippers as $shipper)
-                                            <option value="{{ $shipper->id }}">{{ $shipper->name }}</option>
-                                        @endforeach
-                                        
-                                    </select>
-                                   
-                                    <button type="submit" class="btn btn-primary mt-2">Giao cho Shipper</button>
-                                </form>
+                                  <form action="{{ route('admin.order.assignShipper', $order->id) }}" method="POST">
+    @csrf
+    <select name="assigned_shipper_id" class="form-control" required>
+        <option value="">Chọn Shipper</option>
+        @foreach ($shippers as $shipper)
+            <option value="{{ $shipper->id }}">{{ $shipper->name }}</option>
+        @endforeach
+    </select>
+    
+    <button 
+    type="button" 
+    class="btn btn-success btn-sm mt-2" 
+    onclick="confirmUpdateForm(this)">
+   Gán Shipper
+</button>
+</form>
+
                               
                             </td>
                         </tr>
@@ -57,28 +62,49 @@
         </div>
     </div>
 </section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    $(document).ready(function () {
-        toastr.options = {
-            "closeButton": false,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-        };
+    function confirmUpdateForm(button) {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn cập nhật trạng thái đơn hàng này?',
+            text: "Bạn không thể hoàn tác thay đổi này!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Cập nhật!',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Nếu xác nhận, gửi form
+                button.closest('form').submit();
+            }
+        });
+    }
+</script>
 
-        @if(session('success'))
-            toastr.success("{{ session('success') }}");
-        @endif
 
-        @if(session('error'))
-            toastr.error("{{ session('error') }}");
-        @endif
-    });
+<script>
+     document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+        });
 
    
 </script>

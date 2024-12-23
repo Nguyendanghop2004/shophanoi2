@@ -9,7 +9,7 @@
                         <div class="blog-detail-main-heading">
                             <ul class="tags-lists justify-content-center">
                                 <li>
-                                    <a href="#" class="tags-item">ACCESSORIES</a>
+                               
                                 </li>
                                 {{-- <li>
                                     <a href="#" class="tags-item">{{$data->category->name}}</a>

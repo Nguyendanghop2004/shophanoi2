@@ -132,7 +132,27 @@ class CartController extends Controller
 
     private function getCartDetails($cartItems)
     {
-        return $cartItems->map(function ($item) {
+        // Mảng để lưu trữ thông báo
+        $messages = [];
+
+        // Xóa các mục không hợp lệ (số lượng = 0 hoặc tồn kho không đủ)
+        $cartItems->each(function ($item) use (&$messages) {
+            $variant = $item->product->variants()
+                ->where('color_id', $item->color->id ?? null)
+                ->where('size_id', $item->size->id ?? null)
+                ->first();
+
+            // Nếu biến thể không còn tồn kho hoặc số lượng <= 0, xóa mục này khỏi giỏ hàng
+            if (!$variant || $variant->stock_quantity <= 0 || $item->quantity <= 0) {
+                $messages[] = "Sản phẩm {$item->product->product_name} đã bị xóa do số lượng là 0 hoặc tồn kho không đủ."; // Thông báo xóa sản phẩm
+                $item->delete();
+            }
+        });
+
+        // Lấy chi tiết giỏ hàng còn lại
+        return $cartItems->filter(function ($item) {
+            return $item->quantity > 0; // Chỉ giữ các mục có số lượng > 0
+        })->map(function ($item) use ($messages) {
             $product = $item->product;
             $color = $item->color;
             $size = $item->size;
@@ -141,6 +161,13 @@ class CartController extends Controller
                 ->where('color_id', $color->id ?? null)
                 ->where('size_id', $size->id ?? null)
                 ->first();
+
+            // Giới hạn số lượng theo tồn kho
+            if ($item->quantity > $variant->stock_quantity) {
+                $messages[] = "Sản phẩm {$product->product_name} đã được giảm số lượng xuống còn {$variant->stock_quantity} do tồn kho không đủ."; // Thông báo giảm số lượng
+                $item->quantity = $variant->stock_quantity;
+                $item->save(); // Cập nhật trong cơ sở dữ liệu
+            }
 
             return [
                 'product_id' => $product->id,
@@ -153,26 +180,24 @@ class CartController extends Controller
                 'price' => $product->price ?? 0,
                 'pricebonus' => $variant->price ?? 0,
                 'image_url' => $image->image_url ?? '/default-image.jpg',
-                'subtotal' => ($product->price + $variant->price),
+                'subtotal' => ($product->price + $variant->price) * $item->quantity,
             ];
         })->toArray();
     }
-
     private function getCartDetailsFromSession($cart)
     {
+        // Mảng để lưu trữ thông báo
+        $messages = [];
+
+        // Duyệt qua từng sản phẩm và kiểm tra tính hợp lệ
         $productIds = array_column($cart, 'product_id');
         $colorIds = array_column($cart, 'color_id');
         $sizeIds = array_column($cart, 'size_id');
 
+        // Lấy dữ liệu cần thiết từ cơ sở dữ liệu
         $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
         $colors = Color::whereIn('id', $colorIds)->get()->keyBy('id');
         $sizes = Size::whereIn('id', $sizeIds)->get()->keyBy('id');
-        $images = ProductImage::whereIn('product_id', $productIds)
-            ->whereIn('color_id', $colorIds)
-            ->get()
-            ->groupBy('product_id');
-
-        // Lấy tất cả các variants tương ứng với sản phẩm, màu và kích thước
         $variants = ProductVariant::whereIn('product_id', $productIds)
             ->whereIn('color_id', $colorIds)
             ->whereIn('size_id', $sizeIds)
@@ -181,32 +206,121 @@ class CartController extends Controller
                 return "{$variant->product_id}_{$variant->color_id}_{$variant->size_id}";
             });
 
-        return array_map(function ($item) use ($products, $colors, $sizes, $images, $variants) {
+        // Cập nhật và lọc lại cart dựa trên tồn kho
+        $updatedCart = array_map(function ($item) use ($products, $variants, &$messages) {
             $product = $products[$item['product_id']] ?? null;
-            $color = $colors[$item['color_id']] ?? null;
-            $size = $sizes[$item['size_id']] ?? null;
-            $image = $images[$item['product_id']]->firstWhere('color_id', $item['color_id']) ?? null;
 
-            // Tạo key để tra cứu variant
+            if (!$product) {
+                return null; // Loại bỏ sản phẩm không tồn tại
+            }
+
             $variantKey = "{$item['product_id']}_{$item['color_id']}_{$item['size_id']}";
             $variant = $variants[$variantKey] ?? null;
+
+            // Nếu tồn kho không đủ hoặc số lượng <= 0, loại bỏ biến thể
+            if (!$variant || $variant->stock_quantity <= 0 || $item['quantity'] <= 0) {
+                $messages[] = "Sản phẩm {$product->product_name} đã bị xóa do số lượng là 0 hoặc tồn kho không đủ."; // Thông báo xóa sản phẩm
+                return null;
+            }
+
+            // Giới hạn số lượng theo tồn kho
+            if ($item['quantity'] > $variant->stock_quantity) {
+                $messages[] = "Sản phẩm {$product->product_name} đã được giảm số lượng xuống còn {$variant->stock_quantity} do tồn kho không đủ."; // Thông báo giảm số lượng
+                $item['quantity'] = $variant->stock_quantity; // Cập nhật số lượng theo tồn kho
+            }
+
+            return $item;
+        }, $cart);
+
+        // Loại bỏ các mục null và cập nhật lại session
+        $updatedCart = array_filter($updatedCart, fn($item) => $item !== null);
+        Session::put('cart', array_values($updatedCart)); // Cập nhật lại session với số lượng đã sửa đổi
+
+        // Trả về danh sách sản phẩm hợp lệ để hiển thị
+        return array_values(array_map(function ($item) use ($products, $colors, $sizes, $variants) {
+            $product = $products[$item['product_id']];
+            $variantKey = "{$item['product_id']}_{$item['color_id']}_{$item['size_id']}";
+            $variant = $variants[$variantKey];
+
+            $color = $colors[$item['color_id']] ?? null; // Lấy tên màu sắc từ bảng colors
+            $size = $sizes[$item['size_id']] ?? null;   // Lấy tên kích thước từ bảng sizes
+
             return [
                 'product_id' => $item['product_id'],
-                'color_id' => $color->id ?? null,
-                'size_id' => $size->id ?? null,
+                'color_id' => $item['color_id'],
+                'size_id' => $item['size_id'],
                 'product_name' => $product->product_name ?? 'N/A',
-                'color_name' => $color->name ?? 'N/A',
-                'size_name' => $size->name ?? 'N/A',
+                'color_name' => $color->name ?? 'N/A', // Tên màu sắc
+                'size_name' => $size->name ?? 'N/A',  // Tên kích thước
                 'quantity' => $item['quantity'],
                 'price' => $item['price'] ?? $product->price,
                 'pricebonus' => $variant->price ?? 0,
-                'image_url' => $image->image_url ?? '/default-image.jpg',
-                'subtotal' => ($product->price + $variant->price ?? 0),
+                'image_url' => $product->images->firstWhere('color_id', $item['color_id'])->image_url ?? '/default-image.jpg',
+                'subtotal' => ($product->price + $variant->price) * $item['quantity'],
             ];
-        }, $cart);
+        }, $updatedCart));
     }
+
+
+
     public function viewCart()
     {
+        $products = Product::query()
+        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+        ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+        ->with([
+            'colors' => fn($query) => $query->select('colors.id', 'colors.name', 'colors.sku_color'),
+            'images' => fn($query) => $query->select('product_images.id', 'product_images.product_id', 'product_images.color_id', 'product_images.image_url'),
+        ])
+        ->select([
+            'products.id',
+            'products.product_name',
+            'products.price',
+            'products.slug',
+            DB::raw('COUNT(DISTINCT product_variants.size_id) as distinct_size_count'), // Số size khác nhau
+            DB::raw('(SELECT SUM(stock_quantity) FROM product_variants WHERE product_variants.product_id = products.id) as total_stock_quantity') // Tổng tồn kho chính xác
+        ])
+        ->groupBy('products.id')
+        ->limit(10)
+        ->get();
+
+    $products = $products->map(function ($product) {
+        // Nhóm ảnh theo color_id
+        $imagesByColor = $product->images->groupBy('color_id');
+
+        // Gắn main_image và hover_image vào từng màu
+        $product->colors = $product->colors->map(function ($color) use ($imagesByColor) {
+            $images = $imagesByColor->get($color->id, collect());
+            $mainImage = $images->first()?->image_url ?? null; // Ảnh đầu tiên
+            $hoverImage = $images->skip(1)->first()?->image_url ?? null; // Ảnh thứ hai
+
+            return [
+                'id' => $color->id,
+                'name' => $color->name,
+                'sku_color' => $color->sku_color,
+                'main_image' => $mainImage,
+                'hover_image' => $hoverImage,
+            ];
+        });
+
+        // Thiết lập main_image_url và hover_main_image_url cho sản phẩm
+        $firstColor = $product->colors->first();
+        $product->main_image_url = $firstColor ? $firstColor['main_image'] : null;
+        $product->hover_main_image_url = $firstColor ? $firstColor['hover_image'] : null;
+
+        // Chỉ giữ lại các trường cần thiết
+        return [
+            'id' => $product->id,
+            'name' => $product->product_name,
+            'price' => $product->price,
+            'slug' => $product->slug,
+            'distinct_size_count' => $product->distinct_size_count,
+            'total_stock_quantity' => $product->total_stock_quantity,
+            'main_image_url' => $product->main_image_url,
+            'hover_main_image_url' => $product->hover_main_image_url,
+            'colors' => $product->colors,
+        ];
+    });
         $cartDetails = [];
 
         if (Auth::guard('web')->check()) {
@@ -236,7 +350,7 @@ class CartController extends Controller
         }
 
         // Trả về view với dữ liệu giỏ hàng
-        return view('client.shopping-cart', compact('cartDetails'));
+        return view('client.shopping-cart', compact('cartDetails','products'));
     }
 
     public function removeFromCart(Request $request)
@@ -255,7 +369,7 @@ class CartController extends Controller
             // Trả về kết quả dưới dạng JSON
             return response()->json([
                 'success' => true,
-                'message' => 'Product removed from cart',
+                'message' => 'Xóa sản phẩm thành công',
                 'cart' => $cart->id,  // Trả về giỏ hàng đã được cập nhật
             ]);
         } else {
@@ -280,7 +394,7 @@ class CartController extends Controller
             // Trả về kết quả dưới dạng JSON
             return response()->json([
                 'success' => true,
-                'message' => 'Product removed from cart',
+                'message' => 'Xóa sản phẩm thành công',
                 'cart' => $cart
             ]);
         }
@@ -393,12 +507,12 @@ class CartController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'Unable to retrieve cart details.',
+                'message' => 'Lỗi khi tải giỏ hàng hãy thử tải lại trang!',
             ], 500);
         }
     }
 
-
+ 
 
 
 

@@ -5,12 +5,17 @@ namespace App\Http\Controllers\Admin;
 use App\Models\City;
 use App\Models\Admin;
 use App\Models\Order;
+use App\Models\ProductVariant;
 use App\Models\Wards;
 use App\Models\Shipper;
 use App\Models\Province;
 use App\Models\OrderItem;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Auth;
@@ -43,72 +48,111 @@ class OrderController extends Controller
         return view('admin.order.getList', compact('orders'));
     }
 
-    public function chitiet($id)
-    {   
-        $order = Order::findOrFail($id);
-        $orderitems = OrderItem::where('order_id',$order->id)->get();
-        $city = City::where('matp', $order->city_id)->first();
-        $province = Province::where('maqh', $order->province_id)->first();
-        $ward = Wards::where('xaid', $order->wards_id)->first();
-      
-        return view('admin.order.chitiet', compact('order', 'city', 'province', 'ward','orderitems'));
-    }
-
-    public function inhoadon($id)
+    public function chitiet($encryptedId)
     {
-        $order = Order::findOrFail($id);
-        $orderitems = OrderItem::where('order_id', $order->id)->get();
-        $city = City::where('matp', $order->city_id)->first();
-        $province = Province::where('maqh', $order->province_id)->first();
-        $ward = Wards::where('xaid', $order->wards_id)->first();
-    
-        // Tạo thư mục qr_codes nếu chưa tồn tại
-        $qrCodesDir = storage_path('app/public/qr_codes');
-        if (!File::exists($qrCodesDir)) {
-            File::makeDirectory($qrCodesDir, 0777, true);
+        try {
+         
+            $id = Crypt::decryptString($encryptedId);
+            
+            
+            $order = Order::findOrFail($id);
+            
+      
+            $orderitems = OrderItem::where('order_id', $order->id)->get();
+            $city = City::where('matp', $order->city_id)->first();
+            $province = Province::where('maqh', $order->province_id)->first();
+            $ward = Wards::where('xaid', $order->wards_id)->first();
+            
+           
+            return view('admin.order.chitiet', compact('order', 'city', 'province', 'ward', 'orderitems'));
+        } catch (DecryptException $e) {
+           
+            return redirect()->route('admin.error')->with('error', 'Dữ liệu không hợp lệ!');
+        } catch (ModelNotFoundException $e) {
+           
+            return redirect()->route('admin.error')->with('error', 'Không tìm thấy đơn hàng!');
         }
-    
-        // Tạo mã QR và lưu vào tệp tạm thời
-        $qrCode = QrCode::size(150)->generate($order->id);  // Thay đổi kích thước tùy theo nhu cầu
-        $tempPath = $qrCodesDir . '/hoadon_' . $order->order_code . '.png';
-        file_put_contents($tempPath, $qrCode);
-    
-        // Cấu hình DOMPDF để sử dụng font Unicode
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView('admin.order.hoadon', compact('order', 'orderitems', 'city', 'province', 'ward', 'tempPath'));
-    
-        // Cấu hình để DOMPDF hỗ trợ font Unicode
-        $options = [
-            'isHtml5ParserEnabled' => true,  
-            'isPhpEnabled' => true,        
-            'font_dir' => storage_path('fonts'),  
-            'font_cache' => storage_path('fonts')
-        ];
-    
-        $pdf->setOptions($options);
-    
-        // Xóa tệp mã QR tạm thời sau khi sử dụng
-        unlink($tempPath);
-    
-        // Trả về file PDF
-        return $pdf->download('hoa_don_' . 'HN CLOTHESSHOP' . '.pdf');
     }
+    
+
+    public function inhoadon($encryptedOrderId)
+    {
+        try {
+       
+            $orderId = Crypt::decryptString($encryptedOrderId);
+    
+           
+            $order = Order::findOrFail($orderId);
+    
+       
+            $orderitems = OrderItem::where('order_id', $order->id)->get();
+    
+           
+            $city = City::where('matp', $order->city_id)->first();
+            $province = Province::where('maqh', $order->province_id)->first();
+            $ward = Wards::where('xaid', $order->wards_id)->first();
+    
+        
+            $pdf = Pdf::loadView('admin.order.hoadon', compact('order', 'orderitems', 'city', 'province', 'ward'));
+    
+            
+            $options = [
+                'isHtml5ParserEnabled' => true,
+                'isPhpEnabled' => true,
+                'font_dir' => storage_path('fonts'),
+                'font_cache' => storage_path('fonts'),
+            ];
+    
+            $pdf->setOptions($options);
+    
+    
+            return $pdf->download('hoa_don_' . $order->order_code . '.pdf');
+        } catch (DecryptException $e) {
+           
+            return redirect()->route('admin.error');
+        } catch (ModelNotFoundException $e) {
+          
+            return redirect()->route('admin.error');
+        } catch (\Exception $e) {
+           
+            return redirect()->route('admin.error');
+        }
+    }
+    
     
 
     public function updateStatus(Request $request, $id)
-{
-    $order = Order::find($id);
-    $order->status = $request->input('status');
+    {
+        $order = Order::find($id);
+        $order->status = $request->input('status');
+        
+       
+        if ($order->status == 'hủy') {
+            $order->reason = $request->input('reason');
+            
+           
+            foreach ($order->orderItems as $orderItem) {
+               
+                $variant = ProductVariant::where('product_id', $orderItem->product_id)
+                    ->where('color_id', $orderItem->color_id) 
+                    ->where('size_id', $orderItem->size_id)  
+                    ->first();
+        
+             
+                if ($variant) {
+                    $variant->stock_quantity += $orderItem->quantity;  
+                    $variant->save();  
+                }
+            }
+        } else {
+            $order->reason = null; 
+        }
+        
+        $order->save();
     
-    if ($order->status == 'hủy') {
-        $order->reason = $request->input('reason');
-    } else {
-        $order->reason = null; 
+        return redirect()->route('admin.order.getList')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
     }
-    $order->save();
 
-    return redirect()->route('admin.order.getList')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
-}
 public function showAssignShipperForm()
 {
     $orders = Order::whereNull('assigned_shipper_id')
@@ -182,7 +226,6 @@ public function updateStatusShip(Request $request, $id)
 
     return redirect()->route('admin.order.danhsachgiaohang')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
 }
-
 
 
 

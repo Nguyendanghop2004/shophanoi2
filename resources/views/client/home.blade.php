@@ -4,7 +4,7 @@
 @endsection
 
 @section('content')
-    <!-- categories -->
+    {{-- <!-- categories -->
     <section class="flat-spacing-20">
         <div class="container">
             <div class="row">
@@ -76,44 +76,38 @@
             </div>
         </div>
     </div>
-    <!-- /slider -->
+    <!-- /slider --> --}}
 
     {{-- <!-- Categories -->
     <section class="flat-spacing-5 pb_0">
-    <div class="container">
+        <div class="container">
             <div class="flat-title">
                 <span class="title wow fadeInUp" data-wow-delay="0s">Categories you might like</span>
             </div>
             <div class="hover-sw-nav">
 
-                <div class="swiper tf-sw-collection" data-preview="4" data-tablet="2" data-mobile="2"
-                    data-space-lg="30" data-space-md="30" data-space="15" data-loop="false" data-auto-play="false">
+                <div class="swiper tf-sw-collection" data-preview="4" data-tablet="2" data-mobile="2" data-space-lg="30"
+                    data-space-md="30" data-space="15" data-loop="false" data-auto-play="false">
                     <div class="swiper-wrapper">
-                    @foreach ($categories as $category)
-                        <div class="swiper-slide" lazy="true">
+                        @foreach ($categories as $category)
+                            <div class="swiper-slide" lazy="true">
 
-                            <div class="collection-item style-2 hover-img" >
-                                <div class="collection-inner">
-   <a href="" class="0">
+                                <div class="collection-item style-2 hover-img">
+                                    <div class="collection-inner">
+                                        <a href="" class="0">
 
-                                        <img class="lazyload"
-                                            data-src="{{  Storage::url($category->image_path) }}"
-                                            src="{{ Storage::url($category->image_path) }}"
-                                            alt="collection-img" >
-                                    </a>
-                                    <div class="collection-content">
-                                        <a href=""
-                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>{{$category->name}}</span><i
-                                                class="icon icon-arrow1-top-left"></i></a>
+                                            <img class="lazyload" data-src="{{ Storage::url($category->image_path) }}"
+                                                src="{{ Storage::url($category->image_path) }}" alt="collection-img">
+                                        </a>
+                                        <div class="collection-content">
+                                            <a href=""
+                                                class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>{{ $category->name }}</span><i
+                                                    class="icon icon-arrow1-top-left"></i></a>
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
-
-                        </div>
-
-
-
-
                         @endforeach
                     </div>
 
@@ -179,8 +173,8 @@
     <section class="flat-spacing-15 pb_0">
         <div class="container">
             <div class="flat-title wow fadeInUp" data-wow-delay="0s">
-                <span class="title">Ecomus’s Favorites</span>
-                <p class="sub-title">Beautifully Functional. Purposefully Designed. Consciously Crafted.</p>
+                <span class="title">Sản Phẩm Yêu Thích</span>
+                <p class="sub-title">Thời trang đẹp mắt, tiện lợi và bền vững – dành cho mọi phong cách của bạn.</p>
             </div>
             <div class="hover-sw-nav hover-sw-3">
                 <div class="swiper tf-sw-product-sell wrap-sw-over" data-preview="4" data-tablet="3" data-mobile="2"
@@ -191,7 +185,7 @@
                             <div class="swiper-slide" lazy="true">
                                 <div class="card-product">
                                     <div class="card-product-wrapper">
-                                        <a href="{{route('product-detail',$product['slug'])}}" class="product-img">
+                                        <a href="{{ route('product-detail', $product['slug']) }}" class="product-img">
                                             <img class="lazyload img-product"
                                                 data-src="{{ asset('storage/' . $product['main_image_url']) }}"
                                                 src="{{ asset('storage/' . $product['main_image_url']) }}"
@@ -202,27 +196,28 @@
                                                 alt="image-product">
                                         </a>
                                         <div class="list-product-btn">
-                                            <a href="#quick_add" data-bs-toggle="modal"
+                                            {{-- <a href="#quick_add" data-bs-toggle="modal"
                                                 data-product-id="{{ $product['id'] }}"
                                                 class="box-icon bg_white quick-add tf-btn-loading">
                                                 <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick Add</span>
-                                            </a>
+                                            </a> --}}
                                             <a href="javascript:void(0);"
                                                 class="box-icon bg_white wishlist btn-icon-action">
                                                 <span class="icon icon-heart"></span>
                                                 <span class="tooltip">Add to Wishlist</span>
                                                 <span class="icon icon-delete"></span>
                                             </a>
-                                            <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
+                                            {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                                                 class="box-icon bg_white compare btn-icon-action">
                                                 <span class="icon icon-compare"></span>
                                                 <span class="tooltip">Add to Compare</span>
                                                 <span class="icon icon-check"></span>
-                                            </a>
+                                            </a> --}}
                                             <a href="#quick_view" data-bs-toggle="modal"
+                                                data-product-id="{{ $product['id'] }}"
                                                 class="box-icon bg_white quickview tf-btn-loading">
-                                                <span class="icon icon-view"></span>
+                                                <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick View</span>
                                             </a>
                                         </div>
@@ -231,8 +226,9 @@
                                         </div>
                                     </div>
                                     <div class="card-product-info">
-                                        <a href="{{route('product-detail',$product['slug'])}}" class="title link">{{ $product['name'] }}</a>
-                                        <span class="price">${{ $product['price'] }}</span>
+                                        <a href="{{ route('product-detail', $product['slug']) }}"
+                                            class="title link">{{ $product['name'] }}</a>
+                                        <span class="price">{{ $product['price'] }} VNĐ</span>
                                         <ul class="list-color-product">
                                             @foreach ($product['colors'] as $index => $color)
                                                 <li
@@ -264,6 +260,52 @@
             </div>
         </div>
     </section>
+    
+    <section class="flat-spacing-15 pb_0">
+        <div class="container">
+            <div class="flat-title wow fadeInUp" data-wow-delay="0s">
+                <span class="title">Bài Viết</span>
+              
+            </div>
+            <div class="blog-grid-main">
+        <div class="container">
+            <div class="row">
+                @foreach ($data as $item)
+                    <div class="col-xl-4 col-md-6 col-12">
+                        <div class="blog-article-item">
+                            <div class="article-thumb">
+                                <a href="{{route('blog.detail',$item->slug)  }}">
+                                    <img class="lazyload" src="{{ Storage::url($item->image) }} "
+                                        style="width: 366px; height: 235px;" alt="img-blog">
+                                </a>
+                                 
+                                {{-- <div class="article-label">
+                                    <a href="blog-detail.html"
+                                        class="tf-btn btn-sm radius-3 btn-fill animate-hover-btn">{{$item->category->name}}</a>
+                                </div> --}}
+                            </div>
+                            <div class="article-content">
+                                <div class="article-title">
+                                    <a href="{{route('blog.detail',$item->slug)  }}" class="">{{ $item->title }}</a>
+                                </div>
+                                <div class="article-btn">
+                                    <a href="{{route('blog.detail',$item->slug)  }}" class="tf-btn btn-line fw-6">Xêm Thêm<i
+                                            class="icon icon-arrow1-top-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+
+               
+            </div>
+        </div>
+    </div>
+        </div>
+</section>
+    
+ 
+ 
     <!-- /Best seller -->
     {{--
     <!-- Shop Collection -->
@@ -533,8 +575,9 @@
     </section>
     <!-- /Brand --> --}}
 @endsection
+
 @push('scripts')
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             // Bắt sự kiện click vào nút Quick Add
             $(".quick-add").on("click", function(e) {
@@ -557,13 +600,54 @@
                         $("#quick_add").modal("show");
                     },
                     error: function() {
-                        alert("Sản Phẩm Không Tồn Tại, Hãy Thử Tải Lại Trang!");
+                        toastr.error('Sản Phẩm Không Tồn Tại, Hãy Thử Tải Lại Trang!',
+                            'Cảnh báo');
                     },
                 });
             });
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            // Bắt sự kiện click vào nút Quick Add
+            $(".quickview").on("click", function(e) {
+                e.preventDefault();
 
+                // Lấy ID sản phẩm từ thuộc tính data
+                let productId = $(this).data("product-id");
+
+                // Gửi yêu cầu AJAX
+                $.ajax({
+                    url: "/get-product-info-quick-view", // Đường dẫn API xử lý
+                    method: "GET",
+                    data: {
+                        id: productId
+                    },
+                    success: function(response) {
+                        // Chèn nội dung nhận được vào modal
+                        $("#modal-quick-view-content").html(response);
+                        // Hiển thị modal
+                        $("#quick_view").modal("show");
+                        // Khởi tạo Swiper sau khi nội dung đã được chèn
+                        new Swiper('.tf-single-slide', {
+                            loop: true,
+                            navigation: {
+                                nextEl: '.swiper-button-next',
+                                prevEl: '.swiper-button-prev',
+                            },
+                            autoplay: {
+                                delay: 3000,
+                            },
+                        });
+                    },
+                    error: function() {
+                        toastr.error('Sản Phẩm Không Tồn Tại, Hãy Thử Tải Lại Trang!',
+                            'Cảnh báo');
+                    },
+                });
+            });
+        });
+    </script>
     <script>
         $(document).ready(function() {
             // Khi modal mở, gọi API để cập nhật giỏ hàng
@@ -581,12 +665,15 @@
                         renderModalCart(response.cart); // Cập nhật lại nội dung modal giỏ hàng
 
                     } else {
-                        alert(response.message || 'Failed to load cart details.');
+                        toastr.error(response.message, 'Cảnh báo');
+
                     }
                 },
                 error: function(error) {
-                    console.error('Error loading cart details:', error);
-                    alert('An error occurred while loading the cart.');
+                    // console.error('Error loading cart details:', error);
+                    // alert('An error occurred while loading the cart.');
+                    toastr.error('Gặp lỗi khi tải giỏ hàng hãy thử tải lại trang Web', 'Cảnh báo');
+
                 }
             });
         }
@@ -599,7 +686,11 @@
             modalCartContainer.empty(); // Xóa nội dung cũ trước khi cập nhật mới
 
             if (cartDetails.length === 0) {
-                modalCartContainer.append('<p>Your cart is empty.</p>');
+                modalCartContainer.append(`<div class="tf-mini-cart-items d-flex justify-content-center align-items-center" style="height: 100px;">
+                                                 <div class="tf-mini-cart-item">
+                                                     <p><i class="fa-solid fa-cart-arrow-down"></i> Giỏ hàng trống</p>
+                                                 </div>
+                                          </div>    `);
                 return;
             }
 
@@ -680,7 +771,7 @@
             let total = 0;
             priceDivs.forEach(div => {
                 const price = parseFloat(div.getAttribute('data-price')) ||
-                0; // Lấy giá trị data-price, mặc định là 0 nếu không tồn tại
+                    0; // Lấy giá trị data-price, mặc định là 0 nếu không tồn tại
                 total += price;
             });
             $('.tf-totals-total-value').text(total.toFixed(2));
@@ -700,14 +791,10 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        console.log("Response:", response); // Ghi log phản hồi từ server
-                        alert(response.message);
                         loadModalCart();
-
-                        // Cập nhật lại giao diện nếu cần
                     } else {
-                        console.error("Failed to remove product:", response);
-                        alert('Failed to remove product from cart');
+                        toastr.error(response.message, 'Cảnh báo');
+
                     }
                 },
                 error: function(xhr, status, error) {
@@ -737,13 +824,13 @@
                             console.log('Cập nhật thành công');
                             loadModalCart();
                         } else {
-                            alert(response.message || 'Đã xảy ra lỗi!');
+                            toastr.error(response.message, 'Cảnh báo');
                             loadModalCart();
                         }
                     },
                     error: function(xhr) {
                         console.error(xhr.responseText);
-                        alert('Không thể cập nhật số lượng. Vui lòng thử lại!');
+                        toastr.error('Không thể cập nhật số lượng. Vui lòng thử lại!', 'Lỗi');
                     }
                 });
             }
@@ -795,5 +882,6 @@
                 updateQuantity(productId, colorId, sizeId, newQuantity, url);
             });
         });
-    </script>
+    </script> --}}
+
 @endpush

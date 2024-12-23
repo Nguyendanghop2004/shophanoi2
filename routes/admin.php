@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\ColorSizeController;
 use App\Http\Controllers\Admin\ContactMessageController;
 
 
+use App\Http\Controllers\Admin\ErrorController;
 use App\Http\Controllers\Admin\HistoryController;
 
 use App\Http\Controllers\Admin\OrderController;
@@ -33,6 +34,7 @@ use Illuminate\Support\Facades\Route;
     Route::post('admin/login', [LoginController::class, 'store'])->name('admin.post-login');
     Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus'])->group(function () {
     // Login admin
+    Route::get('error', [ErrorController::class, 'error'])->name('error');
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
     Route::get('account', [AccoutAdminController::class, 'account'])->name('accounts.account')->middleware('permission:account_admin');
@@ -100,9 +102,9 @@ use Illuminate\Support\Facades\Route;
     // Quản lý thanh trượt
     Route::resource('slider', SliderController::class)->except(['show']);
     Route::get('slider/trash', [SliderController::class, 'trash'])->name('slider.trash');
-
+   
     Route::post('slider/update-order', [SliderController::class, 'updateOrder'])->name('slider.updateOrder');
-
+   
     Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
     Route::delete('sliders/{id}/force-delete', [SliderController::class, 'forceDelete'])->name('slider.forceDelete');
 
@@ -219,4 +221,6 @@ use Illuminate\Support\Facades\Route;
     Route::get('orders/danhsachgiaohang', [OrderController::class, 'danhsachgiaohang'])->name('order.danhsachgiaohang')->middleware('permission:Shipper');
     Route::post('order/{order}/remove-shipper', [OrderController::class, 'removeShipper'])->name('order.removeShipper')->middleware('permission:Shipper');
     Route::post('order/{id}/update-updateStatusShip', [OrderController::class, 'updateStatusShip'])->name('order.update-updateStatusShip')->middleware('permission:Shipper');
+  
+
 });
