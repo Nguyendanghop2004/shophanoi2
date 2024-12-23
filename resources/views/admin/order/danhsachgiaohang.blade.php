@@ -87,9 +87,6 @@ nhận đợn</button>
             <option value="đã_xác_nhận" {{ $order->status == 'đã_xác_nhận' ? 'selected' : '' }}>Đã Xác Nhận</option>
         @elseif($order->status == 'ship_đã_nhận')
             <option value="ship_đã_nhận" {{ $order->status == 'ship_đã_nhận' ? 'selected' : '' }}>Ship đã nhận</option>
-            <option value="chờ_giao_hàng" {{ $order->status == 'chờ_giao_hàng' ? 'selected' : '' }}>Chờ Giao Hàng</option>
-        @elseif($order->status == 'chờ_giao_hàng')
-            <option value="chờ_giao_hàng" {{ $order->status == 'chờ_giao_hàng' ? 'selected' : '' }}>Chờ Giao Hàng</option>
             <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
         @elseif($order->status == 'đang_giao_hàng')
             <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
