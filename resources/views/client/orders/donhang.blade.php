@@ -122,7 +122,7 @@
                                     <p class="card-text mb-1"><strong>Số tiền hoàn: </strong>{{ number_format($order->refund_amount, 0, ',', '.') }} VND</p>
                                 </div>
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ route('client.orders.show', $order->id) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                    <a href="{{ route('client.orders.show', ['id' => Crypt::encryptString($order->id)]) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
                                     @if ($order->status === 'giao_hàng_thành_công')
                                     <form action="{{ route('orders.confirm', $order->id) }}" method="POST">
                                         @csrf
