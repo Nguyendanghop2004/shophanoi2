@@ -156,7 +156,7 @@ class OrderController extends Controller
 public function showAssignShipperForm()
 {
     $orders = Order::whereNull('assigned_shipper_id')
-                   ->whereIn('status', ['đã_xác_nhận'])
+                   ->whereIn('status', ['đã xác nhận'])
                    ->get();
 
   
@@ -222,7 +222,7 @@ public function updateStatusShip(Request $request, $id)
     } else {
         $order->reason = null; 
     }
-    if ($order->status == 'giao_hàng_thành_công') {
+    if ($order->status == 'giao hàng thành công') {
         $order->payment_status = 'đã thanh toán'; 
     }
     $order->save();
