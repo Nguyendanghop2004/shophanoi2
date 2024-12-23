@@ -99,7 +99,7 @@
         </li>
     </ul>
     
-    <!-- <div id="orders"></div> -->
+    
     
     <div class="tab-content mt-3">
         <div class="tab-pane fade show active" id="trahang">
@@ -112,36 +112,22 @@
                             </div>
                             <div class="col-9">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title mb-1">{{ $order->orderItems->first()->product_name }}  </h5>
+                                    <h5 class="card-title mb-1">{{ $order->orderItems->first()->product_name }} - {{ $order->orderItems->first()->product_description }}</h5>
                                     <span class="badge badge-success">{{ $order->status }}</span>
                                 </div>
                                 <p class="card-text mb-1">{{ $order->order_code }}</p>
                                 <p class="card-text mb-1"><small class="text-muted">{{ $order->created_at }}</small></p>
-                                @if($order->status === 'hủy') 
-    <p class="card-text mb-1">
-        <strong class="text-muted">Lý Do Hủy:</strong>{{ $order->reason }}
-    </p>
-@endif
-                           
                                 <div class="d-flex justify-content-between align-items-center">
-                               
                                     <p class="card-text mb-1"><strong>Giá: </strong> <span class="text-danger"> {{ number_format($order->total_price, 0, ',', '.') }} VND</span></p>
                                     <p class="card-text mb-1"><strong>Số tiền hoàn: </strong>{{ number_format($order->refund_amount, 0, ',', '.') }} VND</p>
-                                    
                                 </div>
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ route('client.orders.show', ['id' => Crypt::encryptString($order->id)]) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                    <a href="{{ route('client.orders.show', $order->id) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
                                     @if ($order->status === 'giao_hàng_thành_công')
-                                    <form action="{{ route('orders.confirm', $order->id) }}" method="POST" id="confirmForm_{{ $order->id }}">
-    @csrf
-    <button type="button" class="btn btn-success btn-sm confirmOrderBtn" 
-        data-order-id="{{ $order->id }}" 
-        data-action="{{ route('orders.confirm', $order->id) }}">
-        Xác nhận đơn hàng
-    </button>
-</form>
-
-
+                                    <form action="{{ route('orders.confirm', $order->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success btn-sm">Xác nhận đơn hàng</button>
+                                    </form>
                                     @endif
                                     @if (in_array($order->status, ['chờ_xác_nhận', 'đã_xác_nhận']))
                                     <button class="btn btn-danger cancelOrderBtn" data-order-id="{{ $order->id }}" data-action="{{ route('client.orders.cancel', $order->id) }}">Hủy đơn hàng</button>
@@ -176,17 +162,10 @@
                             <option value="Thay đổi địa chỉ giao hàng">Thay đổi địa chỉ giao hàng</option>
                             <option value="Sản phẩm không còn cần thiết">Sản phẩm không còn cần thiết</option>
                             <option value="Thay đổi quyết định">Thay đổi quyết định</option>
-                           
+                            <option value="Lý do khác">Lý do khác</option>
                         </select>
                     </div>
-                    
-                    <!-- Trường nhập lý do khác, ẩn mặc định -->
-                   
-
-                    <button class="btn btn-danger cancelOrderBtn" 
-        data-order-id="{{ $order->id }}" 
-        data-action="{{ route('client.orders.cancel', $order->id) }}" 
-        onclick="confirmCancelOrder(this)">Hủy đơn hàng</button>
+                    <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
                 </form>
             </div>
         </div>
@@ -194,62 +173,7 @@
 </div>
 
 <script>
-    function confirmCancelOrder(button) {
-    Swal.fire({
-        title: 'Bạn muốn hủy đơn hàng này?',
-        text: "Bạn có chắc chắn muốn hủy đơn hàng này không?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Hủy đơn hàng',
-        cancelButtonText: 'Hủy'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Nếu xác nhận, gửi form hủy đơn hàng
-            button.closest('form').submit();
-        }
-    });
-    
-}
-
-
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
     document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.confirmOrderBtn').forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();  // Ngừng hành động mặc định (mở link)
-
-            const orderId = this.getAttribute('data-order-id');
-            const actionUrl = this.getAttribute('data-action');
-            const form = document.getElementById(`confirmForm_${orderId}`);
-
-            // Hiển thị SweetAlert2
-            Swal.fire({
-                title: 'Bạn đã nhận được hàng?',
-                text: "Bạn có chắc chắn muốn xác nhận đơn hàng này không?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Xác nhận',
-                cancelButtonText: 'Hủy'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Nếu người dùng xác nhận, gửi form
-                    form.submit();
-                }
-            });
-        });
-    });
-});
-
-
-</script>
-<script>
-      document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.cancelOrderBtn').forEach(button => {
             button.addEventListener('click', function(event) {
                 event.preventDefault(); 
@@ -273,35 +197,5 @@
             }
         });
     });
-    // Lắng nghe sự kiện thay đổi của select lý do
-   
-   
-
-</script>
-
-
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-            @if (session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Thành công!',
-                    text: '{{ session('success') }}',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            @elseif (session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi!',
-                    text: '{{ session('error') }}',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            @endif
-        });
-
 </script>
 @endsection
