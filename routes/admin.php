@@ -72,9 +72,9 @@ use Illuminate\Support\Facades\Route;
     //start status change
     Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address'])->middleware('permission:account_admin');
 
-    Route::get('accounts/profile/{id}', [ProfileController::class, 'index'])->name('profile.index')->middleware('permission:account_user');
-    Route::get('accounts/changePassword/{id}', [ProfileController::class, 'changePassword'])->name('profile.changePassword')->middleware('permission:account_user');
-    Route::post('accounts/change/{id}', [ProfileController::class, 'change'])->name('profile.change')->middleware('permission:account_user');
+    Route::get('accounts/profile/{id}', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('accounts/changePassword/{id}', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
+    Route::post('accounts/change/{id}', [ProfileController::class, 'change'])->name('profile.change');
     //end  status  change
 
     // Route::get('accounts/profile', [ProfileController::class, 'index'])->name('profile.index');

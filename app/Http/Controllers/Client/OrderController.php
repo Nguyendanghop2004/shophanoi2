@@ -127,8 +127,6 @@ class OrderController extends Controller
 }
 
     
-
-    
    
     public function showCancelReasonForm($order_code)
     {
