@@ -69,8 +69,16 @@ class AccountController extends Controller
     }
     public function loginIndex()
     {
-        return view('client.login');
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+    
+        return response()->view('client.login')
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
+
     public function RegisterIndex()
     {
         return view('client.register');

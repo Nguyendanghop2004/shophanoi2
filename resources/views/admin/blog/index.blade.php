@@ -57,7 +57,7 @@
                             style="width: 50%; height: 100px;" cols="30" rows="5" {{ old('description') }}> </textarea>
                     </div>
             </div>
-            <input type="submit" class="btn btn-primary" value="Tạo mới sản phẩm ở đây ">
+            <input type="submit" class="btn btn-primary" value="Tạo mới bài viết ">
             </form>
         </div>
         </div>

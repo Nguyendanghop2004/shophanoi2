@@ -10,7 +10,7 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['brand_id', 'slug', 'product_name', 'sku', 'description', 'price'];
+    protected $fillable = ['brand_id', 'slug', 'product_name', 'sku','short_description', 'description', 'price'];
 
     public function categories()
     {
@@ -47,10 +47,6 @@ class Product extends Model
     public function images()
     {
         return $this->hasMany(ProductImage::class, 'product_id', 'id'); // Thay đổi tên model và các khóa ngoại nếu cần
-    }
-    public function orderItems()
-    {
-        return $this->hasMany(OrderItem::class);
     }
     // App\Models\Product.php
     public function sizes()

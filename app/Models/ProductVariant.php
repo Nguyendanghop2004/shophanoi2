@@ -39,5 +39,5 @@ class ProductVariant extends Model
     {
         return $this->hasMany(PriceSale::class);
     }
-    
+
 }

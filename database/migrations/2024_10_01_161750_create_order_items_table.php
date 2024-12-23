@@ -15,6 +15,10 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade'); // Khóa ngoại đến bảng orders
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade'); // Liên kết với sản phẩm chính
+            $table->foreignId('color_id')->constrained('colors')->onDelete('cascade'); // Liê
+            $table->foreignId('size_id')->constrained('sizes')->onDelete('cascade');
+            
             $table->string('product_name');
             $table->string('image_url');
             $table->string('color_name'); // Tên màu sản phẩm
