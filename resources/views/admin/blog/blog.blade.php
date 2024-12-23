@@ -32,7 +32,9 @@
                             @foreach ($data as $admin)
                                 <tr>
                                     <th scope="row">{{ $admin->id }}</th>
+
                                     <td>{{ $admin->title }}</td>
+
                                     <td>{{ $admin->unique }}</td>
                                     <td>
                                         <img src="{{ Storage::url($admin->image) }}" alt="Ảnh quản trị viên"

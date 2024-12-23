@@ -318,6 +318,7 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
     
     foreach ($cartDetails as $detail) {
         $order->OrderItems()->create([
+
             'product_id' => $detail['product_id'],
             'color_id' => $detail['color_id'],
             'size_id' => $detail['size_id'],
@@ -327,6 +328,7 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
             'size_name' => $detail['size_name'],
             'quantity' => $detail['quantity'],
             'price' => $detail['price'],
+
         ]);
 
        

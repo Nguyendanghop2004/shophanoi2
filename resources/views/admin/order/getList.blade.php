@@ -114,6 +114,7 @@
                                             </select>
                                             <button type="button" class="btn btn-danger btn-sm mt-2 mx-2 close-btn" onclick="resetStatus(this)">X</button>
                                         </div>
+
                                         @if($order->status != 'hủy' &&  $order->status != 'giao_hàng_thành_công'  &&  $order->status != 'giao_hàng_không_thành_công' &&  $order->status != 'đã_nhận_hàng')
                                         <button 
     type="button" 
@@ -122,6 +123,7 @@
     Cập Nhật
 </button>
 @endif
+
 
                                     </form>
                                 </td>   
@@ -143,6 +145,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+
     function confirmUpdateForm(button) {
         Swal.fire({
             title: 'Bạn có chắc chắn muốn cập nhật trạng thái đơn hàng này?',
@@ -162,6 +165,7 @@
     }
 </script>
 <script>
+
     let originalStatus = '';
 
     function showReasonField(selectElement) {

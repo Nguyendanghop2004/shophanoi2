@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 class AccountController extends Controller
 {
+
     public function acc(Request $request, $section = null)
     {
         if ($request->ajax()) {
@@ -29,17 +30,22 @@ class AccountController extends Controller
     public function login(Request $request)
     {
 
-   
 
-        // dd($request->all());
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
+            if (Auth::user()->status) {
+                Auth::logout();
+                session()->flash('error', 'Tài khoản của bạn đã bị khóa.');
+                return redirect()->back();
+            }
+    
             // Đăng nhập thành công
-            $request->session()->regenerate();
-            return redirect()->route('home');
+            return redirect()->intended('/');
         }
-        return redirect()->route('accountUser.login') ->with('error', 'Mật khẩu hoặc Email không đúng');
+    
+        session()->flash('error', 'Email hoặc mật khẩu không đúng.');
+        return redirect()->back();
     }
     public function logout(Request $request)
     {

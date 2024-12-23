@@ -18,8 +18,9 @@ class Product extends Model
     }
     public function brand()
     {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsTo(Brand::class, 'brand_id');
     }
+    
 
     public function variants()
     {
@@ -52,6 +53,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Size::class, 'product_variants', 'product_id', 'size_id');
     }
-
+    public function productVariants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
 
 }
