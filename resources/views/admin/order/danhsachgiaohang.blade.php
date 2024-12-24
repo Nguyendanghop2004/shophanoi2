@@ -139,7 +139,7 @@
                                                             $order->status != 'giao hàng thành công' &&
                                                             $order->status != 'đã nhận hàng' &&
                                                             $order->status != 'giao hàng không thành công' &&
-                                                            $order->status != 'chờ_xác_nhận' &&
+                                                            $order->status != 'chờ xác nhận' &&
                                                             $order->status != 'đã xác nhận')
                                                         <button type="button" class="btn btn-primary btn-sm mt-2"
                                                             onclick="confirmUpdateFormss(this)">
