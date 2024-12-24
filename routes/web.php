@@ -35,7 +35,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+
 Route::get('/', [HomeController::class, 'home'])->name('home');
+
+Route::get('/', [HomeController::class, 'home'])->name('home')->middleware('checkPassword');
+
 
 
 
@@ -44,8 +48,10 @@ Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 Route::get('error', [ErrorController::class, 'error'])->name('error');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
+
 Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
 Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
+
 Route::get('brand', [BrandController::class, 'index'])->name('brand');
 Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
 Route::get('faq', [FAQController::class, 'index'])->name('faq');
@@ -92,8 +98,10 @@ Route::middleware('auth')->group(function () {
 });
 
     //start blog
+
     Route::get('/blog', [BlogController::class, 'show'])->name('blog.show');
     Route::get('/blog/{slug}/detail', [BlogController::class, 'detail'])->name('blog.detail');
+
 
     //end blog
 
@@ -137,6 +145,4 @@ Route::post('/select-address', [CheckoutController::class, 'select_address']);
 Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
 Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
 Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
-// Route::get('/orders', function () {
-//     return view('orders'); // Đảm bảo tên file view là 'orders'
-// });
+

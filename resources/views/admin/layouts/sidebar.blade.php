@@ -261,7 +261,7 @@
 
             @can('blog')
             <li class="dropdown">
-                <a href="{{ route('admin.blog.index') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-folder"></i>
                     <span>Bài Viết</span></a>
                 <ul class="dropdown-menu">
@@ -362,7 +362,9 @@
                         <span>Quản lí Biển Thể</span></a>
                     <ul class="dropdown-menu">
                         <li><a class="nav-link" href="{{ route('admin.colors.index') }}"><span>Quản Màu Sắc</span></a></li>
+
                         <li><a class="nav-link" href="{{ route('admin.sizes.index') }}"><span> Lí Số Đo</span></a></li>
+
                         <li><a class="nav-link" href="{{ route('admin.brands.index') }}"><span>Quản Lí Thương Hiệu</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.tags.index') }}"><span>Quản lí Thẻ</span></a></li>
                     </ul>

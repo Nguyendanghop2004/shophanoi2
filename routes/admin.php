@@ -180,6 +180,7 @@ use Illuminate\Support\Facades\Route;
     Route::delete('colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy')->middleware('permission:product');
 
     // Route cho BrandController
+
     Route::get('brands', [BrandController::class, 'index'])->name('brands.index')->middleware('permission:product');
     Route::get('brands/create', [BrandController::class, 'create'])->name('brands.create')->middleware('permission:product');
     Route::post('brands', [BrandController::class, 'store'])->name('brands.store')->middleware('permission:product');
@@ -190,6 +191,8 @@ use Illuminate\Support\Facades\Route;
     Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update')->middleware('permission:product');
 
     Route::get('colors-sizes', [ColorSizeController::class, 'index'])->name('colors_sizes.index')->middleware('permission:product');
+
+
 
 
     // lịch sử cập nhật admin.

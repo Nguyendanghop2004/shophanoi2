@@ -11,7 +11,9 @@
             <h4>Chỉnh Sửa Thương Hiệu</h4>
         </div>
         <div class="card-body">
+
             <form id="brand-update-form" action="{{ route('admin.brands.update', $brand->id) }}" method="POST" enctype="multipart/form-data">
+
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -56,7 +58,9 @@
 
                         <!-- Nút Lưu -->
                         <div class="form-group">
+
                             <button type="button" id="update-btn" class="btn btn-primary">Cập Nhật</button>
+
                         </div>
                     </div>
                 </div>
@@ -64,6 +68,7 @@
         </div>
     </div>
 </section>
+
 
 <!-- Thêm thư viện SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -92,6 +97,23 @@
                 });
             });
         }
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Hiển thị ảnh đã chọn
+        $('#image-upload').change(function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    $('#image-preview img').attr('src', event.target.result).parent().show();
+                    $('#image-label').text(file.name);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
     });
 </script>
 @endsection

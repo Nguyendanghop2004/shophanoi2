@@ -31,11 +31,11 @@ class AccountController extends Controller
 
    
 
-    
+        // dd($request->all());
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-          
+            // Đăng nhập thành công
             $request->session()->regenerate();
             return redirect()->route('home');
         }
@@ -54,12 +54,12 @@ class AccountController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password), 
+            'password' => Hash::make($request->password), // Mã hóa mật khẩu
         ]);
 
         auth()->login($user);
 
-        return redirect()->route('home')->with('success','đăng kí thanh công');
+        return redirect()->route('home');
     }
     public function loginIndex()
     {

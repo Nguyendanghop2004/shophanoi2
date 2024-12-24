@@ -13,21 +13,23 @@ class ColorSizeController extends Controller
      */
     public function index(Request $request)
     {
+
      
         $searchColor = $request->query('searchColor');
         $searchSize = $request->query('searchSize');
 
       
+
         $colors = Color::when($searchColor, function ($query, $searchColor) {
             return $query->where('name', 'like', '%' . $searchColor . '%');
         })->paginate(5);
 
-     
+
         $sizes = Size::when($searchSize, function ($query, $searchSize) {
             return $query->where('name', 'like', '%' . $searchSize . '%');
         })->paginate(5);
 
-      
+
         return view('admin.colors_sizes.index', compact('colors', 'sizes', 'searchColor', 'searchSize'));
     }
 }
