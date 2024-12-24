@@ -25,6 +25,9 @@ Route::post('admin/login', [LoginController::class, 'store'])->name('admin.post-
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus'])->group( function () {
     // Login admin
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('tksanpham', [AdminDashboardController::class, 'tksanpham'])->name('tksanpham');
+    Route::get('doanhthu', [AdminDashboardController::class, 'doanhthu'])->name('doanhthu');
+    Route::get('tkadmin', [AdminDashboardController::class, 'tkadmin'])->name('tkadmin');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
     Route::get('account', [AccoutAdminController::class, 'account'])->name('accounts.account')->middleware('permission:index_account_admin');
     Route::get('accounts/create', [AccoutAdminController::class, 'create'])->name('accounts.create');
