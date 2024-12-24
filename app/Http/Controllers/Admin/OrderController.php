@@ -123,47 +123,6 @@ class OrderController extends Controller
     
     
 
-    public function inhoadon($id)
-    {
-        $order = Order::findOrFail($id);
-        $orderitems = OrderItem::where('order_id', $order->id)->get();
-        $city = City::where('matp', $order->city_id)->first();
-        $province = Province::where('maqh', $order->province_id)->first();
-        $ward = Wards::where('xaid', $order->wards_id)->first();
-    
-        // Tạo thư mục qr_codes nếu chưa tồn tại
-        $qrCodesDir = storage_path('app/public/qr_codes');
-        if (!File::exists($qrCodesDir)) {
-            File::makeDirectory($qrCodesDir, 0777, true);
-        }
-    
-        // Tạo mã QR và lưu vào tệp tạm thời
-        $qrCode = QrCode::size(150)->generate($order->id);  // Thay đổi kích thước tùy theo nhu cầu
-        $tempPath = $qrCodesDir . '/hoadon_' . $order->order_code . '.png';
-        file_put_contents($tempPath, $qrCode);
-    
-        // Cấu hình DOMPDF để sử dụng font Unicode
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView('admin.order.hoadon', compact('order', 'orderitems', 'city', 'province', 'ward', 'tempPath'));
-    
-        // Cấu hình để DOMPDF hỗ trợ font Unicode
-        $options = [
-            'isHtml5ParserEnabled' => true,  
-            'isPhpEnabled' => true,        
-            'font_dir' => storage_path('fonts'),  
-            'font_cache' => storage_path('fonts')
-        ];
-    
-        $pdf->setOptions($options);
-    
-        // Xóa tệp mã QR tạm thời sau khi sử dụng
-        unlink($tempPath);
-    
-        // Trả về file PDF
-        return $pdf->download('hoa_don_' . $order->order_code . '.pdf');
-    }
-    
-
     public function updateStatus(Request $request, $id)
     {
         $order = Order::find($id);
