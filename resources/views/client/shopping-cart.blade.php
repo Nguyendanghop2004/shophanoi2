@@ -61,13 +61,15 @@
                 <td class="tf-cart-item_quantity" cart-data-title="Quantity">
                     <div class="cart-quantity">
                         <div class="wg-quantity">
-                            <span class="btn-quantity minus-btn-cart" data-url="{{ route('cart.update') }}" data-id="{{ $item['product_id'] }}" data-color="{{ $item['color_id'] }}" data-size="{{ $item['size_id'] }}">
+
+                            <span class="btn-quantity minus-btn-cart-2" data-url="{{ route('cart.update') }}" data-id="{{ $item['product_id'] }}" data-color="{{ $item['color_id'] }}" data-size="{{ $item['size_id'] }}">
                                 <svg class="d-inline-block" width="9" height="1" viewBox="0 0 9 1" fill="currentColor">
                                     <path d="M9 1H5.14286H3.85714H0V1.50201e-05H3.85714L5.14286 0L9 1.50201e-05V1Z"></path>
                                 </svg>
                             </span>
                             <input type="text" class="quantity-input quantity-input-update" name="number" value="{{ $item['quantity'] }}" data-url="{{ route('cart.update') }}" data-id="{{ $item['product_id'] }}" data-color="{{ $item['color_id'] }}" data-size="{{ $item['size_id'] }}">
-                            <span class="btn-quantity plus-btn-cart" data-url="{{ route('cart.update') }}" data-id="{{ $item['product_id'] }}" data-color="{{ $item['color_id'] }}" data-size="{{ $item['size_id'] }}">
+
+                            <span class="btn-quantity plus-btn-cart-2" data-url="{{ route('cart.update') }}" data-id="{{ $item['product_id'] }}" data-color="{{ $item['color_id'] }}" data-size="{{ $item['size_id'] }}">
                                 <svg class="d-inline-block" width="9" height="9" viewBox="0 0 9 9" fill="currentColor">
                                     <path d="M9 5.14286H5.14286V9H3.85714V5.14286H0V3.85714H3.85714V0H5.14286V3.85714H9V5.14286Z"></path>
                                 </svg>
@@ -442,9 +444,9 @@
             // Lưu lại giá trị hiện tại trước khi thay đổi
             inputField.data('oldQuantity', currentQuantity);
 
-            if (button.hasClass('plus-btn-cart')) {
+            if (button.hasClass('plus-btn-cart-2')) {
                 currentQuantity += 1;
-            } else if (button.hasClass('minus-btn-cart') && currentQuantity > 1) {
+            } else if (button.hasClass('minus-btn-cart-2') && currentQuantity > 1) {
                 currentQuantity -= 1;
             }
 
@@ -457,28 +459,28 @@
             }, 500); // 500ms debounce
         });
 
-        $(document).off('change', '.quantity-input').on('change', '.quantity-input', function() {
-            let inputField = $(this);
-            let productId = inputField.data('id');
-            let colorId = inputField.data('color');
-            let sizeId = inputField.data('size');
-            let url = inputField.data('url');
-            let newQuantity = parseInt(inputField.val()) || 1;
+        // $(document).off('change', '.quantity-input').on('change', '.quantity-input', function() {
+        //     let inputField = $(this);
+        //     let productId = inputField.data('id');
+        //     let colorId = inputField.data('color');
+        //     let sizeId = inputField.data('size');
+        //     let url = inputField.data('url');
+        //     let newQuantity = parseInt(inputField.val()) || 1;
 
-            // Lưu lại giá trị cũ trước khi thay đổi
-            inputField.data('oldQuantity', newQuantity);
+        //     // Lưu lại giá trị cũ trước khi thay đổi
+        //     inputField.data('oldQuantity', newQuantity);
 
-            if (newQuantity < 1) {
-                newQuantity = 1;
-                inputField.val(newQuantity);
-            }
+        //     if (newQuantity < 1) {
+        //         newQuantity = 1;
+        //         inputField.val(newQuantity);
+        //     }
 
-            // Gửi AJAX cập nhật sau khi debounce
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(function() {
-                updateQuantity(productId, colorId, sizeId, newQuantity, url, inputField);
-            }, 500);
-        });
+        //     // Gửi AJAX cập nhật sau khi debounce
+        //     clearTimeout(debounceTimer);
+        //     debounceTimer = setTimeout(function() {
+        //         updateQuantity(productId, colorId, sizeId, newQuantity, url, inputField);
+        //     }, 500);
+        // });
     });
 </script>
 

@@ -61,11 +61,6 @@ Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('sho
 
 //thanh toán
 Route::get('check-out', [CheckOutController::class, 'checkout'])->name('checkout');
-Route::post('/apply-discount', [CheckOutController::class, 'applyDiscount'])->name('apply.discount');
-
-
-
-
 Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnPayReturn'])->name('vnpay.return');
 Route::get('/out-of-stock', [CheckoutController::class, 'outOfStock'])->name('out-of-stock');
@@ -122,6 +117,7 @@ Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->nam
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::get('/cart/modal-cart', [CartController::class, 'getModalCart'])->name('cart.modal');
 
+Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
 
 
 Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.donhang');
