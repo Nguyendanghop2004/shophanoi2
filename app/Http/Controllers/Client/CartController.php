@@ -518,12 +518,14 @@ class CartController extends Controller
     public function count(Request $request)
     {
         if (Auth::check()) {
-            // Người dùng đã đăng nhập: đếm số lượng sản phẩm khác nhau trong database
-            $totalProducts = CartItem::where('user_id', Auth::id())->count();
+            // Người dùng đã đăng nhập: tính tổng số lượng sản phẩm từ database
+            $totalProducts = CartItem::whereHas('cart', function ($query) {
+                $query->where('user_id', Auth::id());
+            })->sum('quantity');
         } else {
-            // Người dùng chưa đăng nhập: đếm số lượng sản phẩm khác nhau trong session
+            // Người dùng chưa đăng nhập: tính tổng số lượng sản phẩm từ session
             $cart = $request->session()->get('cart', []);
-            $totalProducts = count($cart);
+            $totalProducts = array_sum(array_column($cart, 'quantity'));
         }
     
         return response()->json(['count' => $totalProducts]);
