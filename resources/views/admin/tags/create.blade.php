@@ -20,7 +20,7 @@
                             <label>Ảnh Tag</label>
                             <div class="image-preview mx-auto" @error('image_path') style="border:2px dashed red" @enderror>
                                 <label for="image-upload" id="image-label"> Chọn Tập Tin</label>
-                                <input type="file" name="image_path" id="image-upload" accept="image/*" style="display: none;" />
+                                <input type="file" name="background_image" id="image-upload" accept="image/*" style="display: none;" />
                                 <span id="image-preview" style="display: none;">
                                     <img src="" alt="Preview Image" style="width: 100%; height: 100%; object-fit: cover;" />
                                 </span>

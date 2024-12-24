@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
-
+@section('header-home')
+    @include('client.layouts.particals.header-home')
+@endsection
 @section('content')
 @include('client.layouts.particals.page-title')
 
@@ -12,13 +14,13 @@
             </div>
             <div class="tf-content-left has-mt">
                 <div class="sticky-top">
-                    <h5 class="mb_20">Visit Our Campus</h5>
+                    <h5 class="mb_20">Ghé Thăm Của Hàng Chúng Tôi</h5>
                     <div class="mb_20">
-                        <p class="mb_15"><strong>Address</strong></p>
+                        <p class="mb_15"><strong>Địa Chỉ</strong></p>
                         <p>Số 1, Đường Trịnh Văn Bô, Phường Tây Mỗ, Quận Nam Từ Liêm, Hà Nội.</p>
                     </div>
                     <div class="mb_20">
-                        <p class="mb_15"><strong>Phone</strong></p>
+                        <p class="mb_15"><strong>Số Điện Thoại</strong></p>
                         <p>(039) 6075 753</p>
                     </div>
                     <div class="mb_20">
@@ -26,8 +28,8 @@
                         <p>hanoiclotheshop@gmail.com</p>
                     </div>
                     <div class="mb_36">
-                        <p class="mb_15"><strong>Open Time</strong></p>
-                        <p class="mb_15">Mở cửa đón khách mọi ngày trong tuần từ 8am 5pm</p>
+                        <p class="mb_15"><strong>Thời Gian Mở Cửa</strong></p>
+                        <p class="mb_15">Mở cửa đón khách mọi ngày trong tuần từ 8 giờ sáng tới 5 giờ chiều</p>
                     </div>
                     <div>
                         <ul class="tf-social-icon d-flex gap-20 style-default">

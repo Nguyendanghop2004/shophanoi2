@@ -4,94 +4,27 @@
 @endsection
 
 @section('content')
-    <!-- categories -->
+    {{-- <!-- categories -->
     <section class="flat-spacing-20">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="tf-categories-wrap">
                         <div class="tf-categories-container">
-                            <div class="collection-item-circle hover-img">
-                                <a href="shop-collection-sub.html" class="collection-image img-style">
-                                    <img class="lazyload"
-                                        data-src="{{ asset('client/assets/images/collections/collection-circle-8.jpg') }}"
-                                        src="{{ asset('client/assets/images/collections/collection-circle-8.jpg') }}"
-                                        alt="collection-img">
-                                </a>
-                                <div class="collection-content text-center">
-                                    <a href="shop-collection-sub.html" class="link title fw-6">New Arrivals</a>
-                                </div>
-                            </div>
-                            {{-- @dd(Auth::user()->name) --}}
-                            <div class="collection-item-circle hover-img">
-                                <a href="shop-collection-sub.html" class="collection-image img-style">
-                                    <img class="lazyload"
-                                        data-src="{{ asset('client/assets/images/collections/collection-circle-9.jpg') }}"
-                                        src="{{ asset('client/assets/images/collections/collection-circle-9.jpg') }}"
-                                        alt="collection-img">
-                                </a>
-                                <div class="collection-content text-center">
-                                    <a href="shop-collection-sub.html" class="link title fw-6">Best Sellers</a>
-                                </div>
-                            </div>
-                            <div class="collection-item-circle hover-img">
-                                <a href="shop-collection-sub.html" class="collection-image img-style">
-                                    <img class="lazyload"
-                                        data-src="{{ asset('client/assets/images/collections/collection-circle-10.jpg') }}"
-                                        src="{{ asset('client/assets/images/collections/collection-circle-10.jpg') }}"
-                                        alt="collection-img">
-                                </a>
-                                <div class="collection-content text-center">
-                                    <a href="shop-collection-sub.html" class="link title fw-6">Top Rated</a>
-                                </div>
-                            </div>
-                            <div class="collection-item-circle hover-img">
-                                <a href="shop-collection-sub.html" class="collection-image img-style">
-                                    <img class="lazyload"
-                                        data-src="{{ asset('client/assets/images/collections/collection-circle-11.jpg') }}"
-                                        src="{{ asset('client/assets/images/collections/collection-circle-11.jpg') }}"
-                                        alt="collection-img">
-                                </a>
-                                <div class="collection-content text-center">
-                                    <a href="shop-collection-sub.html" class="link title fw-6">Brands We Love</a>
-                                </div>
-                            </div>
-                            <div class="collection-item-circle hover-img">
-                                <a href="shop-collection-sub.html" class="collection-image img-style">
-                                    <img class="lazyload"
-                                        data-src="{{ asset('client/assets/images/collections/collection-circle-12.jpg') }}"
-                                        src="{{ asset('client/assets/images/collections/collection-circle-12.jpg') }}"
-                                        alt="collection-img">
-                                </a>
-                                <div class="collection-content text-center">
-                                    <a href="shop-collection-sub.html" class="link title fw-6">Trending</a>
-                                </div>
-                            </div>
-                            <div class="collection-item-circle hover-img">
-                                <a href="shop-collection-sub.html" class="collection-image img-style">
-                                    <img class="lazyload"
-                                        data-src="{{ asset('client/assets/images/collections/collection-circle-13.jpg') }}"
-                                        src="{{ asset('client/assets/images/collections/collection-circle-13.jpg') }}"
-                                        alt="collection-img">
-                                </a>
-                                <div class="collection-content text-center">
-                                    <a href="shop-collection-sub.html" class="link title fw-6">The Re-Imagined</a>
-                                </div>
-                            </div>
-                            <div class="collection-item-circle hover-img">
-                                <div class="has-saleoff-wrap position-relative">
+                            @foreach ($collections as $collection)
+                                <div class="collection-item-circle hover-img">
                                     <a href="shop-collection-sub.html" class="collection-image img-style">
                                         <img class="lazyload"
-                                            data-src="{{ asset('client/assets/images/collections/sale.jpg') }}"
-                                            src="{{ asset('client/assets/images/collections/sale.jpg') }}"
+                                            data-src="{{ asset('storage/' . $collection->background_image) }}"
+                                            src="{{ asset('storage/' . $collection->background_image) }}"
                                             alt="collection-img">
                                     </a>
-                                    <div class="sale-off fw-5">30% off</div>
+                                    <div class="collection-content text-center">
+                                        <a href="shop-collection-sub.html"
+                                            class="link title fw-6">{{ $collection->name }}</a>
+                                    </div>
                                 </div>
-                                <div class="collection-content text-center">
-                                    <a href="shop-collection-sub.html" class="link title fw-6">Sale</a>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                         <div class="tf-shopall-wrap">
                             <div class="collection-item-circle tf-shopall">
@@ -109,7 +42,7 @@
         </div>
     </section>
     <!-- /categories -->
-    {{--
+
     <!-- slider -->
     <div class="tf-slideshow slider-women slider-effect-fade position-relative">
         <div class="swiper tf-sw-slideshow" data-preview="1" data-tablet="1" data-mobile="1" data-centered="false"
@@ -135,8 +68,6 @@
                         </div>
                     </div>
                 @endforeach
-
-
             </div>
         </div>
         <div class="wrap-pagination">
@@ -154,37 +85,32 @@
                 <span class="title wow fadeInUp" data-wow-delay="0s">Categories you might like</span>
             </div>
             <div class="hover-sw-nav">
-       
-                <div class="swiper tf-sw-collection" data-preview="4" data-tablet="2" data-mobile="2"
-                    data-space-lg="30" data-space-md="30" data-space="15" data-loop="false" data-auto-play="false">
+
+                <div class="swiper tf-sw-collection" data-preview="4" data-tablet="2" data-mobile="2" data-space-lg="30"
+                    data-space-md="30" data-space="15" data-loop="false" data-auto-play="false">
                     <div class="swiper-wrapper">
-                    @foreach ($categories as $category)
-                        <div class="swiper-slide" lazy="true">
-                     
-                            <div class="collection-item style-2 hover-img" >
-                                <div class="collection-inner">
-                                    <a href="" class="0"> 
-                                        <img class="lazyload"
-                                            data-src="{{ asset('client/assets/images/collections/collection-42.jpg') }}"
-                                            src="{{ asset('client/assets/images/collections/collection-42.jpg') }}"
-                                            alt="collection-img">
-                                    </a>
-                                    <div class="collection-content">
-                                        <a href=""
-                                            class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>{{$category->name}}</span><i
-                                                class="icon icon-arrow1-top-left"></i></a>
+                        @foreach ($categories as $category)
+                            <div class="swiper-slide" lazy="true">
+
+                                <div class="collection-item style-2 hover-img">
+                                    <div class="collection-inner">
+                                        <a href="" class="0">
+
+                                            <img class="lazyload" data-src="{{ Storage::url($category->image_path) }}"
+                                                src="{{ Storage::url($category->image_path) }}" alt="collection-img">
+                                        </a>
+                                        <div class="collection-content">
+                                            <a href=""
+                                                class="tf-btn collection-title hover-icon fs-15 rounded-full"><span>{{ $category->name }}</span><i
+                                                    class="icon icon-arrow1-top-left"></i></a>
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
-                            
-                        </div>          
-                       
-                        
-                       
-                       
                         @endforeach
                     </div>
-                    
+
                 </div>
                 <div class="nav-sw nav-next-slider nav-next-collection box-icon w_46 round"><span
                         class="icon icon-arrow-left"></span></div>
@@ -244,255 +170,80 @@
     <!-- /Banner Collection --> --}}
 
     <!-- Best seller -->
-    {{-- @if(session('success'))
-    <div style="padding: 10px; margin-bottom: 15px; border: 1px solid #c3e6cb; background-color: #d4edda; color: #155724; border-radius: 5px; width:1000px;">
-        <strong>Thành công!</strong> {{ session('success') }}
-        <button style="float: left; background: none; border: none; color: #155724; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
-    </div>
-@endif
-
-@if(session('error'))
-    <div style="padding: 10px; margin-bottom: 15px; border: 1px solid #f5c6cb; background-color: #f8d7da; color: #721c24; border-radius: 5px;">
-        <strong>Lỗi!</strong> {{ session('error') }}
-        <button style="float: right; background: none; border: none; color: #721c24; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
-    </div>
-@endif --}}
-@if(session('success'))
-    <div style="position: relative; padding: 15px; margin: 15px 0; background: linear-gradient(to right, #a8e063, #56ab2f); color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <strong style="font-size: 16px;">🎉 Thành công!</strong>
-        <p style="margin: 5px 0; font-size: 14px;">{{ session('success') }}</p>
-        <button style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
-    </div>
-@endif
-
-@if(session('error'))
-    <div style="position: relative; padding: 15px; margin: 15px 0; background: linear-gradient(to right, #e53935, #d32f2f); color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <strong style="font-size: 16px;">⚠️ Lỗi!</strong>
-        <p style="margin: 5px 0; font-size: 14px;">{{ session('error') }}</p>
-        <button style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
-    </div>
-@endif
-
     <section class="flat-spacing-15 pb_0">
         <div class="container">
             <div class="flat-title wow fadeInUp" data-wow-delay="0s">
-                <span class="title">Ecomus’s Favorites</span>
-
-                <p class="sub-title">Beautifully Functional. Purposefully Designed. Consciously Crafted.</p>
+                <span class="title">Sản Phẩm Yêu Thích</span>
+                <p class="sub-title">Thời trang đẹp mắt, tiện lợi và bền vững – dành cho mọi phong cách của bạn.</p>
             </div>
             <div class="hover-sw-nav hover-sw-3">
                 <div class="swiper tf-sw-product-sell wrap-sw-over" data-preview="4" data-tablet="3" data-mobile="2"
-                    data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3"
-                    data-pagination-lg="3">
+                    data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3" data-pagination-lg="3">
                     <div class="swiper-wrapper">
-                        {{-- @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
 
-    @if(session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif --}}
-  
                         @foreach ($products as $product)
-                        <div class="swiper-slide" lazy="true">
-                            <div class="card-product">
-                                <div class="card-product-wrapper">
-                                    <a href="" class="product-img">
-                                        <!-- Ảnh chính của sản phẩm -->
-                                        <img class="lazyload img-product"
-                                            data-src="{{ asset('storage/' . $product->main_image_url) }}"
-                                            src="{{ asset('storage/' . $product->main_image_url) }}"
-                                            alt="{{ $product->product_name }}" width="100px" height="100px">
-
-                                            <!-- Ảnh hover, có thể lấy ảnh khác từ bảng images nếu có nhiều ảnh -->
-                                            @php
-                                                $hoverImage = $product->images->first(); // Giả sử bạn có quan hệ images trong model
-                                            @endphp
-                                            @if ($hoverImage)
-                                                <img class="lazyload img-hover"
-                                                    data-src="{{ asset('storage/' . $hoverImage->image_url) }}"
-                                                    src="{{ asset('storage/' . $hoverImage->image_url) }}"
-                                                    alt="{{ $product->product_name }}">
-                                            @endif
-                                        </a>
-
-                                        <div class="list-product-btn">
-                                            <a href="#quick_add" data-bs-toggle="modal" data-product-id="{{ $product->id }}"
-                                                class="box-icon bg_white quick-add tf-btn-loading">
-                                                <span class="icon icon-bag"></span>
-                                                <span class="tooltip">Quick Add</span>
-                                            </a>
-                                            
-                                          
-                                                <form action="{{ route('wishlist.add', $product->id) }}" method="POST" style="display: inline;">
-                                                    @csrf
-                                                    <button type="submit" class="box-icon bg_white wishlist btn-icon-action">
-                                                        <span class="icon icon-heart"></span>
-                                                        <span class="tooltip">Add to Wishlist</span>
-                                                    </button>
-                                                </form>
-                                                
-                                           
-                                            <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                                class="box-icon bg_white compare btn-icon-action">
-                                                <span class="icon icon-compare"></span>
-                                                <span class="tooltip">Add to Compare</span>
-                                                <span class="icon icon-check"></span>
-                                            </a>
-                                            <a href="#quick_view" data-bs-toggle="modal"
-                                                class="box-icon bg_white quickview tf-btn-loading">
-                                                <span class="icon icon-view"></span>
-                                                <span class="tooltip">Quick View</span>
-                                            </a>
-                                        </div>
-
-                                        <div class="size-list">
-                                            <span>{{ $product->variants->count() }} sizes available</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="card-product-info">
-                                        <a href="" class="title link">{{ $product->product_name }}</a>
-                                        <span class="price">${{ number_format($product->price, 2) }}</span>
-
-                                        <!-- Hiển thị màu sắc -->
-                                        <ul class="list-color-product">
-                                            @foreach ($product->colors as $color)
-                                                <li
-                                                    class="list-color-item color-swatch {{ $loop->first ? 'active' : '' }}">
-                                                    <span class="tooltip">{{ $color->name }}</span>
-                                                    <span class="swatch-value"
-                                                        style="background-color: {{ $color->sku_color }}"></span>
-
-                                                    @php
-                                                        // Tìm ảnh của màu tương ứng
-                                                        $colorImage = $product->images->firstWhere(
-                                                            'color_id',
-                                                            $color->id,
-                                                        );
-                                                    @endphp             
-                                                    @if ($colorImage)
-                                                        <img class="lazyload"
-                                                            data-src="{{ asset('storage/' . $colorImage->image_url) }}"
-                                                            src="{{ asset('storage/' . $colorImage->image_url) }}"
-                                                            alt="{{ $color->name }}">
-                                                    @endif
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                        {{-- @foreach ($products as $product)
                             <div class="swiper-slide" lazy="true">
                                 <div class="card-product">
                                     <div class="card-product-wrapper">
-                                        <a href="" class="product-img">
-                                            <!-- Ảnh chính của sản phẩm -->
+                                        <a href="{{ route('product-detail', $product['slug']) }}" class="product-img">
                                             <img class="lazyload img-product"
-                                                data-src="{{ asset('storage/' . $product->main_image_url) }}"
-                                                src="{{ asset('storage/' . $product->main_image_url) }}"
-                                                alt="{{ $product->product_name }}" width="100px" height="100px">
-
-                                            <!-- Ảnh hover, có thể lấy ảnh khác từ bảng images nếu có nhiều ảnh -->
-                                            @php
-                                                $hoverImage = $product->images->first(); // Giả sử bạn có quan hệ images trong model
-                                            @endphp
-                                            @if ($hoverImage)
-                                                <img class="lazyload img-hover"
-                                                    data-src="{{ asset('storage/' . $hoverImage->image_url) }}"
-                                                    src="{{ asset('storage/' . $hoverImage->image_url) }}"
-                                                    alt="{{ $product->product_name }}">
-                                            @endif
+                                                data-src="{{ asset('storage/' . $product['main_image_url']) }}"
+                                                src="{{ asset('storage/' . $product['main_image_url']) }}"
+                                                alt="image-product">
+                                            <img class="lazyload img-hover"
+                                                data-src="{{ asset('storage/' . $product['hover_main_image_url']) }}"
+                                                src="{{ asset('storage/' . $product['hover_main_image_url']) }}"
+                                                alt="image-product">
                                         </a>
-                                        @php
-                                        // Lấy user_id hoặc session ID
-                                        $userId = auth()->check() ? auth()->id() : session()->getId();
-                                        
-                                        // Kiểm tra sản phẩm có trong wishlist
-                                        $inWishlist = \App\Models\Wishlist::where('product_id', $product->id)
-                                            ->where('user_id', $userId)
-                                            ->exists();
-                                    @endphp
                                         <div class="list-product-btn">
-                                            <a href="#quick_add" data-bs-toggle="modal"
-                                                data-product-id="{{ $product->id }}"
+                                            {{-- <a href="#quick_add" data-bs-toggle="modal"
+                                                data-product-id="{{ $product['id'] }}"
                                                 class="box-icon bg_white quick-add tf-btn-loading">
                                                 <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick Add</span>
+                                            </a> --}}
+                                            <a href="javascript:void(0);"
+                                                class="box-icon bg_white wishlist btn-icon-action">
+                                                <span class="icon icon-heart"></span>
+                                                <span class="tooltip">Add to Wishlist</span>
+                                                <span class="icon icon-delete"></span>
                                             </a>
-
-                                            <form action="{{ route('wishlist.add', $product->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" {{ $inWishlist ? 'disabled' : '' }}
-                                                    class="box-icon bg_white wishlist btn-icon-action">
-                                                    <span class="icon icon-heart"></span>
-                                                    <span class="tooltip">Add to Wishlist</span>
-                                                </button>
-                                            </form>
-                                            @if ($inWishlist)
-            <form action="{{ route('wishlist.remove', $product->id) }}" method="POST">
-                @csrf
-                                              
-                                                    @method('delete')
-                                                    <button type="submit"
-                                                        class="box-icon bg_white wishlist btn-icon-action">
-                                                        <span class="tooltip">Remove Wishlist</span>
-                                                        <span class="icon icon-delete"></span>
-                                                    </button>
-                                            @endif
-
-
-
-                                            <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
+                                            {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                                                 class="box-icon bg_white compare btn-icon-action">
                                                 <span class="icon icon-compare"></span>
                                                 <span class="tooltip">Add to Compare</span>
                                                 <span class="icon icon-check"></span>
-                                            </a>
+                                            </a> --}}
                                             <a href="#quick_view" data-bs-toggle="modal"
+                                                data-product-id="{{ $product['id'] }}"
                                                 class="box-icon bg_white quickview tf-btn-loading">
-                                                <span class="icon icon-view"></span>
+                                                <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick View</span>
                                             </a>
                                         </div>
-
                                         <div class="size-list">
-                                            <span>{{ $product->variants->count() }} sizes available</span>
+                                            <span>{{ $product['distinct_size_count'] }} sizes available</span>
                                         </div>
                                     </div>
-
                                     <div class="card-product-info">
-                                        <a href="" class="title link">{{ $product->product_name }}</a>
-                                        <span class="price">${{ number_format($product->price, 2) }}</span>
-
-                                        <!-- Hiển thị màu sắc -->
+                                        <a href="{{ route('product-detail', $product['slug']) }}"
+                                            class="title link">{{ $product['name'] }}</a>
+                                        <span class="price">{{ $product['price'] }} VNĐ</span>
                                         <ul class="list-color-product">
-                                            @foreach ($product->colors as $color)
+                                            @foreach ($product['colors'] as $index => $color)
                                                 <li
-                                                    class="list-color-item color-swatch {{ $loop->first ? 'active' : '' }}">
-                                                    <span class="tooltip">{{ $color->name }}</span>
+                                                    class="list-color-item color-swatch @if ($index == 0) active @endif">
+                                                    <span class="tooltip">{{ $color['name'] }}</span>
                                                     <span class="swatch-value"
-                                                        style="background-color: {{ $color->sku_color }}"></span>
-
-                                                    @php
-                                                        // Tìm ảnh của màu tương ứng
-                                                        $colorImage = $product->images->firstWhere(
-                                                            'color_id',
-                                                            $color->id,
-                                                        );
-                                                    @endphp
-                                                    @if ($colorImage)
-                                                        <img class="lazyload"
-                                                            data-src="{{ asset('storage/' . $colorImage->image_url) }}"
-                                                            src="{{ asset('storage/' . $colorImage->image_url) }}"
-                                                            alt="{{ $color->name }}">
-                                                    @endif
+                                                        style="background-color: {{ $color['sku_color'] }}"></span>
+                                                    <img class="lazyload image-product"
+                                                        data-src="{{ asset('storage/' . $color['main_image']) }}"
+                                                        src="{{ asset('storage/' . $color['main_image']) }}"
+                                                        alt="image-product">
+                                                    <img class="lazyload hover-image-product"
+                                                        data-src="{{ asset('storage/' . $color['hover_image']) }}"
+                                                        src="{{ asset('storage/' . $color['hover_image']) }}"
+                                                        alt="image-product">
                                                 </li>
                                             @endforeach
                                         </ul>
@@ -500,360 +251,6 @@
                                 </div>
                             </div>
                         @endforeach
-
- --}}
-
-
-                        {{-- <div class="swiper-slide" lazy="true">
-                            <div class="card-product">
-                                <div class="card-product-wrapper">
-                                    <a href="product-detail.html" class="product-img">
-                                        <img class="lazyload img-product"
-                                            data-src="{{ asset('client/assets/images/products/brown.jpg') }}"
-                                            src="{{ asset('client/assets/images/products/brown.jpg') }}"
-                                            alt="image-product">
-                                        <img class="lazyload img-hover"
-                                            data-src="{{ asset('client/assets/images/products/purple.jpg') }}"
-                                            src="{{ asset('client/assets/images/products/purple.jpg') }}"
-                                            alt="image-product">
-                                    </a>
-                                    <div class="list-product-btn">
-                                        <a href="#quick_add" data-bs-toggle="modal"
-                                            class="box-icon bg_white quick-add tf-btn-loading">
-                                            <span class="icon icon-bag"></span>
-                                            <span class="tooltip">Quick Add</span>
-                                        </a>
-                                        <a href="javascript:void(0);" class="box-icon bg_white wishlist btn-icon-action">
-                                            <span class="icon icon-heart"></span>
-                                            <span class="tooltip">Add to Wishlist</span>
-                                            <span class="icon icon-delete"></span>
-                                        </a>
-                                        <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                            class="box-icon bg_white compare btn-icon-action">
-                                            <span class="icon icon-compare"></span>
-                                            <span class="tooltip">Add to Compare</span>
-                                            <span class="icon icon-check"></span>
-                                        </a>
-                                        <a href="#quick_view" data-bs-toggle="modal"
-                                            class="box-icon bg_white quickview tf-btn-loading">
-                                            <span class="icon icon-view"></span>
-                                            <span class="tooltip">Quick View</span>
-                                        </a>
-                                    </div>
-                                    <div class="size-list">
-                                        <span>4 sizes available</span>
-                                    </div>
-                                    <div class="on-sale-wrap">
-                                        <div class="on-sale-item">-33%</div>
-                                    </div>
-                                    <div class="countdown-box">
-                                        <div class="js-countdown" data-timer="1007500" data-labels="d :,h :,m :,s"></div>
-                                    </div>
-                                </div>
-                                <div class="card-product-info">
-                                    <a href="product-detail.html" class="title link">Ribbed modal T-shirt</a>
-                                    <span class="price">From $18.95</span>
-                                    <ul class="list-color-product">
-                                        <li class="list-color-item color-swatch active">
-                                            <span class="tooltip">Brown</span>
-                                            <span class="swatch-value bg_brown"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/brown.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/brown.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                        <li class="list-color-item color-swatch">
-                                            <span class="tooltip">Light Purple</span>
-                                            <span class="swatch-value bg_purple"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/purple.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/purple.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                        <li class="list-color-item color-swatch">
-                                            <span class="tooltip">Light Green</span>
-                                            <span class="swatch-value bg_light-green"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/green.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/green.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide" lazy="true">
-                            <div class="card-product">
-                                <div class="card-product-wrapper">
-                                    <a href="product-detail.html" class="product-img">
-                                        <img class="lazyload img-product"
-                                            data-src="{{ asset('client/assets/images/products/white-3.jpg') }}"
-                                            src="{{ asset('client/assets/images/products/white-3.jpg') }}"
-                                            alt="image-product">
-                                        <img class="lazyload img-hover"
-                                            data-src="{{ asset('client/assets/images/products/white-4.jpg') }}"
-                                            src="{{ asset('client/assets/images/products/white-4.jpg') }}"
-                                            alt="image-product">
-                                    </a>
-                                    <div class="list-product-btn absolute-2">
-                                        <a href="#shoppingCart" data-bs-toggle="modal"
-                                            class="box-icon bg_white quick-add tf-btn-loading">
-                                            <span class="icon icon-bag"></span>
-                                            <span class="tooltip">Add to cart</span>
-                                        </a>
-                                        <a href="javascript:void(0);" class="box-icon bg_white wishlist btn-icon-action">
-                                            <span class="icon icon-heart"></span>
-                                            <span class="tooltip">Add to Wishlist</span>
-                                            <span class="icon icon-delete"></span>
-                                        </a>
-                                        <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                            class="box-icon bg_white compare btn-icon-action">
-                                            <span class="icon icon-compare"></span>
-                                            <span class="tooltip">Add to Compare</span>
-                                            <span class="icon icon-check"></span>
-                                        </a>
-                                        <a href="#quick_view" data-bs-toggle="modal"
-                                            class="box-icon bg_white quickview tf-btn-loading">
-                                            <span class="icon icon-view"></span>
-                                            <span class="tooltip">Quick View</span>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="card-product-info">
-                                    <a href="product-detail.html" class="title link">Oversized Printed T-shirt</a>
-                                    <span class="price">$10.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide" lazy="true">
-                            <div class="card-product">
-                                <div class="card-product-wrapper">
-                                    <a href="product-detail.html" class="product-img">
-                                        <img class="lazyload img-product"
-                                            data-src="{{ asset('client/assets/images/products/white-2.jpg') }}"
-                                            src="{{ asset('client/assets/images/products/white-2.jpg') }}"
-                                            alt="image-product">
-                                        <img class="lazyload img-hover"
-                                            data-src="{{ asset('client/assets/images/products/pink-1.jpg') }}"
-                                            src="{{ asset('client/assets/images/products/pink-1.jpg') }}"
-                                            alt="image-product">
-                                    </a>
-                                    <div class="list-product-btn">
-                                        <a href="#quick_add" data-bs-toggle="modal"
-                                            class="box-icon bg_white quick-add tf-btn-loading">
-                                            <span class="icon icon-bag"></span>
-                                            <span class="tooltip">Quick Add</span>
-                                        </a>
-                                        <a href="javascript:void(0);" class="box-icon bg_white wishlist btn-icon-action">
-                                            <span class="icon icon-heart"></span>
-                                            <span class="tooltip">Add to Wishlist</span>
-                                            <span class="icon icon-delete"></span>
-                                        </a>
-                                        <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                            class="box-icon bg_white compare btn-icon-action">
-                                            <span class="icon icon-compare"></span>
-                                            <span class="tooltip">Add to Compare</span>
-                                            <span class="icon icon-check"></span>
-                                        </a>
-                                        <a href="#quick_view" data-bs-toggle="modal"
-                                            class="box-icon bg_white quickview tf-btn-loading">
-                                            <span class="icon icon-view"></span>
-                                            <span class="tooltip">Quick View</span>
-                                        </a>
-                                    </div>
-                                    <div class="size-list">
-                                        <span>4 sizes available</span>
-                                    </div>
-                                </div>
-                                <div class="card-product-info">
-                                    <a href="product-detail.html" class="title">Oversized Printed T-shirt</a>
-                                    <span class="price">$16.95</span>
-                                    <ul class="list-color-product">
-                                        <li class="list-color-item color-swatch active">
-                                            <span class="tooltip">White</span>
-                                            <span class="swatch-value bg_white"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/white-2.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/white-2.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                        <li class="list-color-item color-swatch">
-                                            <span class="tooltip">Pink</span>
-                                            <span class="swatch-value bg_purple"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/pink-1.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/pink-1.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                        <li class="list-color-item color-swatch">
-                                            <span class="tooltip">Black</span>
-                                            <span class="swatch-value bg_dark"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/black-2.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/black-2.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide" lazy="true">
-                            <div class="card-product">
-                                <div class="card-product-wrapper">
-                                    <a href="product-detail.html" class="product-img">
-                                        <img class="lazyload img-product"
-                                            data-src="{{ asset('client/assets/images/products/brown-2.jpg') }}"
-                                            src="{{ asset('client/assets/images/products/brown-2.jpg') }}"
-                                            alt="image-product">
-                                        <img class="lazyload img-hover"
-                                            data-src="{{ asset('client/assets/images/products/brown-3.jpg') }}"
-                                            src="{{ asset('client/assets/images/products/brown-3.jpg') }}"
-                                            alt="image-product">
-                                    </a>
-                                    <div class="size-list">
-                                        <span>4 sizes available</span>
-                                    </div>
-                                    <div class="list-product-btn">
-                                        <a href="#quick_add" data-bs-toggle="modal"
-                                            class="box-icon bg_white quick-add tf-btn-loading">
-                                            <span class="icon icon-bag"></span>
-                                            <span class="tooltip">Quick Add</span>
-                                        </a>
-                                        <a href="javascript:void(0);" class="box-icon bg_white wishlist btn-icon-action">
-                                            <span class="icon icon-heart"></span>
-                                            <span class="tooltip">Add to Wishlist</span>
-                                            <span class="icon icon-delete"></span>
-                                        </a>
-                                        <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                            class="box-icon bg_white compare btn-icon-action">
-                                            <span class="icon icon-compare"></span>
-                                            <span class="tooltip">Add to Compare</span>
-                                            <span class="icon icon-check"></span>
-                                        </a>
-                                        <a href="#quick_view" data-bs-toggle="modal"
-                                            class="box-icon bg_white quickview tf-btn-loading">
-                                            <span class="icon icon-view"></span>
-                                            <span class="tooltip">Quick View</span>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="card-product-info">
-                                    <a href="product-detail.html" class="title link">V-neck linen T-shirt</a>
-                                    <span class="price">$114.95</span>
-                                    <ul class="list-color-product">
-                                        <li class="list-color-item color-swatch active">
-                                            <span class="tooltip">Brown</span>
-                                            <span class="swatch-value bg_brown"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/brown-2.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/brown-2.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                        <li class="list-color-item color-swatch">
-                                            <span class="tooltip">White</span>
-                                            <span class="swatch-value bg_white"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/white-5.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/white-5.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide" lazy="true">
-                            <div class="card-product">
-                                <div class="card-product-wrapper">
-                                    <a href="product-detail.html" class="product-img">
-                                        <img class="lazyload img-product"
-                                            data-src="{{ asset('client/assets/images/products/light-green-1.jpg') }}"
-                                            src="{{ asset('client/assets/images/products/light-green-1.jpg') }}"
-                                            alt="image-product">
-                                        <img class="lazyload img-hover"
-                                            data-src="{{ asset('client/assets/images/products/light-green-2.jpg') }}"
-                                            src="{{ asset('client/assets/images/products/light-green-2.jpg') }}"
-                                            alt="image-product">
-                                    </a>
-                                    <div class="list-product-btn absolute-2">
-                                        <a href="#quick_add" data-bs-toggle="modal"
-                                            class="box-icon bg_white quick-add tf-btn-loading">
-                                            <span class="icon icon-bag"></span>
-                                            <span class="tooltip">Quick Add</span>
-                                        </a>
-                                        <a href="javascript:void(0);" class="box-icon bg_white wishlist btn-icon-action">
-                                            <span class="icon icon-heart"></span>
-                                            <span class="tooltip">Add to Wishlist</span>
-                                            <span class="icon icon-delete"></span>
-                                        </a>
-                                        <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                            class="box-icon bg_white compare btn-icon-action">
-                                            <span class="icon icon-compare"></span>
-                                            <span class="tooltip">Add to Compare</span>
-                                            <span class="icon icon-check"></span>
-                                        </a>
-                                        <a href="#quick_view" data-bs-toggle="modal"
-                                            class="box-icon bg_white quickview tf-btn-loading">
-                                            <span class="icon icon-view"></span>
-                                            <span class="tooltip">Quick View</span>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="card-product-info">
-                                    <a href="product-detail.html" class="title link">Loose Fit Sweatshirt</a>
-                                    <span class="price">$10.00</span>
-                                    <ul class="list-color-product">
-                                        <li class="list-color-item color-swatch active">
-                                            <span class="tooltip">Light Green</span>
-                                            <span class="swatch-value bg_light-green"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/light-green-1.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/light-green-1.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                        <li class="list-color-item color-swatch">
-                                            <span class="tooltip">Black</span>
-                                            <span class="swatch-value bg_dark"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/black-3.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/black-3.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                        <li class="list-color-item color-swatch">
-                                            <span class="tooltip">Blue</span>
-                                            <span class="swatch-value bg_blue-2"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/blue.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/blue.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                        <li class="list-color-item color-swatch">
-                                            <span class="tooltip">Dark Blue</span>
-                                            <span class="swatch-value bg_dark-blue"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/dark-blue.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/dark-blue.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                        <li class="list-color-item color-swatch">
-                                            <span class="tooltip">White</span>
-                                            <span class="swatch-value bg_white"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/white-6.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/white-6.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                        <li class="list-color-item color-swatch">
-                                            <span class="tooltip">Light Grey</span>
-                                            <span class="swatch-value bg_light-grey"></span>
-                                            <img class="lazyload"
-                                                data-src="{{ asset('client/assets/images/products/light-grey.jpg') }}"
-                                                src="{{ asset('client/assets/images/products/light-grey.jpg') }}"
-                                                alt="image-product">
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div> --}}
                     </div>
                 </div>
                 <div class="nav-sw nav-next-slider nav-next-product box-icon w_46 round"><span
@@ -863,8 +260,54 @@
             </div>
         </div>
     </section>
-    <!-- /Best seller -->
+    
+    <section class="flat-spacing-15 pb_0">
+        <div class="container">
+            <div class="flat-title wow fadeInUp" data-wow-delay="0s">
+                <span class="title">Bài Viết</span>
+              
+            </div>
+            <div class="blog-grid-main">
+        <div class="container">
+            <div class="row">
+                @foreach ($data as $item)
+                    <div class="col-xl-4 col-md-6 col-12">
+                        <div class="blog-article-item">
+                            <div class="article-thumb">
+                                <a href="{{route('blog.detail',$item->slug)  }}">
+                                    <img class="lazyload" src="{{ Storage::url($item->image) }} "
+                                        style="width: 366px; height: 235px;" alt="img-blog">
+                                </a>
+                                 
+                                {{-- <div class="article-label">
+                                    <a href="blog-detail.html"
+                                        class="tf-btn btn-sm radius-3 btn-fill animate-hover-btn">{{$item->category->name}}</a>
+                                </div> --}}
+                            </div>
+                            <div class="article-content">
+                                <div class="article-title">
+                                    <a href="{{route('blog.detail',$item->slug)  }}" class="">{{ $item->title }}</a>
+                                </div>
+                                <div class="article-btn">
+                                    <a href="{{route('blog.detail',$item->slug)  }}" class="tf-btn btn-line fw-6">Xêm Thêm<i
+                                            class="icon icon-arrow1-top-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
 
+               
+            </div>
+        </div>
+    </div>
+        </div>
+</section>
+    
+ 
+ 
+    <!-- /Best seller -->
+    {{--
     <!-- Shop Collection -->
     <section class="flat-spacing-19">
         <div class="container">
@@ -1130,5 +573,315 @@
             </div>
         </div>
     </section>
-    <!-- /Brand -->
+    <!-- /Brand --> --}}
 @endsection
+
+@push('scripts')
+    {{-- <script>
+        $(document).ready(function() {
+            // Bắt sự kiện click vào nút Quick Add
+            $(".quick-add").on("click", function(e) {
+                e.preventDefault();
+
+                // Lấy ID sản phẩm từ thuộc tính data
+                let productId = $(this).data("product-id");
+
+                // Gửi yêu cầu AJAX
+                $.ajax({
+                    url: "/get-product-info", // Đường dẫn API xử lý
+                    method: "GET",
+                    data: {
+                        id: productId
+                    },
+                    success: function(response) {
+                        // Chèn nội dung nhận được vào modal
+                        $("#product-modal-content").html(response);
+                        // Hiển thị modal
+                        $("#quick_add").modal("show");
+                    },
+                    error: function() {
+                        toastr.error('Sản Phẩm Không Tồn Tại, Hãy Thử Tải Lại Trang!',
+                            'Cảnh báo');
+                    },
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Bắt sự kiện click vào nút Quick Add
+            $(".quickview").on("click", function(e) {
+                e.preventDefault();
+
+                // Lấy ID sản phẩm từ thuộc tính data
+                let productId = $(this).data("product-id");
+
+                // Gửi yêu cầu AJAX
+                $.ajax({
+                    url: "/get-product-info-quick-view", // Đường dẫn API xử lý
+                    method: "GET",
+                    data: {
+                        id: productId
+                    },
+                    success: function(response) {
+                        // Chèn nội dung nhận được vào modal
+                        $("#modal-quick-view-content").html(response);
+                        // Hiển thị modal
+                        $("#quick_view").modal("show");
+                        // Khởi tạo Swiper sau khi nội dung đã được chèn
+                        new Swiper('.tf-single-slide', {
+                            loop: true,
+                            navigation: {
+                                nextEl: '.swiper-button-next',
+                                prevEl: '.swiper-button-prev',
+                            },
+                            autoplay: {
+                                delay: 3000,
+                            },
+                        });
+                    },
+                    error: function() {
+                        toastr.error('Sản Phẩm Không Tồn Tại, Hãy Thử Tải Lại Trang!',
+                            'Cảnh báo');
+                    },
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Khi modal mở, gọi API để cập nhật giỏ hàng
+            $('#shoppingCart').on('show.bs.modal', function() {
+                loadModalCart(); // Hàm gọi API để lấy thông tin giỏ hàng
+            });
+        });
+
+        function loadModalCart() {
+            $.ajax({
+                url: '/cart/modal-cart', // Route API của phương thức getModalCart
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        renderModalCart(response.cart); // Cập nhật lại nội dung modal giỏ hàng
+
+                    } else {
+                        toastr.error(response.message, 'Cảnh báo');
+
+                    }
+                },
+                error: function(error) {
+                    // console.error('Error loading cart details:', error);
+                    // alert('An error occurred while loading the cart.');
+                    toastr.error('Gặp lỗi khi tải giỏ hàng hãy thử tải lại trang Web', 'Cảnh báo');
+
+                }
+            });
+        }
+
+
+
+        // Hàm hiển thị lại nội dung modal giỏ hàng
+        function renderModalCart(cartDetails) {
+            const modalCartContainer = $('.tf-mini-cart-items'); // Container của modal cart
+            modalCartContainer.empty(); // Xóa nội dung cũ trước khi cập nhật mới
+
+            if (cartDetails.length === 0) {
+                modalCartContainer.append(`<div class="tf-mini-cart-items d-flex justify-content-center align-items-center" style="height: 100px;">
+                                                 <div class="tf-mini-cart-item">
+                                                     <p><i class="fa-solid fa-cart-arrow-down"></i> Giỏ hàng trống</p>
+                                                 </div>
+                                          </div>    `);
+                return;
+            }
+
+            // Thêm từng sản phẩm vào modal
+            cartDetails.forEach(item => {
+                modalCartContainer.append(`
+                                    <div class="tf-mini-cart-item">
+                                        <div class="tf-mini-cart-image">
+                                            <a href="product-detail.html">
+                                                <img src="storage/${item.image_url}" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="tf-mini-cart-info">
+                                            <a class="title link"
+                                                href="product-detail.html">${item.product_name}</a>
+                                            <div class="meta-variant">${item.color_name} / ${item.size_name}</div>
+                                            <div class="price fw-6" data-price="${item.price * item.quantity}">${item.price * item.quantity}</div>
+                                            <div class="tf-mini-cart-btns">
+                                                <div class="wg-quantity small">
+                                                    <!-- Nút giảm số lượng -->
+                                                    <span class="btn-quantity minus-btn-cart"
+                                                        data-url="{{ route('cart.update') }}"
+                                                        data-id="${item.product_id}"
+                                                        data-color="${item.color_id}"
+                                                        data-size="${item.size_id}">
+                                                        <svg class="d-inline-block" width="9" height="1"
+                                                            viewBox="0 0 9 1" fill="currentColor">
+                                                            <path
+                                                                d="M9 1H5.14286H3.85714H0V1.50201e-05H3.85714L5.14286 0L9 1.50201e-05V1Z">
+                                                            </path>
+                                                        </svg>
+                                                    </span>
+                                                    <!-- Trường nhập số lượng -->
+                                                    <input type="text" class="quantity-input quantity-input-cart" name="number"
+                                                        value="${item.quantity}"
+                                                        data-url="{{ route('cart.update') }}"
+                                                        data-id="${item.product_id}"
+                                                        data-color="${item.color_id}"
+                                                        data-size="${item.size_id}">
+
+                                                    <!-- Nút tăng số lượng -->
+                                                    <span class="btn-quantity plus-btn-cart"
+                                                        data-url="{{ route('cart.update') }}"
+                                                        data-id="${item.product_id}"
+                                                        data-color="${item.color_id}"
+                                                        data-size="${item.size_id}">
+                                                        <svg class="d-inline-block" width="9" height="9"
+                                                            viewBox="0 0 9 9" fill="currentColor">
+                                                            <path
+                                                                d="M9 5.14286H5.14286V9H3.85714V5.14286H0V3.85714H3.85714V0H5.14286V3.85714H9V5.14286Z">
+                                                            </path>
+                                                        </svg>
+                                                    </span>
+                                                </div>
+                                                  <div class="tf-mini-cart-remove"
+                                                    data-id="${item.product_id}"
+                                                    data-color="${item.color_id}"
+                                                    data-size="${item.size_id}">
+                                                              Remove
+                                                  </div>
+                                            </div>
+                                        </div>
+                                    </div>
+             `);
+            });
+            // Gắn sự kiện click cho nút "Remove"
+            $('.tf-mini-cart-remove').off('click').on('click', function() {
+                const productId = $(this).data('id');
+                const colorId = $(this).data('color');
+                const sizeId = $(this).data('size');
+                removeFromCart(productId, colorId, sizeId); // Gọi hàm xóa
+
+            });
+            // Lấy tất cả các phần tử <div> có class "price"
+            const priceDivs = document.querySelectorAll('.price');
+
+            // Tính tổng giá trị của tất cả các data-price
+            let total = 0;
+            priceDivs.forEach(div => {
+                const price = parseFloat(div.getAttribute('data-price')) ||
+                    0; // Lấy giá trị data-price, mặc định là 0 nếu không tồn tại
+                total += price;
+            });
+            $('.tf-totals-total-value').text(total.toFixed(2));
+        }
+    </script>
+    <script>
+        // Xử lý khi nhấn nút xóa
+        function removeFromCart(productId, colorId, sizeId) {
+            $.ajax({
+                url: '/remove-from-cart', // URL tới route xóa sản phẩm
+                method: 'POST', // Chú ý: nên dùng POST thay vì GET cho hành động xóa
+                data: {
+                    product_id: productId,
+                    color_id: colorId,
+                    size_id: sizeId,
+                    _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
+                },
+                success: function(response) {
+                    if (response.success) {
+                        loadModalCart();
+                    } else {
+                        toastr.error(response.message, 'Cảnh báo');
+
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", status, error, xhr.responseText); // Ghi log lỗi AJAX
+                    alert('There was an error processing your request.');
+                }
+            });
+
+        }
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Hàm gửi AJAX cập nhật số lượng
+            function updateQuantity(productId, colorId, sizeId, newQuantity, url) {
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'), // CSRF Token
+                        product_id: productId,
+                        color_id: colorId,
+                        size_id: sizeId,
+                        quantity: newQuantity
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            console.log('Cập nhật thành công');
+                            loadModalCart();
+                        } else {
+                            toastr.error(response.message, 'Cảnh báo');
+                            loadModalCart();
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        toastr.error('Không thể cập nhật số lượng. Vui lòng thử lại!', 'Lỗi');
+                    }
+                });
+            }
+
+            // Gắn sự kiện click cho nút plus và minus
+            $(document).off('click', '.minus-btn-cart, .plus-btn-cart').on('click',
+                '.minus-btn-cart, .plus-btn-cart',
+                function(e) {
+                    e.preventDefault();
+
+                    let button = $(this);
+                    let inputField = button.siblings('.quantity-input'); // Trường input
+                    let productId = button.data('id');
+                    let colorId = button.data('color');
+                    let sizeId = button.data('size');
+                    let url = button.data('url');
+                    let currentQuantity = parseInt(inputField.val()) || 1;
+
+                    // Tăng hoặc giảm số lượng
+                    if (button.hasClass('plus-btn-cart')) {
+                        currentQuantity += 1;
+                    } else if (button.hasClass('minus-btn-cart') && currentQuantity > 1) {
+                        currentQuantity -= 1;
+                    }
+
+                    // Cập nhật số lượng trong input
+                    inputField.val(currentQuantity);
+
+                    // Gửi AJAX cập nhật
+                    updateQuantity(productId, colorId, sizeId, currentQuantity, url);
+                });
+
+            // Gắn sự kiện change cho input
+            $(document).off('change', '.quantity-input-cart').on('change', '.quantity-input-cart', function() {
+                let inputField = $(this);
+                let productId = inputField.data('id');
+                let colorId = inputField.data('color');
+                let sizeId = inputField.data('size');
+                let url = inputField.data('url');
+                let newQuantity = parseInt(inputField.val()) || 1;
+
+                // Đảm bảo số lượng tối thiểu là 1
+                if (newQuantity < 1) {
+                    newQuantity = 1;
+                    inputField.val(newQuantity);
+                }
+
+                // Gửi AJAX cập nhật
+                updateQuantity(productId, colorId, sizeId, newQuantity, url);
+            });
+        });
+    </script> --}}
+
+@endpush

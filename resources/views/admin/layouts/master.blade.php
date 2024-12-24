@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>General Dashboard &mdash; Stisla</title>
+    <title>Hanoiclothesshop &mdash; Hanoiclothesshop</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @stack('header-css-js')
@@ -47,12 +47,16 @@
             @include('admin.layouts.sidebar')
             <!-- Main Content -->
             <div class="main-content">
+                <style>
+                    body {
+                        font-family: 'Times New Roman', serif;
+                    }
+                </style>
                 @yield('content')
             </div>
             <footer class="main-footer">
                 <div class="footer-left">
-                    Copyright &copy; 2018 <div class="bullet"></div> Design By <a href="https://nauval.in/">Muhamad
-                        Nauval Azhar</a>
+                    Copyright &copy; 2024 <div class="bullet"></div> Design By <a href="https://nauval.in/">Hanoiclothesshop</a>
                 </div>
                 <div class="footer-right">
 

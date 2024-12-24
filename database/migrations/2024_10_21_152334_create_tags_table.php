@@ -14,15 +14,11 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('type');
+            $table->enum('type', ['collection', 'material']);  // Sử dụng enum để giới hạn các giá trị có thể có
             $table->string('description')->nullable();
-            $table->string('background_image')->nullable();
+            $table->string('background_image')->nullable();  // Nếu có ảnh nền, thì lưu đường dẫn
             $table->timestamps();
         });
-
-
-
-
     }
 
     /**

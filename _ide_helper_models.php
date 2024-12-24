@@ -23,6 +23,7 @@ namespace App\Models{
  * @property string|null $image_path
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property bool $check 1 là đc đang nhập 0 là k đc đăng nhập
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
@@ -34,6 +35,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Admin permission($permissions, $without = false)
  * @method static \Illuminate\Database\Eloquent\Builder|Admin query()
  * @method static \Illuminate\Database\Eloquent\Builder|Admin role($roles, $guard = null, $without = false)
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin whereCheck($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Admin whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Admin whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Admin whereId($value)
@@ -46,6 +48,35 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Admin withoutRole($roles, $guard = null)
  */
 	class Admin extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $content
+ * @property string $title
+ * @property string $unique
+ * @property string $image
+ * @property string $slug
+ * @property bool $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|BlogClient newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BlogClient newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BlogClient query()
+ * @method static \Illuminate\Database\Eloquent\Builder|BlogClient whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BlogClient whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BlogClient whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BlogClient whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BlogClient whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BlogClient whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BlogClient whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BlogClient whereUnique($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BlogClient whereUpdatedAt($value)
+ */
+	class BlogClient extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -103,23 +134,27 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $cart_id
- * @property int $variant_id
+ * @property int $product_id
+ * @property int $color_id
+ * @property int $size_id
  * @property int $quantity
- * @property string $price
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Cart $cart
- * @property-read \App\Models\ProductVariant $variant
+ * @property-read \App\Models\Color $color
+ * @property-read \App\Models\Product $product
+ * @property-read \App\Models\Size $size
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem query()
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereCartId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereColorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CartItem wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereSizeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CartItem whereVariantId($value)
  */
 	class CartItem extends \Eloquent {}
 }
@@ -145,8 +180,6 @@ namespace App\Models{
  * @property-read int|null $products_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $productss
  * @property-read int|null $productss_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Slider> $sliders
- * @property-read int|null $sliders_count
  * @method static \Illuminate\Database\Eloquent\Builder|Category newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Category newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Category onlyTrashed()
@@ -193,8 +226,12 @@ namespace App\Models{
  * @property string $sku_color
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductVariant> $variants
- * @property-read int|null $variants_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductImage> $images
+ * @property-read int|null $images_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductVariant> $productVariants
+ * @property-read int|null $product_variants_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $products
+ * @property-read int|null $products_count
  * @method static \Illuminate\Database\Eloquent\Builder|Color newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Color newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Color query()
@@ -236,10 +273,65 @@ namespace App\Models{
 /**
  * 
  *
- * @property-read \App\Models\Admin|null $admin
+ * @property int $id
+ * @property string $code
+ * @property string $discount_type
+ * @property string $discount_value
+ * @property int $min_quantity
+ * @property string|null $min_total
+ * @property string $start_date
+ * @property string|null $end_date
+ * @property int $usage_limit
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserDiscountCode> $userDiscountCodes
+ * @property-read int|null $user_discount_codes_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property-read int|null $users_count
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereDiscountType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereDiscountValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereMinQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereMinTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereUsageLimit($value)
+ */
+	class DiscountCode extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $admin_id
+ * @property string $action
+ * @property string $model_type
+ * @property int $model_id
+ * @property array $changes
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Admin $admin
  * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins query()
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereAction($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereAdminId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereChanges($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereModelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereModelType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorieAdmins whereUpdatedAt($value)
  */
 	class HistorieAdmins extends \Eloquent {}
 }
@@ -248,11 +340,27 @@ namespace App\Models{
 /**
  * 
  *
+ * @property int $id
+ * @property int $user_id
+ * @property string $action
+ * @property string $model_type
+ * @property int $model_id
+ * @property array $changes
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Admin|null $admin
- * @property-read \App\Models\User|null $user
+ * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|History newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|History newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|History query()
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereAction($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereChanges($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereModelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereModelType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|History whereUserId($value)
  */
 	class History extends \Eloquent {}
 }
@@ -262,34 +370,46 @@ namespace App\Models{
  * 
  *
  * @property int $id
- * @property string $order_code
  * @property int|null $user_id
  * @property string $name
- * @property string $phone
+ * @property string $email
+ * @property string|null $payment_method
+ * @property string $payment_status
+ * @property string|null $reason
+ * @property string $total_price
  * @property string $address
- * @property string|null $email
+ * @property int $city_id
+ * @property int $wards_id
+ * @property int $province_id
+ * @property string $phone_number
+ * @property string $order_code
  * @property string|null $note
- * @property string $total
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $orderItems
- * @property-read int|null $order_items_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $Orderitems
+ * @property-read int|null $orderitems_count
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentMethod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePhoneNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereProvinceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereReason($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereWardsId($value)
  */
 	class Order extends \Eloquent {}
 }
@@ -300,25 +420,43 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $order_id
- * @property int $variant_id
- * @property int $quantity
+ * @property string $product_name
+ * @property string $image_url
+ * @property string $color_name
+ * @property string $size_name
  * @property string $price
+ * @property int $quantity
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Order|null $order
+ * @property-read \App\Models\Order $order
+ * @property-read \App\Models\Product|null $product
  * @property-read \App\Models\ProductVariant|null $variant
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereColorName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereImageUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereOrderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereProductName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereSizeName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereVariantId($value)
  */
 	class OrderItem extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment query()
+ */
+	class Payment extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -345,8 +483,9 @@ namespace App\Models{
  * @property string $slug
  * @property string $product_name
  * @property string $sku
- * @property string $price
+ * @property int $price
  * @property int $status
+ * @property string|null $short_description
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -358,6 +497,8 @@ namespace App\Models{
  * @property-read int|null $colors_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductImage> $images
  * @property-read int|null $images_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Size> $sizes
+ * @property-read int|null $sizes_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read int|null $tags_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductVariant> $variants
@@ -373,6 +514,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereProductName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereShortDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereSku($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereStatus($value)
@@ -389,7 +531,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $product_id
- * @property int|null $color_id
+ * @property int $color_id
  * @property string $image_url
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -422,7 +564,7 @@ namespace App\Models{
  * @property int $size_id
  * @property string $product_code
  * @property int $stock_quantity
- * @property string $price
+ * @property int $price
  * @property int $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -535,16 +677,13 @@ namespace App\Models{
  * @property string|null $link_url
  * @property int|null $position
  * @property int $is_active
- * @property int $category_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \App\Models\Category $category
  * @method static \Illuminate\Database\Eloquent\Builder|Slider newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Slider newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Slider onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Slider query()
- * @method static \Illuminate\Database\Eloquent\Builder|Slider whereCategoryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Slider whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Slider whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Slider whereId($value)
@@ -609,6 +748,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\City|null $city
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DiscountCode> $discountCodes
+ * @property-read int|null $discount_codes_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \App\Models\Province|null $province
@@ -640,6 +781,19 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User withoutTrashed()
  */
 	class User extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \App\Models\DiscountCode|null $discountCode
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|UserDiscountCode newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserDiscountCode newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserDiscountCode query()
+ */
+	class UserDiscountCode extends \Eloquent {}
 }
 
 namespace App\Models{

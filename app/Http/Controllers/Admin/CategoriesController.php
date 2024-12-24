@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\Rule;
 use Storage;
 use Str;
@@ -120,54 +122,79 @@ class CategoriesController extends Controller
     }
 
  
-    public function edit($id)
+    public function edit($encryptedId)
     {
-        $categories = Category::findOrFail($id); 
-        $categoryList = Category::all();
-        return view('admin.category.edit', compact('categoryList', 'categories',));
+        try {
+          
+            $id = Crypt::decryptString($encryptedId);
+    
+         
+            $categories = Category::findOrFail($id);
+            $categoryList = Category::all();
+    
+            return view('admin.category.edit', compact('categoryList', 'categories'));
+        } catch (DecryptException $e) {
+           
+            return redirect()->route('admin.error');
+        }
     }
 
    
     public function update(Request $request, $id)
     {
         $category = Category::findOrFail($id);
-        $request->validate([
+    
+      
+        $rules = [
             'name' => [
                 'required',
-                'unique:categories,name,' . $category->id, 
                 'max:255',
                 'regex:/^[\pL\pN\s]+$/u', 
+                Rule::unique('categories', 'name')->ignore($category->id)->where(function ($query) use ($category) {
+                    return $query->where('parent_id', $category->parent_id); 
+                }),
             ],
-            'slug' => 'required|unique:categories,slug,' . $category->id, 
+            'slug' => [
+                'required',
+                Rule::unique('categories', 'slug')->ignore($category->id)->where(function ($query) use ($category) {
+                    return $query->where('parent_id', $category->parent_id); 
+                }),
+            ],
             'description' => 'required',
             'image_path' => 'nullable|image',
             'parent_id' => 'nullable|exists:categories,id',
             'status' => 'required|boolean', 
-        ], [
+        ];
+    
+      
+        $request->validate($rules, [
             'name.required' => 'Tên danh mục không được để trống.',
-            'name.unique' => 'Tên danh mục đã tồn tại.',
+            'name.unique' => 'Tên danh mục đã tồn tại trong cùng danh mục cha.',
             'name.max' => 'Tên danh mục không được vượt quá 255 ký tự.',
             'name.regex' => 'Tên danh mục chỉ được chứa chữ cái, số và khoảng trắng.',
             'slug.required' => 'Đường dẫn thân thiện không được để trống.',
-            'slug.unique' => 'Đường dẫn thân thiện đã tồn tại.',
+            'slug.unique' => 'Đường dẫn thân thiện đã tồn tại trong cùng danh mục cha.',
             'description.required' => 'Mô tả không được để trống.',
             'image_path.image' => 'File tải lên phải là ảnh.',
             'parent_id.exists' => 'Danh mục cha không tồn tại.',
             'status.required' => 'Trạng thái không được để trống.', 
         ]);
     
+  
         if ($request->hasFile('image_path')) {
             if ($category->image_path) {
+            
                 Storage::disk('public')->delete($category->image_path); 
             }
     
+        
             $imagePath = $request->file('image_path')->store('categories', 'public');
             $category->image_path = $imagePath; 
         }
     
-        
-        $category->name = $request->name;
-        $category->slug = $request->slug;
+      
+        $category->name = $request->name ?? $category->name;
+        $category->slug = $request->slug ?? $category->slug;
         $category->description = $request->description;
         $category->parent_id = $request->parent_id;
         $category->status = $request->status; 
