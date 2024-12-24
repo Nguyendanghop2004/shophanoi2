@@ -40,7 +40,7 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 
 
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
-Route::get('gioithieu', [AboutUsController::class, 'index'])->name('index');
+
 Route::get('error', [ErrorController::class, 'error'])->name('error');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');

@@ -89,7 +89,7 @@ class OrderController extends Controller
            
             return redirect()->route('error')->with('error', 'Dữ liệu không hợp lệ!');
         } catch (ModelNotFoundException $e) {
-            // Xử lý lỗi không tìm thấy đơn hàng
+         
             return redirect()->route('error')->with('error', 'Đơn hàng không tồn tại hoặc bạn không có quyền truy cập!');
         }
     }
@@ -258,30 +258,30 @@ class OrderController extends Controller
     public function showOrderDetail($encryptedOrderCode)
     {
         try {
-            // Giải mã mã đơn hàng từ URL
+          
             $order_code = Crypt::decryptString($encryptedOrderCode);
     
-            // Tìm đơn hàng dựa trên mã đơn hàng đã giải mã
+           
             $order = Order::where('order_code', $order_code)->firstOrFail();
     
-            // Lấy thông tin địa chỉ
+           
             $city = City::where('matp', $order->city_id)->first();
             $province = Province::where('maqh', $order->province_id)->first();
             $ward = Wards::where('xaid', $order->wards_id)->first();
     
-            // Lấy các mục trong đơn hàng
+           
             $orderitems = $order->orderItems;
     
-            // Trả về view hiển thị chi tiết đơn hàng
+           
             return view('client.orders.detail', compact('order', 'city', 'province', 'ward', 'orderitems'));
         } catch (DecryptException $e) {
-            // Lỗi giải mã không thành công
+          
             return redirect()->route('error');
         } catch (ModelNotFoundException $e) {
-            // Lỗi không tìm thấy đơn hàng
+          
             return redirect()->route('error');
         } catch (\Exception $e) {
-            // Xử lý các lỗi khác
+           
             return redirect()->route('error');
         }
     }
