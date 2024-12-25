@@ -1,29 +1,59 @@
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
     <title>Hóa Đơn - Đơn Hàng #{{ $order->id }}</title>
     <style>
-        /* Thiết lập font mặc định */
-        body {
-            font-family: 'Arial', 'Helvetica', 'Tahoma', 'Verdana', sans-serif; /* Font hỗ trợ tiếng Việt */
-    color: #333;
-    margin: 0;
-    padding: 0;/* Giảm kích thước font tổng thể */
+        @font-face {
+            font-family: 'DejaVu Sans';
+            src: url({{ storage_path('fonts/DejaVuSans.ttf') }}) format('truetype');
+            font-weight: normal;
+            font-style: normal;
         }
 
-        /* Định dạng chung cho toàn bộ container */
+        body {
+            font-family: 'DejaVu Sans', serif;
+            margin: 0;
+            padding: 0;
+        }
+
         .container {
             width: 100%;
-            max-width: 800px;  /* Giới hạn chiều rộng của container */
+
+            max-width: 800px;
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Hóa Đơn - Đơn Hàng #{{ $order->id }}</title>
+    <style>
+        @font-face {
+            font-family: 'DejaVu Sans';
+            src: url({{ storage_path('fonts/DejaVuSans.ttf') }}) format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'DejaVu Sans', serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+
             margin: 0 auto;
             padding: 20px;
             border: 1px solid #ddd;
             background-color: #f9f9f9;
         }
 
-        /* Định dạng phần tiêu đề */
+
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -33,7 +63,9 @@
             margin: 0;
             font-size: 28px;
             font-weight: bold;
+
             font-family: 'Arial', sans-serif;
+
         }
 
         .header p {
@@ -41,7 +73,7 @@
             font-size: 16px;
         }
 
-        /* Định dạng thông tin đơn hàng */
+
         .order-details {
             display: flex;
             justify-content: space-between;
@@ -57,7 +89,7 @@
             margin: 5px 0;
         }
 
-        /* Định dạng bảng hiển thị sản phẩm */
+
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -74,14 +106,14 @@
             background-color: #f2f2f2;
         }
 
-        /* Định dạng tổng tiền */
+
         .total {
             text-align: right;
             font-size: 16px;
             margin-top: 10px;
         }
 
-        /* Định dạng phần footer */
+
         .footer {
             text-align: center;
             font-size: 14px;
@@ -93,24 +125,25 @@
             margin: 5px 0;
         }
 
-        /* Đảm bảo hình ảnh sản phẩm không bị lệch hoặc vỡ bố cục */
+
         .table img {
             max-width: 50px;
             height: auto;
         }
+
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- Header -->
+
     <div class="header">
         <h1>Hóa Đơn Mua Hàng</h1>
         <p>Đơn hàng #{{ $order->id }}</p>
         <p>Ngày: {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</p>
     </div>
 
-    <!-- Order Details -->
+
     <div class="order-details">
         <div class="customer-info">
             <h3>Thông Tin Khách Hàng</h3>
@@ -127,11 +160,10 @@
         </div>
     </div>
 
-    <!-- Order Items Table -->
+
     <table class="table">
         <thead>
             <tr>
-                <th>Ảnh Sản Phẩm</th>
                 <th>Tên Sản Phẩm</th>
                 <th>Số Lượng</th>
                 <th>Đơn Giá</th>
@@ -141,7 +173,9 @@
         <tbody>
             @foreach ($orderitems as $item)
                 <tr>
+
                     <td><img src="{{ Storage::url($item->image_url) }}"></td>
+
                     <td>{{ $item->product_name }}</td>
                     <td>{{ $item->quantity }}</td>
                     <td>{{ number_format($item->price, 0, ',', '.') }} VNĐ</td>
@@ -151,12 +185,19 @@
         </tbody>
     </table>
 
-    <!-- Total Amount -->
+
     <div class="total">
         <p><strong>Tổng Tiền:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VNĐ</p>
     </div>
 
-    <!-- Footer -->
+
+    <div class="qr-code">
+        <p><strong>Mã QR:</strong></p>
+        <img src="{{ storage_path('app/public/qr_codes/hoadon_' . $order->order_code . '.png') }}" alt="QR Code">
+    </div>
+    
+
+
     <div class="footer">
         <p>Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi!</p>
     </div>

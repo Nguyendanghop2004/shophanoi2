@@ -11,17 +11,18 @@
             <h4>Sửa danh mục</h4>
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.categories.update', $categories->id) }}" method="POST" enctype="multipart/form-data">
+            <form id="category-form" action="{{ route('admin.categories.update', $categories->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row">
+                    <!-- Cột bên trái -->
                     <div class="col-lg-3 col-md-6 col-12">
                         <div class="form-group">
                             <label>Ảnh Danh Mục</label>
                             <div class="image-preview mx-auto" style="width: 100%; height: 250px; border: 2px dashed #ddd; display: flex; justify-content: center; align-items: center;">
                                 <label for="image-upload" id="image-label" style="cursor: pointer;">Chọn Tập Tin</label>
                                 <input type="file" name="image_path" id="image-upload" accept="image/*" style="display: none;" />
-                                <span id="image-preview" style="display: block;">
+                                <span id="image-preview">
                                     <img src="{{ Storage::url($categories->image_path) }}" alt="Preview Image" style="width: 100%; height: 100%; object-fit: cover;" />
                                 </span>
                             </div>
@@ -41,10 +42,11 @@
                         </div>
                     </div>
 
+                    <!-- Cột bên phải -->
                     <div class="col-lg-9 col-md-6 col-12">
                         <div class="form-group">
                             <label>Tên Danh Mục</label>
-                            <input type="text" name="name" class="form-control  @error('name') is-invalid  @enderror" value="{{ old('name', $categories->name) }}">
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $categories->name) }}">
                         </div>
                         @error('name')
                                 <div class="invalid-feedback" style="display: block;">
@@ -53,7 +55,7 @@
                             @enderror
                         <div class="form-group">
                             <label>Đường Dẫn Thân Thiện</label>
-                            <input type="text" name="slug" class="form-control  @error('slug') is-invalid  @enderror" value="{{ old('slug', $categories->slug) }}">
+                            <input type="text" name="slug" class="form-control @error('slug') is-invalid @enderror" value="{{ old('slug', $categories->slug) }}">
                         </div>
                         @error('slug')
                                 <div class="invalid-feedback" style="display: block;">
@@ -62,7 +64,7 @@
                             @enderror
                         <div class="form-group">
                             <label>Mô Tả Danh Mục</label>
-                            <textarea name="description" class="form-control  @error('description') is-invalid  @enderror">{{ old('description', $categories->description) }}</textarea>
+                            <textarea name="description" class="form-control @error('description') is-invalid @enderror">{{ old('description', $categories->description) }}</textarea>
                         </div>
                         @error('description')
                                 <div class="invalid-feedback" style="display: block;">
@@ -81,7 +83,7 @@
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                            <button type="button" id="submit-btn" class="btn btn-primary">Cập Nhật</button>
                         </div>
                     </div>
                 </div>
@@ -90,33 +92,44 @@
     </div>
 </section>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
+<!-- Thư viện JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    $(document).ready(function () {
-        toastr.options = {
-            "closeButton": true,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-        };
+    document.addEventListener('DOMContentLoaded', function () {
+        // Thay đổi ảnh khi chọn file
+        const imageUpload = document.getElementById('image-upload');
+        const imagePreviewImg = document.querySelector('#image-preview img');
 
-        @if(session('success'))
-            toastr.success("{{ session('success') }}");
-        @endif
-
-     
-        $('#image-upload').change(function (e) {
-            const file = e.target.files[0];
+        imageUpload.addEventListener('change', function () {
+            const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function (event) {
-                    $('#image-preview img').attr('src', event.target.result);
-                }
+                reader.onload = function (e) {
+                    imagePreviewImg.src = e.target.result; 
+                };
                 reader.readAsDataURL(file);
             }
+        });
+
+       
+        const submitBtn = document.getElementById('submit-btn');
+        const form = document.getElementById('category-form');
+
+        submitBtn.addEventListener('click', function () {
+            Swal.fire({
+                title: 'Bạn có chắc chắn?',
+                text: 'Danh mục sẽ được cập nhật sau khi xác nhận!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Có, cập nhật!',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
         });
     });
 </script>

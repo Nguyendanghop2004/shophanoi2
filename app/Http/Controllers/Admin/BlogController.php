@@ -7,7 +7,9 @@ use App\Models\BlogClient;
 use App\Models\Category;
 use App\Models\ProductImage;
 use Auth;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Storage;
 use Str;
 
@@ -38,12 +40,21 @@ class BlogController extends Controller
         return redirect()->route('admin.blog.show')->with('success', 'Thêm mới thành công');
     }
 
-    public function edit(string $id)
+    public function edit(string $encryptedId)
     {
-        $categories = Category::all();
+        try {
+         
+            $id = Crypt::decryptString($encryptedId);
+    
 
-        $data  = BlogClient::findOrFail($id);
-        return view('admin.blog.edit', compact('data', 'categories'));
+            $categories = Category::all();
+            $data = BlogClient::findOrFail($id);
+    
+            return view('admin.blog.edit', compact('data', 'categories'));
+        } catch (DecryptException $e) {
+          
+            return redirect()->route('admin.error');
+        }
     }
     public function update(Request $request, string $id)
     {
@@ -67,7 +78,7 @@ class BlogController extends Controller
         if ($img && Storage::exists($img) && $request->hasFile('image')) {
             Storage::delete($img);
         }
-        return back()->with('success', 'Sửa thành công');
+        return redirect()->route('admin.blog.show')->with('success', 'sửa thành công');
     }
 
     public function destroy(string $id)

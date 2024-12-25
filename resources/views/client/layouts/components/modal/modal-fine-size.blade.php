@@ -2,20 +2,20 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="header">
-                <div class="demo-title">Size chart</div>
+                <div class="demo-title">Bảng size</div>
                 <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
             </div>
             <div class="tf-rte">
                 <div class="tf-table-res-df">
-                    <h6>Size guide</h6>
+                    <h6>Hướng dẫn chọn size</h6>
                     <table class="tf-sizeguide-table">
                         <thead>
                             <tr>
                                 <th>Size</th>
                                 <th>US</th>
-                                <th>Bust</th>
-                                <th>Waist</th>
-                                <th>Low Hip</th>
+                                <th>Vòng ngực</th>
+                                <th>Vòng eo</th>
+                                <th>Vòng hông</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,7 +31,7 @@
                                 <td>4</td>
                                 <td>34 - 35</td>
                                 <td>26 - 27</td>
-                                <td>35 - 26</td>
+                                <td>35 - 36</td>
                             </tr>
                             <tr>
                                 <td>M</td>
@@ -43,7 +43,7 @@
                             <tr>
                                 <td>L</td>
                                 <td>8</td>
-                                <td>38 - 29</td>
+                                <td>38 - 39</td>
                                 <td>30 - 31</td>
                                 <td>42 - 44</td>
                             </tr>
@@ -66,15 +66,13 @@
                 </div>
                 <div class="tf-page-size-chart-content">
                     <div>
-                        <h6>Measuring Tips</h6>
-                        <div class="title">Bust</div>
-                        <p>Measure around the fullest part of your bust.</p>
-                        <div class="title">Waist</div>
-                        <p>Measure around the narrowest part of your torso.</p>
-                        <div class="title">Low Hip</div>
-                        <p class="mb-0">With your feet together measure around the fullest part of your
-                            hips/rear.
-                        </p>
+                        <h6>Cách đo</h6>
+                        <div class="title">Vòng ngực</div>
+                        <p>Đo quanh phần đầy nhất của vòng ngực.</p>
+                        <div class="title">Vòng eo</div>
+                        <p>Đo quanh phần hẹp nhất của cơ thể bạn.</p>
+                        <div class="title">Vòng hông</div>
+                        <p class="mb-0">Đứng với hai chân sát nhau, đo quanh phần đầy nhất của hông/mông.</p>
                     </div>
                     <div>
                         <img class="sizechart lazyload" data-src="images/shop/products/size_chart2.jpg"

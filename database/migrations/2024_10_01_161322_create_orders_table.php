@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('phone_number'); 
             $table->string('order_code'); 
             $table->text('note')->nullable(); 
-            $table->enum('status', ['chờ_xác_nhận','đã_xác_nhận','đóng_hàng', 'đang_giao_hàng', 'giao_hàng_thành_công', 'hủy'])
+            $table->enum('status', ['chờ_xác_nhận','đã_xác_nhận','chờ_giao_hàng', 'đang_giao_hàng', 'giao_hàng_thành_công','đã_nhận_hàng', 'hủy'])
                   ->default('chờ_xác_nhận'); 
             $table->timestamps();
         });

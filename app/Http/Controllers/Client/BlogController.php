@@ -10,13 +10,14 @@ class BlogController extends Controller
 {
     public function show()
     {
-        $data = BlogClient::get();
+        
+        $data = BlogClient::where('status', 1)->get();
+        
         return view('client.blog.blog', compact('data'));
     }
-    public function detail(string $id)
+    public function detail(string $slug)
     {
-      
-        $data = BlogClient::query()->findOrFail($id );
+        $data = BlogClient::where('slug', $slug)->where('status', 1)->firstOrFail();
         return view('client.blog.detail', compact('data'));
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Client\ContactController;
+use App\Http\Controllers\client\ErrorController;
+use App\Http\Controllers\client\GioithieuController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\ShipperController;
@@ -11,6 +13,7 @@ use App\Http\Controllers\Client\BrandController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckOutController;
 use App\Http\Controllers\Client\FAQController;
+use App\Http\Controllers\client\OrderController;
 use App\Http\Controllers\Client\OutStoreController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProductDetailController;
@@ -31,15 +34,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+Route::get('/', [HomeController::class, 'home'])->name('home');
+
 Route::get('/', [HomeController::class, 'home'])->name('home')->middleware('checkPassword');
 
 
 
+
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
+Route::get('gioithieu', [AboutUsController::class, 'index'])->name('index');
+Route::get('error', [ErrorController::class, 'error'])->name('error');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
+
 Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
-Route::get('product-detail/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
+Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
+
 Route::get('brand', [BrandController::class, 'index'])->name('brand');
 Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
 Route::get('faq', [FAQController::class, 'index'])->name('faq');
@@ -48,9 +60,15 @@ Route::get('time-line', [TimeLineController::class, 'index'])->name('time-line')
 Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping-cart');
 
 //thanh toán
-Route::get('check-out', [CheckOutController::class, 'checkout'])->name('check-out');
+Route::get('check-out', [CheckOutController::class, 'checkout'])->name('checkout');
+Route::post('/apply-discount', [CheckOutController::class, 'applyDiscount'])->name('apply.discount');
+
+
+
+
 Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnPayReturn'])->name('vnpay.return');
+Route::get('/out-of-stock', [CheckoutController::class, 'outOfStock'])->name('out-of-stock');
 
 // routes/web.php
 
@@ -74,16 +92,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
+
 });
 
     //start blog
-    Route::get('/blog/show', [BlogController::class, 'show'])->name('blog.show')->middleware('checkPassword');
-    Route::get('/blog/{id}/detail', [BlogController::class, 'detail'])->name('blog.detail');
+
+    Route::get('/blog', [BlogController::class, 'show'])->name('blog.show');
+    Route::get('/blog/{slug}/detail', [BlogController::class, 'detail'])->name('blog.detail');
+
 
     //end blog
 
 // cart
 Route::get('/get-product-info', [HomeController::class, 'getProductInfo']);
+Route::get('/get-product-info-quick-view', [HomeController::class, 'getProductInfoQuickView']);
+
 Route::post('/add-to-cart', [CartController::class, 'addToCart']);
 Route::get('/cart', [CartController::class, 'viewCart'])->name('cart');
 Route::get('/debug-cart', function () {
@@ -95,11 +120,29 @@ Route::get('/debug-cart', function () {
 });
 Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::get('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::get('/cart/modal-cart', [CartController::class, 'getModalCart'])->name('cart.modal');
 
 
 
+Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.donhang');
+Route::get('/order/donhang/{id}', [OrderController::class, 'show'])->name('client.orders.show');
+Route::post('order/cancel/{id}', [OrderController::class, 'cancel'])->name('client.orders.cancel');
 
-Route::get('/thanhtoanthanhcong', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
+Route::get('/order/{order_code}/cancel', [OrderController::class, 'showCancelReasonForm'])->name('cancel.order.page');
+Route::get('/order/detail/{order_code}', [OrderController::class, 'showOrderDetail'])->name('order.detail.page');
+// Route để gửi yêu cầu hủy đơn hàng qua AJAX
+Route::post('/order/cancel', [OrderController::class, 'cancelOrder'])->name('cancel.order');
+
+
+
+Route::post('/orders/confirm/{id}', [OrderController::class, 'confirmOrder'])->name('orders.confirm');
+Route::get('/orders/search', [OrderController::class, 'search'])->name('order.search');
+
+
+Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
 Route::post('/select-address', [CheckoutController::class, 'select_address']);
+
+Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
+Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
+Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
 

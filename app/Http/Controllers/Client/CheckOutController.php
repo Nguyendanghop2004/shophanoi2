@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\OrderRequest;
+use App\Models\DiscountCode;
+use App\Models\UserDiscountCode;
+use Auth;
 use DB;
 use Mail;
 use Session;
@@ -28,26 +31,39 @@ class CheckOutController extends Controller
         $cartDetails = [];
         $totalPrice = 0;
         $user = auth()->user();
-        $categories = Category::with(relations: [
-            'children' => function ($query) {
-                $query->where('status', 1);
-            }
-        ])->where('status', 1)
-            ->whereNull('parent_id')->get();
+    
         if (auth()->check()) {
             $cart = Cart::where('user_id', $user->id)
                 ->with(['cartItems.product.images', 'cartItems.color', 'cartItems.size'])
                 ->first();
     
             if ($cart && $cart->cartItems->isNotEmpty()) {
-                $cartDetails = $cart->cartItems->map(function ($item) {
+                foreach ($cart->cartItems as $item) {
+                    $variant = ProductVariant::where([
+                        ['product_id', $item->product_id],
+                        ['color_id', $item->color_id],
+                        ['size_id', $item->size_id],
+                    ])->first();
+    
+                    if (!$variant) {
+                        return redirect()->route('cart')->with('error', "Không tìm thấy biến thể sản phẩm.");
+                    }
+    
+                    // Kiểm tra tồn kho
+                    if ($item->quantity > $variant->stock_quantity) {
+                        return redirect()->route('cart')->with(
+                            'error',
+                            "Sản phẩm '{$item->product->product_name}' chỉ còn lại {$variant->stock_quantity} trong kho."
+                        );
+                    }
+    
                     $product = $item->product;
                     $color = $item->color;
                     $size = $item->size;
                     $image = $product->images->firstWhere('color_id', $color->id);
                     $imageUrl = $image ? $image->image_url : '/default-image.jpg';
     
-                    return [
+                    $cartDetails[] = [
                         'product_id' => $product->id,
                         'color_id' => $color->id ?? null,
                         'size_id' => $size->id ?? null,
@@ -59,20 +75,39 @@ class CheckOutController extends Controller
                         'image_url' => $imageUrl,
                         'subtotal' => ($item->price ?? $product->price) * $item->quantity,
                     ];
-                });
+                }
     
-                $totalPrice = $cartDetails->sum('subtotal');
+                $totalPrice = collect($cartDetails)->sum('subtotal');
+            } else {
+                return redirect()->route('cart')->with('error', 'Giỏ hàng của bạn hiện tại không có sản phẩm.');
             }
         } else {
             $cart = session()->get('cart', []);
     
             if (!empty($cart)) {
                 foreach ($cart as $item) {
+                    $variant = ProductVariant::where([
+                        ['product_id', $item['product_id']],
+                        ['color_id', $item['color_id']],
+                        ['size_id', $item['size_id']],
+                    ])->first();
+    
+                    if (!$variant) {
+                        return redirect()->route('cart')->with('error', "Không tìm thấy biến thể sản phẩm.");
+                    }
+    
+                    // Kiểm tra tồn kho
+                    if ($item['quantity'] > $variant->stock_quantity) {
+                        return redirect()->route('cart')->with(
+                            'error',
+                            "Sản phẩm '{$item['product_name']}' chỉ còn lại {$variant->stock_quantity} trong kho."
+                        );
+                    }
+    
                     $product = Product::find($item['product_id']);
                     $color = Color::find($item['color_id']);
                     $size = Size::find($item['size_id']);
                     $image = $product->images->firstWhere('color_id', $color->id);
-    
                     $imageUrl = $image ? $image->image_url : '/default-image.jpg';
     
                     $cartDetails[] = [
@@ -90,22 +125,28 @@ class CheckOutController extends Controller
                 }
     
                 $totalPrice = array_sum(array_column($cartDetails, 'subtotal'));
+            } else {
+                return redirect()->route('cart')->with('error', 'Giỏ hàng của bạn hiện tại không có sản phẩm.');
             }
         }
-        
-        
-            $cities = City::orderBy('name_thanhpho', 'ASC')->get();
-            $provinces = collect();
-            $wards = collect();
-        
-            if (auth()->check()) {
-                $user = auth()->user();
-                $provinces = Province::where('matp', $user->city_id)->orderBy('name_quanhuyen', 'ASC')->get();
-                $wards = Wards::where('maqh', $user->province_id)->orderBy('name_xaphuong', 'ASC')->get();
-            }
     
-        return view('client.check-out', compact('cartDetails', 'totalPrice', 'cities', 'provinces', 'wards', 'user','categories'));
+        $cities = City::orderBy('name_thanhpho', 'ASC')->get();
+        $provinces = collect();
+        $wards = collect();
+    
+        if (auth()->check()) {
+            $provinces = Province::where('matp', $user->city_id)->orderBy('name_quanhuyen', 'ASC')->get();
+            $wards = Wards::where('maqh', $user->province_id)->orderBy('name_xaphuong', 'ASC')->get();
+        }
+    
+        return view('client.check-out', compact('cartDetails', 'totalPrice', 'cities', 'provinces', 'wards', 'user'));
     }
+    
+    
+    
+    
+
+    
     
      public function select_address(Request $request)
     {
@@ -131,26 +172,51 @@ class CheckOutController extends Controller
 
     public function placeOrder(OrderRequest $request)
     {
-        $paymentMethod = $request->input('payment'); 
-        $cartDetails = $this->getCartDetails(); 
+        $paymentMethod = $request->input('payment');
+        $cartDetails = $this->getCartDetails();
         $totalPrice = $cartDetails['totalPrice'];
-        $orderCode = 'HN' . strtoupper(uniqid()); 
-
+        $orderCode = 'HN' . strtoupper(uniqid());
+       
+        $outOfStockItems = []; 
+    
+        foreach ($cartDetails['items'] as $item) {
+            $productVariant = ProductVariant::where('product_id', $item['product_id'])
+                ->where('color_id', $item['color_id'])
+                ->where('size_id', $item['size_id'])
+                ->first();
+    
+            if ($productVariant && $productVariant->stock_quantity < $item['quantity']) {
+              
+                $outOfStockItems[] = [
+                    'product_name' => $item['product_name'],
+                    'requested_quantity' => $item['quantity'],
+                    'remaining_quantity' => $productVariant->stock_quantity
+                ];
+            }
+        }
+    
+        if (!empty($outOfStockItems)) {
+       
+            return redirect()->route('out-of-stock')
+                ->with('out_of_stock_items', $outOfStockItems)
+                ->with('error', 'Một số sản phẩm không đủ số lượng trong kho.');
+        }
+    
         if (empty($cartDetails['items'])) {
             return redirect()->back()->with('error', 'Giỏ hàng của bạn trống!');
         }
-
+    
         $order = $this->createOrder($request, $cartDetails['items'], $totalPrice, $orderCode, $paymentMethod);
-
-       
+    
         if ($paymentMethod === 'cod') {
             return $this->handleCOD($order);
         } elseif ($paymentMethod === 'vnpay') {
             return $this->handleVNPay($order, $totalPrice);
         }
-
+    
         return redirect()->route('home')->with('error', 'Phương thức thanh toán không hợp lệ.');
     }
+    
     public function getCartDetails()
 {
     
@@ -228,6 +294,9 @@ class CheckOutController extends Controller
 
 private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $orderCode, $paymentMethod)
 {
+   
+   
+
     
     $order = Order::create([
         'user_id' => auth()->id() ?? null,
@@ -248,17 +317,21 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
 
     
     foreach ($cartDetails as $detail) {
-       
         $order->OrderItems()->create([
+
+            'product_id' => $detail['product_id'],
+            'color_id' => $detail['color_id'],
+            'size_id' => $detail['size_id'],
             'product_name' => $detail['product_name'],
             'image_url' => $detail['image_url'],
             'color_name' => $detail['color_name'],
             'size_name' => $detail['size_name'],
             'quantity' => $detail['quantity'],
             'price' => $detail['price'],
+
         ]);
 
-   
+       
         $variant = ProductVariant::where('product_id', $detail['product_id'])
             ->where('color_id', $detail['color_id'])
             ->where('size_id', $detail['size_id'])
@@ -273,6 +346,7 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
 }
 
 
+
     private function handleCOD(Order $order)
     {
     
@@ -285,14 +359,14 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
             session()->forget('cart');
         }
 
-        return redirect()->route('home')->with('success', 'Đặt hàng thành công');
+        return redirect()->route('thanhtoanthanhcong', ['id' => $order->id]);
     }
 
    // Hàm handle VNPay
    private function handleVNPay(Order $order, $totalPrice)
    {
-       // Các tham số từ VNPAY
-       $vnp_TmnCode = "E5WL6ON5"; // Mã website tại VNPAY
+     
+       $vnp_TmnCode = "E5WL6ON5";
        $vnp_HashSecret = "RJVBT58452T7DZK0UOOM0EY10SVH79VS"; // Chuỗi bí mật
        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; // URL thanh toán
        $vnp_TxnRef = time(); // Mã đơn hàng
@@ -380,22 +454,17 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
    {
        $vnp_HashSecret = "RJVBT58452T7DZK0UOOM0EY10SVH79VS"; 
        $inputData = $request->all();  
-       $data = $request->all();
-       
+   
        $vnp_SecureHash = $inputData['vnp_SecureHash'];  
        unset($inputData['vnp_SecureHash'], $inputData['vnp_SecureHashType']); 
    
-      
        ksort($inputData);
        $hashData = urldecode(http_build_query($inputData));
        $checkHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
    
-       
        if ($checkHash === $vnp_SecureHash) {
-           
-          
            if ($inputData['vnp_ResponseCode'] === '00') {
-             
+               // Thanh toán thành công
                $orderCode = $inputData['vnp_OrderInfo'];  
                $order = Order::where('order_code', $orderCode)->first();
    
@@ -403,47 +472,75 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
                    $order->payment_status = 'Đã thanh toán'; 
                    $order->save(); 
                    Mail::to($order->email)->send(new OrderConfirmationMail($order));
+   
+                   // Xóa giỏ hàng sau khi thanh toán thành công
                    if (auth()->check()) {  
                        Cart::where('user_id', auth()->id())->delete();
                    } else {
-                     
                        session()->forget('cart');
                    }
-                   return view('client.thanhtoansuccess', compact('data'));
+   
+                   // Chuyển hướng đến trang thông báo thanh toán thành công và hiển thị thông tin đơn hàng
+                   return redirect()->route('thanhtoanthanhcong', ['id' => $order->id]);
+   
                } else {
                    return redirect()->route('home')->with('error', 'Không tìm thấy đơn hàng');
                }
            } else {
-               
+               // Thanh toán thất bại
                $orderCode = $inputData['vnp_OrderInfo'];  
                $order = Order::where('order_code', $orderCode)->first();
    
                if ($order) {
                    $order->payment_status = 'Thất bại'; 
                    $order->save();
-                   $order->delete(); 
+   
+                   // Hoàn lại số lượng sản phẩm nếu thanh toán thất bại
+                   foreach ($order->orderItems as $orderItem) {
+                       $productVariant = ProductVariant::where('product_id', $orderItem->product_id)
+                           ->where('color_id', $orderItem->color_id)
+                           ->where('size_id', $orderItem->size_id)
+                           ->first();
+   
+                       if ($productVariant) {
+                           $productVariant->stock_quantity += $orderItem->quantity; 
+                           $productVariant->save(); 
+                       }
+                   }
+   
+                   $order->delete(); // Xóa đơn hàng nếu thanh toán thất bại
                }
    
                return redirect()->route('home')->with('error', 'Thanh toán thất bại, đơn hàng đã bị hủy và xóa');
            }
        } else {
-         
            return redirect()->route('home')->with('error', 'Lỗi bảo mật, vui lòng thử lại');
        }
    }
-
-public function thanhtoanthanhcong(Request $request)
-{
-    $categories = Category::with(relations: [
-        'children' => function ($query) {
-            $query->where('status', 1);
-        }
-    ])->where('status', 1)
-        ->whereNull('parent_id')->get();
-    $data = $request->all();
-    return view('client.thanhtoansuccess', compact('data','categories'));
    
+   // Hàm hiển thị thông tin đơn hàng khi thanh toán thành công
+   public function thanhtoanthanhcong($id)
+   {
+       $order = Order::findOrFail($id);
+       $orderItems = OrderItem::where('order_id', $order->id)->get();
+       $city = City::where('matp', $order->city_id)->first();
+       $province = Province::where('maqh', $order->province_id)->first();
+       $ward = Wards::where('xaid', $order->wards_id)->first();
+   
+       return view('client.thanhtoansuccess', compact('order', 'orderItems', 'city', 'province', 'ward'));
+   }
+   
+public function outOfStock()
+{
+    $outOfStockItems = session('out_of_stock_items', []); 
+    $error = session('error'); 
+
+    return view('client.error', compact('outOfStockItems', 'error'));
 }
  
 
 }
+
+
+
+

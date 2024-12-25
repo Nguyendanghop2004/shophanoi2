@@ -11,22 +11,26 @@
                 <h4>Cập nhật quản trị viên</h4>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.accounts.update', $admin->id) }}" method="POST" enctype="multipart/form-data">
+                <form id="admin-form" action="{{ route('admin.accounts.update', $admin->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-12">
+                       
+                        
                             <div class="form-group">
                                 <label for="name">Tên</label>
-                                <input type="text" name="name" class="form-control"
-                                    value="{{ old('name', $admin->name) }}">
+                                <input type="text" name="name" class="form-control" value="{{ old('name', $admin->name) }}">
                             </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" name="email" class="form-control"
-                                    value="{{ old('email', $admin->email) }}">
-                            </div>
+                            
+                            @if(!$isAdmin)
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" name="password" class="form-control" value="">
+                                </div>
+                            @endif
                         </div>
+                        
                         <div class="col-lg-6 col-md-6 col-12">
                             <div id="image-preview" class="image-preview mx-auto"
                                 @error('image_path') style="border:2px dashed red" @enderror>
@@ -46,50 +50,74 @@
 
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            <button type="submit" id="submit-btn" class="btn btn-primary">Cập nhật</button>
                         </div>
                     </div>
+                </form>
             </div>
-            </form>
         </div>
-        
     </section>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            @if (session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Thành công!',
-                    text: '{{ session('success') }}',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            @elseif (session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi!',
-                    text: '{{ session('error') }}',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            @endif
+      
+    document.addEventListener("DOMContentLoaded", function() {
+        // Hiển thị thông báo thành công hoặc lỗi
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        @elseif (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: '{{ session('error') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        @endif
 
-            // Thêm sự kiện thay đổi cho input file
-            const imageUpload = document.getElementById('image-upload');
-            const imagePreviewImg = document.getElementById('image-preview-img');
+        // Thêm sự kiện thay đổi cho input file
+        const imageUpload = document.getElementById('image-upload');
+        const imagePreviewImg = document.getElementById('image-preview-img');
 
-            imageUpload.addEventListener('change', function() {
-                const file = this.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        imagePreviewImg.setAttribute('src', e.target.result);
-                    }
-                    reader.readAsDataURL(file);
+        imageUpload.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreviewImg.setAttribute('src', e.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Xác nhận khi nhấn nút Cập nhật
+        $('#submit-btn').on('click', function(e) {
+            e.preventDefault(); // Ngừng việc gửi form mặc định
+
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn cập nhật thông tin quản trị viên này?',
+                text: "Thông tin quản trị viên sẽ được cập nhật ngay sau khi bạn xác nhận!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Có, cập nhật!',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Nếu người dùng xác nhận, gửi form
+                    $('#admin-form').submit();
                 }
             });
         });
-        
-    </script>
+    });
+</script>
+
+   
 @endsection

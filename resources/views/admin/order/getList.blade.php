@@ -28,6 +28,7 @@
                                 <option value="đã_xác_nhận" {{ request('status') == 'đã_xác_nhận' ? 'selected' : '' }}>Đã Xác Nhận</option>
                                 <option value="đang_giao_hàng" {{ request('status') == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
                                 <option value="giao_hàng_thành_công" {{ request('status') == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
+                                <option value="đã_nhận_hàng" {{ request('status') == 'đã_nhận_hàng' ? 'selected' : '' }}>Đã nhận hàng</option>
                                 <option value="hủy" {{ request('status') == 'hủy' ? 'selected' : '' }}>Hủy</option>
                             </select>
                             <select name="payment_method" class="form-control ml-2" onchange="this.form.submit()">
@@ -76,13 +77,25 @@
                                                 <option value="hủy" {{ $order->status == '' ? 'selected' : '' }}>Hủy</option>
                                             @elseif($order->status == 'đã_xác_nhận')
                                                 <option value="đã_xác_nhận" {{ $order->status == 'đã_xác_nhận' ? 'selected' : '' }}>Đã Xác Nhận</option>
-                                                <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
+                                                <option value="chờ_giao_hàng" {{ $order->status == 'chờ_giao_hàng' ? 'selected' : '' }}>Chờ Giao Hàng</option>
                                                 <option value="hủy" {{ $order->status == 'hủy' ? 'selected' : '' }}>Hủy</option>
+                                            @elseif($order->status == 'ship_đã_nhận')
+                                                <option value="ship_đã_nhận" {{ $order->status == 'ship_đã_nhận' ? 'selected' : '' }}>Ship đã nhận</option>
+                                                <option value="chờ_giao_hàng" {{ $order->status == 'chờ_giao_hàng' ? 'selected' : '' }}>Chờ Giao Hàng</option>
+
+                                            @elseif($order->status == 'chờ_giao_hàng')
+                                                <option value="chờ_giao_hàng" {{ $order->status == 'chờ_giao_hàng' ? 'selected' : '' }}>Chờ Giao Hàng</option>
+                                                <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
                                             @elseif($order->status == 'đang_giao_hàng')
                                                 <option value="đang_giao_hàng" {{ $order->status == 'đang_giao_hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
                                                 <option value="giao_hàng_thành_công" {{ $order->status == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
+                                                <option value="giao_hàng_không_thành_công" {{ $order->status == 'giao_hàng_không_thành_công' ? 'selected' : '' }}>Giao Hàng Không Thành Công</option>
                                             @elseif($order->status == 'giao_hàng_thành_công')
                                                 <option value="giao_hàng_thành_công" {{ $order->status == 'giao_hàng_thành_công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
+                                            @elseif($order->status == 'giao_hàng_không_thành_công')
+                                                <option value="giao_hàng_không_thành_công" {{ $order->status == 'giao_hàng_không_thành_công' ? 'selected' : '' }}>Giao Hàng Không Thành Công</option>
+                                            @elseif($order->status == 'đã_nhận_hàng')
+                                            <option value="đã_nhận_hàng" {{ $order->status == 'đã_nhận_hàng' ? 'selected' : '' }}>Đã nhận hàng</option>
                                             @elseif($order->status == 'hủy')
                                                 <option value="hủy" {{ $order->status == 'hủy' ? 'selected' : '' }}>Hủy</option>
                                             @endif
@@ -102,11 +115,20 @@
                                             <button type="button" class="btn btn-danger btn-sm mt-2 mx-2 close-btn" onclick="resetStatus(this)">X</button>
                                         </div>
 
-                                        <button type="submit" class="btn btn-success btn-sm mt-2">Cập Nhật</button>
+                                        @if($order->status != 'hủy' &&  $order->status != 'giao_hàng_thành_công'  &&  $order->status != 'giao_hàng_không_thành_công' &&  $order->status != 'đã_nhận_hàng')
+                                        <button 
+    type="button" 
+    class="btn btn-success btn-sm mt-2" 
+    onclick="confirmUpdateForm(this)">
+    Cập Nhật
+</button>
+@endif
+
+
                                     </form>
                                 </td>   
                                 <td>
-                                    <a href="{{ route('admin.order.chitiet', $order->id) }}" class="btn btn-info btn-sm">Chi tiết</a>
+                                    <a href="{{ route('admin.order.chitiet',['id' => Crypt::encryptString($order->id)]) }}" class="btn btn-info btn-sm">Chi tiết</a>
                                 </td>
                             </tr>
                             @endforeach
@@ -120,21 +142,40 @@
         </div>
     </div>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    // Lưu trạng thái ban đầu khi chọn "Hủy"
+
+    function confirmUpdateForm(button) {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn cập nhật trạng thái đơn hàng này?',
+            text: "Bạn không thể hoàn tác thay đổi này!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Cập nhật!',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Nếu xác nhận, gửi form
+                button.closest('form').submit();
+            }
+        });
+    }
+</script>
+<script>
+
     let originalStatus = '';
 
     function showReasonField(selectElement) {
         var reasonField = selectElement.closest('td').querySelector('.reason-field');
         var selectedStatus = selectElement.value;
 
-        // Lưu trạng thái ban đầu
         if (selectedStatus === 'hủy' && !originalStatus) {
             originalStatus = selectElement.value;
         }
 
-        // Hiển thị phần lý do nếu chọn hủy
         if (selectedStatus === 'hủy') {
             reasonField.style.display = 'block';
         } else {
@@ -142,14 +183,36 @@
         }
     }
 
-    // Khi nhấn X, khôi phục trạng thái ban đầu và ẩn trường lý do
     function resetStatus(button) {
         var reasonField = button.closest('.reason-field');
         var selectStatus = button.closest('td').querySelector('select[name="status"]');
         
-        // Khôi phục trạng thái ban đầu
         selectStatus.value = originalStatus;
         reasonField.style.display = 'none';
     }
+</script>
+
+
+<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+        });
+
 </script>
 @endsection

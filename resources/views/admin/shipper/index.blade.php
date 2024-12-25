@@ -3,123 +3,185 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Danh Sách Nhân Viên Giao Hàng</h1>
+            <h1>Danh Sách Shipper</h1>
         </div>
 
-
-
-        <a href="{{ route('admin.shippers.create') }}" class="btn btn-primary mb-3">Thêm Nhân Viên Giao Hàng</a>
-
         <div class="card card-primary">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <div class="section-title mt-0">
-                    Danh sách nhân viên giao hàng
-                </div>
+            <div class="card-header">
+                <h4>Danh Sách Shipper</h4>
                 <div class="card-header-action">
-                    <form action="{{ route('admin.shippers.search') }}" method="GET" class="form-inline">
-                        <div class="search-element">
-                            <input class="form-control" name="search" type="text" placeholder="Tìm kiếm" aria-label="Search" data-width="250">
-                            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
-                        </div>
-                    </form>
+                    <a href="{{ route('admin.accounts.create') }}" class="btn btn-primary">
+                        Tạo Mới
+                    </a>
                 </div>
             </div>
-
-            <div class="card-body p-0">
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">Tên</th>
+                                <th scope="col">#</th>
+                                <th scope="col">Tên Shipper</th>
                                 <th scope="col">Email</th>
-                                <th scope="col">Số điện thoại</th>
-                                <th scope="col">Quê quán</th>
-                                <th scope="col">Ngày sinh</th>
-                                <th scope="col">Ảnh đại diện</th>
-                                <th scope="col">Hành động</th>
+                                <th scope="col">Vai Trò</th>
+                                <th scope="col">Trạng Thái</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($shippers as $shipper)
+                            @foreach ($admins as $admin)
                                 <tr>
-                                    <td>{{ $shipper->name }}</td>
-                                    <td>{{ $shipper->email }}</td>
-                                    <td>{{ $shipper->phone }}</td>
-                                    <td>{{ $shipper->hometown }}</td>
-                                    <td>{{ $shipper->date_of_birth }}</td>
+                                    <th scope="row">{{ $admin->id }}</th>
+                                    <td><a class="text-primary"
+                                           href="{{ route('admin.accounts.show', $admin->id) }}">{{ $admin->name }}</a>
+                                    </td>
+                                    <td>{{ $admin->email }}</td>
                                     <td>
-                                        <img src="{{ asset($shipper->profile_picture) }}" alt="Profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
+                                        @foreach ($admin->roles as $role)
+                                            {{ $role->name }}
+                                        @endforeach
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.shippers.edit', $shipper->id) }}" class="btn btn-icon btn-warning">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <form action="{{ route('admin.shippers.destroy', $shipper->id) }}" method="POST" style="display:inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-icon btn-danger">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </form>
+                                        @if ($admin->status)
+                                            <span class="badge badge-success">Hoạt động</span>
+                                        @else
+                                            <span class="badge badge-danger">Không hoạt động</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <!-- Sửa -->
+                                            <a href="{{ route('admin.accounts.edit', $admin->id) }}"
+                                               class="btn btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+
+                                            <!-- Xóa -->
+                                            <form action="{{ route('admin.accounts.destroy', $admin->id) }}" method="POST"
+                                                onsubmit="return confirmDelete(event)">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger ml-2">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+
+                                            <!-- Vô hiệu hóa / Kích hoạt -->
+                                            @if ($admin->status)
+                                                <form action="{{ route('admin.accounts.deactivate', $admin->id) }}"
+                                                    method="POST" class="ml-2" onsubmit="return confirmDeactivate(event)">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="fas fa-lock"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <form action="{{ route('admin.accounts.activate', $admin->id) }}"
+                                                    method="POST" class="ml-2" onsubmit="return confirmActivate(event)">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-success">
+                                                        <i class="fas fa-unlock"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-            </div>
-
-            <div class="card-body mx-auto">
-                <div class="buttons">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item {{ $shippers->onFirstPage() ? 'disabled' : '' }}">
-                                <a class="page-link" href="{{ $shippers->previousPageUrl() }}" aria-label="Previous">
-                                    <span aria-hidden="true">«</span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                            </li>
-
-                            @foreach ($shippers->getUrlRange(1, $shippers->lastPage()) as $page => $url)
-                                <li class="page-item {{ $page == $shippers->currentPage() ? 'active' : '' }}">
-                                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                                </li>
-                            @endforeach
-
-                            <li class="page-item {{ $shippers->hasMorePages() ? '' : 'disabled' }}">
-                                <a class="page-link" href="{{ $shippers->nextPageUrl() }}" aria-label="Next">
-                                    <span aria-hidden="true">»</span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                {{ $admins->links() }}
             </div>
         </div>
     </section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+    <!-- SweetAlert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Xử lý sự kiện cho nút Vô hiệu hóa
+        function confirmDeactivate(event) {
+            event.preventDefault();  // Ngừng hành động mặc định của nút
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn vô hiệu hóa shipper này?',
+                text: 'Shipper sẽ không thể hoạt động nữa!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Vô hiệu hóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Nếu xác nhận, gửi form
+                    event.target.closest('form').submit();
+                }
+            });
+        }
+
+        // Xử lý sự kiện cho nút Kích hoạt
+        function confirmActivate(event) {
+            event.preventDefault();  // Ngừng hành động mặc định của nút
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn kích hoạt shipper này?',
+                text: 'Shipper sẽ có thể hoạt động lại!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Kích hoạt',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Nếu xác nhận, gửi form
+                    event.target.closest('form').submit();
+                }
+            });
+        }
+
+        // Xử lý sự kiện cho nút Xóa
+        function confirmDelete(event) {
+            event.preventDefault();  // Ngừng hành động mặc định của nút
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn xóa shipper này?',
+                text: 'Hành động này không thể hoàn tác!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Nếu xác nhận, gửi form
+                    event.target.closest('form').submit();
+                }
+            });
+        }
+    </script>
+
 
 <script>
-    $(document).ready(function () {
-        toastr.options = {
-            "closeButton": false,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-        };
-
-        @if(session('success'))
-            toastr.success("{{ session('success') }}");
-        @endif
-
-        @if(session('error'))
-            toastr.error("{{ session('error') }}");
-        @endif
-    });
+      document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+        });
 
    
 </script>

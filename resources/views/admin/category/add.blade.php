@@ -11,7 +11,7 @@
             <h4>Thêm Mới Danh Mục</h4>
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.categories.store') }}" method="POST" enctype="multipart/form-data">
+            <form id="category-form" action="{{ route('admin.categories.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-lg-3 col-md-6 col-12">
@@ -43,7 +43,7 @@
                     <div class="col-lg-9 col-md-6 col-12">
                         <div class="form-group">
                             <label>Tên Danh Mục</label>
-                            <input type="text" name="name" class="form-control @error('name') is-invalid  @enderror" value="{{ old('name') }}">
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
                         </div>
                         @error('name')
                             <div class="invalid-feedback" style="display: block;">
@@ -53,7 +53,7 @@
 
                         <div class="form-group">
                             <label>Đường Dẫn Thân Thiện</label>
-                            <input type="text" name="slug" class="form-control @error('slug') is-invalid  @enderror" value="{{ old('slug') }}">
+                            <input type="text" name="slug" class="form-control @error('slug') is-invalid @enderror" value="{{ old('slug') }}">
                         </div>
                         @error('slug')
                             <div class="invalid-feedback" style="display: block;">
@@ -63,7 +63,7 @@
 
                         <div class="form-group">
                             <label>Mô Tả</label>
-                            <textarea name="description" class="form-control @error('description') is-invalid  @enderror">{{ old('description') }}</textarea>
+                            <textarea name="description" class="form-control @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
                         </div>
                         @error('description')
                             <div class="invalid-feedback" style="display: block;">
@@ -84,7 +84,7 @@
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Lưu</button>
+                            <button type="submit" id="submit-btn" class="btn btn-primary">Lưu</button>
                         </div>
                     </div>
                 </div>
@@ -93,10 +93,11 @@
     </div>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-    
+       
         function convertToSlug(text) {
             const from = "áàảãạâấầẩẫậăắằẳẵặéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵđ";
             const to = "aaaaaaaaaaaaaaaaaeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyyd";
@@ -114,7 +115,7 @@
             $('input[name="slug"]').val(slug);
         });
 
-  
+      
         $('#image-upload').change(function (e) {
             const file = e.target.files[0];
             if (file) {
@@ -125,6 +126,26 @@
                 }
                 reader.readAsDataURL(file);
             }
+        });
+
+        $('#submit-btn').click(function(e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn thêm mới danh mục này?',
+                text: "Danh mục sẽ được lưu ngay sau khi bạn xác nhận!",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Có, lưu danh mục!',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                  
+                    $('#category-form').submit();
+                }
+            });
         });
     });
 </script>
