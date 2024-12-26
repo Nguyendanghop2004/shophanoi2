@@ -36,11 +36,11 @@ public function ward()
     }
     public function isCancellable()
     {
-        return in_array($this->status, ['chờ_xác_nhận', 'đã_xác_nhận']);
+        return in_array($this->status, ['chờ xác nhận', 'đã xác nhận']);
     }
     public function confirm()
     {
-        $this->update(['status' => 'đã_nhận_hàng']);
+        $this->update(['status' => 'đã nhận hàng']);
     }
     public function assignedShipper()
     {

@@ -33,7 +33,9 @@
                                 <tr>
                                     <th scope="row">{{ $admin->id }}</th>
 
+
                                     <td>{{ $admin->title }}</td>
+
 
                                     <td>{{ $admin->unique }}</td>
                                     <td>

@@ -24,7 +24,7 @@ class AccoutUserController extends Controller
         $user->status = true;
         $user->save();
 
-        return redirect()->back()->with('error', 'Tài khoản đã bị vô hiệu hóa.');
+        return redirect()->back()->with('success', 'Tài khoản đã được kích hoạt.');
     }
     public function deactivateUser($id)
     {
@@ -32,7 +32,7 @@ class AccoutUserController extends Controller
         $user->status = false;
         $user->save();
 
-        return redirect()->back()->with('success', 'Tài khoản đã được kích hoạt.');
+        return redirect()->back()->with('success', 'Tài khoản đã bị vô hiệu hóa.');
     }
     public function accountUser(User $user)
     {

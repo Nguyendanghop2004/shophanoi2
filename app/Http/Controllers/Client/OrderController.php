@@ -168,8 +168,6 @@ class OrderController extends Controller
 }
 
     
-
-    
    
     public function showCancelReasonForm($order_code = null)
     {
@@ -193,7 +191,7 @@ class OrderController extends Controller
         }
 
         
-        $nonCancelableStatuses = ['đã_xác_nhận', 'đang_giao_hàng', 'giao_hàng_thành_công', 'đã_nhận_hàng', 'hủy'];
+        $nonCancelableStatuses = ['đã xác nhận', 'đang giao hàng', 'giao hàng thành công', 'đã nhận hàng', 'hủy'];
     
      
         if (in_array($order->status, $nonCancelableStatuses)) {
@@ -226,7 +224,7 @@ class OrderController extends Controller
         }
     
        
-        $nonCancelableStatuses = ['đã_xác_nhận', 'đóng_hàng', 'đang_giao_hàng', 'giao_hàng_thành_công'];
+        $nonCancelableStatuses = ['đã xác nhận', 'đang giao hàng', 'giao hàng thành công'];
     
         if (in_array($order->status, $nonCancelableStatuses)) {
             return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');

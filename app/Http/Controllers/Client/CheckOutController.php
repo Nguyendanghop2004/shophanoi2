@@ -52,7 +52,7 @@ class CheckOutController extends Controller
                         return redirect()->route('cart')->with('error', "Không tìm thấy biến thể sản phẩm.");
                     }
     
-                    // Kiểm tra tồn kho
+                   
                     if ($item->quantity > $variant->stock_quantity) {
                         return redirect()->route('cart')->with(
                             'error',
@@ -182,43 +182,76 @@ class CheckOutController extends Controller
        
         $outOfStockItems = []; 
     
-        foreach ($cartDetails['items'] as $item) {
-            $productVariant = ProductVariant::where('product_id', $item['product_id'])
-                ->where('color_id', $item['color_id'])
-                ->where('size_id', $item['size_id'])
-                ->first();
-    
-            if ($productVariant && $productVariant->stock_quantity < $item['quantity']) {
-              
-                $outOfStockItems[] = [
-                    'product_name' => $item['product_name'],
-                    'requested_quantity' => $item['quantity'],
-                    'remaining_quantity' => $productVariant->stock_quantity
-                ];
-            }
-        }
-    
-        if (!empty($outOfStockItems)) {
        
-            return redirect()->route('out-of-stock')
-                ->with('out_of_stock_items', $outOfStockItems)
-                ->with('error', 'Một số sản phẩm không đủ số lượng trong kho.');
+        DB::beginTransaction();
+    
+        try {
+            foreach ($cartDetails['items'] as $item) {
+                $productVariant = ProductVariant::where('product_id', $item['product_id'])
+                    ->where('color_id', $item['color_id'])
+                    ->where('size_id', $item['size_id'])
+                    ->lockForUpdate()
+                    ->first();
+    
+                if ($productVariant) {
+                  
+                    if ($productVariant->stock_quantity == 0) {
+                        $outOfStockItems[] = [
+                            'product_name' => $item['product_name'],
+                            'requested_quantity' => $item['quantity'],
+                            'remaining_quantity' => 0
+                        ];
+                    } elseif ($productVariant->stock_quantity < $item['quantity']) {
+                        $outOfStockItems[] = [
+                            'product_name' => $item['product_name'],
+                            'requested_quantity' => $item['quantity'],
+                            'remaining_quantity' => $productVariant->stock_quantity
+                        ];
+                    } else {
+                     
+                        $productVariant->decrement('stock_quantity', $item['quantity']);
+                    }
+                }
+            }
+    
+     
+            if (!empty($outOfStockItems)) {
+                DB::rollBack();
+                return redirect()->route('out-of-stock')
+                    ->with('out_of_stock_items', $outOfStockItems)
+                    ->with('error', 'Một số sản phẩm không đủ số lượng trong kho hoặc đã hết hàng.');
+            }
+    
+           
+            if (empty($cartDetails['items'])) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Giỏ hàng của bạn trống!');
+            }
+    
+       
+            $order = $this->createOrder($request, $cartDetails['items'], $totalPrice, $orderCode, $paymentMethod);
+    
+            
+            if ($paymentMethod === 'cod') {
+               
+                return $this->handleCOD($order);
+            } elseif ($paymentMethod === 'vnpay') {
+               
+                return $this->handleVNPay($order, $totalPrice);
+            }
+    
+            DB::rollBack();
+            return redirect()->route('home')->with('error', 'Phương thức thanh toán không hợp lệ.');
+    
+        } catch (\Exception $e) {
+          
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Đã có lỗi xảy ra trong quá trình đặt hàng.');
         }
-    
-        if (empty($cartDetails['items'])) {
-            return redirect()->back()->with('error', 'Giỏ hàng của bạn trống!');
-        }
-    
-        $order = $this->createOrder($request, $cartDetails['items'], $totalPrice, $orderCode, $paymentMethod);
-    
-        if ($paymentMethod === 'cod') {
-            return $this->handleCOD($order);
-        } elseif ($paymentMethod === 'vnpay') {
-            return $this->handleVNPay($order, $totalPrice);
-        }
-    
-        return redirect()->route('home')->with('error', 'Phương thức thanh toán không hợp lệ.');
     }
+    
+    
+    
     
     public function getCartDetails()
 {
@@ -336,15 +369,21 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
 
        
         $variant = ProductVariant::where('product_id', $detail['product_id'])
-            ->where('color_id', $detail['color_id'])
-            ->where('size_id', $detail['size_id'])
-            ->first();
-
-        if ($variant) {
-            $variant->decrement('stock_quantity', $detail['quantity']);
+        ->where('color_id', $detail['color_id'])
+        ->where('size_id', $detail['size_id'])
+        ->first();
+    
+    if ($variant) {
+        
+        if ($variant->stock_quantity > 0) {
+          
+            $quantityToDecrement = min($variant->stock_quantity, $detail['quantity']);
+            $variant->decrement('stock_quantity', $quantityToDecrement);
         }
     }
-
+    
+    }
+    DB::commit();
     return $order;
 }
 

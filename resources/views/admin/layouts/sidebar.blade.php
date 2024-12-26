@@ -261,7 +261,7 @@
 
             @can('blog')
             <li class="dropdown">
-                <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                <a href="{{ route('admin.blog.index') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-folder"></i>
                     <span>Bài Viết</span></a>
                 <ul class="dropdown-menu">
