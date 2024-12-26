@@ -25,8 +25,8 @@ return new class extends Migration
             $table->string('phone_number'); 
             $table->string('order_code'); 
             $table->text('note')->nullable(); 
-            $table->enum('status', ['chờ_xác_nhận','đã_xác_nhận','chờ_giao_hàng', 'đang_giao_hàng', 'giao_hàng_thành_công','đã_nhận_hàng', 'hủy'])
-                  ->default('chờ_xác_nhận'); 
+            $table->enum('status', ['chờ xác nhận','đã xác nhận','ship đã nhận', 'đang giao hàng', 'giao hàng thành công','đã nhận hàng','giao hàng không thành công', 'hủy'])
+                  ->default('chờ xác nhận'); 
             $table->timestamps();
         });
     }

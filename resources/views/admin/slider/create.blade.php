@@ -9,6 +9,11 @@
         <div class="card card-primary">
             <div class="card-header">
                 <h4>Tạo mới thanh trượt </h4>
+                <div class="card-header-action">
+                    <a href="{{ url()->previous() }}" class="btn btn-primary">
+                        Quay Lại 
+                    </a>
+                </div>
             </div>
             <div class="card-body">
                 <form action="{{ route('admin.slider.store') }}" method="POST" enctype="multipart/form-data">
@@ -42,7 +47,8 @@
                                             <div class="text-danger ml-2">*</div>
                                         </div>
                                         <input type="text" name="title"
-                                            class="form-control  @error('title') is-invalid  @enderror" value="{{ old('title') }}">
+                                            class="form-control  @error('title') is-invalid  @enderror"
+                                            value="{{ old('title') }}">
                                         @error('title')
                                             <div class="invalid-feedback">
                                                 {{ $message }}

@@ -35,16 +35,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
-Route::get('/', [HomeController::class, 'home'])->name('home')->middleware('checkPassword');
+Route::get('/login', [HomeController::class, 'home'])->name('home');
+
+
 
 
 
 
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
-Route::get('gioithieu', [AboutUsController::class, 'index'])->name('index');
+
 Route::get('error', [ErrorController::class, 'error'])->name('error');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
@@ -61,11 +62,6 @@ Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('sho
 
 //thanh toán
 Route::get('check-out', [CheckOutController::class, 'checkout'])->name('checkout');
-Route::post('/apply-discount', [CheckOutController::class, 'applyDiscount'])->name('apply.discount');
-
-
-
-
 Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnPayReturn'])->name('vnpay.return');
 Route::get('/out-of-stock', [CheckoutController::class, 'outOfStock'])->name('out-of-stock');
@@ -98,7 +94,6 @@ Route::middleware('auth')->group(function () {
 });
 
     //start blog
-
     Route::get('/blog', [BlogController::class, 'show'])->name('blog.show');
     Route::get('/blog/{slug}/detail', [BlogController::class, 'detail'])->name('blog.detail');
 
@@ -122,6 +117,7 @@ Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->nam
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::get('/cart/modal-cart', [CartController::class, 'getModalCart'])->name('cart.modal');
 
+Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
 
 
 Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.donhang');

@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="{{ asset('client/assets/fonts/fonts.css') }}">
     <!-- Icons -->
     <link rel="stylesheet" href="{{ asset('client/assets/fonts/font-icons.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-B+1K+q+czpOjPvMI5DjwukDqa8GdHsO6IMB+CHCaDeFE64ct5LKfHEJ87rXT2y7I5GpqHgExGzxt9QZ8clUBiA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-B+1K+q+czpOjPvMI5DjwukDqa8GdHsO6IMB+CHCaDeFE64ct5LKfHEJ87rXT2y7I5GpqHgExGzxt9QZ8clUBiA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="{{ asset('client/assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('client/assets/css/swiper-bundle.min.css') }}">
@@ -82,7 +84,7 @@
     <!-- /toolbarShopmb -->
 
     <!-- modal login -->
-    {{-- @include('client.layouts.components.modal.modal-login') --}}
+    @include('client.layouts.components.modal.modal-login')
     <!-- /modal login -->
 
     <!-- shoppingCart -->
@@ -261,16 +263,17 @@
 
             // Thêm từng sản phẩm vào modal
             cartDetails.forEach(item => {
+                const productDetailUrl = `/product/${item.slug}`;
                 modalCartContainer.append(`
                                     <div class="tf-mini-cart-item">
                                         <div class="tf-mini-cart-image">
-                                            <a href="product-detail.html">
-                                                <img src="storage/${item.image_url}" alt="">
+                                            <a href="${productDetailUrl}">
+                                                <img src="/storage/${item.image_url}" alt="">
                                             </a>
                                         </div>
                                         <div class="tf-mini-cart-info">
                                             <a class="title link"
-                                                href="product-detail.html">${item.product_name}</a>
+                                                href="${productDetailUrl}">${item.product_name}</a>
                                             <div class="meta-variant">${item.color_name} / ${item.size_name}</div>
                                             <div class="price fw-6" data-price="${item.price * item.quantity}">${item.price * item.quantity}</div>
                                             <div class="tf-mini-cart-btns">
@@ -446,6 +449,27 @@
                 // Gửi AJAX cập nhật
                 updateQuantity(productId, colorId, sizeId, newQuantity, url);
             });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Gọi API để lấy số lượng sản phẩm trong giỏ hàng
+            function updateCartCount() {
+                $.ajax({
+                    url: '/cart/count',
+                    method: 'GET',
+                    success: function(response) {
+                        $('.cart-count').text(response.count);
+                    },
+                    error: function() {
+                        toastr.error('Không thể lấy thông tin giỏ hàng', 'Lỗi');
+
+                    }
+                });
+            }
+
+            // Gọi hàm khi trang được tải
+            updateCartCount();
         });
     </script>
 </body>

@@ -11,7 +11,7 @@
                 <h4>Cập nhật quản trị viên</h4>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.accountsUser.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+                <form id="update-admin-form" action="{{ route('admin.accountsUser.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="row">
@@ -100,7 +100,7 @@
 
                         <!-- Nút cập nhật -->
                         <div class="form-group">
-                            <button type="button" name="edit_user" class="btn btn-primary edit_user">Cập nhật</button>
+                            <button type="button" name="edit_user" id="submit-btn" class="btn btn-primary edit_user">Cập nhật</button>
                         </div>
                     </div>
                 </form>
@@ -113,7 +113,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-         
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -132,7 +131,6 @@
                 });
             @endif
 
-           
             const imageUpload = document.getElementById('image-upload');
             const imagePreviewImg = document.getElementById('image-preview-img');
             imageUpload.addEventListener('change', function () {
@@ -149,10 +147,10 @@
                 }
             });
 
-         
             const submitButton = document.querySelector('.edit_user');
-            const form = document.querySelector('form');
+            const form = document.querySelector('#update-admin-form');  // Thêm ID cho form
             submitButton.addEventListener('click', function (e) {
+                e.preventDefault(); // Ngăn gửi mặc định
                 Swal.fire({
                     title: 'Bạn có chắc chắn?',
                     text: "Thông tin sẽ được cập nhật sau khi xác nhận!",
@@ -164,12 +162,11 @@
                     cancelButtonText: 'Hủy'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        form.submit();
+                        form.submit(); // Gửi biểu mẫu
                     }
                 });
             });
 
-        
             $('.choose').on('change', function () {
                 var action = $(this).attr('id');
                 var ma_id = $(this).val();

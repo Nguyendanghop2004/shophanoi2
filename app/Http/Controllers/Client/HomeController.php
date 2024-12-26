@@ -269,4 +269,4 @@ return view('client.home', compact( 'products', 'collections', 'tags'));
 
        
     }
-}
+
