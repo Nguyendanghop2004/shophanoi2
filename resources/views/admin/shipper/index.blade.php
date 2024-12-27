@@ -57,14 +57,14 @@
                                             </a>
 
                                             <!-- Xóa -->
-                                            <form action="{{ route('admin.accounts.destroy', $admin->id) }}" method="POST"
+                                            {{-- <form action="{{ route('admin.accounts.destroy', $admin->id) }}" method="POST"
                                                 onsubmit="return confirmDelete(event)">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger ml-2">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
-                                            </form>
+                                            </form> --}}
 
                                             <!-- Vô hiệu hóa / Kích hoạt -->
                                             @if ($admin->status)
