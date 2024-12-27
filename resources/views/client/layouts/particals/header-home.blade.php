@@ -123,6 +123,7 @@
                        </a>
                    </div>
                    <div class="col-xl-2 col-md-4 col-6 text-center" style="max-width:80%;">
+
                        <a href="{{route('home')}}" class="logo-header">
                            <img src="{{asset('client/assets/images/logo/logo4.png')}}" alt="logo" class="logo">
                        </a>
@@ -130,6 +131,7 @@
 
 
                    <div class="col-xl-5 col-md-4 col-3">
+
                     @if (Auth::check())
                         <a href="{{ route('order.donhang') }}">Đơn hàng của tôi</a>
                     @else
@@ -169,14 +171,18 @@
                         <li class="nav-cart">
                             <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
                                 <i class="icon icon-bag"></i>
-                                <span class="count-box">0</span>
+                                <span class="count-box cart-count">0</span>
                             </a>
                         </li>
                     </ul>
                 </div>
                 
 
+                                     
+                      
+
            </div>
+
        </div>
       
     
@@ -191,6 +197,7 @@
                        @include('client.layouts.particals.navleft')
                        <!-- cate -->
                    </ul>
+
                </div>
            </div>
        </div>

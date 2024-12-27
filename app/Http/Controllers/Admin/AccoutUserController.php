@@ -102,7 +102,7 @@ class AccoutUserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        
+       
         $dataUser = User::findOrFail($id);
 
 
@@ -141,7 +141,7 @@ class AccoutUserController extends Controller
 
 
 
-       
+         
         $dataUser->update($data);
  
         return redirect()->route('admin.accountsUser.accountUser')->with('success', 'Cập nhật thành công!');

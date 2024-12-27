@@ -21,7 +21,7 @@ class CheckPasswordChange
         if (!$admin->check) {
             // dd(1);
             Auth::logout();
-            return redirect()->route('admin.login')->withErrors(['email' => 'Tài khoản của bạn đã bị thay đổi mật khẩu.']);
+            return redirect()->route('accountUser.login')->withErrors(['email' => 'Tài khoản của bạn đã bị thay đổi mật khẩu.']);
 
         }
         return $next($request);
