@@ -36,14 +36,26 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+
 Route::middleware('checkPassword')->group(function () {
 
 
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
+
+Route::get('/login', [HomeController::class, 'home'])->name('home');
+
+
+
+
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
 
+
+
+Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
+
+Route::get('error', [ErrorController::class, 'error'])->name('error');
 
 
     Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
@@ -55,6 +67,7 @@ Route::middleware('checkPassword')->group(function () {
     Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
     Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
 
+
     Route::get('brand', [BrandController::class, 'index'])->name('brand');
     Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
     Route::get('faq', [FAQController::class, 'index'])->name('faq');
@@ -65,10 +78,6 @@ Route::middleware('checkPassword')->group(function () {
     //thanh toán
     Route::get('check-out', [CheckOutController::class, 'checkout'])->name('checkout');
     Route::post('/apply-discount', [CheckOutController::class, 'applyDiscount'])->name('apply.discount');
-
-
-
-
     Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
     Route::get('/vnpay/return', [CheckoutController::class, 'vnPayReturn'])->name('vnpay.return');
     Route::get('/out-of-stock', [CheckoutController::class, 'outOfStock'])->name('out-of-stock');
@@ -106,7 +115,6 @@ Route::middleware('checkPassword')->group(function () {
     });
 
     //start blog
-
     Route::get('/blog', [BlogController::class, 'show'])->name('blog.show');
     Route::get('/blog/{slug}/detail', [BlogController::class, 'detail'])->name('blog.detail');
 
@@ -130,9 +138,13 @@ Route::middleware('checkPassword')->group(function () {
 
 
 
+
     Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.donhang');
     Route::get('/order/donhang/{id}', [OrderController::class, 'show'])->name('client.orders.show');
     Route::post('order/cancel/{id}', [OrderController::class, 'cancel'])->name('client.orders.cancel');
+
+Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+
 
     Route::get('/order/{order_code}/cancel', [OrderController::class, 'showCancelReasonForm'])->name('cancel.order.page');
     Route::get('/order/detail/{order_code}', [OrderController::class, 'showOrderDetail'])->name('order.detail.page');

@@ -74,25 +74,25 @@
             <button class="nav-link btn {{ $status === '' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => '']) }}'">Tất cả đơn hàng</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link btn {{ $status === 'chờ_xác_nhận' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'chờ_xác_nhận']) }}'">Chờ xác nhận</button>
+            <button class="nav-link btn {{ $status === 'chờ xác nhận' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'chờ xác nhận']) }}'">Chờ xác nhận</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link btn {{ $status === 'đã_xác_nhận' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'đã_xác_nhận']) }}'">Đã xác nhận</button>
+            <button class="nav-link btn {{ $status === 'đã xác nhận' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'đã xác nhận']) }}'">Đã xác nhận</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link btn {{ $status === 'ship_đã_nhận' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'ship_đã_nhận']) }}'">Ship đã nhận</button>
+            <button class="nav-link btn {{ $status === 'ship đã nhận' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'ship đã nhận']) }}'">Ship đã nhận</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link btn {{ $status === 'chờ_giao_hàng' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'chờ_giao_hàng']) }}'">Chờ giao hàng</button>
+            <button class="nav-link btn {{ $status === 'đang giao hàng' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'đang giao hàng']) }}'">Đang giao hàng</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link btn {{ $status === 'đang_giao_hàng' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'đang_giao_hàng']) }}'">Đang giao hàng</button>
+            <button class="nav-link btn {{ $status === 'giao hàng thành công' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'giao hàng thành công']) }}'">Giao hàng thành công</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link btn {{ $status === 'giao_hàng_thành_công' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'giao_hàng_thành_công']) }}'">Giao hàng thành công</button>
+            <button class="nav-link btn {{ $status === 'đã nhận hàng' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'đã nhận hàng']) }}'">Đơn hàng đã nhận</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link btn {{ $status === 'đã_nhận_hàng' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'đã_nhận_hàng']) }}'">Xác nhận giao hàng thành công</button>
+            <button class="nav-link btn {{ $status === 'giao hàng không thành công' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'giao hàng không thành công']) }}'">Đơn hàng hoàn về</button>
         </li>
         <li class="nav-item">
             <button class="nav-link btn {{ $status === 'hủy' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'hủy']) }}'">Đã hủy</button>
@@ -123,13 +123,13 @@
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('client.orders.show', ['id' => Crypt::encryptString($order->id)]) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
-                                    @if ($order->status === 'giao_hàng_thành_công')
+                                    @if ($order->status === 'giao hàng thành công')
                                     <form action="{{ route('orders.confirm', $order->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-success btn-sm">Xác nhận đơn hàng</button>
+                                        <button type="submit" class="btn btn-success btn-sm">Đã nhận hàng</button>
                                     </form>
                                     @endif
-                                    @if (in_array($order->status, ['chờ_xác_nhận', 'đã_xác_nhận']))
+                                    @if (in_array($order->status, ['chờ xác nhận', 'đã xác nhận']))
                                     <button class="btn btn-danger cancelOrderBtn" data-order-id="{{ $order->id }}" data-action="{{ route('client.orders.cancel', $order->id) }}">Hủy đơn hàng</button>
                                     @endif                         
                                 </div>

@@ -1,5 +1,6 @@
 <li><a href="product-detail.html"
-        class="menu-link-text link ms-1 @if ($index == 1) fw-bold @else ps-2 @endif">{{ $child->name }} </a></li>
+        class="menu-link-text link  @if ($index == 1) fw-bold @else @endif">{{ $child->name }} </a>
+</li>
 @php
     $index++;
 @endphp
@@ -9,4 +10,3 @@
         @include('client.layouts.particals.child-categories', ['child' => $child])
     @endforeach
 @endif
-

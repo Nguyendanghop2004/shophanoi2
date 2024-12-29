@@ -16,9 +16,9 @@
 <div class="tf-product-info-wrap position-relative">
     <div class="tf-product-info-list">
         <div class="tf-product-info-title">
-            <h5><a class="link" href="product-detail.html">{{ $product->product_name }}</a></h5>
+            <h5><a class="link" href="{{ route('product-detail', $product->slug) }}">{{ $product->product_name }}</a></h5>
         </div>
-        {{-- <div class="tf-product-info-badges">
+        {{-- <div class="tf-product-info-badges">   
             <div class="badges text-uppercase">Best seller</div>
             <div class="product-status-content">
                 <i class="icon-lightning"></i>
@@ -88,15 +88,10 @@
                     <span class="tooltip">Add to Compare</span>
                     <span class="icon icon-check"></span>
                 </a>
-                <div class="w-100">
-                    <a href="#" class="btns-full">Buy with <img src="images/payments/paypal.png"
-                            alt=""></a>
-                    <a href="#" class="payment-more-option">More payment options</a>
-                </div>
             </form>
         </div>
         <div>
-            <a href="product-detail.html" class="tf-btn fw-6 btn-line">View full details<i
+            <a href="{{ route('product-detail', $product->slug) }}" class="tf-btn fw-6 btn-line">View full details<i
                     class="icon icon-arrow1-top-left"></i></a>
         </div>
     </div>

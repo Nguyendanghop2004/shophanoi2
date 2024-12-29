@@ -122,10 +122,14 @@
                        </a>
                    </div>
                    <div class="col-xl-2 col-md-4 col-6 text-center" style="max-width:80%;">
+
                        <a href="home-multi-brand.html" class="logo-header">
 
                            <img src="{{ asset('client/assets/images/logo/logo.png') }}" alt="logo" class="logo">
 
+
+                       <a href="{{route('home')}}" class="logo-header">
+                           <img src="{{asset('client/assets/images/logo/logo4.png')}}" alt="logo" class="logo">
                        </a>
                    </div>
 
@@ -165,26 +169,26 @@
                                     <i class="icon icon-account"></i>
                                 </a>
                             </li>
-                        @endif --}}
-                           <li class="nav-wishlist">
-                               <a href="wishlist.html" class="nav-icon-item">
-                                   <i class="icon icon-heart"></i>
-                                   <span class="count-box">0</span>
-                               </a>
-                           </li>
-                           <li class="nav-cart">
-                               <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
-                                   <i class="icon icon-bag"></i>
-                                   <span class="count-box">0</span>
-                               </a>
-                           </li>
-                       </ul>
-                   </div>
 
+                        @endif
+                        <li class="nav-wishlist">
+                            <a href="wishlist.html" class="nav-icon-item">
+                                <i class="icon icon-heart"></i>
+                                <span class="count-box">0</span>
+                            </a>
+                        </li>
+                        <li class="nav-cart">
+                            <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
+                                <i class="icon icon-bag"></i>
+                                <span class="count-box cart-count">0</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
 
-                 
-
-
+                                     
+                      
            </div>
 
        </div>
@@ -204,6 +208,7 @@
 
                </div>
            </div>
+       </div>
 
    </header>
    <!-- /header -->

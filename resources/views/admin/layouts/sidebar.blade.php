@@ -204,7 +204,7 @@
         </li>
         <li class="dropdown">
             <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                <img alt="image" src="assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
+             
                 <div class="d-sm-none d-lg-inline-block">
                     {{ Auth::check() ? Auth::user()->name : 'Guest' }}
                 </div>
@@ -261,7 +261,7 @@
 
             @can('blog')
             <li class="dropdown">
-                <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                <a href="{{ route('admin.blog.index') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-folder"></i>
                     <span>Bài Viết</span></a>
                 <ul class="dropdown-menu">
@@ -273,6 +273,21 @@
                 </ul>
             </li>
             @endcan
+            @can('dashboard')
+            <li class="dropdown">
+                <a href="{{ route('admin.dashboard') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                        class="fas fa-folder"></i>
+                    <span>Thống kê</span></a>
+                <ul class="dropdown-menu">
+
+
+                    <li><a class="nav-link" href="{{ route('admin.dashboard') }}"><span>Tổng Quan</span></a></li>
+                   
+
+                </ul>
+            </li>
+            @endcan
+          
             <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
             @can('contact')
             <li><a class="nav-link" href="{{ route('admin.contact.index') }}"><i class="fas fa-envelope"></i>

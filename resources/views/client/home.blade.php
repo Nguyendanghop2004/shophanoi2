@@ -4,7 +4,7 @@
 @endsection
 
 @section('content')
-    {{-- <!-- categories -->
+    <!-- categories -->
     <section class="flat-spacing-20">
         <div class="container">
             <div class="row">
@@ -76,7 +76,7 @@
             </div>
         </div>
     </div>
-    <!-- /slider --> --}}
+    <!-- /slider -->
 
     {{-- <!-- Categories -->
     <section class="flat-spacing-5 pb_0">
