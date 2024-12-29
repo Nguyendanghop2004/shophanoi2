@@ -168,25 +168,23 @@ class HomeController extends Controller
             $product->main_image_url = $firstColor ? $firstColor['main_image'] : null;
             $product->hover_main_image_url = $firstColor ? $firstColor['hover_image'] : null;
 
-    // Chỉ giữ lại các trường cần thiết
-    return [
-        'id' => $product->id,
-        'name' => $product->product_name,
-        'price' => $product->price,
-        'slug' => $product->slug,
-        'distinct_size_count' => $product->distinct_size_count,
-        'total_stock_quantity' => $product->total_stock_quantity,
-        'main_image_url' => $product->main_image_url,
-        'hover_main_image_url' => $product->hover_main_image_url,
-        'colors' => $product->colors,
-    ];
-});
+            // Chỉ giữ lại các trường cần thiết
+            return [
+                'id' => $product->id,
+                'name' => $product->product_name,
+                'price' => $product->price,
+                'slug' => $product->slug,
+                'distinct_size_count' => $product->distinct_size_count,
+                'total_stock_quantity' => $product->total_stock_quantity,
+                'main_image_url' => $product->main_image_url,
+                'hover_main_image_url' => $product->hover_main_image_url,
+                'colors' => $product->colors,
+            ];
+        });
+        // return response()->json($products);
+        return view('client.home', compact('products', 'collections', 'sliders'));
 
-// Trả về view
-return view('client.home', compact( 'products', 'collections', 'tags'));
-
-
-    }
+        }
     public function getProductInfo(Request $request)
     {
         $product = Product::with(['variants', 'colors', 'images'])->find($request->id);
@@ -277,4 +275,3 @@ return view('client.home', compact( 'products', 'collections', 'tags'));
 
        
     }
-}

@@ -49,13 +49,10 @@ Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 Route::get('error', [ErrorController::class, 'error'])->name('error');
 
 Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
-<<<<<<<<< Temporary merge branch 1
 Route::get('shop-collection', [ShopCollectionController::class, 'index'])->name('shop-collection');
 Route::get('product-detail/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
-=========
 Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
 Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
->>>>>>>>> Temporary merge branch 2
 Route::get('brand', [BrandController::class, 'index'])->name('brand');
 Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
 Route::get('faq', [FAQController::class, 'index'])->name('faq');

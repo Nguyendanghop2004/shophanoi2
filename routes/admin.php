@@ -185,10 +185,7 @@ use Illuminate\Support\Facades\Route;
     Route::post('brands', [BrandController::class, 'store'])->name('brands.store');
     Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show');
     Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
-<<<<<<<<< Temporary merge branch 1
-=========
     Route::put('brands/{id}/edit', [BrandController::class, 'update'])->name('brands.update');
->>>>>>>>> Temporary merge branch 2
     Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
     Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
 
