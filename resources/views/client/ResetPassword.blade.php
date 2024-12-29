@@ -18,11 +18,11 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="header">
-                                    <div class="demo-title">Log in</div>
+                                    <div class="demo-title">Reset your password</div>
                                 </div>
 
                                 <div class="tf-login-form">
-                                    <form action="{{ route('account.login') }}" method="post">
+                                    <form action="{{ route('password.email') }}" method="post">
                                         @csrf
                                         <div class="tf-field style-1">
                                             <input class="tf-field-input tf-input" placeholder=" Nhập Email" type="email"
@@ -32,31 +32,14 @@
                                                 <p style="color: red; font-size: 14px;">{{ $message }}</p>
                                             @enderror
                                         </div>
-                                        <div class="tf-field style-1">
-                                            <input class="tf-field-input tf-input" placeholder=" " type="password"
-                                                name="password" @error('password') is-invalid @enderror>
-                                            <label class="tf-field-label" for="">Password *</label>
-                                            @error('password')
-                                                <p style="color: red; font-size: 14px;">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <a href="{{route('account.ResePassword')}}"  class="btn-link link">Forgot
-                                                your
-                                                password?</a>
-                                        </div>
+                                        
+                                       
                                         <div class="bottom">
                                             <div class="w-100">
                                                 <button type="submit"
-                                                    class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Log
-                                                        in</span></button>
+                                                    class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span> Change Password</span></button>
                                             </div>
-                                            <div class="w-100">
-                                                <a href="{{ route('account.register') }}" class="btn-link fw-6 w-100 link">
-                                                    New customer? Create your account
-                                                    <i class="icon icon-arrow1-top-left"></i>
-                                                </a>
-                                            </div>
+                                            
                                         </div>
                                     </form>
                                 </div>
