@@ -232,6 +232,8 @@ namespace App\Models{
  * @property-read int|null $product_variants_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $products
  * @property-read int|null $products_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductVariant> $variants
+ * @property-read int|null $variants_count
  * @method static \Illuminate\Database\Eloquent\Builder|Color newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Color newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Color query()
@@ -485,6 +487,7 @@ namespace App\Models{
  * @property string $sku
  * @property int $price
  * @property int $status
+ * @property int $is_best_seller
  * @property string|null $short_description
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -512,6 +515,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereIsBestSeller($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereProductName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereShortDescription($value)
