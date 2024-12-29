@@ -102,7 +102,7 @@ class AccoutUserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // Lấy dữ liệu người dùng cũ
+       
         $dataUser = User::findOrFail($id);
 
 
@@ -117,34 +117,33 @@ class AccoutUserController extends Controller
 
 
 
-        // Xử lý ảnh (nếu có)
+       
         if ($request->hasFile('image')) {
-            // Xóa ảnh cũ nếu có ảnh mới
+           
             if ($dataUser->image && Storage::exists($dataUser->image)) {
                 Storage::delete($dataUser->image);
             }
-            // Lưu ảnh mới
+         
             $data['image'] = Storage::put('public/images/User', $request->file('image'));
         }
 
 
-        // Cập nhật thông tin người dùng
+        
         $dataUser->update($data);
         History::create([
-            'user_id' => auth()->id(), // Người thực hiện hành động
-            'action' => 'update', // Hành động (update, create, delete)
-            'model_type' => 'User', // Loại model
-            'model_id' => $dataUser->id, // ID của model
+            'user_id' => auth()->id(), 
+            'action' => 'update', 
+            'model_type' => 'User', 
+            'model_id' => $dataUser->id, 
             'changes' => array_diff($dataUser->getAttributes(), $data),
         ]);
-        // Trả về thông báo thành công
+    
 
 
 
-        // Cập nhật thông tin người dùng
+         
         $dataUser->update($data);
-
-        // Trả về thông báo thành công
+ 
         return redirect()->route('admin.accountsUser.accountUser')->with('success', 'Cập nhật thành công!');
     }
 

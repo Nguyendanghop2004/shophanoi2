@@ -46,55 +46,56 @@
 
    </style>
    <div class="announcement-bar bg_dark">
-       <div class="wrap-announcement-bar">
-           <div class="box-sw-announcement-bar">
-               <div class="announcement-bar-item">
-                   <p>FREE SHIPPING AND RETURNS</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>NEW SEASON, NEW STYLES: FASHION SALE YOU CAN'T MISS</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>LIMITED TIME OFFER: FASHION SALE YOU CAN'T RESIST</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>FREE SHIPPING AND RETURNS</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>NEW SEASON, NEW STYLES: FASHION SALE YOU CAN'T MISS</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>LIMITED TIME OFFER: FASHION SALE YOU CAN'T RESIST</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>FREE SHIPPING AND RETURNS</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>NEW SEASON, NEW STYLES: FASHION SALE YOU CAN'T MISS</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>LIMITED TIME OFFER: FASHION SALE YOU CAN'T RESIST</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>FREE SHIPPING AND RETURNS</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>NEW SEASON, NEW STYLES: FASHION SALE YOU CAN'T MISS</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>LIMITED TIME OFFER: FASHION SALE YOU CAN'T RESIST</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>FREE SHIPPING AND RETURNS</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>NEW SEASON, NEW STYLES: FASHION SALE YOU CAN'T MISS</p>
-               </div>
-               <div class="announcement-bar-item">
-                   <p>LIMITED TIME OFFER: FASHION SALE YOU CAN'T RESIST</p>
-               </div>
-           </div>
-       </div>
+   <div class="wrap-announcement-bar">
+    <div class="box-sw-announcement-bar">
+        <div class="announcement-bar-item">
+            <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
+        </div>
+        <div class="announcement-bar-item">
+            <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
+        </div>
+    </div>
+</div>
+
        <span class="icon-close close-announcement-bar"></span>
 
    </div>
@@ -122,13 +123,15 @@
                        </a>
                    </div>
                    <div class="col-xl-2 col-md-4 col-6 text-center" style="max-width:80%;">
-                       <a href="home-multi-brand.html" class="logo-header">
-                           <img src="{{asset('client/assets/images/logo/logo.png')}}" alt="logo" class="logo">
+
+                       <a href="{{route('home')}}" class="logo-header">
+                           <img src="{{asset('client/assets/images/logo/logo4.png')}}" alt="logo" class="logo">
                        </a>
                    </div>
 
 
                    <div class="col-xl-5 col-md-4 col-3">
+
                     @if (Auth::check())
                         <a href="{{ route('order.donhang') }}">Đơn hàng của tôi</a>
                     @else
@@ -168,14 +171,18 @@
                         <li class="nav-cart">
                             <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
                                 <i class="icon icon-bag"></i>
-                                <span class="count-box">0</span>
+                                <span class="count-box cart-count">0</span>
                             </a>
                         </li>
                     </ul>
                 </div>
                 
 
+                                     
+                      
+
            </div>
+
        </div>
       
     
@@ -190,6 +197,7 @@
                        @include('client.layouts.particals.navleft')
                        <!-- cate -->
                    </ul>
+
                </div>
            </div>
        </div>

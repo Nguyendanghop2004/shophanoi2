@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\Rule;
 use Storage;
 use Str;
@@ -120,11 +122,21 @@ class CategoriesController extends Controller
     }
 
  
-    public function edit($id)
+    public function edit($encryptedId)
     {
-        $categories = Category::findOrFail($id); 
-        $categoryList = Category::all();
-        return view('admin.category.edit', compact('categoryList', 'categories',));
+        try {
+          
+            $id = Crypt::decryptString($encryptedId);
+    
+         
+            $categories = Category::findOrFail($id);
+            $categoryList = Category::all();
+    
+            return view('admin.category.edit', compact('categoryList', 'categories'));
+        } catch (DecryptException $e) {
+           
+            return redirect()->route('admin.error');
+        }
     }
 
    
@@ -132,7 +144,7 @@ class CategoriesController extends Controller
     {
         $category = Category::findOrFail($id);
     
-        // Cập nhật quy tắc validate
+      
         $rules = [
             'name' => [
                 'required',
@@ -171,16 +183,16 @@ class CategoriesController extends Controller
   
         if ($request->hasFile('image_path')) {
             if ($category->image_path) {
-                // Xóa ảnh cũ
+            
                 Storage::disk('public')->delete($category->image_path); 
             }
     
-            // Lưu ảnh mới
+        
             $imagePath = $request->file('image_path')->store('categories', 'public');
             $category->image_path = $imagePath; 
         }
     
-        // Cập nhật các thông tin khác của danh mục
+      
         $category->name = $request->name ?? $category->name;
         $category->slug = $request->slug ?? $category->slug;
         $category->description = $request->description;

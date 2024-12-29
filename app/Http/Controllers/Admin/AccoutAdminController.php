@@ -131,32 +131,32 @@ class AccoutAdminController extends Controller
             $data = $request->except('image_path');
             $data['name'] = $request->name;
     
-            // Kiểm tra và gán lại mật khẩu
+         
             if ($request->password == '') {
                 $data['password'] = $dataAdmin->password;
             } else {
                 $data['password'] = Hash::make($request->password);
             }
     
-            // Xử lý ảnh nếu có tải lên
+         
             if ($request->hasFile('image_path')) {
                 $data['image_path'] = Storage::put('public/images/admin', $request->file('image_path'));
             }
     
-            // Lưu lịch sử cập nhật
+         
             HistorieAdmins::create([
-                'admin_id' => auth()->id(), // Người thực hiện hành động
-                'action' => 'update', // Hành động (update, create, delete)
-                'model_type' => 'Admin', // Loại model
-                'model_id' => $dataAdmin->id, // ID của model
+                'admin_id' => auth()->id(), 
+                'action' => 'update', 
+                'model_type' => 'Admin', 
+                'model_id' => $dataAdmin->id, 
                 'changes' => array_diff($dataAdmin->getAttributes(), $data),
             ]);
     
-            // Cập nhật dữ liệu admin
+         
             $img = $dataAdmin->image_path;
             $dataAdmin->update($data);
     
-            // Xóa ảnh cũ nếu có ảnh mới
+          
             if ($img && Storage::exists($img) && $request->hasFile('image_path')) {
                 Storage::delete($img);
             }
@@ -178,7 +178,7 @@ class AccoutAdminController extends Controller
         }
         $dataUser->delete();
 
-        // Kiểm tra và xóa ảnh nếu có
+      
         if ($dataUser->image_path && Storage::exists($dataUser->image_path)) {
             Storage::delete($dataUser->image_path);
         }
@@ -216,7 +216,7 @@ class AccoutAdminController extends Controller
         $data = $request->all();
         $admin = Admin::find($id);
 
-        // Lấy role của người đang thực hiện yêu cầu
+       
         $currentUser = auth()->user();
         $currentUserRole = $currentUser->roles->first();
 
@@ -224,7 +224,7 @@ class AccoutAdminController extends Controller
             return redirect()->back()->with('error', 'Bạn không thể cấp vai trò này.');
         }
 
-        // Kiểm tra nếu vai trò mới là 'admin' và có bất kỳ người dùng nào khác đã là 'admin'
+       
         if ($data['role'] === 'admin') {
             $existingAdmin = Admin::role('admin')->where('id', '!=', $id)->first();
             if ($existingAdmin) {
@@ -248,13 +248,13 @@ class AccoutAdminController extends Controller
 
         $role_id = $admin->roles->first()->id;
 
-        $currentAdmin = auth()->guard('admin')->user(); // Sử dụng guard admin
+        $currentAdmin = auth()->guard('admin')->user(); 
         $currentAdminRole = $currentAdmin->roles->first();
 
         if ($currentAdminRole && $currentAdminRole->name == 'admin' && $admin->hasRole('admin')) {
         }
 
-        // Kiểm tra và thiết lập quyền
+       
         $permissions = $data['permission'] ?? [];
 
         if (empty($permissions)) {
@@ -288,7 +288,7 @@ class AccoutAdminController extends Controller
     $permission->name = $data['permission'];
     $permission->save();
 
-    return redirect()->back()->with('thong bao', 'Thêm thành công');
+    return redirect()->back()->with('success', 'Thêm thành công');
 }
     // thêm roles
 
@@ -310,7 +310,7 @@ class AccoutAdminController extends Controller
         $role->name = $data['roles'];
         $role->save();
     
-        return redirect()->back()->with('thong_bao', 'Thêm thành công');
+        return redirect()->back()->with('success', 'Thêm thành công');
     }
     
     // Trang thái người dùng
@@ -327,7 +327,7 @@ class AccoutAdminController extends Controller
     {
         $admin = Admin::findOrFail($id);
 
-        // Kiểm tra xem tài khoản có vai trò admin không
+      
         if ($admin->hasRole('admin')) {
             return redirect()->back()->with('error', 'Không thể vô hiệu hóa tài khoản có quyền admin.');
         }
@@ -358,6 +358,5 @@ class AccoutAdminController extends Controller
         $user->update($data);
         return back()->with('success', 'Đổi mới thành công',);
     }
-    //lịch sử cập nhật 
-
+   
 }

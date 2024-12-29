@@ -21,6 +21,7 @@
         <h3>Thông Tin Đơn Hàng</h3>
         <p><strong>Tên Khách Hàng:</strong> {{ $order->name }}</p>
         <p><strong>Số Điện Thoại:</strong> {{ $order->phone_number }}</p>
+        <p><strong>Trạng Thái Thanh Toán:</strong> {{ $order->payment_status }}</p>
         <p><strong>Phương thức thanh toán:</strong> {{ $order->payment_method }}</p>
         <p><strong>Địa Chỉ Cụ Thể:</strong>{{ $city->name_thanhpho }},{{ $province->name_quanhuyen }},{{ $ward->name_xaphuong }}, {{ $order->address }}</p>
     </div>

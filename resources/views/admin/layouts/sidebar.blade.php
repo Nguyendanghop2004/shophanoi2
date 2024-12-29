@@ -204,7 +204,7 @@
         </li>
         <li class="dropdown">
             <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                <img alt="image" src="assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
+             
                 <div class="d-sm-none d-lg-inline-block">
                     {{ Auth::check() ? Auth::user()->name : 'Guest' }}
                 </div>
@@ -238,7 +238,7 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="{{ route('admin.dashboard') }}">Stisla</a>
+            <a href="{{ route('admin.dashboard') }}">Hanoiclothesshop</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
             <a href="index.html">St</a>
@@ -259,7 +259,7 @@
                 </ul>
             </li>
 
-
+            @can('blog')
             <li class="dropdown">
                 <a href="{{ route('admin.blog.index') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-folder"></i>
@@ -272,17 +272,53 @@
 
                 </ul>
             </li>
-            <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
-            <li><a class="nav-link" href="{{ route('admin.contact.index') }}"><i class="fas fa-envelope"></i>
-                    <span>Liên
-                        Hệ</span></a></li>
-            @can('shipper')
-                <li><a class="nav-link" href="{{ route('admin.shippers.index') }}"><i class="fas fa-shipping-fast"></i>
-                        <span>Nhân
-                            viên giao hàng</span></a></li>
             @endcan
+            @can('dashboard')
+            <li class="dropdown">
+                <a href="{{ route('admin.dashboard') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                        class="fas fa-folder"></i>
+                    <span>Thống kê</span></a>
+                <ul class="dropdown-menu">
 
-            @can('categori')
+
+                    <li><a class="nav-link" href="{{ route('admin.dashboard') }}"><span>Tổng Quan</span></a></li>
+                   
+
+                </ul>
+            </li>
+            @endcan
+          
+            <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
+            @can('contact')
+            <li><a class="nav-link" href="{{ route('admin.contact.index') }}"><i class="fas fa-envelope"></i>
+                    <span>Liên Hệ</span></a></li>
+                    @endcan
+            @can('manager_ship')
+            <li class="menu-header">Quản Lí Shipper</li>
+            <li class="dropdown">
+                <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                    <span>Quản Lí Shipper</span></a>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link" href="{{ route('admin.shippers.index') }}"></i>
+                        <span>Nhân viên giao hàng</span></a></li>
+                    <li><a class="nav-link" href="{{route('admin.order.assign')}}"><span>Đơn hàng chưa giao</span></a></li>
+                </ul>
+            </li>
+                
+            @endcan
+            @can('Shipper')
+            <li class="menu-header">Shipper</li>
+            <li class="dropdown">
+                <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                    <span>Shipper</span></a>
+                <ul class="dropdown-menu">
+                   
+                    <li><a class="nav-link" href="{{route('admin.order.danhsachgiaohang')}}"><span>Danh sách giao hàng</span></a></li>
+                </ul>
+            </li>
+            @endcan
+            @can('categories')
+            <li class="menu-header">Danh mục</li>
                 <li class="dropdown">
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
                         <span>Danh mục sản phẩm</span></a>
@@ -305,11 +341,6 @@
                     <ul class="dropdown-menu">
 
                         <li><a class="nav-link" href="{{route('admin.order.getList')}}"><span>Danh Sách Đơn Hàng</span></a></li>
-                        <li><a class="nav-link" href="{{route('admin.order.assign')}}"><span>Gán shipper</span></a></li>
-                        <li><a class="nav-link" href="{{route('admin.order.danhsachgiaohang')}}"><span>Danh sách giao hàng</span></a></li>
-
-
-                       
                     </ul>
                 </li>
                 
@@ -331,22 +362,21 @@
                         <span>Quản lí Biển Thể</span></a>
                     <ul class="dropdown-menu">
                         <li><a class="nav-link" href="{{ route('admin.colors.index') }}"><span>Quản Màu Sắc</span></a></li>
-                        <li><a class="nav-link" href="{{ route('admin.sizes.index') }}"><span>Quản Lí Số Đo</span></a></li>
+
+                        <li><a class="nav-link" href="{{ route('admin.sizes.index') }}"><span> Lí Số Đo</span></a></li>
+
                         <li><a class="nav-link" href="{{ route('admin.brands.index') }}"><span>Quản Lí Thương Hiệu</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.tags.index') }}"><span>Quản lí Thẻ</span></a></li>
                     </ul>
                 </li>
             @endcan
 
-            @can('Acount')
+            @canany(['account_admin','account_user'])
             <li class="menu-header">Quản Lí tài khoản</li>
-
             <li class="dropdown">
-
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
                     <span>Account</span></a>
                 <ul class="dropdown-menu">
-
                     <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Tài khoản
                                 Admin</span></a></li>
                     <li><a class="nav-link" href="{{ route('admin.history') }}">
@@ -354,7 +384,6 @@
                     <li><a class="nav-link" href="{{ route('admin.accountsUser.accountUser') }}"><span>Tài khoản User</span></a></li>
                     <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Phân quyền và vai
                                 trò</span></a></li>
-                    
                 </ul>
             </li>
             @endcan
