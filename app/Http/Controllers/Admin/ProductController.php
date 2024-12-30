@@ -193,48 +193,52 @@ class ProductController extends Controller
     }
 
 
-    private function processDescription($description, $productId)
+    private function processDescription($description, $productId) 
     {
         if (empty(trim($description))) {
-            // Nếu mô tả rỗng, xóa toàn bộ ảnh liên quan
-            ProductImage::where('product_id', $productId)->get()->each(function ($image) {
-                Storage::delete("public/" . $image->image_url); // Xóa file
-                $image->delete(); // Xóa bản ghi trong CSDL
-            });
+            // Nếu mô tả rỗng, chỉ xóa các ảnh có color_id = null (ảnh thuộc mô tả)
+            ProductImage::where('product_id', $productId)
+                ->whereNull('color_id') // Chỉ xóa ảnh mô tả
+                ->get()
+                ->each(function ($image) {
+                    Storage::delete("public/" . $image->image_url); // Xóa file
+                    $image->delete(); // Xóa bản ghi trong CSDL
+                });
             return ''; // Trả về chuỗi rỗng
         }
-
+    
         $dom = new \DOMDocument();
         libxml_use_internal_errors(true); // Bỏ qua các lỗi HTML không hợp lệ
         $dom->loadHTML(mb_convert_encoding($description, 'HTML-ENTITIES', 'UTF-8'));
-
+    
         // Danh sách ảnh trong mô tả mới
         $newImages = [];
-
+    
         foreach ($dom->getElementsByTagName('img') as $img) {
             /** @var \DOMElement $img */
             $src = $img->getAttribute('src');
-
+    
             // Kiểm tra nếu ảnh được encode base64
             if (preg_match('/^data:image\/(\w+);base64,/', $src, $type)) {
                 $data = substr($src, strpos($src, ',') + 1);
                 $data = base64_decode($data);
-
+    
                 // Tạo tên ảnh ngẫu nhiên
                 $imageName = uniqid() . '.png';
                 $filePath = "public/images/products/summernote/$imageName";
                 Storage::put($filePath, $data);
-
+    
                 // Cập nhật đường dẫn của ảnh trong nội dung
                 $img->setAttribute('src', asset("storage/images/products/summernote/$imageName"));
-
-                // Lưu thông tin ảnh mới vào CSDL
+    
+                // Lưu thông tin ảnh mới vào CSDL với color_id = null
                 $imageUrl = "images/products/summernote/$imageName";
                 ProductImage::create([
                     'product_id' => $productId,
+                    'color_id' => null, // Đặt color_id = null để phân biệt ảnh mô tả
                     'image_url' => $imageUrl,
                 ]);
-
+    
                 // Thêm vào danh sách ảnh mới
                 $newImages[] = $imageUrl;
             } else {
@@ -243,26 +247,33 @@ class ProductController extends Controller
                 $newImages[] = $existingPath;
             }
         }
-
-        // Lấy danh sách ảnh cũ từ CSDL
-        $oldImages = ProductImage::where('product_id', $productId)->pluck('image_url')->toArray();
+    
+        // Lấy danh sách ảnh cũ từ CSDL (chỉ lấy ảnh mô tả với color_id = null)
+        $oldImages = ProductImage::where('product_id', $productId)
+            ->whereNull('color_id') // Chỉ lấy ảnh mô tả
+            ->pluck('image_url')
+            ->toArray();
+    
         // Xóa các ảnh cũ không còn trong mô tả
         $imagesToDelete = array_diff($oldImages, $newImages);
-
+    
         foreach ($imagesToDelete as $imagePath) {
             Storage::delete("public/" . $imagePath); // Xóa file khỏi storage
-            ProductImage::where('product_id', $productId)->where('image_url', $imagePath)->delete(); // Xóa bản ghi CSDL
+            ProductImage::where('product_id', $productId)
+                ->where('image_url', $imagePath)
+                ->whereNull('color_id') // Chỉ xóa ảnh mô tả
+                ->delete();
         }
-
+    
         // Chỉ lấy phần nội dung bên trong <body>
         $bodyContent = '';
         foreach ($dom->getElementsByTagName('body')->item(0)->childNodes as $child) {
             $bodyContent .= $dom->saveHTML($child);
         }
-
+    
         return $bodyContent; // Trả về nội dung đã xử lý
     }
-
+    
     /**
      * Display the specified resource.
      */
@@ -347,7 +358,7 @@ class ProductController extends Controller
     {
         // Tìm sản phẩm theo ID
         $product = Product::findOrFail($id);
-
+ 
         // Cập nhật thông tin sản phẩm
         $product->product_name = $request->product_name;
         $product->price = $request->price;

@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\SaleProductController;
 use App\Http\Controllers\Admin\ShipperController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SliderController;
@@ -97,14 +98,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::post('accounts/{id}/activate', [AccoutAdminController::class, 'activate'])->name('accounts.activate')->middleware('permission:activate_Account');
     Route::post('accounts/{id}/deactivate', [AccoutAdminController::class, 'deactivate'])->name('accounts.deactivate')->middleware('permission:deactivate_Account');
 
- // Quản lý thanh trượt
- Route::resource('slider', SliderController::class)->except(['show']);
- Route::get('slider/trash', [SliderController::class, 'trash'])->name('slider.trash');
+    // Quản lý thanh trượt
+    Route::resource('slider', SliderController::class)->except(['show']);
+    Route::get('slider/trash', [SliderController::class, 'trash'])->name('slider.trash');
 
- Route::post('slider/update-order', [SliderController::class, 'updateOrder'])->name('slider.updateOrder');
+    Route::post('slider/update-order', [SliderController::class, 'updateOrder'])->name('slider.updateOrder');
 
- Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
- Route::delete('sliders/{id}/force-delete', [SliderController::class, 'forceDelete'])->name('slider.forceDelete');
+    Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
+    Route::delete('sliders/{id}/force-delete', [SliderController::class, 'forceDelete'])->name('slider.forceDelete');
 
     // Quản lý danh mục
     Route::get('categories', [CategoriesController::class, 'list'])->name('categories.list')->middleware('permission:listCategories');
@@ -117,12 +118,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::post('categories/toggle-status/{id}', [CategoriesController::class, 'toggleStatus'])->name('categories.toggleStatus');
 
     // Quản lý sản phẩm
-// quản lí đơn hàng
+    // quản lí đơn hàng
 
-//end quản lí đơn hàng
+    //end quản lí đơn hàng
     Route::resource('product', ProductController::class);
-//quản lí coupons
-Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('discount_codes.index');
+    //quản lí coupons
+    Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('discount_codes.index');
 
     // Route để hiển thị form tạo mã giảm giá
     Route::get('discount-codes/create', [DiscountCodeController::class, 'create'])->name('discount_codes.create');
@@ -211,10 +212,16 @@ Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('di
     Route::post('blog/{id}/deactivateBlog', [BlogController::class, 'deactivateBlog'])->name('accountsUser.deactivateBlog');
     //end blog
     // ORDERS
-    Route::get('order/getList',[OrderController::class,'getList'])->name('order.getList');
+    Route::get('order/getList', [OrderController::class, 'getList'])->name('order.getList');
     Route::get('order/{id}', [OrderController::class, 'chitiet'])->name('order.chitiet');
     Route::post('order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.update-status');
     Route::get('order/index', [OrderController::class, 'index'])->name('order.index');
     Route::get('order/in-hoadon/{id}', [OrderController::class, 'inhoadon'])->name('order.inHoaDon');
 
+
+    //sale product
+    Route::resource('/sales', SaleProductController::class);
+
 });
+
+

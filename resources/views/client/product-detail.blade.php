@@ -6,10 +6,10 @@
         <div class="container">
             <div class="tf-breadcrumb-wrap d-flex justify-content-between flex-wrap align-items-center">
                 <div class="tf-breadcrumb-list">
-                    <a href="index.html" class="text">Home</a>
+                    <a href="{{ route('home') }}" class="text">Home</a>
                     <i class="icon icon-arrow-right"></i>
-                    <a href="#" class="text">Women</a>
-                    <i class="icon icon-arrow-right"></i>
+                    {{-- <a href="#" class="text">Women</a>
+                    <i class="icon icon-arrow-right"></i> --}}
                     <span class="text">{{ $product->product_name }}</span>
                 </div>
                 <div class="tf-breadcrumb-prev-next">
@@ -88,9 +88,21 @@
                                 <div class="tf-product-info-price">
                                     {{-- <div class="price-on-sale">${{ $product->price }}</div>
                                     <div class="compare-at-price">$10.00</div> --}}
-                                    <div class="price">{{ $product->price }} VNĐ</div>
+                                    @if ($product->sale_price < $product->price)
+                                        <span class="sale-price">{{ number_format($product->sale_price, 0, ',', '.') }}
+                                            VNĐ</span>
+                                        <span class="original-price" style="text-decoration: line-through; color: #888;">
+                                            {{ number_format($product->price, 0, ',', '.') }} VNĐ
+                                        </span>
+                                    @else
+                                        <span class="regular-price">{{ number_format($product->price, 0, ',', '.') }}
+                                            VNĐ</span>
+                                    @endif
 
                                     {{-- <div class="badges-on-sale"><span>20</span>% OFF</div> --}}
+                                </div>
+                                <div class="tf-product-description">
+                                    <p>{{ $product->short_description }}</p>
                                 </div>
                                 {{-- <div class="tf-product-info-liveview">
                                     <div class="liveview-count">20</div>
@@ -139,8 +151,7 @@
                                                 Kích thước: <span
                                                     class="fw-6 variant-picker-label-value selected-size">Không có</span>
                                             </div>
-                                            <a href="#find_size" data-bs-toggle="modal" class="find-size fw-6">Find your
-                                                size</a>
+                                            <a href="#find_size" data-bs-toggle="modal" class="find-size fw-6">Tìm Kiếm Kích Thước Dành Cho Bạn</a>
                                         </div>
                                         <div class="variant-picker-values" id="size-options-container">
                                             <!-- Các kích thước sẽ được thêm vào đây bằng JavaScript khi chọn màu -->
@@ -150,30 +161,34 @@
                                 <div class="tf-product-info-quantity">
                                     <div class="quantity-title fw-6">Số lượng</div>
                                     <div class="wg-quantity">
-                                        <span class="btn-quantity minus-btn">-</span>
+                                        <span class="btn-quantity minus-btn-detail">-</span>
                                         <input type="text" name="quantity_product" value="1">
-                                        <span class="btn-quantity plus-btn">+</span>
+                                        <span class="btn-quantity plus-btn-detail">+</span>
                                     </div>
                                 </div>
                                 <div class="tf-product-info-buy-button">
                                     <form class="">
                                         <a href="javascript:void(0);"
                                             class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Thêm
-                                                vào giỏ -&nbsp;</span><span class="tf-qty-price"
-                                                data-price="{{ $product->price }}">0
-                                                VNĐ</span></a>
+                                                vào giỏ -&nbsp;<span class="tf-qty-price"
+                                                    data-price="{{ $product->price }}"
+                                                    data-sale-price="{{ isset($product->sale_price) && $product->sale_price < $product->price ? $product->sale_price : $product->price }}">
+                                                    {{ number_format(isset($product->sale_price) && $product->sale_price < $product->price ? $product->sale_price : $product->price, 0, ',', '.') }}
+                                                    VNĐ
+                                                </span>
+                                        </a>
                                         <a href="javascript:void(0);"
                                             class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
                                             <span class="icon icon-heart"></span>
                                             <span class="tooltip">Add to Wishlist</span>
                                             <span class="icon icon-delete"></span>
                                         </a>
-                                        <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
+                                        {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                                             class="tf-product-btn-wishlist hover-tooltip box-icon bg_white compare btn-icon-action">
                                             <span class="icon icon-compare"></span>
                                             <span class="tooltip">Add to Compare</span>
                                             <span class="icon icon-check"></span>
-                                        </a>
+                                        </a> --}}
 
                                     </form>
                                 </div>
@@ -250,7 +265,7 @@
                 </div>
             </div>
         </div>
-        <div class="tf-sticky-btn-atc">
+        {{-- <div class="tf-sticky-btn-atc">
             <div class="container">
                 <div class="tf-height-observer w-100 d-flex align-items-center">
                     <div class="tf-sticky-atc-product d-flex align-items-center">
@@ -298,7 +313,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </section>
     <!-- /default -->
     <!-- tabs -->
@@ -315,16 +330,16 @@
                                 <span class="inner">Xem màu và kích thước</span>
                             </li>
                             <li class="item-title">
-                                <span class="inner">Shipping</span>
+                                <span class="inner">Vận chuyển</span>
                             </li>
                             <li class="item-title">
-                                <span class="inner">Return Policies</span>
+                                <span class="inner">Chính sách hoàn trả</span>
                             </li>
                         </ul>
                         <div class="widget-content-tab">
                             <div class="widget-content-inner active">
                                 <div class="">
-                                {{$product->description }}
+                                    {{ $product->description }}
                                 </div>
                             </div>
                             <div class="widget-content-inner">
@@ -347,33 +362,13 @@
                             </div>
                             <div class="widget-content-inner">
                                 <div class="tf-page-privacy-policy">
-                                    <div class="title">The Company Private Limited Policy</div>
-                                    <p>The Company Private Limited and each of their respective subsidiary, parent and
-                                        affiliated companies is deemed to operate this Website (“we” or “us”) recognizes
-                                        that you care how information about you is used and shared. We have created this
-                                        Privacy Policy to inform you what information we collect on the Website, how we use
-                                        your information and the choices you have about the way your information is
-                                        collected and used. Please read this Privacy Policy carefully. Your use of the
-                                        Website indicates that you have read and accepted our privacy practices, as outlined
-                                        in this Privacy Policy.</p>
-                                    <p>Please be advised that the practices described in this Privacy Policy apply to
-                                        information gathered by us or our subsidiaries, affiliates or agents: (i) through
-                                        this Website, (ii) where applicable, through our Customer Service Department in
-                                        connection with this Website, (iii) through information provided to us in our free
-                                        standing retail stores, and (iv) through information provided to us in conjunction
-                                        with marketing promotions and sweepstakes.</p>
-                                    <p>We are not responsible for the content or privacy practices on any websites.</p>
-                                    <p>We reserve the right, in our sole discretion, to modify, update, add to, discontinue,
-                                        remove or otherwise change any portion of this Privacy Policy, in whole or in part,
-                                        at any time. When we amend this Privacy Policy, we will revise the “last updated”
-                                        date located at the top of this Privacy Policy.</p>
-                                    <p>If you provide information to us or access or use the Website in any way after this
-                                        Privacy Policy has been changed, you will be deemed to have unconditionally
-                                        consented and agreed to such changes. The most current version of this Privacy
-                                        Policy will be available on the Website and will supersede all previous versions of
-                                        this Privacy Policy.</p>
-                                    <p>If you have any questions regarding this Privacy Policy, you should contact our
-                                        Customer Service Department by email at marketing@company.com</p>
+                                    <div class="title">Chính sách của Công ty TNHH Tư nhân</div>
+                                    <p>Công ty TNHH tư nhân và mỗi công ty con, công ty mẹ và công ty liên kết tương ứng của họ được coi là vận hành Trang web này (“chúng tôi” hoặc “chúng tôi”) nhận ra rằng bạn quan tâm đến cách thông tin về bạn được sử dụng và chia sẻ. Chúng tôi đã tạo Chính sách quyền riêng tư này để thông báo cho bạn những thông tin chúng tôi thu thập trên Trang web, cách chúng tôi sử dụng thông tin của bạn và những lựa chọn mà bạn có về cách thu thập và sử dụng thông tin của mình. Vui lòng đọc kỹ Chính sách quyền riêng tư này. Việc bạn sử dụng Trang web cho thấy rằng bạn đã đọc và chấp nhận các thực tiễn về quyền riêng tư của chúng tôi, như được nêu trong Chính sách quyền riêng tư này.</p>
+                                    <p>Xin lưu ý rằng các thông lệ được mô tả trong Chính sách quyền riêng tư này áp dụng cho thông tin do chúng tôi hoặc các công ty con, chi nhánh hoặc đại lý của chúng tôi thu thập: (i) thông qua Trang web này, (ii) nếu có, thông qua Phòng dịch vụ khách hàng của chúng tôi liên quan đến Trang web này, ( iii) thông qua thông tin được cung cấp cho chúng tôi tại các cửa hàng bán lẻ độc lập của chúng tôi và (iv) thông qua thông tin được cung cấp cho chúng tôi cùng với các chương trình khuyến mãi tiếp thị và rút thăm trúng thưởng.</p>
+                                    <p>Chúng tôi không chịu trách nhiệm về nội dung hoặc các biện pháp bảo mật trên bất kỳ trang web nào.</p>
+                                    <p>Chúng tôi có quyền, theo quyết định riêng của mình, sửa đổi, cập nhật, thêm vào, ngừng, xóa hoặc thay đổi bất kỳ phần nào của Chính sách quyền riêng tư này, toàn bộ hoặc một phần, bất cứ lúc nào. Khi chúng tôi sửa đổi Chính sách quyền riêng tư này, chúng tôi sẽ sửa lại ngày “cập nhật lần cuối” nằm ở đầu Chính sách quyền riêng tư này.</p>
+                                    <p>Nếu bạn cung cấp thông tin cho chúng tôi hoặc truy cập hay sử dụng Trang web theo bất kỳ cách nào sau khi Chính sách quyền riêng tư này được thay đổi, bạn sẽ được coi là đã đồng ý và đồng ý vô điều kiện với những thay đổi đó. Phiên bản mới nhất của Chính sách quyền riêng tư này sẽ có trên Trang web và sẽ thay thế tất cả các phiên bản trước đó của Chính sách quyền riêng tư này.</p>
+                                    <p>Nếu bạn có bất kỳ câu hỏi nào liên quan đến Chính sách quyền riêng tư này, bạn nên liên hệ với Bộ phận dịch vụ khách hàng của chúng tôi qua email tại marketing@company.com</p>
                                 </div>
                             </div>
                             <div class="widget-content-inner">
@@ -445,11 +440,11 @@
         </div>
     </section>
     <!-- /tabs -->
-    <!-- product -->
+    {{-- <!-- product -->
     <section class="flat-spacing-1 pt_0">
         <div class="container">
             <div class="flat-title">
-                <span class="title">People Also Bought</span>
+                <span class="title">Sản phẩm liên quan</span>
             </div>
             <div class="hover-sw-nav hover-sw-2">
                 <div class="swiper tf-sw-product-sell wrap-sw-over" data-preview="4" data-tablet="3" data-mobile="2"
@@ -847,8 +842,8 @@
             </div>
         </div>
     </section>
-    <!-- /product -->
-    <!-- recent -->
+    <!-- /product --> --}}
+    {{-- <!-- recent -->
     <section class="flat-spacing-4 pt_0">
         <div class="container">
             <div class="flat-title">
@@ -1251,7 +1246,7 @@
             </div>
         </div>
     </section>
-    <!-- /recent -->
+    <!-- /recent --> --}}
 @endsection
 @section('product-detail')
     <!-- modal compare_color -->
@@ -1505,7 +1500,9 @@
 
                 $('.btn-size').click(function() {
                     var sizeName = $(this).data('size-name');
-                    $('.selected-size').text(sizeName);
+                    var sizePrice = $(this).data('size-price');
+
+                    $('.selected-size').text(`${sizeName} + ${formatPrice(sizePrice)}`);
                     updateTotalPrice();
                 });
             });
@@ -1588,15 +1585,25 @@
 
             // Cập nhật giá trị tổng tiền
             function updateTotalPrice() {
-                let quantity = parseInt($('input[name="quantity_product"]').val()) || 0;
-                let priceBonus = parseInt($('input.btn-size:checked').data('size-price')) || 0;
-                let productPrice = parseInt($('.tf-qty-price').data('price')) || 0;
-                let totalPrice = (productPrice + priceBonus) * quantity;
-                let price = productPrice + priceBonus;
+                // Lấy số lượng sản phẩm
+                let quantity = parseInt($('input[name="quantity_product"]').val()) || 1;
 
-                $('.tf-qty-price').text(`${totalPrice} VNĐ`);
-                // $('.price-product').text(`${price} VNĐ`);
+                // Lấy giá gốc và giá giảm
+                let productPrice = parseFloat($('.tf-qty-price').data('price')) || 0; // Giá gốc
+                let salePrice = parseFloat($('.tf-qty-price').data('sale-price')) ||
+                    productPrice; // Giá giảm (nếu có)
+
+                // Lấy giá cộng thêm từ kích thước (nếu có)
+                let sizePrice = parseFloat($('input.btn-size:checked').data('size-price')) || 0;
+
+                // Tính giá tổng
+                let finalPrice = salePrice + sizePrice; // Giá cuối cùng cho 1 sản phẩm
+                let totalPrice = finalPrice * quantity; // Tổng tiền
+
+                // Cập nhật vào giao diện
+                $('.tf-qty-price').text(`${totalPrice.toLocaleString('vi-VN')} VNĐ`);
             }
+
 
             // sự kiện tăng giảm số lượng
             var btnQuantity = function() {
@@ -1610,7 +1617,7 @@
                     return value;
                 };
 
-                $(".minus-btn").on("click", function(e) {
+                $(".minus-btn-detail").on("click", function(e) {
                     e.preventDefault();
                     var $this = $(this);
                     var $input = $this.closest("div").find("input");
@@ -1623,7 +1630,7 @@
                     updateTotalPrice();
                 });
 
-                $(".plus-btn").on("click", function(e) {
+                $(".plus-btn-detail").on("click", function(e) {
                     e.preventDefault();
                     var $this = $(this);
                     var $input = $this.closest("div").find("input");
@@ -1658,7 +1665,7 @@
 
                 sizes.forEach(function(sizeInfo, index) {
                     if (index === 0) {
-                        $('.selected-size').text(sizeInfo.size.name);
+                        $('.selected-size').text(`${sizeInfo.size.name} + ${formatPrice(sizeInfo.price)}`);
                     }
 
                     var sizeElement = `
@@ -1672,6 +1679,13 @@
                     sizeContainer.append(sizeElement);
                 });
                 updateTotalPrice();
+            }
+            // Hàm định dạng giá tiền
+            function formatPrice(price) {
+                return new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                }).format(price);
             }
         });
     </script>

@@ -53,5 +53,14 @@ class Product extends Model
         return $this->belongsToMany(Size::class, 'product_variants', 'product_id', 'size_id');
     }
 
-
+    public function sales()
+    {
+        return $this->hasOne(ProductSale::class)
+                    ->where('start_date', '<=', now())
+                    ->where(function ($query) {
+                        $query->whereNull('end_date')
+                              ->orWhere('end_date', '>=', now());
+                    });
+    }
+    
 }

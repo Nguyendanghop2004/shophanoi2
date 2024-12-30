@@ -39,6 +39,12 @@ class HomeController extends Controller
             ->with([
                 'colors' => fn($query) => $query->select('colors.id', 'colors.name', 'colors.sku_color'),
                 'images' => fn($query) => $query->select('product_images.id', 'product_images.product_id', 'product_images.color_id', 'product_images.image_url'),
+                'sales' => fn($query) => $query->select('product_sales.product_id', 'product_sales.discount_type', 'product_sales.discount_value')
+                    ->where('start_date', '<=', now())
+                    ->where(function ($q) {
+                        $q->whereNull('end_date')
+                            ->orWhere('end_date', '>=', now());
+                    }),
             ])
             ->select([
                 'products.id',
@@ -46,7 +52,7 @@ class HomeController extends Controller
                 'products.price',
                 'products.slug',
                 DB::raw('COUNT(DISTINCT product_variants.size_id) as distinct_size_count'), // Số size khác nhau
-                DB::raw('(SELECT SUM(stock_quantity) FROM product_variants WHERE product_variants.product_id = products.id) as total_stock_quantity') // Tổng tồn kho chính xác
+                DB::raw('(SELECT SUM(stock_quantity) FROM product_variants WHERE product_variants.product_id = products.id) as total_stock_quantity'), // Tổng tồn kho chính xác
             ])
             ->groupBy('products.id')
             ->limit(10)
@@ -71,6 +77,16 @@ class HomeController extends Controller
                 ];
             });
 
+            // Tính toán giá giảm nếu có sale
+            $salePrice = $product->price; // Giá gốc
+            if ($product->sales) {
+                if ($product->sales->discount_type === 'percent') {
+                    $salePrice = $product->price * (1 - $product->sales->discount_value / 100);
+                } elseif ($product->sales->discount_type === 'fixed') {
+                    $salePrice = $product->price - $product->sales->discount_value;
+                }
+            }
+
             // Thiết lập main_image_url và hover_main_image_url cho sản phẩm
             $firstColor = $product->colors->first();
             $product->main_image_url = $firstColor ? $firstColor['main_image'] : null;
@@ -81,13 +97,14 @@ class HomeController extends Controller
                 'id' => $product->id,
                 'name' => $product->product_name,
                 'price' => $product->price,
+                'sale_price' => max(0, $salePrice), // Giá sau giảm, không được âm
                 'slug' => $product->slug,
                 'distinct_size_count' => $product->distinct_size_count,
                 'total_stock_quantity' => $product->total_stock_quantity,
                 'main_image_url' => $product->main_image_url,
                 'hover_main_image_url' => $product->hover_main_image_url,
                 'colors' => $product->colors,
-            ];
+            ]; 
         });
         // return response()->json($products);
         return view('client.home', compact('products', 'collections', 'sliders'));
@@ -137,8 +154,13 @@ class HomeController extends Controller
             'brand',
             'variants.color',
             'variants.size',
-            'images'
-        ])->where('id', $request->id)->first();
+            'images',
+            'sales' => fn($query) => $query->where('start_date', '<=', now())
+                ->where(function ($q) {
+                    $q->whereNull('end_date')
+                        ->orWhere('end_date', '>=', now());
+                })
+        ])->find($request->id); // Sử dụng find để đơn giản hóa
 
         // Kiểm tra nếu không tìm thấy sản phẩm
         if (!$product) {
@@ -152,24 +174,46 @@ class HomeController extends Controller
         foreach ($product->variants as $variant) {
             $colorId = $variant->color_id;
             $size = $variant->size;
-            $price = $variant->price;
+            $price = (float) $variant->price; // Ép kiểu float để đảm bảo tính toán chính xác
             $stockQuantity = $variant->stock_quantity;
+
+            $salePrice = $product->price; // Mặc định là giá gốc
+
+            if ($product->sales) {
+                $discountValue = $product->sales->discount_value;
+                if ($product->sales->discount_type === 'percent') {
+                    if ($discountValue > 0 && $discountValue <= 100) {
+                        $salePrice = $product->price * (1 - $discountValue / 100);
+                    }
+                } elseif ($product->sales->discount_type === 'fixed') {
+                    if ($discountValue >= 0 && $discountValue <= $product->price) {
+                        $salePrice = $product->price - $discountValue;
+                    }
+                }
+            }
             
+            $product->sale_price = max(0, $salePrice); // Đảm bảo không có giá trị âm
+            
+
             // Nếu chưa có màu này trong danh sách $colorSizes thì tạo mới
             if (!isset($colorSizes[$colorId])) {
                 $colorSizes[$colorId] = [];
             }
 
             // Thêm size và giá nếu chưa có
-            if (!in_array($size, array_column($colorSizes[$colorId], 'size'))) {
+            $exists = collect($colorSizes[$colorId])->firstWhere('size', $size);
+            if (!$exists) {
                 $colorSizes[$colorId][] = [
                     'size' => $size,
                     'price' => $price,
+                    'sale_price' => $salePrice, // Thêm giá sale
                     'stock_quantity' => $stockQuantity
                 ];
             }
         }
+
         // Trả về một view partial chứa thông tin sản phẩm, ảnh ngẫu nhiên, và các size theo màu
         return view('client.layouts.components.ajax-file.quick-view', compact('product', 'colorSizes'))->render();
     }
+
 }

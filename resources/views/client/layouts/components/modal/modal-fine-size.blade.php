@@ -2,20 +2,20 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="header">
-                <div class="demo-title">Size chart</div>
+                <div class="demo-title">Biểu đồ kích thước</div>
                 <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
             </div>
             <div class="tf-rte">
                 <div class="tf-table-res-df">
-                    <h6>Size guide</h6>
+                    <h6>Hướng dẫn kích thước</h6>
                     <table class="tf-sizeguide-table">
                         <thead>
                             <tr>
-                                <th>Size</th>
-                                <th>US</th>
-                                <th>Bust</th>
-                                <th>Waist</th>
-                                <th>Low Hip</th>
+                                <th>Kích cỡ</th>
+                                <th>Tôi</th>
+                                <th>Vòng 1 ( Bust )</th>
+                                <th>Vòng 2 ( waist )</th>
+                                <th>Vòng 3 ( low-hips )</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,19 +66,20 @@
                 </div>
                 <div class="tf-page-size-chart-content">
                     <div>
-                        <h6>Measuring Tips</h6>
-                        <div class="title">Bust</div>
-                        <p>Measure around the fullest part of your bust.</p>
-                        <div class="title">Waist</div>
-                        <p>Measure around the narrowest part of your torso.</p>
-                        <div class="title">Low Hip</div>
-                        <p class="mb-0">With your feet together measure around the fullest part of your
-                            hips/rear.
+                        <h6>Mẹo đo lường</h6>
+                        <div class="title">Vòng 1</div>
+                        <p>Đo xung quanh phần đầy nhất của bức tượng bán thân của bạn.</p>
+                        <div class="title">Vòng 2</div>
+                        <p>Đo xung quanh phần hẹp nhất của cơ thể bạn.</p>
+                        <div class="title">Vòng 3</div>
+                        <p class="mb-0">Chắp hai chân lại và đo xung quanh phần đầy đặn nhất của hông/phía sau của
+                            bạn.
                         </p>
                     </div>
                     <div>
-                        <img class="sizechart lazyload" data-src="images/shop/products/size_chart2.jpg"
-                            src="images/shop/products/size_chart2.jpg" alt="">
+                        <img class="sizechart lazyload"
+                            data-src="{{ asset('client/assets/images/shop/products/size_chart2.jpg') }}"
+                            src="{{ asset('client/assets/images/shop/products/size_chart2.jpg') }}" alt="">
                     </div>
                 </div>
             </div>
