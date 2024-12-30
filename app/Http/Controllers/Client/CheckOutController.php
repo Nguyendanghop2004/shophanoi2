@@ -364,7 +364,6 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
             'size_name' => $detail['size_name'],
             'quantity' => $detail['quantity'],
             'price' => $detail['price'],
-
         ]);
 
        

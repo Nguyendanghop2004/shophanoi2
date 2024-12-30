@@ -525,62 +525,54 @@
     </section>
     <!-- /Icon box -->
 
-    <!-- Tags -->
+    <!-- Brand -->
     <section class="flat-spacing-12">
-        <div class="container">
-            <div class="swiper tf-sw-brand border-0" data-play="true" data-loop="true" data-preview="6" data-tablet="4" data-mobile="2" data-space-lg="30" data-space-md="15">
-                <div class="swiper-wrapper">
-                    @foreach ($tags as $tag)
+        <div class="">
+            <div class="wrap-carousel wrap-brand wrap-brand-v2 autoplay-linear">
+                <div class="swiper tf-sw-brand border-0" data-play="true" data-loop="true" data-preview="6"
+                    data-tablet="4" data-mobile="2" data-space-lg="30" data-space-md="15">
+                    <div class="swiper-wrapper">
                         <div class="swiper-slide">
-                            <div class="tag-item">
-                                <!-- Ảnh bộ sưu tập -->
-                                <img src="{{ asset('storage/' . $tag->background_image) }}" 
-                                     alt="{{ $tag->name }}" 
-                                     class="tag-image">
-    
-                                <!-- Tên bộ sưu tập -->
-                                <h6 class="tag-name">{{ $tag->name }}</h6>
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-01.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-01.png') }}" alt="image-brand">
                             </div>
                         </div>
-                    @endforeach
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-02.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-02.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-03.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-03.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-04.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-04.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-05.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-05.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-06.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-06.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-<<<<<<< HEAD
-    
-    <!-- CSS -->
-    <style>
-        .tag-item {
-            text-align: center;
-        }
-    
-        .tag-image {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin: 0 auto;
-            display: block;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-    
-        .tag-image:hover {
-            transform: scale(1.05);
-        }
-    
-        .tag-name {
-            margin-top: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-        }
-    </style>
-   
-    
-    
-    
     <!-- /Brand --> --}}
 @endsection
 

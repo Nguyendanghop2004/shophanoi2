@@ -65,17 +65,26 @@ class SizeController extends Controller
      * Cập nhật kích thước trong cơ sở dữ liệu.
      */
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+{
+    // Tìm kích thước theo ID
+    $size = Size::findOrFail($id);
 
-        $size = Size::findOrFail($id); // Tìm size theo ID
-
-        $size->update($request->only('name'));
-
-        return redirect()->route('admin.colors_sizes.index')->with('success', 'Size updated successfully.');
+    // Kiểm tra nếu kích thước đang được sử dụng trong biến thể sản phẩm
+    if ($size->productVariants()->count() > 0) {
+        // Trả về thông báo lỗi nếu không thể sửa
+        return redirect()->route('admin.colors_sizes.index')->with('error', 'Không thể sửa kích thước này vì nó đang được sử dụng trong sản phẩm.');
     }
+
+    // Nếu không bị ràng buộc, thực hiện cập nhật
+    $request->validate([
+        'name' => 'required|string|max:255',
+    ]);
+
+    $size->update($request->only('name'));
+
+    return redirect()->route('admin.colors_sizes.index')->with('success', 'Size updated successfully.');
+}
+
 
     /**
      * Xóa kích thước khỏi cơ sở dữ liệu.

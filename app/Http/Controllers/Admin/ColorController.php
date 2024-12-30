@@ -71,19 +71,28 @@ class ColorController extends Controller
      * Cập nhật màu sắc trong cơ sở dữ liệu.
      */
     public function update(Request $request, $id)
-    {
+{
+    // Tìm màu sắc theo ID
+    $color = Color::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'sku_color' => 'required|string|max:255|unique:colors,sku_color,' . $id,
-        ]);
-
-        $color = Color::findOrFail($id);
-
-        $color->update($request->only('name', 'sku_color'));
-
-        return redirect()->route('admin.colors_sizes.index')->with('success', 'Color updated successfully.');
+    // Kiểm tra nếu màu sắc đang được sử dụng trong biến thể sản phẩm
+    if ($color->productVariants()->count() > 0) {
+        // Trả về thông báo lỗi nếu không thể sửa
+        return redirect()->route('admin.colors_sizes.index')->with('error', 'Không thể sửa màu sắc này vì nó đang được sử dụng trong sản phẩm.');
     }
+
+    // Nếu không bị ràng buộc, thực hiện cập nhật
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'sku_color' => 'required|string|max:255|unique:colors,sku_color,' . $id,
+    ]);
+
+    $color->update($request->only('name', 'sku_color'));
+
+    return redirect()->route('admin.colors_sizes.index')->with('success', 'Color updated successfully.');
+}
+
+
 
     /**
      * Xóa màu sắc khỏi cơ sở dữ liệu.

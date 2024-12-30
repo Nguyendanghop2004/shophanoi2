@@ -58,6 +58,19 @@ Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 Route::get('error', [ErrorController::class, 'error'])->name('error');
 
 
+Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
+Route::get('shop-collection', [ShopCollectionController::class, 'index'])->name('shop-collection');
+Route::get('product-detail/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
+Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
+Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
+Route::get('brand', [BrandController::class, 'index'])->name('brand');
+Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
+Route::get('faq', [FAQController::class, 'index'])->name('faq');
+Route::get('out-store', [OutStoreController::class, 'index'])->name('out-store');
+Route::get('time-line', [TimeLineController::class, 'index'])->name('time-line');
+Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping-cart');
+
+
     Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
     Route::get('gioithieu', [AboutUsController::class, 'index'])->name('index');
     Route::get('error', [ErrorController::class, 'error'])->name('error');
@@ -66,6 +79,7 @@ Route::get('error', [ErrorController::class, 'error'])->name('error');
 
     Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
     Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
+
 
 
     Route::get('brand', [BrandController::class, 'index'])->name('brand');
