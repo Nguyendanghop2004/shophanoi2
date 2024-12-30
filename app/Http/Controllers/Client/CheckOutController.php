@@ -217,8 +217,8 @@ class CheckOutController extends Controller
      
             if (!empty($outOfStockItems)) {
                 DB::rollBack();
-                return redirect()->route('out-of-stock')
-                    ->with('out_of_stock_items', $outOfStockItems)
+                return redirect()->route('cart')
+                  
                     ->with('error', 'Một số sản phẩm không đủ số lượng trong kho hoặc đã hết hàng.');
             }
     
@@ -233,10 +233,10 @@ class CheckOutController extends Controller
     
             
             if ($paymentMethod === 'cod') {
-               
+                DB::commit();
                 return $this->handleCOD($order);
             } elseif ($paymentMethod === 'vnpay') {
-               
+                DB::commit();
                 return $this->handleVNPay($order, $totalPrice);
             }
     
@@ -383,7 +383,7 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
     }
     
     }
-    DB::commit();
+  
     return $order;
 }
 
