@@ -88,6 +88,13 @@ Route::middleware('checkPassword')->group(function () {
     Route::post('/accountUser/register', [AccountController::class, 'register'])->name('accountUser.register');
     Route::get('/accountUser/register', [AccountController::class, 'RegisterIndex'])->name('account.register');
     Route::get('/accountUser/ResePassword', [AccountController::class, 'ResePasswordIndex'])->name('account.ResePassword');
+
+    Route::get('/accountUser/profile', [AccountController::class, 'profile'])->name('account.profile');
+    Route::get('/accountUser/profile/Orders', [AccountController::class, 'profileOrders'])->name('account.profileOrders');
+    Route::get('/accountUser/profile/address', [AccountController::class, 'profileAddress'])->name('account.profileAddress');
+    Route::get('/accountUser/profile/profileAccountDetails', [AccountController::class, 'profileAccountDetails'])->name('account.profileAccountDetails');
+    Route::get('/accountUser/profile/profileWishlist', [AccountController::class, 'profileWishlist'])->name('account.profileWishlist');
+
     Route::post('/password/email', [ForgotPasswordController::class, 'sendResetCode'])->name('password.email');
     Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->name('account.resetPassword');
     Route::post('/check-code', [ForgotPasswordController::class, 'checkCode'])->name('account.checkcode');

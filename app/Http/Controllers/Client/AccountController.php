@@ -30,7 +30,6 @@ class AccountController extends Controller
     public function login(Request $request)
     {
 
-
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
@@ -41,7 +40,7 @@ class AccountController extends Controller
             }
     
             // Đăng nhập thành công
-            return redirect()->intended('/');
+            return redirect()->intended('/')->with('success' ,'Đăng nhập thành công');
         }
     
         session()->flash('error', 'Email hoặc mật khẩu không đúng.');
@@ -51,7 +50,7 @@ class AccountController extends Controller
     {
         if (Auth::check()) {
             Auth::logout(); // Thực hiện logout
-            return redirect()->route('home');
+            return redirect()->route('home')->with('success' ,'Đăng xuất thành công');
         }
     }
     public function Register(RegisterRequest $request)
@@ -65,7 +64,7 @@ class AccountController extends Controller
 
         auth()->login($user);
 
-        return redirect()->route('home');
+        return redirect()->route('home')->with('success' ,'Đăng ký thành công');
     }
     public function loginIndex()
     {
@@ -86,5 +85,20 @@ class AccountController extends Controller
     public function ResePasswordIndex(){
         return view('client.ResetPassword');
 
+    }
+    public function profile()  {
+        return view('client.user.profile.profile');
+    }
+    public function profileOrders()  {
+        return view('client.user.profile.order');
+    }
+    public function profileAddress()  {
+        return view('client.user.profile.address');
+    }
+    public function profileAccountDetails()  {
+        return view('client.user.profile.account-details');
+    }
+    public function profileWishlist()  {
+        return view('client.user.profile.wishlist');
     }
 }

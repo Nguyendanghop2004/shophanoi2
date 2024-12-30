@@ -95,7 +95,7 @@ class AccoutAdminController extends Controller
 
     Admin::create($data);
 
-    return redirect()->route('admin.accounts.account')->with('success', 'Thêm mới thành công');
+    return redirect()->route('admin.accounts.account')->with('  ', 'Thêm mới thành công');
 }
 
     /**

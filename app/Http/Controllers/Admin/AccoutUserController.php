@@ -57,16 +57,17 @@ class AccoutUserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-
         $request->except('image');
         $data =
-            [
-                'name' => $request->name,
-                "email" => $request->email,
-                "password" => Hash::make($request->password),
-            ];
+        [
+            'name' => $request->name,
+            "email" => $request->email,
+            "password" => Hash::make($request->password),
+            "image" => $request->image,
+        ];
+     
         if ($request->hasFile('image')) {
-            $data['image']  =  Storage::put('public/images/admin', $request->file('image_path'));
+            $data['image']  =  Storage::put('public/images/admin', $request->file('image'));
         }
         User::create($data);
         return redirect()->route('admin.accountsUser.accountUser')->with('success', 'Thêm mới thành công');

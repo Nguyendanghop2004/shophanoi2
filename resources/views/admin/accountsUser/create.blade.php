@@ -53,7 +53,6 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-
                                 <div class="">
                                     <label for="password_confirmation">Xác nhận mật khẩu</label>
                                     <input @error('password') style="border:2px dashed red"  @enderror type="password"
@@ -73,7 +72,6 @@
                             </div>
                             <div class="form-group text-center mt-2">
                                 <label for="image-upload" class="btn btn-secondary">Chọn ảnh</label>
-                                <input type="file" name="image" id="image-upload" style="display: none;" />
                             </div>
                             @error('image')
                                 <div class="invalid-feedback" style="display: block;">
