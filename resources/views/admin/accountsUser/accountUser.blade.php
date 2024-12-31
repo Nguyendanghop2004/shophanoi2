@@ -33,10 +33,13 @@
                             @foreach ($users as $user)
                                 <tr>
                                     <th scope="row">{{ $user->id }}</th>
-                                    <td ><a class="text-primary" href="{{ route('admin.accountsUser.show', $user->id) }}">{{ $user->name }}</a></td>
+                                    <td><a class="text-primary"
+                                            href="{{ route('admin.accountsUser.show', $user->id) }}">{{ $user->name }}</a>
+                                    </td>
                                     <td>{{ $user->email }}</td>
                                     <td>
-                                        <img src="{{ Storage::url($user->image) }}" alt="Ảnh quản trị viên" width="100px" height="60px">
+                                        <img src="{{ Storage::url($user->image) }}" alt="Ảnh quản trị viên" width="100px"
+                                            height="60px">
                                     </td>
 
                                     <td>
@@ -52,32 +55,39 @@
                                         <p class="mb-1 ga-bottom ">{{ $user->city->name_thanhpho ?? '' }}</p>
                                         <p class="mb-0 ga-bottom ">{{ $user->address }}</p>
                                     </td>
-                                    
+
                                     <td>
                                         <div class="d-flex">
-                                            <a href="{{ route('admin.accountsUser.edit', $user->id) }}" class="btn btn-warning">
+                                            <a href="{{ route('admin.accountsUser.edit', $user->id) }}"
+                                                class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            
-                                            <form action="{{ route('admin.accountsUser.destroy', $user->id) }}" method="POST" id="delete-user-{{ $user->id }}">
+
+                                            <form action="{{ route('admin.accountsUser.destroy', $user->id) }}"
+                                                method="POST" id="delete-user-{{ $user->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="btn btn-danger ml-2 delete-btn" data-user-id="{{ $user->id }}">
+                                                <button type="button" class="btn btn-danger ml-2 delete-btn"
+                                                    data-user-id="{{ $user->id }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
 
                                             @if ($user->status)
-                                                <form action="{{ route('admin.accountsUser.deactivateUser', $user->id) }}" method="POST" class="ml-2" id="deactivate-user-{{ $user->id }}">
+                                                <form action="{{ route('admin.accountsUser.deactivateUser', $user->id) }}"
+                                                    method="POST" class="ml-2" id="activate-user-{{ $user->id }}">
                                                     @csrf
-                                                    <button type="button" class="btn btn-danger deactivate-btn" data-user-id="{{ $user->id }}">
+                                                    <button type="button" class="btn btn-success activate-btn"
+                                                        data-user-id="{{ $user->id }}">
                                                         <i class="fas fa-lock"></i>
                                                     </button>
                                                 </form>
                                             @else
-                                                <form action="{{ route('admin.accountsUser.activateUser', $user->id) }}" method="POST" class="ml-2" id="activate-user-{{ $user->id }}">
+                                                <form action="{{ route('admin.accountsUser.activateUser', $user->id) }}"
+                                                    method="POST" class="ml-2" id="deactivate-user-{{ $user->id }}">
                                                     @csrf
-                                                    <button type="button" class="btn btn-success activate-btn" data-user-id="{{ $user->id }}">
+                                                    <button type="button" class="btn btn-danger deactivate-btn"
+                                                        data-user-id="{{ $user->id }}">
                                                         <i class="fas fa-unlock"></i>
                                                     </button>
                                                 </form>

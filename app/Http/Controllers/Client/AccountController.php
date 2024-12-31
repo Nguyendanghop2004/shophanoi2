@@ -77,4 +77,12 @@ class AccountController extends Controller
     {
         return view('client.register');
     }
+
+    public function ResePasswordIndex(){
+        return view('client.ResetPassword');
+
+    }
 }
+
+
+
