@@ -6,7 +6,6 @@
         <h1>Danh Sách Màu Sắc và Kích Thước</h1>
     </div>
 
-    <!-- Sử dụng class row để chia đôi không gian -->
     <div class="row">
         <!-- Bảng Màu Sắc -->
         <div class="col-md-6">
@@ -20,7 +19,6 @@
 
                 <div class="card-body">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <!-- Form Tìm Kiếm Màu Sắc -->
                         <form class="form-inline" method="GET" action="{{ route('admin.colors.index') }}">
                             <div class="search-element">
                                 <input class="form-control" type="search" placeholder="Tìm kiếm màu sắc..." aria-label="Search" name="searchColor" value="{{ request()->searchColor }}" data-width="250">
@@ -155,8 +153,6 @@
         </div>
     </div>
 </section>
-
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

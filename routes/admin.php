@@ -180,15 +180,14 @@ use Illuminate\Support\Facades\Route;
     Route::delete('colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy')->middleware('permission:product');
 
     // Route cho BrandController
-
-    Route::get('brands', [BrandController::class, 'index'])->name('brands.index')->middleware('permission:product');
-    Route::get('brands/create', [BrandController::class, 'create'])->name('brands.create')->middleware('permission:product');
-    Route::post('brands', [BrandController::class, 'store'])->name('brands.store')->middleware('permission:product');
-    Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show')->middleware('permission:product');
-    Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit')->middleware('permission:product');
-    Route::put('brands/{id}/edit', [BrandController::class, 'update'])->name('brands.update')->middleware('permission:product');
-    Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy')->middleware('permission:product');
-    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update')->middleware('permission:product');
+    Route::get('brands', [BrandController::class, 'index'])->name('brands.index');
+    Route::get('brands/create', [BrandController::class, 'create'])->name('brands.create');
+    Route::post('brands', [BrandController::class, 'store'])->name('brands.store');
+    Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show');
+    Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
+    Route::put('brands/{id}/edit', [BrandController::class, 'update'])->name('brands.update');
+    Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
 
     Route::get('colors-sizes', [ColorSizeController::class, 'index'])->name('colors_sizes.index')->middleware('permission:product');
 
