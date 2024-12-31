@@ -10,11 +10,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->unsignedBigInteger('city_id')->after('address'); // Thêm trường city_id sau cột address
-            $table->unsignedBigInteger('wards_id')->after('city_id'); // Thêm trường wards_id sau cột city_id
-            $table->unsignedBigInteger('province_id')->after('wards_id'); // Thêm trường province_id sau cột wards_id
-        });
+        // Schema::table('orders', function (Blueprint $table) {
+        //     $table->unsignedBigInteger('city_id')->after('address'); // Thêm trường city_id sau cột address
+        //     $table->unsignedBigInteger('wards_id')->after('city_id'); // Thêm trường wards_id sau cột city_id
+        //     $table->unsignedBigInteger('province_id')->after('wards_id'); // Thêm trường province_id sau cột wards_id
+        // });
     }
 
     /**

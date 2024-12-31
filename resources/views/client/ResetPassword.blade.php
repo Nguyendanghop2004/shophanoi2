@@ -3,8 +3,14 @@
     @include('client.layouts.particals.header-home')
 @endsection
 @section('content')
-    <!-- danh mục -->
+    <!-- categories -->
     <section class="flat-spacing-20">
+        @if (session('warning'))
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ session('warning') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -12,11 +18,11 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="header">
-                                    <div class="demo-title">Đăng nhập</div>
+                                    <div class="demo-title">Reset your password</div>
                                 </div>
 
                                 <div class="tf-login-form">
-                                    <form action="{{ route('account.login') }}" method="post">
+                                    <form action="{{ route('password.email') }}" method="post">
                                         @csrf
                                         <div class="tf-field style-1">
                                             <input class="tf-field-input tf-input" placeholder=" Nhập Email" type="email"
@@ -26,34 +32,14 @@
                                                 <p style="color: red; font-size: 14px;">{{ $message }}</p>
                                             @enderror
                                         </div>
-                                        <div class="tf-field style-1">
-                                            <input class="tf-field-input tf-input" placeholder=" " type="password"
-                                                name="password" @error('password') is-invalid @enderror>
-                                            <label class="tf-field-label" for="">Mật khẩu *</label>
-                                            @error('password')
-                                            <p style="color: red; font-size: 14px;">{{ $message }}</p>
-                                        @enderror
-                                        </div>
-                                        <div>
-
-                                            <a href="{{route('account.ResePassword')}}"  class="btn-link link">Quên Mật Khẩu</a>
-
-                                        </div>
+                                        
+                                       
                                         <div class="bottom">
                                             <div class="w-100">
                                                 <button type="submit"
-                                                    class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Đăng nhập</span></button>
+                                                    class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span> Change Password</span></button>
                                             </div>
-                                            <div class="w-100">
-
-
-                                                <a href="{{route('account.register')}}" class="btn-link fw-6 w-100 link">
-                                                    Khách hàng mới? Tạo tài khoản
-
-
-                                                    <i class="icon icon-arrow1-top-left"></i>
-                                                </a>
-                                            </div>
+                                            
                                         </div>
                                     </form>
                                 </div>
@@ -64,11 +50,9 @@
             </div>
         </div>
     </section>
-
 @endsection
-   
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         @if (session('success'))
@@ -90,8 +74,16 @@
         @endif
 
 
-
     });
 </script>
-
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.classList.add('fade');
+                alert.classList.remove('show');
+            }, 5000); // 5 giây
+        });
+    });
+</script>
