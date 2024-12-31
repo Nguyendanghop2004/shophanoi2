@@ -143,7 +143,7 @@ Route::get('error', [ErrorController::class, 'error'])->name('error');
     Route::get('/order/donhang/{id}', [OrderController::class, 'show'])->name('client.orders.show');
     Route::post('order/cancel/{id}', [OrderController::class, 'cancel'])->name('client.orders.cancel');
 
-Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+    Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
 
 
     Route::get('/order/{order_code}/cancel', [OrderController::class, 'showCancelReasonForm'])->name('cancel.order.page');

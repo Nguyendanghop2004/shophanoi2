@@ -11,10 +11,9 @@
     </div>
 
     <div class="col-lg-12">
-        <a href="{{route('admin.permissions.index')}}" class="btn btn-outline-danger mb-4">Quay lại</a>
+        <a href="{{ route('admin.permissions.index') }}" class="btn btn-outline-danger mb-4">Quay lại</a>
 
         <!-- Display session messages -->
-      
 
         <div class="card card-primary mb-4">
             <div class="card-header bg-primary text-white">
@@ -61,6 +60,21 @@
                     <div class="form-group">
                         <label for="name" class="form-label">Tên quyền</label>
                         <input type="text" class="form-control" value="{{ old('permission') }}" name="permission" placeholder="Tên quyền">
+                       @if(session('thong_bao'))
+                <div class="alert alert-success">
+                    {{ session('thong_bao') }}
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
                     </div>
                     <input type="submit" name="insertper" value="Thêm mới quyền" class="btn btn-danger mt-3" id="add-permission-btn">
                 </form>
