@@ -172,7 +172,7 @@ class HomeController extends Controller
         return view('client.home', compact('products', 'collections', 'sliders'));
 
         }
->>>>>>> 0189a736f23a3a2b3efcdf9a93f142ad82a1aa70
+
     public function getProductInfo(Request $request)
     {
         $product = Product::with(['variants', 'colors', 'images'])->find($request->id);

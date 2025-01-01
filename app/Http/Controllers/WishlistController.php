@@ -13,7 +13,7 @@ class WishlistController extends Controller
     public function add(Request $request)
     {
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để thêm vào danh sách yêu thích.');
+            return redirect()->route('accountUser.login')->with('error', 'Bạn cần đăng nhập để thêm vào danh sách yêu thích.');
         }
     
         $userId = Auth::id();
@@ -40,7 +40,7 @@ class WishlistController extends Controller
     public function remove(Request $request)
     {
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để xóa khỏi danh sách yêu thích.');
+            return redirect()->route('accountUser.login')->with('error', 'Bạn cần đăng nhập để xóa khỏi danh sách yêu thích.');
         }
     
         $userId = Auth::id();
@@ -59,7 +59,7 @@ class WishlistController extends Controller
     public function getWishlist()
     {
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để xem danh sách yêu thích.');
+            return redirect()->route('accountUser.login')->with('error', 'Bạn cần đăng nhập để xem danh sách yêu thích.');
         }
 
        
