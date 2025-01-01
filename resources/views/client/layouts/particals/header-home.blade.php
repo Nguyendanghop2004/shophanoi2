@@ -168,8 +168,9 @@
 
                         @endif -->
                         <li class="nav-wishlist">
-                            <a href="wishlist.html" class="nav-icon-item">
+                            <a href="{{route('wishlist')}}" class="nav-icon-item">
                                 <i class="icon icon-heart"></i>
+                             
                                 <span class="count-box">0</span>
                             </a>
                         </li>

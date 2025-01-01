@@ -14,6 +14,7 @@ use App\Models\Color;
 use App\Models\Size;
 use App\Models\Tag;
 
+use App\Models\Wishlist;
 use Auth;
 
 use DB;
@@ -90,83 +91,21 @@ class HomeController extends Controller
                 'colors' => $product->colors,
             ];
         });
-        
+        $wishlist = [];
+
+        // Kiểm tra nếu người dùng đã đăng nhập
+        if (Auth::check()) {
+           
+            $wishlist = Wishlist::where('user_id', Auth::id())
+                ->pluck('product_id')
+                ->toArray();  // Lấy tất cả ID sản phẩm trong wishlist
+        }
         // return response()->json($products);
-        return view('client.home', compact('products', 'collections', 'sliders','data'));
+        return view('client.home', compact('products', 'collections', 'sliders','data','wishlist'));
 
-        $collections = Tag::where('type', 'collection')->get();
+      
 
-        // Lấy danh sách sản phẩm
-        $products = Product::with([
-            'colors' => function ($query) {
-                $query->select('colors.id', 'colors.name', 'colors.sku_color');
-            },
-            'variants' => function ($query) {
-                $query->select('product_variants.id', 'product_variants.product_id', 'product_variants.size_id');
-            },
-            'images' => function ($query) {
-                $query->select('product_images.id', 'product_images.product_id', 'product_images.color_id', 'product_images.image_url');
-            }
-        ])
-        ->select([
-            'products.id',
-            'products.price',
-            'products.brand_id',
-            'products.slug',
-            'products.product_name',
-            'products.sku',
-            'products.description',
-            'products.status',
-            DB::raw('(SELECT SUM(stock_quantity) FROM product_variants WHERE product_variants.product_id = products.id) as total_stock_quantity'),
-            DB::raw('(SELECT image_url FROM product_images WHERE product_images.product_id = products.id ORDER BY RAND() LIMIT 1) as main_image_url')
-        ])
-        ->limit(10)
-        ->get();
 
-        // Lấy tags
-        $tags = Tag::whereNotNull('background_image')->get();
-
-// Xử lý sản phẩm
-$products = $products->map(function ($product) {
-    // Nhóm ảnh theo color_id
-    $imagesByColor = $product->images->groupBy('color_id');
-
-    // Gắn main_image và hover_image vào từng màu
-    $product->colors = $product->colors->map(function ($color) use ($imagesByColor) {
-        $images = $imagesByColor->get($color->id, collect());
-        $mainImage = $images->first()?->image_url ?? null; // Ảnh đầu tiên
-        $hoverImage = $images->skip(1)->first()?->image_url ?? null; // Ảnh thứ hai
-
-        return [
-            'id' => $color->id,
-            'name' => $color->name,
-            'sku_color' => $color->sku_color,
-            'main_image' => $mainImage,
-            'hover_image' => $hoverImage,
-        ];
-    });
-
-    // Thiết lập main_image_url và hover_main_image_url cho sản phẩm
-    $firstColor = $product->colors->first();
-    $product->main_image_url = $firstColor ? $firstColor['main_image'] : null;
-    $product->hover_main_image_url = $firstColor ? $firstColor['hover_image'] : null;
-
-    // Chỉ giữ lại các trường cần thiết
-    return [
-        'id' => $product->id,
-        'name' => $product->product_name,
-        'price' => $product->price,
-        'slug' => $product->slug,
-        'distinct_size_count' => $product->distinct_size_count,
-        'total_stock_quantity' => $product->total_stock_quantity,
-        'main_image_url' => $product->main_image_url,
-        'hover_main_image_url' => $product->hover_main_image_url,
-        'colors' => $product->colors,
-    ];
-});
-
-// Trả về view
-return view('client.home', compact( 'products', 'collections', 'tags'));
 
 
     }
