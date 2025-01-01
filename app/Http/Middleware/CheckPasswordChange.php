@@ -17,10 +17,8 @@ class CheckPasswordChange
      */
     public function handle(Request $request, Closure $next): Response
     {
-
         if (Auth::check()) {
             if (Auth::user()->status) {
-                // dd(1);
                 Auth::logout();
                 return redirect()->route('accountUser.login')->with('error', 'Tài khoản của bạn đã bị khóa',);
             }

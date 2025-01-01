@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class RegisterRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Xác định xem người dùng có được phép thực hiện yêu cầu này không.
      */
     public function authorize(): bool
     {
@@ -15,15 +15,19 @@ class RegisterRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Lấy các quy tắc xác thực sẽ áp dụng cho yêu cầu này.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+           
+            'name' => 'required|string|max:255|unique:users,name',
+
+           
+            'email' => 'required|string|email|max:255|unique:users,email',
+
             'password' => 'required|string|min:8|confirmed',
             'password_confirmation' => 'required|string|min:8',
         ];
@@ -48,7 +52,17 @@ class RegisterRequest extends FormRequest
 
             'password_confirmation.required' => 'Xác nhận mật khẩu là trường bắt buộc.',
             'password_confirmation.string' => 'Xác nhận mật khẩu phải là một chuỗi ký tự.',
-            'password_confirmation.min' => 'Xác nhận mật khẩu phải có ít nhất 8 ký tự.',
+
+
+           
+            'password_confirmation' => 'required|string|min:8',
         ];
     }
+
+    /**
+     * Tùy chỉnh thông báo lỗi cho các quy tắc xác thực
+     *
+     * @return array<string, string>
+     */
+  
 }

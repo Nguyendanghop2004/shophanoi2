@@ -11,6 +11,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        {{-- @dd($order) --}}
         <div class="container">
             <div class="row">
         <!-- page-cart -->
@@ -33,71 +34,38 @@
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th class="fw-6">Order</th>
-                                                <th class="fw-6">Date</th>
-                                                <th class="fw-6">Status</th>
-                                                <th class="fw-6">Total</th>
-                                                <th class="fw-6">Actions</th>
+                                                <th class="fw-6">Mã code</th>
+                                                <th class="fw-6">Ngày</th>
+                                                <th class="fw-6">Trạng thái</th>
+                                                <th class="fw-6">Tổng cộng</th>
+                                                <th class="fw-6">Hành động</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach ($order as $item)
+                                                
                                             <tr class="tf-order-item">
                                                 <td>
-                                                    #123
+                                                   {{$item->order_code}}
                                                 </td>
                                                 <td>
-                                                    August 1, 2024
+                                                
+                                                    {{$item->created_at->format('d/m/Y')}}
                                                 </td>
                                                 <td>
-                                                    On hold
+                                                    {{$item->status}}
                                                 </td>
                                                 <td>
-                                                    $200.0 for 1 items
+                                                    {{$item->total_price}}
                                                 </td>
                                                 <td>
-                                                    <a href="my-account-orders-details.html" class="tf-btn btn-fill animate-hover-btn rounded-0 justify-content-center">
-                                                        <span>View</span>
+                                                    <a href="{{route('profile.profileOrder',$item->id)}}" class="tf-btn btn-fill animate-hover-btn rounded-0 justify-content-center">
+                                                        <span>Chi tiết</span>
                                                     </a>
                                                 </td>
                                             </tr>
-                                            <tr class="tf-order-item">
-                                                <td>
-                                                    #345
-                                                </td>
-                                                <td>
-                                                    August 2, 2024
-                                                </td>
-                                                <td>
-                                                    On hold
-                                                </td>
-                                                <td>
-                                                    $300.0 for 1 items
-                                                </td>
-                                                <td>
-                                                    <a href="my-account-orders-details.html" class="tf-btn btn-fill animate-hover-btn rounded-0 justify-content-center">
-                                                        <span>View</span>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr class="tf-order-item">
-                                                <td>
-                                                    #567
-                                                </td>
-                                                <td>
-                                                    August 3, 2024
-                                                </td>
-                                                <td>
-                                                    On hold
-                                                </td>
-                                                <td>
-                                                    $400.0 for 1 items
-                                                </td>
-                                                <td>
-                                                    <a href="my-account-orders-details.html" class="tf-btn btn-fill animate-hover-btn rounded-0 justify-content-center">
-                                                        <span>View</span>
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                            @endforeach
+                                          
     
                                         </tbody>
                                     </table>

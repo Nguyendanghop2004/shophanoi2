@@ -1,5 +1,3 @@
-<!-- chu y -->
-{{-- @dd(Auth::user()->name) --}}
 <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
 
     {{-- @dd(Auth::user()); --}}
@@ -10,16 +8,22 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ Storage::url(auth()->user()->image) }}" alt="Ảnh quản trị viên"
+                        <img src="{{ Storage::url(auth()->user()->image) }}" alt="Ảnh"
                             class="rounded-circle mr-1" width="30px">
-
                     </a>
 
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li>
                             <a class="dropdown-item"
-                                href="{{ route('account.profile') }}">{{ \Illuminate\Support\Str::words(auth()->user()->name, 2, '...') }}</a>
+                                href="{{ route('account.profile',auth()->user()->id) }}">{{ \Illuminate\Support\Str::words(auth()->user()->name, 2, '...') }}</a>
+                        </li>
+                        <li>
+                            @if (Auth::check())
+                                <a   class="dropdown-item" href="{{ route('order.donhang') }}">Đơn hàng của tôi</a>
+                            @else
+                                <a  class="dropdown-item" href="{{ route('accountUser.login') }}">Đơn hàng của tôi</a>
+                            @endif
                         </li>
                         <li>
                             <hr class="dropdown-divider">

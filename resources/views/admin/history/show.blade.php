@@ -17,9 +17,7 @@
                     <div class="card-body">
                         <p><strong>Name: </strong>{{ $admin->name }}</p>
                         <p><strong>Email: </strong>{{ $admin->email }}</p>
-                        <p><strong>Ảnh: </strong></p>
-                        <img src="{{ Storage::url($admin->image_path) }}" alt="Ảnh quản trị viên" width="100px"
-                            height="px">
+                   
                     </div>
                 </div>
 
@@ -43,11 +41,11 @@
                             @if ($key == 'email')
                                 <p><strong>Email:</strong> {{ $old }}</p>
                             @endif
-                            @if ($key == 'image_path')
+                            {{-- @if ($key == 'image_path')
                                 <p><strong>Ảnh:</strong>
                                     <img src="{{ Storage::url($old) }}" alt="Ảnh quản trị viên" width="100px"
                                         height="60px">
-                            @endif
+                            @endif --}}
                         @endforeach
                     </div>
                 </div>

@@ -17,7 +17,7 @@ use App\Http\Controllers\Admin\ContactMessageController;
 
 use App\Http\Controllers\Admin\ErrorController;
 use App\Http\Controllers\Admin\HistoryController;
-
+use App\Http\Controllers\Admin\HistoryUserController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
@@ -51,7 +51,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('accountsUser/create', [AccoutUserController::class, 'create'])->name('accountsUser.create')->middleware('permission:account_user');
     Route::post('accountsUser/store', [AccoutUserController::class, 'store'])->name('accountsUser.store')->middleware('permission:account_user');
     Route::get('accountsUser/edit/{id}', [AccoutUserController::class, 'edit'])->name('accountsUser.edit')->middleware('permission:account_user');
-    Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update')->middleware('permission:account_user');
+Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update')->middleware('permission:account_user');    
     Route::delete('accountsUser/destroy/{id}', [AccoutUserController::class, 'destroy'])->name('accountsUser.destroy')->middleware('permission:account_user');
 
     Route::get('accountsUser/change/{id}', [AccoutUserController::class, 'change'])->name('accountsUser.change')->middleware('permission:account_user');
@@ -74,9 +74,9 @@ use Illuminate\Support\Facades\Route;
     //start status change
     Route::post('accountsUser/select-address', [AccoutUserController::class, 'select_address'])->middleware('permission:account_admin');
 
-    Route::get('accounts/profile/{id}', [ProfileController::class, 'index'])->name('profile.index')->middleware('permission:account_user');
-    Route::get('accounts/changePassword/{id}', [ProfileController::class, 'changePassword'])->name('profile.changePassword')->middleware('permission:account_user');
-    Route::post('accounts/change/{id}', [ProfileController::class, 'change'])->name('profile.change')->middleware('permission:account_user');
+    Route::get('accounts/profile/{id}', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('accounts/changePassword/{id}', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
+    Route::post('accounts/change/{id}', [ProfileController::class, 'change'])->name('profile.change');
     //end  status  change
 
     // Route::get('accounts/profile', [ProfileController::class, 'index'])->name('profile.index');
@@ -180,15 +180,14 @@ use Illuminate\Support\Facades\Route;
     Route::delete('colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy')->middleware('permission:product');
 
     // Route cho BrandController
-
-    Route::get('brands', [BrandController::class, 'index'])->name('brands.index')->middleware('permission:product');
-    Route::get('brands/create', [BrandController::class, 'create'])->name('brands.create')->middleware('permission:product');
-    Route::post('brands', [BrandController::class, 'store'])->name('brands.store')->middleware('permission:product');
-    Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show')->middleware('permission:product');
-    Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit')->middleware('permission:product');
-    Route::put('brands/{id}/edit', [BrandController::class, 'update'])->name('brands.update')->middleware('permission:product');
-    Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy')->middleware('permission:product');
-    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update')->middleware('permission:product');
+    Route::get('brands', [BrandController::class, 'index'])->name('brands.index');
+    Route::get('brands/create', [BrandController::class, 'create'])->name('brands.create');
+    Route::post('brands', [BrandController::class, 'store'])->name('brands.store');
+    Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show');
+    Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
+    Route::put('brands/{id}/edit', [BrandController::class, 'update'])->name('brands.update');
+    Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
 
     Route::get('colors-sizes', [ColorSizeController::class, 'index'])->name('colors_sizes.index')->middleware('permission:product');
 
@@ -199,7 +198,13 @@ use Illuminate\Support\Facades\Route;
     Route::get('history', [HistoryController::class, 'history'])->name('history')->middleware('permission:account_admin');
     Route::get('history/show/{id}', [HistoryController::class, 'show'])->name('show')->middleware('permission:account_admin');
     Route::delete('history/delete/{id}', [HistoryController::class, 'delete'])->name('delete')->middleware('permission:account_admin');
+// end  lịch sử cập nhật admin
 
+ // lịch sử cập nhật user
+ Route::get('history-user', [HistoryUserController::class, 'historyUser'])->name('historyUser')->middleware('permission:account_admin');
+ Route::get('history-user/show/{id}', [HistoryUserController::class, 'showUser'])->name('showUser')->middleware('permission:account_admin');
+
+ // end  lịch sử cập nhật admin
     //start blog
     Route::get('blog/index', [BlogController::class, 'index'])->name('blog.index')->middleware('permission:blog');
     Route::post('blog/store', [BlogController::class, 'store'])->name('blog.store')->middleware('permission:blog');

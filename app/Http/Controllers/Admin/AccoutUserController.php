@@ -24,7 +24,7 @@ class AccoutUserController extends Controller
         $user->status = true;
         $user->save();
 
-        return redirect()->back()->with('error', 'Tài khoản đã bị vô hiệu hóa.');
+        return redirect()->back()->with('success', 'Tài khoản đã được kích hoạt.');
     }
     public function deactivateUser($id)
     {
@@ -32,7 +32,7 @@ class AccoutUserController extends Controller
         $user->status = false;
         $user->save();
 
-        return redirect()->back()->with('success', 'Tài khoản đã được kích hoạt.');
+        return redirect()->back()->with('success', 'Tài khoản đã bị vô hiệu hóa.');
     }
     public function accountUser(User $user)
     {
@@ -59,13 +59,13 @@ class AccoutUserController extends Controller
     {
         $request->except('image');
         $data =
-        [
-            'name' => $request->name,
-            "email" => $request->email,
-            "password" => Hash::make($request->password),
-            "image" => $request->image,
-        ];
-     
+            [
+                'name' => $request->name,
+                "email" => $request->email,
+                "password" => Hash::make($request->password),
+                "image" => $request->image,
+            ];
+
         if ($request->hasFile('image')) {
             $data['image']  =  Storage::put('public/images/admin', $request->file('image'));
         }
@@ -103,48 +103,30 @@ class AccoutUserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        
         $dataUser = User::findOrFail($id);
-
-
         $data = $request->only('name', 'email', 'phone_number', 'address', 'city_id', 'province_id', 'wards_id');
-
-
         if ($request->password) {
             $data['password'] = Hash::make($request->password);
         } else {
             $data['password'] = $dataUser->password;
         }
-
-
-
-       
         if ($request->hasFile('image')) {
-           
+
             if ($dataUser->image && Storage::exists($dataUser->image)) {
                 Storage::delete($dataUser->image);
             }
-         
             $data['image'] = Storage::put('public/images/User', $request->file('image'));
         }
-
-
-        
-        $dataUser->update($data);
+        $idadmin = Auth()->user()->id;
+        $data1 = $dataUser->toArray();
         History::create([
-            'user_id' => auth()->id(), 
-            'action' => 'update', 
-            'model_type' => 'User', 
-            'model_id' => $dataUser->id, 
-            'changes' => array_diff($dataUser->getAttributes(), $data),
+            'user_id' =>  $dataUser->id,
+            'action' => 'update',
+            'model_type' => Auth()->user()->name,
+            'model_id' =>  $idadmin,
+            'changes' => array_diff($data1, $data),
         ]);
-    
-
-
-
-       
         $dataUser->update($data);
- 
         return redirect()->route('admin.accountsUser.accountUser')->with('success', 'Cập nhật thành công!');
     }
 
@@ -204,5 +186,4 @@ class AccoutUserController extends Controller
             echo $output;
         }
     }
-    
 }

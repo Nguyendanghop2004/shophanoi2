@@ -122,21 +122,25 @@
                        </a>
                    </div>
                    <div class="col-xl-2 col-md-4 col-6 text-center" style="max-width:80%;">
+
                        <a href="home-multi-brand.html" class="logo-header">
 
                            <img src="{{ asset('client/assets/images/logo/logo.png') }}" alt="logo" class="logo">
 
+
+                       <a href="{{route('home')}}" class="logo-header">
+                           <img src="{{asset('client/assets/images/logo/logo4.png')}}" alt="logo" class="logo">
                        </a>
                    </div>
 
 
                    <div class="col-xl-5 col-md-4 col-3">
 
-                       @if (Auth::check())
+                       {{-- @if (Auth::check())
                            <a href="{{ route('order.donhang') }}">Đơn hàng của tôi</a>
                        @else
                            <a href="{{ route('accountUser.login') }}">Đơn hàng của tôi</a>
-                       @endif
+                       @endif --}}
                        <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
                            <li class="nav-search">
                                <form action="{{ route('order.search') }}" method="GET" class="search-form"
@@ -157,7 +161,7 @@
                            </div>
                            @include('client.layouts.particals.navright')
 
-                           {{-- @if (Auth::check())
+                          {{-- @if (Auth::check())
                             <a href="{{ route('accountUser.logout') }}">Logout</a>
                         @else
                             <li>
@@ -165,26 +169,26 @@
                                     <i class="icon icon-account"></i>
                                 </a>
                             </li>
+
                         @endif --}}
-                           <li class="nav-wishlist">
-                               <a href="wishlist.html" class="nav-icon-item">
-                                   <i class="icon icon-heart"></i>
-                                   <span class="count-box">0</span>
-                               </a>
-                           </li>
-                           <li class="nav-cart">
-                               <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
-                                   <i class="icon icon-bag"></i>
-                                   <span class="count-box">0</span>
-                               </a>
-                           </li>
-                       </ul>
-                   </div>
+                        <li class="nav-wishlist">
+                            <a href="wishlist.html" class="nav-icon-item">
+                                <i class="icon icon-heart"></i>
+                                <span class="count-box">0</span>
+                            </a>
+                        </li>
+                        <li class="nav-cart">
+                            <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
+                                <i class="icon icon-bag"></i>
+                                <span class="count-box cart-count">0</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
 
-
-                 
-
-
+                                     
+                      
            </div>
 
        </div>
@@ -204,6 +208,7 @@
 
                </div>
            </div>
+       </div>
 
    </header>
    <!-- /header -->

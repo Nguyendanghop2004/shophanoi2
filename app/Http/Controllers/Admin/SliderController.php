@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreSliderRequest;
 use App\Http\Requests\Admin\UpdateSliderRequest;
-use App\Models\Category;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -15,8 +14,7 @@ class SliderController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $sliders = Slider::with('category')
-            ->when($search, function ($query) use ($search) {
+        $sliders = Slider::when($search, function ($query) use ($search) {
                 $query->where('title', 'like', "%{$search}%");
             })
             ->orderBy('position', 'asc')

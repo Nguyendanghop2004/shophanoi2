@@ -18,6 +18,7 @@ use App\Http\Controllers\client\OrderController;
 use App\Http\Controllers\Client\OutStoreController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProductDetailController;
+use App\Http\Controllers\Client\Profile\ProfileOrderController;
 use App\Http\Controllers\Client\ShopCollectionController;
 use App\Http\Controllers\Client\ShoppingCartController;
 use App\Http\Controllers\Client\TimeLineController;
@@ -36,14 +37,39 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+
 Route::middleware('checkPassword')->group(function () {
 
 
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
+
+    Route::get('/login', [HomeController::class, 'home'])->name('home');
+
+
+
+
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
 
+
+
+    Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
+
+    Route::get('error', [ErrorController::class, 'error'])->name('error');
+
+
+    Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
+    Route::get('shop-collection', [ShopCollectionController::class, 'index'])->name('shop-collection');
+    Route::get('product-detail/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
+    Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
+    Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
+    Route::get('brand', [BrandController::class, 'index'])->name('brand');
+    Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
+    Route::get('faq', [FAQController::class, 'index'])->name('faq');
+    Route::get('out-store', [OutStoreController::class, 'index'])->name('out-store');
+    Route::get('time-line', [TimeLineController::class, 'index'])->name('time-line');
+    Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping-cart');
 
 
     Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
@@ -55,6 +81,8 @@ Route::middleware('checkPassword')->group(function () {
     Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
     Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
 
+
+
     Route::get('brand', [BrandController::class, 'index'])->name('brand');
     Route::get('contactv2', [ContactController::class, 'index'])->name('contact');
     Route::get('faq', [FAQController::class, 'index'])->name('faq');
@@ -65,10 +93,6 @@ Route::middleware('checkPassword')->group(function () {
     //thanh toán
     Route::get('check-out', [CheckOutController::class, 'checkout'])->name('checkout');
     Route::post('/apply-discount', [CheckOutController::class, 'applyDiscount'])->name('apply.discount');
-
-
-
-
     Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('order.place');
     Route::get('/vnpay/return', [CheckoutController::class, 'vnPayReturn'])->name('vnpay.return');
     Route::get('/out-of-stock', [CheckoutController::class, 'outOfStock'])->name('out-of-stock');
@@ -89,16 +113,18 @@ Route::middleware('checkPassword')->group(function () {
     Route::get('/accountUser/register', [AccountController::class, 'RegisterIndex'])->name('account.register');
     Route::get('/accountUser/ResePassword', [AccountController::class, 'ResePasswordIndex'])->name('account.ResePassword');
 
-    Route::get('/accountUser/profile', [AccountController::class, 'profile'])->name('account.profile');
-    Route::get('/accountUser/profile/Orders', [AccountController::class, 'profileOrders'])->name('account.profileOrders');
-    Route::get('/accountUser/profile/address', [AccountController::class, 'profileAddress'])->name('account.profileAddress');
-    Route::get('/accountUser/profile/profileAccountDetails', [AccountController::class, 'profileAccountDetails'])->name('account.profileAccountDetails');
-    Route::get('/accountUser/profile/profileWishlist', [AccountController::class, 'profileWishlist'])->name('account.profileWishlist');
+    Route::get('/accountUser/profile/{id}', [AccountController::class, 'profile'])->name('account.profile');
+    Route::get('/accountUser/profile-address', [AccountController::class, 'profileAddress'])->name('account.profileAddress');
+    Route::get('/accountUser/profile-profileAccountDetails/{id}', [AccountController::class, 'profileAccountDetails'])->name('account.profileAccountDetails');
+    Route::put('accountsUser/profile-AccountDetails/{id}', [AccountController::class, 'storeProfile'])->name('accountsUser.storeProfile');
+    Route::get('/accountUser/profile-profileWishlist', [AccountController::class, 'profileWishlist'])->name('account.profileWishlist');
+
+    Route::get('/accountUser/profile-order', [AccountController::class, 'profileOrders'])->name('account.profileOrders');
 
     Route::post('/password/email', [ForgotPasswordController::class, 'sendResetCode'])->name('password.email');
     Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->name('account.resetPassword');
     Route::post('/check-code', [ForgotPasswordController::class, 'checkCode'])->name('account.checkcode');
-    Route::get('/reset-code/{token}', [ForgotPasswordController::class, 'resetCode'])->name('account.resetCode');
+    Route::post('/reset-code/{token}', [ForgotPasswordController::class, 'resetCode'])->name('account.resetCode');
     Route::get('/reset-change-password/{token}', [ForgotPasswordController::class, 'indexChangePassword'])->name('account.changePassword');
     Route::post('/reset-change-password/{id}', [ForgotPasswordController::class, 'changePassword'])->name('account.indexchangePassword');
 
@@ -113,7 +139,6 @@ Route::middleware('checkPassword')->group(function () {
     });
 
     //start blog
-
     Route::get('/blog', [BlogController::class, 'show'])->name('blog.show');
     Route::get('/blog/{slug}/detail', [BlogController::class, 'detail'])->name('blog.detail');
 
@@ -137,9 +162,13 @@ Route::middleware('checkPassword')->group(function () {
 
 
 
+
     Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.donhang');
     Route::get('/order/donhang/{id}', [OrderController::class, 'show'])->name('client.orders.show');
     Route::post('order/cancel/{id}', [OrderController::class, 'cancel'])->name('client.orders.cancel');
+
+    Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+
 
     Route::get('/order/{order_code}/cancel', [OrderController::class, 'showCancelReasonForm'])->name('cancel.order.page');
     Route::get('/order/detail/{order_code}', [OrderController::class, 'showOrderDetail'])->name('order.detail.page');
@@ -158,4 +187,16 @@ Route::middleware('checkPassword')->group(function () {
     Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
     Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
     Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
+
+    //profile 
+    Route::prefix('profile')
+        ->as('profile.')
+        ->group(function () {
+
+            Route::get('/order/{id}', [ProfileOrderController::class, 'ProfileOrder'])->name('profileOrder');
+        });
+
+
+    // end profile
+
 });

@@ -7,6 +7,9 @@ use App\Models\DiscountCode;
 use App\Models\UserDiscountCode;
 use Auth;
 use DB;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Crypt;
 use Mail;
 use Session;
 use App\Models\Cart;
@@ -49,7 +52,7 @@ class CheckOutController extends Controller
                         return redirect()->route('cart')->with('error', "Không tìm thấy biến thể sản phẩm.");
                     }
     
-                    // Kiểm tra tồn kho
+                   
                     if ($item->quantity > $variant->stock_quantity) {
                         return redirect()->route('cart')->with(
                             'error',
@@ -179,43 +182,76 @@ class CheckOutController extends Controller
        
         $outOfStockItems = []; 
     
-        foreach ($cartDetails['items'] as $item) {
-            $productVariant = ProductVariant::where('product_id', $item['product_id'])
-                ->where('color_id', $item['color_id'])
-                ->where('size_id', $item['size_id'])
-                ->first();
-    
-            if ($productVariant && $productVariant->stock_quantity < $item['quantity']) {
-              
-                $outOfStockItems[] = [
-                    'product_name' => $item['product_name'],
-                    'requested_quantity' => $item['quantity'],
-                    'remaining_quantity' => $productVariant->stock_quantity
-                ];
-            }
-        }
-    
-        if (!empty($outOfStockItems)) {
        
-            return redirect()->route('out-of-stock')
-                ->with('out_of_stock_items', $outOfStockItems)
-                ->with('error', 'Một số sản phẩm không đủ số lượng trong kho.');
+        DB::beginTransaction();
+    
+        try {
+            foreach ($cartDetails['items'] as $item) {
+                $productVariant = ProductVariant::where('product_id', $item['product_id'])
+                    ->where('color_id', $item['color_id'])
+                    ->where('size_id', $item['size_id'])
+                    ->lockForUpdate()
+                    ->first();
+    
+                if ($productVariant) {
+                  
+                    if ($productVariant->stock_quantity == 0) {
+                        $outOfStockItems[] = [
+                            'product_name' => $item['product_name'],
+                            'requested_quantity' => $item['quantity'],
+                            'remaining_quantity' => 0
+                        ];
+                    } elseif ($productVariant->stock_quantity < $item['quantity']) {
+                        $outOfStockItems[] = [
+                            'product_name' => $item['product_name'],
+                            'requested_quantity' => $item['quantity'],
+                            'remaining_quantity' => $productVariant->stock_quantity
+                        ];
+                    } else {
+                     
+                        $productVariant->decrement('stock_quantity', $item['quantity']);
+                    }
+                }
+            }
+    
+     
+            if (!empty($outOfStockItems)) {
+                DB::rollBack();
+                return redirect()->route('out-of-stock')
+                    ->with('out_of_stock_items', $outOfStockItems)
+                    ->with('error', 'Một số sản phẩm không đủ số lượng trong kho hoặc đã hết hàng.');
+            }
+    
+           
+            if (empty($cartDetails['items'])) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Giỏ hàng của bạn trống!');
+            }
+    
+       
+            $order = $this->createOrder($request, $cartDetails['items'], $totalPrice, $orderCode, $paymentMethod);
+    
+            
+            if ($paymentMethod === 'cod') {
+               
+                return $this->handleCOD($order);
+            } elseif ($paymentMethod === 'vnpay') {
+               
+                return $this->handleVNPay($order, $totalPrice);
+            }
+    
+            DB::rollBack();
+            return redirect()->route('home')->with('error', 'Phương thức thanh toán không hợp lệ.');
+    
+        } catch (\Exception $e) {
+          
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Đã có lỗi xảy ra trong quá trình đặt hàng.');
         }
-    
-        if (empty($cartDetails['items'])) {
-            return redirect()->back()->with('error', 'Giỏ hàng của bạn trống!');
-        }
-    
-        $order = $this->createOrder($request, $cartDetails['items'], $totalPrice, $orderCode, $paymentMethod);
-    
-        if ($paymentMethod === 'cod') {
-            return $this->handleCOD($order);
-        } elseif ($paymentMethod === 'vnpay') {
-            return $this->handleVNPay($order, $totalPrice);
-        }
-    
-        return redirect()->route('home')->with('error', 'Phương thức thanh toán không hợp lệ.');
     }
+    
+    
+    
     
     public function getCartDetails()
 {
@@ -328,20 +364,25 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
             'size_name' => $detail['size_name'],
             'quantity' => $detail['quantity'],
             'price' => $detail['price'],
-
         ]);
 
        
         $variant = ProductVariant::where('product_id', $detail['product_id'])
-            ->where('color_id', $detail['color_id'])
-            ->where('size_id', $detail['size_id'])
-            ->first();
-
-        if ($variant) {
-            $variant->decrement('stock_quantity', $detail['quantity']);
+        ->where('color_id', $detail['color_id'])
+        ->where('size_id', $detail['size_id'])
+        ->first();
+    
+    if ($variant) {
+        
+        if ($variant->stock_quantity > 0) {
+          
+            $quantityToDecrement = min($variant->stock_quantity, $detail['quantity']);
+            $variant->decrement('stock_quantity', $quantityToDecrement);
         }
     }
-
+    
+    }
+    DB::commit();
     return $order;
 }
 
@@ -359,10 +400,10 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
             session()->forget('cart');
         }
 
-        return redirect()->route('thanhtoanthanhcong', ['id' => $order->id]);
+        return redirect()->route('thanhtoanthanhcong',  ['id' => Crypt::encryptString($order->id)]);
     }
 
-   // Hàm handle VNPay
+  
    private function handleVNPay(Order $order, $totalPrice)
    {
      
@@ -378,7 +419,7 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
        $vnp_Returnurl = route('vnpay.return'); // URL trả về sau khi thanh toán
        $vnp_IpAddr = request()->ip(); // IP của khách hàng
    
-       // Dữ liệu gửi đến VNPAY
+     
        $inputData = array(
            "vnp_Version" => "2.0.0",
            "vnp_TmnCode" => $vnp_TmnCode,
@@ -464,7 +505,7 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
    
        if ($checkHash === $vnp_SecureHash) {
            if ($inputData['vnp_ResponseCode'] === '00') {
-               // Thanh toán thành công
+             
                $orderCode = $inputData['vnp_OrderInfo'];  
                $order = Order::where('order_code', $orderCode)->first();
    
@@ -473,21 +514,21 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
                    $order->save(); 
                    Mail::to($order->email)->send(new OrderConfirmationMail($order));
    
-                   // Xóa giỏ hàng sau khi thanh toán thành công
+                
                    if (auth()->check()) {  
                        Cart::where('user_id', auth()->id())->delete();
                    } else {
                        session()->forget('cart');
                    }
    
-                   // Chuyển hướng đến trang thông báo thanh toán thành công và hiển thị thông tin đơn hàng
-                   return redirect()->route('thanhtoanthanhcong', ['id' => $order->id]);
+               
+                   return redirect()->route('thanhtoanthanhcong',  ['id' => Crypt::encryptString($order->id)]);
    
                } else {
                    return redirect()->route('home')->with('error', 'Không tìm thấy đơn hàng');
                }
            } else {
-               // Thanh toán thất bại
+             
                $orderCode = $inputData['vnp_OrderInfo'];  
                $order = Order::where('order_code', $orderCode)->first();
    
@@ -495,7 +536,6 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
                    $order->payment_status = 'Thất bại'; 
                    $order->save();
    
-                   // Hoàn lại số lượng sản phẩm nếu thanh toán thất bại
                    foreach ($order->orderItems as $orderItem) {
                        $productVariant = ProductVariant::where('product_id', $orderItem->product_id)
                            ->where('color_id', $orderItem->color_id)
@@ -508,7 +548,7 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
                        }
                    }
    
-                   $order->delete(); // Xóa đơn hàng nếu thanh toán thất bại
+                   $order->delete(); 
                }
    
                return redirect()->route('home')->with('error', 'Thanh toán thất bại, đơn hàng đã bị hủy và xóa');
@@ -518,17 +558,30 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
        }
    }
    
-   // Hàm hiển thị thông tin đơn hàng khi thanh toán thành công
-   public function thanhtoanthanhcong($id)
+ 
+   public function thanhtoanthanhcong($encryptedId)
    {
-       $order = Order::findOrFail($id);
-       $orderItems = OrderItem::where('order_id', $order->id)->get();
-       $city = City::where('matp', $order->city_id)->first();
-       $province = Province::where('maqh', $order->province_id)->first();
-       $ward = Wards::where('xaid', $order->wards_id)->first();
-   
-       return view('client.thanhtoansuccess', compact('order', 'orderItems', 'city', 'province', 'ward'));
+       try {
+          
+           $id = Crypt::decryptString($encryptedId);
+           $order = Order::findOrFail($id);
+           $city = City::where('matp', $order->city_id)->first();
+           $province = Province::where('maqh', $order->province_id)->first();
+           $ward = Wards::where('xaid', $order->wards_id)->first();
+           $orderItems = OrderItem::where('order_id', $order->id)->get();
+           return view('client.thanhtoansuccess', compact('order', 'orderItems', 'city', 'province', 'ward'));
+       } catch (DecryptException $e) {
+         
+           return redirect()->route('error');
+       } catch (ModelNotFoundException $e) {
+          
+           return redirect()->route('error');
+       } catch (\Exception $e) {
+          
+           return redirect()->route('error');
+       }
    }
+   
    
 public function outOfStock()
 {
