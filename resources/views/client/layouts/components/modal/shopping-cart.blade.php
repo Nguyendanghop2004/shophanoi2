@@ -133,7 +133,7 @@
                             <div class="tf-mini-cart-view-checkout">
                                 <a href="{{ route('cart') }}"
                                     class="tf-btn btn-outline radius-3 link w-100 justify-content-center">View cart</a>
-                                <a href="checkout.html"
+                                <a href="{{ route('checkout') }}"
                                     class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Check
                                         out</span></a>
                             </div>

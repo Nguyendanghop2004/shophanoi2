@@ -133,6 +133,28 @@
     margin-right: 10px;
 }
 
+
+/* Đảm bảo mỗi sản phẩm có khoảng cách và kiểu dáng nhất quán */
+.product-item {
+    margin-bottom: 15px; /* Khoảng cách giữa các sản phẩm */
+}
+
+/* Thêm các kiểu dáng khác nếu cần */
+.product-info {
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ml-3 {
+    margin-left: 15px;
+}
+
+.mx-4 {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+
 </style>
 
 <div class="container mt-5">
@@ -189,19 +211,22 @@
                     <div class="col-md-6">
                         <div class="info-section-2">
                             <h5>Danh sách sản phẩm</h5>
-                            @foreach($order->orderItems as $item)
-                                <div class="d-flex align-items-center">
-                                    <img src="{{ Storage::url($item->image_url) }}" style="width:100px" alt="Product Image" class="product-info">
-                                    <div class="ml-3">
-                                        <p class="mx-4">{{ $item->product_name }}</p>
-                                        <p class="mx-4" >Giá: {{ number_format($item->price, 0, ',', '.') }} VND</p>
-                                        <p class="mx-4" >Size: {{ $item->size }}</p>
-                                        <p class="mx-4" >Số lượng: {{ $item->quantity }}</p>
+                            <div class="product-list">
+                                @foreach($order->orderItems as $item)
+                                    <div class="d-flex align-items-center product-item">
+                                        <img src="{{ Storage::url($item->image_url) }}" style="width:100px" alt="Product Image" class="product-info">
+                                        <div class="ml-3">
+                                            <p class="mx-4">{{ $item->product_name }}</p>
+                                            <p class="mx-4">Giá: {{ number_format($item->price, 0, ',', '.') }} VND</p>
+                                            <p class="mx-4">Size: {{ $item->size }}</p>
+                                            <p class="mx-4">Số lượng: {{ $item->quantity }}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         </div>
                     </div>
+                    
                     <div class="col-md-6">
                         <div class="info-section">
                             <h5>Thanh toán</h5>

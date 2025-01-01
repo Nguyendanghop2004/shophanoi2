@@ -36,9 +36,7 @@
                                         </div>
                                         <div>
 
-                                            <a href="{{route('account.ResePassword')}}"  class="btn-link link">Forgot
-                                                your
-                                                password?</a>
+                                            <a href="{{route('account.ResePassword')}}"  class="btn-link link">Quên Mật Khẩu</a>
 
                                         </div>
                                         <div class="bottom">

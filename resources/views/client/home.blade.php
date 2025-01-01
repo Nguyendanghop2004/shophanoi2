@@ -883,5 +883,29 @@
             });
         });
     </script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+     document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+            @endif
+        });
+
+   
+</script>
 @endpush

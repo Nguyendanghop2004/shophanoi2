@@ -171,10 +171,15 @@ Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
     Route::get('/orders/search', [OrderController::class, 'search'])->name('order.search');
 
 
-    Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
-    Route::post('/select-address', [CheckoutController::class, 'select_address']);
 
-    Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
-    Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
-    Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
+Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
+Route::post('/select-address', [CheckoutController::class, 'select_address']);
+
+
+
+
+Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
+Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
+Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
+
 });

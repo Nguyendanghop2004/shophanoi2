@@ -64,6 +64,55 @@
     background: linear-gradient(135deg, #f27121, #e94057, #8a2387); 
     color: white;
 }
+.badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+}
+
+.badge-chờ-xác-nhận {
+    background-color: #ffc107;
+    color: #fff;
+}
+
+.badge-đã-xác-nhận {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.badge-hủy {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.badge-ship-đã-nhận {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+.badge-đang-giao-hàng {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.badge-giao-hàng-thành-công {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.badge-giao-hàng-không-thành-công {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.badge-đã-nhận-hàng {
+    background-color: #28a745;
+    color: #fff;
+}
+
 
 
 </style>
@@ -113,7 +162,7 @@
                             <div class="col-9">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title mb-1">{{ $order->orderItems->first()->product_name }} - {{ $order->orderItems->first()->product_description }}</h5>
-                                    <span class="badge badge-success">{{ $order->status }}</span>
+                                    <span class="badge badge-{{ str_replace(' ', '-', strtolower($order->status)) }}">{{ $order->status }}</span>
                                 </div>
                                 <p class="card-text mb-1">{{ $order->order_code }}</p>
                                 <p class="card-text mb-1"><small class="text-muted">{{ $order->created_at }}</small></p>
@@ -162,7 +211,7 @@
                             <option value="Thay đổi địa chỉ giao hàng">Thay đổi địa chỉ giao hàng</option>
                             <option value="Sản phẩm không còn cần thiết">Sản phẩm không còn cần thiết</option>
                             <option value="Thay đổi quyết định">Thay đổi quyết định</option>
-                            <option value="Lý do khác">Lý do khác</option>
+                     
                         </select>
                     </div>
                     <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
@@ -197,5 +246,30 @@
             }
         });
     });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+     document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+            @endif
+        });
+
+   
 </script>
 @endsection

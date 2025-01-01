@@ -79,7 +79,7 @@
                                                     @csrf
                                                     <button type="button" class="btn btn-success activate-btn"
                                                         data-user-id="{{ $user->id }}">
-                                                        <i class="fas fa-unlock"></i>
+                                                        <i class="fas fa-lock"></i>
                                                     </button>
                                                 </form>
                                             @else
@@ -88,7 +88,7 @@
                                                     @csrf
                                                     <button type="button" class="btn btn-danger deactivate-btn"
                                                         data-user-id="{{ $user->id }}">
-                                                        <i class="fas fa-lock"></i>
+                                                        <i class="fas fa-unlock"></i>
                                                     </button>
                                                 </form>
                                             @endif

@@ -125,7 +125,7 @@
 
                        <a href="home-multi-brand.html" class="logo-header">
 
-                           <img src="{{ asset('client/assets/images/logo/logo.png') }}" alt="logo" class="logo">
+                        
 
 
                        <a href="{{route('home')}}" class="logo-header">
@@ -136,11 +136,7 @@
 
                    <div class="col-xl-5 col-md-4 col-3">
 
-                       @if (Auth::check())
-                           <a href="{{ route('order.donhang') }}">Đơn hàng của tôi</a>
-                       @else
-                           <a href="{{ route('accountUser.login') }}">Đơn hàng của tôi</a>
-                       @endif
+                 
                        <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
                            <li class="nav-search">
                                <form action="{{ route('order.search') }}" method="GET" class="search-form"
@@ -160,8 +156,8 @@
                                Vui lòng nhập từ khóa tìm kiếm
                            </div>
                            @include('client.layouts.particals.navright')
-
-                           {{-- @if (Auth::check())
+<!-- 
+                          @if (Auth::check())
                             <a href="{{ route('accountUser.logout') }}">Logout</a>
                         @else
                             <li>
@@ -170,7 +166,7 @@
                                 </a>
                             </li>
 
-                        @endif
+                        @endif -->
                         <li class="nav-wishlist">
                             <a href="wishlist.html" class="nav-icon-item">
                                 <i class="icon icon-heart"></i>
