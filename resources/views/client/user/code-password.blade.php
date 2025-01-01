@@ -59,7 +59,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="header">
-                            <div class="demo-title">Code</div>
+                            <div class="demo-title">Nhập code</div>
                             {{-- <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span> --}}
                         </div>
                         <div class="tf-login-form">
@@ -74,7 +74,7 @@
                                                 aria-describedby="basic-addon2" name="reset_code"
                                                 value="{{ old('reset_code') }}">
                                             <a href="{{ route('account.resetCode', $resetRequest->token) }}"
-                                                class="btn btn-outline-secondary">Change Code</a>
+                                                class="btn btn-outline-secondary">gửi lại</a>
                                             @error('reset-code')
                                                 <div class="alert alert-danger">{{ $message }}</div>
                                             @enderror

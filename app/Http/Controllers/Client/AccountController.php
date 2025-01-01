@@ -147,7 +147,6 @@ class AccountController extends Controller
     }
     public function profileWishlist()
     {
-
         return view('client.user.profile.wishlist');
     }
 }

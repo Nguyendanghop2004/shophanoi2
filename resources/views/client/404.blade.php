@@ -1,3 +1,9 @@
+@extends('client.layouts.master')
+@section('header-home')
+    @include('client.layouts.particals.header-home')
+@endsection
+@section('content')
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -92,3 +98,4 @@
   <script src="assets/js/custom.js"></script>
 </body>
 </html>
+@endsection

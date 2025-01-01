@@ -199,7 +199,7 @@
 >>>>>>>>> Temporary merge branch 2
     <div class="header">
         <h1>Hóa Đơn Mua Hàng</h1>
-        <p>Đơn hàng #{{ $order->id }}</p>
+        <p>Đơn hàng #{{ $order->order_code }}</p>
         <p>Ngày: {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</p>
     </div>
 

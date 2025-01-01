@@ -47,7 +47,7 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $color->name }}</td>
-                                    <td>{{ $color->sku_color }}</td> <!-- Hiển thị SKU Color -->
+                                    <td>{{ $color->sku_color }}</td> 
                                     <td>
                                         <div class="d-flex justify-content-start">
                                             <a href="{{ route('admin.colors.edit', $color->id) }}" class="btn btn-warning ml-2"><i class="fas fa-edit"></i></a>
