@@ -3,7 +3,7 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Lịch sử Update</h1>
+            <h1>Lịch sử User</h1>
         </div>
         
         <div class="row">
@@ -41,11 +41,7 @@
                             @if ($key == 'email')
                                 <p><strong>Email:</strong> {{ $old }}</p>
                             @endif
-                            {{-- @if ($key == 'image_path')
-                                <p><strong>Ảnh:</strong>
-                                    <img src="{{ Storage::url($old) }}" alt="Ảnh quản trị viên" width="100px"
-                                        height="60px">
-                            @endif --}}
+                            
                         @endforeach
                     </div>
                 </div>

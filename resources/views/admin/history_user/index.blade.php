@@ -26,16 +26,16 @@
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @foreach ($histories as $admin)
+                            {{-- @dd($admin->admin) --}}
                                 <tr>
-                                    <th scope="row">{{ $admin->id }}</th>
-                                    <td> {{ $admin->admin->name }}</td>
+                                    <th scope="row"> {{ $admin->id}}</th>
+                                    <td> {{$admin->model_type}} </td>
                                     <td>{{ $admin->action }}</td>
 
                                     <td>
-                                        {{ $admin->model_id }}
+                                     {{ $admin->user->id}}
 
                                     </td>
                                     <td>
@@ -43,7 +43,7 @@
                                     </td>
                                     <td>
                                         <div class="d-flex">
-                                            <a href="{{ route('admin.show', $admin->id) }}" class="btn btn-warning">
+                                            <a href="{{ route('admin.showUser', $admin->id) }}" class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                         </div>

@@ -451,27 +451,7 @@
             });
         });
     </script>
-    <script>
-        $(document).ready(function() {
-            // Gọi API để lấy số lượng sản phẩm trong giỏ hàng
-            function updateCartCount() {
-                $.ajax({
-                    url: '/cart/count',
-                    method: 'GET',
-                    success: function(response) {
-                        $('.cart-count').text(response.count);
-                    },
-                    error: function() {
-                        toastr.error('Không thể lấy thông tin giỏ hàng', 'Lỗi');
-
-                    }
-                });
-            }
-
-            // Gọi hàm khi trang được tải
-            updateCartCount();
-        });
-    </script>
+    
 </body>
 
 </html>

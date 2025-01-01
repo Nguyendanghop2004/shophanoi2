@@ -18,7 +18,7 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="header">
-                                    <div class="demo-title"> Change Password</div>
+                                    <div class="demo-title"> Đổi mật khẩu</div>
                                 </div>
 
                                 <div class="tf-login-form">
@@ -27,7 +27,7 @@
                                         <div class="tf-field style-1">
                                             <input class="tf-field-input tf-input" placeholder=" " type="password"
                                                 name="password" @error('password') is-invalid @enderror>
-                                            <label class="tf-field-label" for="">Password *</label>
+                                            <label class="tf-field-label" for="">Mật khẩu *</label>
                                             @error('password')
                                                 <p style="color: red; font-size: 14px;">{{ $message }}</p>
                                             @enderror
@@ -35,7 +35,7 @@
                                         <div class="tf-field style-1">
                                             <input class="tf-field-input tf-input" placeholder=" " type="password"
                                                 name="password_confirmation" @error('password') is-invalid @enderror>
-                                            <label class="tf-field-label" for="">Confirm Password *</label>
+                                            <label class="tf-field-label" for="">Nhập lại mật khẩu *</label>
                                             @error('password_confirmation')
                                                 <p style="color: red; font-size: 14px;">{{ $message }}</p>
                                             @enderror

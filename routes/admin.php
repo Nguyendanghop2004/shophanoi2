@@ -17,7 +17,7 @@ use App\Http\Controllers\Admin\ContactMessageController;
 
 use App\Http\Controllers\Admin\ErrorController;
 use App\Http\Controllers\Admin\HistoryController;
-
+use App\Http\Controllers\Admin\HistoryUserController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
@@ -51,7 +51,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('accountsUser/create', [AccoutUserController::class, 'create'])->name('accountsUser.create')->middleware('permission:account_user');
     Route::post('accountsUser/store', [AccoutUserController::class, 'store'])->name('accountsUser.store')->middleware('permission:account_user');
     Route::get('accountsUser/edit/{id}', [AccoutUserController::class, 'edit'])->name('accountsUser.edit')->middleware('permission:account_user');
-    Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update')->middleware('permission:account_user');
+Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update')->middleware('permission:account_user');    
     Route::delete('accountsUser/destroy/{id}', [AccoutUserController::class, 'destroy'])->name('accountsUser.destroy')->middleware('permission:account_user');
 
     Route::get('accountsUser/change/{id}', [AccoutUserController::class, 'change'])->name('accountsUser.change')->middleware('permission:account_user');
@@ -198,7 +198,13 @@ use Illuminate\Support\Facades\Route;
     Route::get('history', [HistoryController::class, 'history'])->name('history')->middleware('permission:account_admin');
     Route::get('history/show/{id}', [HistoryController::class, 'show'])->name('show')->middleware('permission:account_admin');
     Route::delete('history/delete/{id}', [HistoryController::class, 'delete'])->name('delete')->middleware('permission:account_admin');
+// end  lịch sử cập nhật admin
 
+ // lịch sử cập nhật user
+ Route::get('history-user', [HistoryUserController::class, 'historyUser'])->name('historyUser')->middleware('permission:account_admin');
+ Route::get('history-user/show/{id}', [HistoryUserController::class, 'showUser'])->name('showUser')->middleware('permission:account_admin');
+
+ // end  lịch sử cập nhật admin
     //start blog
     Route::get('blog/index', [BlogController::class, 'index'])->name('blog.index')->middleware('permission:blog');
     Route::post('blog/store', [BlogController::class, 'store'])->name('blog.store')->middleware('permission:blog');
