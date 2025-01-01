@@ -77,6 +77,7 @@
 </div>
 <!-- /slider -->
 
+
 {{-- <!-- Categories -->
 <section class="flat-spacing-5 pb_0">
     <div class="container">
@@ -262,9 +263,52 @@
                                         @endforeach
                                     </ul>
                                 </div>
+=======
+    <!-- Brand -->
+    <section class="flat-spacing-12">
+        <div class="">
+            <div class="wrap-carousel wrap-brand wrap-brand-v2 autoplay-linear">
+                <div class="swiper tf-sw-brand border-0" data-play="true" data-loop="true" data-preview="6"
+                    data-tablet="4" data-mobile="2" data-space-lg="30" data-space-md="15">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-01.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-01.png') }}" alt="image-brand">
+>>>>>>> 0189a736f23a3a2b3efcdf9a93f142ad82a1aa70
                             </div>
                         </div>
-                    @endforeach
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-02.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-02.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-03.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-03.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-04.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-04.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-05.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-05.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-06.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-06.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="nav-sw nav-next-slider nav-next-product box-icon w_46 round"><span
@@ -272,6 +316,7 @@
             <div class="nav-sw nav-prev-slider nav-prev-product box-icon w_46 round"><span
                     class="icon icon-arrow-right"></span></div>
         </div>
+<<<<<<< HEAD
     </div>
 </section>
 
@@ -589,6 +634,9 @@
 
 
 
+=======
+    </section>
+>>>>>>> 0189a736f23a3a2b3efcdf9a93f142ad82a1aa70
     <!-- /Brand --> --}}
     @endsection
 
