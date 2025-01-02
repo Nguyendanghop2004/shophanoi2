@@ -8,7 +8,8 @@
         <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <div class="card card-statistic-1">
-                   <a href="{{ route('admin.accounts.account') }}"> <div class="card-icon bg-primary">
+                   <a href="{{ route('admin.accounts.account') }}"> 
+                    <div class="card-icon bg-primary">
                         <i class="far fa-user"></i>
                     </div></a>
                     <div class="card-wrap">
@@ -21,25 +22,63 @@
                     </div>
                 </div>
             </div>
+           
+               
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <div class="card card-statistic-1">
+                    <a href="{{ route('admin.categories.list') }}">
                     <div class="card-icon bg-danger">
                         <i class="far fa-newspaper"></i>
+                    </div></a>
+                    <div class="</a>card-wrap">
+                        <div class="card-header">
+                            <h4>Só danh mục</h4>
+                        </div>
+                        <div class="card-body">
+                            {{ $allDanhmuc }}
+                        </div>
+                    </div>
+                </div>
+            </div>   <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <div class="card card-statistic-1">
+                    <div class="card-icon bg-danger">
+                        
+                        <i class="fas fa-tag"></i>
                     </div>
                     <div class="card-wrap">
                         <div class="card-header">
-                            <h4>News</h4>
+                            <h4>Só mã giảm giá</h4>
                         </div>
                         <div class="card-body">
-                            42
+                            {{ $allmgg }}
                         </div>
                     </div>
                 </div>
             </div>
+            
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <div class="card card-statistic-1">
+                    <a href="{{ route('admin.product.index') }}">
+                    <div class="card-icon bg-danger">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="card-header">
+                            <h4>Só sản phẩm</h4>
+                        </div>
+                        <div class="card-body">
+                            {{ $allProduct }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12"  >
+                
+                <div class="card card-statistic-1">
+                     <a href="{{ route('admin.order.getList') }}">
                     <div class="card-icon bg-warning">
                         <i class="far fa-file"></i>
+                        
                     </div>
                     <div class="card-wrap">
                         <div class="card-header">
@@ -51,14 +90,16 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+
+            {{-- <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <div class="card card-statistic-1">
+                    <a href="{{ route('admin.accountsUser.accountUser') }}">
                     <div class="card-icon bg-success">
                         <i class="fas fa-circle"></i>
                     </div>
                     <div class="card-wrap">
                         <div class="card-header">
-                            <h4>Tài khoản Users Online</h4>
+                            <h4>Tài khoản User</h4>
                         </div>
                         <div class="card-body">
                             {{ $CountUser }}
@@ -67,7 +108,45 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
+         <!-- User đang hoạt động -->
+         <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="card card-statistic-1">
+                <a href="{{ route('admin.accountsUser.accountUser') }}"> 
+                    <div class="card-icon bg-success">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                </a>
+                <div class="card-wrap">
+                    <div class="card-header">
+                        <h4>User Đang Hoạt Động</h4>
+                    </div>
+                    <div class="card-body">
+                        {{ $activeUsersCount }}
+                    </div>
+                </div>
+            </div>
         </div>
+    
+        <!-- User bị khóa -->
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="card card-statistic-1">
+                <a href="{{ route('admin.accountsUser.accountUser') }}"> 
+                    <div class="card-icon bg-danger">
+                        <i class="fas fa-user-lock"></i>
+                    </div>
+                </a>
+                <div class="card-wrap">
+                    <div class="card-header">
+                        <h4>User Bị Khóa</h4>
+                    </div>
+                    <div class="card-body">
+                        {{ $inactiveUsersCount }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
         <div class="row">
             <div class="col-lg-8 col-md-12 col-12 col-sm-12">
                 <div class="card">
@@ -228,7 +307,7 @@
             <div class="col-lg-6 col-md-6 col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Referral URL</h4>
+                        <h4>Biểu đồ thống kê theo sản phẩm bán ít nhất</h4>
                     </div>
                    
                     <div class="card-body">
@@ -295,6 +374,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>Thống kê đơn hàng</h4>
+                      
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -316,11 +396,11 @@
                             </div>
                             <div class="col text-center">
                                 <div>
-                                    <i class="fas fa-box" style="font-size: 60px; color: green;"></i> <!-- Tăng kích thước và đổi màu -->
+                                    <i class="fas fa-truck-loading fa-5x" style="font-size: 60px; color: #28a745;"></i> <!-- Biểu tượng giao hàng không thành công -->
                                 </div>
-                                <div class="mt-2 font-weight-bold">Đóng hàng</div>
+                                <div class="mt-2 font-weight-bold">Giao hàng không thành công</div>
                                 <div class="text-muted text-small"><span class="text-danger"><i
-                                            class="fas fa-caret-down"></i></span>{{$dongHang}}</div>
+                                            class="fas fa-caret-down"></i></span>{{$giaoHangKhongTC}}</div>
                             </div>
                             <div class="col text-center">
                                 <div>
@@ -339,11 +419,28 @@
                             </div>
                             <div class="col text-center">
                                 <div>
+                                    <i class="fas fa-check-circle fa-5x text-success" style="font-size: 60px;"></i>
+
+                                </div>
+                                <div class="mt-2 font-weight-bold">Đã nhận hàng</div>
+                                <div class="text-muted text-small"><span class="text-primary"><i
+                                            class="fas fa-caret-up"></i></span> {{$daNhanHang}}</div>
+                            </div>
+                            <div class="col text-center">
+                                <div>
                                     <i class="fas fa-shipping-fast fa-5x text-info" style="font-size: 60px;"></i> <!-- Biểu tượng giao hàng nhanh -->
                                 </div>
                                 <div class="mt-2 font-weight-bold">Đang giao hàng</div>
                                 <div class="text-muted text-small"><span class="text-primary"><i
                                             class="fas fa-caret-up"></i></span> {{$dangGiaoHang}}</div>
+                            </div>
+                            <div class="col text-center">
+                                <div>
+                                    <i class="fas fa-box fa-5x text-info" style="font-size: 60px;"></i> <!-- Biểu tượng "Ship đã nhận" -->
+                                </div>
+                                <div class="mt-2 font-weight-bold">Ship đã nhận</div>
+                                <div class="text-muted text-small"><span class="text-primary"><i
+                                            class="fas fa-caret-up"></i></span> {{$shipDaNhan}}</div>
                             </div>
                             <div class="col text-center">
                                 <div>
@@ -358,14 +455,47 @@
                 </div>
 
             </div>
+            {{-- Biểu đồ thống kê đơn hàng theo trạng thái  --}}
+            <div class="col-10 col-md-4 col-lg-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h4>Biểu đồ thống kê đơn hàng </h4>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="myChart3" width="300px" height="400px"></canvas>
+                  </div>
+                </div>
+              </div>
+              {{-- KC bểu đồ tồn kho --}}
+              <div class="col-11 col-md-5 col-lg-5">
+                <div class="card">
+                  <div class="card-header">
+                    <h4>Biểu đồ tồn kho</h4>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="myChart4"></canvas>
+                  </div>
+                </div>
+              </div>
+              {{-- biểu đồ tỉnh --}}
+              <div class="col-12 col-md-6 col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h4>Doanh thu theo tỉnh</h4>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="salesChart"></canvas>
+                  </div>
+                </div>
+              </div>
             <div class="col-lg-6 col-md-6 col-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Top 5 sản phẩm bán chạy nhất</h4>
                         <div class="card-header-action">
                             <div class="dropdown">
-                                <a href="#" class="dropdown-toggle btn btn-primary"
-                                    data-toggle="dropdown">Filter</a>
+                                {{-- <a href="#" class="dropdown-toggle btn btn-primary"
+                                    data-toggle="dropdown">Filter</a> --}}
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a href="#" class="dropdown-item has-icon"><i class="far fa-circle"></i>
                                         Electronic</a>
@@ -374,7 +504,7 @@
                                     <a href="#" class="dropdown-item has-icon"><i class="far fa-circle"></i>
                                         Hat</a>
                                     <div class="dropdown-divider"></div>
-                                    <a href="#" class="dropdown-item">View All</a>
+                                    {{-- <a href="#" class="dropdown-item">View All</a> --}}
                                 </div>
                             </div>
                         </div>
@@ -443,9 +573,9 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="d-inline">Top 5 sản phẩm bán được ít nhất</h4>
-                        <div class="card-header-action">
+                        {{-- <div class="card-header-action">
                             <a href="#" class="btn btn-primary">View All</a>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="card-body">
                         <ul class="list-unstyled list-unstyled-border">
@@ -501,17 +631,18 @@
                             <li class="media">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="cbx-4">
-                                    <label class="custom-control-label" for="cbx-4"></label>
+                                    {{-- <label class="custom-control-label" for="cbx-4"></label> --}}
                                 </div>
                                 <img class="mr-3 rounded-circle" width="50" src="assets/img/avatar/avatar-1.png"
                                     alt="avatar">
                                 <div class="media-body">
-                                    <div class="badge badge-pill badge-danger mb-1 float-right">Not
-                                        Finished</div>
+                                    {{-- <div class="badge badge-pill badge-danger mb-1 float-right">Not
+                                        Finished</div> --}}
                                     <h6 class="media-title"><a href="#">{{$product->product_name }}</a>
                                     </h6>
                                     <div class="text-small text-muted">Đã bán: {{ $product->total_sold }}<div class="bullet">
-                                        </div> {{ number_format($product->total_revenue, 2) }}</div>
+                                        {{-- </div> {{ number_format($product->total_revenue, 2) }}</div> --}}
+                                        <div class="media-right">{{ number_format($product->total_revenue, 2) }}</div>
                                 </div>
                             </li>
                             @endforeach
@@ -522,7 +653,7 @@
         </div>
         <div class="row">
 
-            <div class="col-lg-6 col-md-12 col-12 col-sm-12">
+            {{-- <div class="col-lg-6 col-md-12 col-12 col-sm-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Latest Posts</h4>
@@ -685,7 +816,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
 
@@ -696,6 +827,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     var ctx = document.getElementById("bieudo1").getContext('2d');
+    
 
 // Biểu đồ đầu tiên (tuần)
 var myChart = new Chart(ctx, {
@@ -708,8 +840,8 @@ var myChart = new Chart(ctx, {
             borderWidth: 2,
             backgroundColor: '#6777ef',
             borderColor: '#6777ef',
-            borderWidth: 3.5,
-            tension: 0.4,
+            borderWidth: 3,
+            tension: 0.6,
             pointBackgroundColor: '#ffffff',
             pointRadius: 4
         }]
@@ -865,6 +997,113 @@ document.getElementById('show-month').addEventListener('click', function(e) {
     document.getElementById('show-week').classList.remove('btn-primary');
 });
 
+
+
+
+// biểu đồ tragnj thai
+var oiu = document.getElementById("myChart3").getContext('2d');
+var myChart3 = new Chart(oiu, {
+  type: 'doughnut',
+  data: {
+    labels: @json($labels), 
+    datasets: [{
+      data: @json($data),
+      backgroundColor: [
+        '#191d21',
+        '#63ed7a',
+        '#ffa426',
+        '#fc544b',
+        '#6777ef',
+      ],
+  
+    }],
+  
+  },
+  options: {
+    responsive: true,
+    legend: {
+      position: 'bottom',
+    },
+  }
+});
+// Biểu  đồ tồn kho 
+var abc = document.getElementById("myChart4").getContext('2d');
+var myChart4 = new Chart(abc, {
+  type: 'pie',
+  data: {
+    labels: @json($tkSp), 
+    datasets: [{
+      data:  @json($tkTonkho), 
+      backgroundColor: [
+        '#191d21',
+        '#63ed7a',
+        '#ffa426',
+        '#fc544b',
+        '#6777ef',
+      ]
+    }],
+   
+  },
+  options: {
+    responsive: true,
+    legend: {
+      position: 'bottom',
+    },
+  }
+});
+
+    var edc = document.getElementById('salesChart').getContext('2d');
+    var salesChart = new Chart(edc, {
+        type: 'bar', // Biểu đồ cột
+        data: {
+            labels: @json($tenTinh), // Danh sách tên các tỉnh
+            datasets: [
+                {
+                    label: 'Số lượng bán',
+                    data: @json($SoluongBan), // Dữ liệu số lượng bán
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)', // Màu cột
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Doanh thu (VND)',
+                    data: @json($donhthuTinh), // Dữ liệu doanh thu
+                    backgroundColor: 'rgba(255, 99, 132, 0.7)', // Màu cột
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            let value = context.raw;
+                            if (context.dataset.label === 'Doanh thu (VND)') {
+                                value = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+                            }
+                            return `${context.dataset.label}: ${value}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function (value) {
+                            return new Intl.NumberFormat('vi-VN', { style: 'decimal' }).format(value);
+                        }
+                    }
+                }
+            }
+        }
+    });
 </script>
 
 

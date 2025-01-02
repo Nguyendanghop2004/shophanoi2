@@ -28,7 +28,7 @@
                                 <option value="đã xác nhận" {{ request('status') == 'đã xác nhận' ? 'selected' : '' }}>Đã Xác Nhận</option>
                                 <option value="đang giao hàng" {{ request('status') == 'đang giao hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
                                 <option value="giao hàng thành công" {{ request('status') == 'giao hàng thành công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
-                                <option value="giao không hàng thành công" {{ request('status') == 'giao không hàng thành công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
+                                <option value="giao hàng không thành công" {{ request('status') == 'giao không hàng thành công' ? 'selected' : '' }}>Giao Hàng Không Thành Công</option>
                                 <option value="đã nhận hàng" {{ request('status') == 'đã nhận hàng' ? 'selected' : '' }}>Đã nhận hàng</option>
                                 <option value="hủy" {{ request('status') == 'hủy' ? 'selected' : '' }}>Hủy</option>
                             </select>
@@ -50,7 +50,6 @@
                                 <th scope="col">ID Order</th>
                                 <th scope="col">UserName</th>
                                 <th scope="col">Email</th>
-                            =
                                 <th scope="col">Price</th>
                                 <th scope="col">Mã Đơn Hàng</th>
                                 <th scope="col">Thanh toán</th>
@@ -91,7 +90,7 @@
                                             @elseif($order->status == 'giao hàng không thành công')
                                                 <option value="giao hàng không thành công" {{ $order->status == 'giao hàng không thành công' ? 'selected' : '' }}>Giao Hàng Không Thành Công</option>
                                             @elseif($order->status == 'đã nhận hàng')
-                                            <option value="đã nhận hàng" {{ $order->status == 'đã nhận hàng' ? 'selected' : '' }}>Đã nhận hàng</option>
+                                            <option value="đã nhận hàng" {{ $order->status == 'đã nhận hàng' ? 'selected' : '' }}>Hoàn thành</option>
                                             @elseif($order->status == 'hủy')
                                                 <option value="hủy" {{ $order->status == 'hủy' ? 'selected' : '' }}>Hủy</option>
                                             @endif

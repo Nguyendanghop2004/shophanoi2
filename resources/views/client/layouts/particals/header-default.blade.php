@@ -32,12 +32,8 @@
                     </li>
                     <li class="nav-account"><a href="#login" data-bs-toggle="modal" class="nav-icon-item"><i
                                 class="icon icon-account"></i></a></li>
-
-                                
-                                <li class="nav-wishlist"><a href="{{route('wishlist.index')}}" class="nav-icon-item"><i
-                                    class="icon icon-heart"></i><span class="count-box">0</span></a></li>
-
-
+                    <li class="nav-wishlist"><a href="{{route('wishlist.index')}}" class="nav-icon-item"><i
+                                class="icon icon-heart"></i><span class="count-box">0</span></a></li>
                     <li class="nav-cart"><a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item"><i
                                 class="icon icon-bag"></i><span class="count-box">0</span></a></li>
                 </ul>

@@ -168,19 +168,27 @@ public function showAssignShipperForm()
 }
 
 
-public function assignShipper(Request $request, Order $order ,$id)
+public function assignShipper(Request $request, $id)
 {
     $request->validate([
         'assigned_shipper_id' => 'required|exists:admins,id'
     ], [
-        'assigned_shipper_id' => 'Vui lòng chọn shipper.',
+        'assigned_shipper_id.required' => 'Vui lòng chọn shipper.',
+        'assigned_shipper_id.exists' => 'Shipper không hợp lệ.'
     ]);
-    $order = Order::find($id);
-        $order->assigned_shipper_id = $request->assigned_shipper_id;
-        $order->save();
 
-        return redirect()->back()->with('success', 'Đã cấp đơn hàng cho shipper.');
+    $order = Order::find($id);
+
+    if ($order->assigned_shipper_id) {
+        return redirect()->back()->with('error', 'Đơn hàng đã có shipper.');
+    }
+
+    $order->assigned_shipper_id = $request->assigned_shipper_id;
+    $order->save();
+
+    return redirect()->back()->with('success', 'Đã cấp đơn hàng cho shipper.');
 }
+
 public function danhsachgiaohang()
 {
     $orders = Order::whereNotNull('assigned_shipper_id')->where('status', '!=', 'hủy')->get();

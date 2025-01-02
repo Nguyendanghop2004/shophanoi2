@@ -22,7 +22,6 @@ use App\Http\Controllers\Client\ShoppingCartController;
 use App\Http\Controllers\Client\TimeLineController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
-
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,10 +38,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
-
 Route::post('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+Route::delete('/wishlist/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 Route::get('gioithieu', [AboutUsController::class, 'index'])->name('index');
 Route::get('error', [ErrorController::class, 'error'])->name('error');

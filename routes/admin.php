@@ -36,9 +36,6 @@ use Illuminate\Support\Facades\Route;
     // Login admin
     Route::get('error', [ErrorController::class, 'error'])->name('error');
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-    Route::get('tksanpham', [AdminDashboardController::class, 'tksanpham'])->name('tksanpham');
-    Route::get('doanhthu', [AdminDashboardController::class, 'doanhthu'])->name('doanhthu');
-    Route::get('tkadmin', [AdminDashboardController::class, 'tkadmin'])->name('tkadmin');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
     Route::get('account', [AccoutAdminController::class, 'account'])->name('accounts.account')->middleware('permission:account_admin');
     Route::get('accounts/create', [AccoutAdminController::class, 'create'])->name('accounts.create')->middleware('permission:account_admin');

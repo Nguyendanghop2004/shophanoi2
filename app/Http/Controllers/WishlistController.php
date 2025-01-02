@@ -108,7 +108,7 @@ public function add(Request $request, $productId)
 {
     if (!auth()->check()) {
         $request->session()->put('url.intended', url()->previous());
-        return redirect()->route('account')->with('error', 'Bạn cần đăng nhập để thêm sản phẩm vào wishlist.');
+        return redirect()->route('accountUser.login')->with('error', 'Bạn cần đăng nhập để thêm sản phẩm vào wishlist.');
     }
 
     $userId = auth()->id();

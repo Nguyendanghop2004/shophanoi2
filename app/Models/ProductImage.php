@@ -22,5 +22,4 @@ class ProductImage extends Model
     {
         return $this->belongsTo(Color::class, 'color_id');
     }
-    
 }

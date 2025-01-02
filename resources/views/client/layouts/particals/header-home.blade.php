@@ -112,7 +112,6 @@
                            <!-- cate -->
                        </ul>
                    </div>
-
                    <div class="col-md-4 col-3 tf-lg-hidden">
                        <a href="#mobileMenu" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft">
                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 24 16"
@@ -131,7 +130,6 @@
 
 
                    <div class="col-xl-5 col-md-4 col-3">
-
                     @if (Auth::check())
                         <a href="{{ route('order.donhang') }}">Đơn hàng của tôi</a>
                     @else
@@ -162,8 +160,12 @@
                                 </a>
                             </li>
                         @endif
-                        <li class="nav-wishlist"><a href="{{route('wishlist.index')}}" class="nav-icon-item"><i
-                            class="icon icon-heart"></i><span class="count-box">0</span></a></li>
+                        <li class="nav-wishlist">
+                            <a href="{{route('wishlist.index')}}" class="nav-icon-item">
+                                <i class="icon icon-heart"></i>
+                                <span class="count-box">0</span>
+                            </a>
+                        </li>
                         <li class="nav-cart">
                             <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
                                 <i class="icon icon-bag"></i>

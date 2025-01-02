@@ -11,7 +11,15 @@
                 <h4>Danh Sách Đơn Hàng Cần Giao Shipper</h4>
             </div>
             <div class="card-body">
-
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @elseif (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
 
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -32,25 +40,22 @@
                                     <td>{{ $order->email }}</td>
                                     <td>{{ $order->status }}</td>
                                     <td>
-                                        @if ($errors->has('assigned_shipper_id'))
-                                            <span class="text-danger">{{ $errors->first('assigned_shipper_id') }}</span>
-                                        @endif
                                         <form action="{{ route('admin.order.assignShipper', $order->id) }}" method="POST">
                                             @csrf
-                                            <select name="assigned_shipper_id" class="form-control" required>
+                                            <select name="assigned_shipper_id" class="form-control @error('assigned_shipper_id') is-invalid @enderror" required>
                                                 <option value="">Chọn Shipper</option>
                                                 @foreach ($shippers as $shipper)
                                                     <option value="{{ $shipper->id }}">{{ $shipper->name }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('assigned_shipper_id')
+                                                <span class="invalid-feedback">{{ $message }}</span>
+                                            @enderror
 
-                                            <button type="button" class="btn btn-success btn-sm mt-2"
-                                                onclick="confirmUpdateForm(this)">
+                                            <button type="button" class="btn btn-success btn-sm mt-2" onclick="confirmUpdateForm(this)">
                                                 Giao cho Shipper
                                             </button>
                                         </form>
-
-
                                     </td>
                                 </tr>
                             @endforeach
@@ -80,10 +85,7 @@
                 }
             });
         }
-    </script>
 
-
-    <script>
         document.addEventListener("DOMContentLoaded", function() {
             @if (session('success'))
                 Swal.fire({

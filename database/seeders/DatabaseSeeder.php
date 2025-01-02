@@ -4,7 +4,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,8 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-
-        $this->call(AdminSeeder::class);
+        // \App\Models\User::factory(10)->create();
 
 
         //    'name' => 'Test User',
@@ -31,10 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SizeSeeder::class);
         $this->call(TagSeeder::class);
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 33bdedcad09798685d94de0ca2f2571033411ade
     }
 }
 
