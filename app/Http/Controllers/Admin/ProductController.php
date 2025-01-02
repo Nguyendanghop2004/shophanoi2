@@ -30,11 +30,11 @@ class ProductController extends Controller
         $search = $request->input('search');
         $products = Product::with([
             'colors' => function ($query) {
-                $query->select('colors.id', 'colors.name', 'colors.sku_color');
+                $query->select('colors.id', 'colors.name', 'colors.sku_color'); // Chỉ lấy cột cần thiết từ bảng colors
             },
             'variants',
             'tags' => function ($query) {
-                $query->whereIn('type', ['collection', 'material']); 
+                $query->whereIn('type', ['collection', 'material']); // Lấy các tag thuộc loại collection và material
             }
         ])
             ->select('products.id', 'products.price', 'products.brand_id', 'products.slug', 'products.product_name', 'products.sku', 'products.description', 'products.status')
@@ -61,11 +61,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::whereNull('parent_id') 
-            ->where('status', 1) 
+        $categories = Category::whereNull('parent_id') // Lọc danh mục cha
+            ->where('status', 1) // Chỉ lấy danh mục có status = 1
             ->with([
                 'children' => function ($query) {
-                    $query->where('status', 1); 
+                    $query->where('status', 1); // Lọc danh mục con có status = 1
                 }
             ])
             ->get();
@@ -79,7 +79,7 @@ class ProductController extends Controller
     {
         $color = Color::find($colorId);
         $sizes = Size::all();
-     
+        // Trả về view phụ chứa thẻ card, truyền thêm dữ liệu nếu cần
         return view('admin.product.variant-card', compact('color', 'sizes'));
     }
 
@@ -90,7 +90,7 @@ class ProductController extends Controller
     {
 
         DB::transaction(function () use ($request) {
-           
+            // 1. Lưu thông tin sản phẩm chính
             $product = Product::create([
                 'brand_id' => $request->input('brand_id'),
                 'product_name' => $request->input('product_name'),
@@ -101,46 +101,56 @@ class ProductController extends Controller
             ]);
 
             $product->description = $this->processDescription($request->input('description'), $product->id);
-          
+            // Lưu sản phẩm
             $product->save();
-          
-            if ($request->has('tagCollection')) {
-                $this->syncTags($product, $request->input('tagCollection'), 'collection');
-            }
+            // Lưu tags cho tagCollection và tagMaterial
+            $this->syncTags(
+                $product,
+                $request->input('tagCollection'),
+                $request->input('tagMaterial')
+            );
 
-            if ($request->has('tagMaterial')) {
-                $this->syncTags($product, $request->input('tagMaterial'), 'material');
-            }
 
-          
+            // 2. Đồng bộ danh mục sản phẩm với bảng `category_product`
             if ($request->has('categories')) {
                 $product->categories()->sync($request->input('categories'));
             }
 
-          
+            // 3. Lưu các biến thể sản phẩm
             $variantIds = $this->storeProductVariants($product, $request->input('variants'), $request->input('product_code'));
-          
+            // 4. Lưu ảnh sản phẩm
             $this->storeProductImages($product->id, $request->file('images'));
 
         });
 
         return redirect()->route('admin.product.create')->with('success', 'Sản phẩm đã được thêm thành công');
     }
-    
-    protected function syncTags($product, $tagIds, $type = null)
+    // Hàm xử lý lưu tag sản phẩm
+    protected function syncTags($product, $tagCollection, $tagMaterial)
     {
-        if (is_null($tagIds) || empty($tagIds)) {
-            $tagIds = [];
+        // Danh sách tag IDs cần đồng bộ
+        $tagsToSync = [];
+
+        // Lấy các tags của loại collection
+        if (is_array($tagCollection) && !empty($tagCollection)) {
+            $collectionTags = Tag::whereIn('id', $tagCollection)->where('type', 'collection')->pluck('id')->toArray();
+            $tagsToSync = array_merge($tagsToSync, $collectionTags);
         }
-        foreach ($tagIds as $tagId) {
-            $tag = Tag::find($tagId);
-            if ($tag && $tag->type === $type) {
-                $product->tags()->sync([$tagId]);
-            }
+
+        // Lấy các tags của loại material
+        if (is_array($tagMaterial) && !empty($tagMaterial)) {
+            $materialTags = Tag::whereIn('id', $tagMaterial)->where('type', 'material')->pluck('id')->toArray();
+            $tagsToSync = array_merge($tagsToSync, $materialTags);
+        }
+
+        // Đồng bộ tất cả tags trong một lần
+        if (!empty($tagsToSync)) {
+            $product->tags()->sync($tagsToSync);
         }
     }
 
-  
+
+    // Hàm xử lý lưu biến thể sản phẩm
     protected function storeProductVariants($product, $variants, $productCode)
     {
         $variantIds = [];
@@ -163,7 +173,7 @@ class ProductController extends Controller
         return $variantIds;
     }
 
-   
+    // Hàm xử lý lưu ảnh sản phẩm
     protected function storeProductImages($productId, $images)
     {
         if ($images) {
@@ -183,76 +193,87 @@ class ProductController extends Controller
     }
 
 
-    private function processDescription($description, $productId)
+    private function processDescription($description, $productId) 
     {
         if (empty(trim($description))) {
-          
-            ProductImage::where('product_id', $productId)->get()->each(function ($image) {
-                Storage::delete("public/" . $image->image_url);
-                $image->delete(); 
-            });
-            return ''; 
+            // Nếu mô tả rỗng, chỉ xóa các ảnh có color_id = null (ảnh thuộc mô tả)
+            ProductImage::where('product_id', $productId)
+                ->whereNull('color_id') // Chỉ xóa ảnh mô tả
+                ->get()
+                ->each(function ($image) {
+                    Storage::delete("public/" . $image->image_url); // Xóa file
+                    $image->delete(); // Xóa bản ghi trong CSDL
+                });
+            return ''; // Trả về chuỗi rỗng
         }
-
+    
         $dom = new \DOMDocument();
-        libxml_use_internal_errors(true); 
+        libxml_use_internal_errors(true); // Bỏ qua các lỗi HTML không hợp lệ
         $dom->loadHTML(mb_convert_encoding($description, 'HTML-ENTITIES', 'UTF-8'));
-
-       
+    
+        // Danh sách ảnh trong mô tả mới
         $newImages = [];
-
+    
         foreach ($dom->getElementsByTagName('img') as $img) {
             /** @var \DOMElement $img */
             $src = $img->getAttribute('src');
-
-            
+    
+            // Kiểm tra nếu ảnh được encode base64
             if (preg_match('/^data:image\/(\w+);base64,/', $src, $type)) {
                 $data = substr($src, strpos($src, ',') + 1);
                 $data = base64_decode($data);
-
-             
+    
+                // Tạo tên ảnh ngẫu nhiên
                 $imageName = uniqid() . '.png';
                 $filePath = "public/images/products/summernote/$imageName";
                 Storage::put($filePath, $data);
-
-             
+    
+                // Cập nhật đường dẫn của ảnh trong nội dung
                 $img->setAttribute('src', asset("storage/images/products/summernote/$imageName"));
-
-              
+    
+                // Lưu thông tin ảnh mới vào CSDL với color_id = null
                 $imageUrl = "images/products/summernote/$imageName";
                 ProductImage::create([
                     'product_id' => $productId,
+                    'color_id' => null, // Đặt color_id = null để phân biệt ảnh mô tả
                     'image_url' => $imageUrl,
                 ]);
-
-               
+    
+                // Thêm vào danh sách ảnh mới
                 $newImages[] = $imageUrl;
             } else {
-             
-                $existingPath = str_replace(asset('storage') . '/', '', $src);
+                // Nếu ảnh đã tồn tại (không phải base64), thêm vào danh sách ảnh mới
+                $existingPath = str_replace(asset('storage') . '/', '', $src); // Loại bỏ asset URL để lấy đường dẫn lưu trữ
                 $newImages[] = $existingPath;
             }
         }
-
-       
-        $oldImages = ProductImage::where('product_id', $productId)->pluck('image_url')->toArray();
-      
+    
+        // Lấy danh sách ảnh cũ từ CSDL (chỉ lấy ảnh mô tả với color_id = null)
+        $oldImages = ProductImage::where('product_id', $productId)
+            ->whereNull('color_id') // Chỉ lấy ảnh mô tả
+            ->pluck('image_url')
+            ->toArray();
+    
+        // Xóa các ảnh cũ không còn trong mô tả
         $imagesToDelete = array_diff($oldImages, $newImages);
-
+    
         foreach ($imagesToDelete as $imagePath) {
             Storage::delete("public/" . $imagePath); // Xóa file khỏi storage
-            ProductImage::where('product_id', $productId)->where('image_url', $imagePath)->delete(); // Xóa bản ghi CSDL
+            ProductImage::where('product_id', $productId)
+                ->where('image_url', $imagePath)
+                ->whereNull('color_id') // Chỉ xóa ảnh mô tả
+                ->delete();
         }
-
+    
         // Chỉ lấy phần nội dung bên trong <body>
         $bodyContent = '';
         foreach ($dom->getElementsByTagName('body')->item(0)->childNodes as $child) {
             $bodyContent .= $dom->saveHTML($child);
         }
-
+    
         return $bodyContent; // Trả về nội dung đã xử lý
     }
-
+    
     /**
      * Display the specified resource.
      */
@@ -264,7 +285,7 @@ class ProductController extends Controller
                     ->whereHas('variants'); // Lọc màu sắc có ít nhất một biến thể
             },
             'variants' => function ($query) {
-                $query->select('id', 'product_id', 'color_id', 'size_id', 'product_code', 'status') // Đảm bảo không có xung đột cột
+                $query->select('id', 'product_id', 'color_id', 'size_id', 'product_code', 'stock_quantity', 'price', 'status') // Đảm bảo không có xung đột cột
                     ->with(['color:id,name', 'size:id,name']); // Chỉ lấy các trường cần thiết
             },
             'images' => function ($query) {
@@ -279,7 +300,6 @@ class ProductController extends Controller
 
         // Nhóm ảnh theo màu
         $imagesGroupedByColor = $product->images->groupBy('color_id');
-
         return view('admin.product.show', compact('product', 'variantsGroupedByColor', 'imagesGroupedByColor'));
     }
 
@@ -338,7 +358,7 @@ class ProductController extends Controller
     {
         // Tìm sản phẩm theo ID
         $product = Product::findOrFail($id);
-
+ 
         // Cập nhật thông tin sản phẩm
         $product->product_name = $request->product_name;
         $product->price = $request->price;
@@ -352,8 +372,12 @@ class ProductController extends Controller
         $product->save();
 
         // Cập nhật tag và categories (nếu cần)
-        $this->syncTags($product, $request->tagCollection, 'collection');
-        $this->syncTags($product, $request->tagMaterial, 'material');
+        $this->syncTags(
+            $product,
+            $request->tagCollection,
+            $request->tagMaterial
+        );
+
         $product->categories()->sync($request->categories);
         // Lấy tất cả biến thể sản phẩm
         $variants = ProductVariant::where('product_id', $product->id)->get();
@@ -407,14 +431,18 @@ class ProductController extends Controller
         $sku = $request->input('product_code');
         $images['images'][$request->input('colorVatiant')] = $request->file('imagesVatiant');
         // Lưu các biến thể sản phẩm vào bảng `product_variants`
-        foreach ($sizes as $size) {
+        // Lấy danh sách kích thước từ database
+        $sizesMap = Size::whereIn('id', $sizes)->pluck('name', 'id')->toArray(); // ['id' => 'name']
+
+        foreach ($sizes as $sizeId) {
+            $sizeName = $sizesMap[$sizeId] ?? null;
             $product_variant = new ProductVariant();
             $product_variant->product_id = $product_id;
             $product_variant->color_id = $request->input('colorVatiant');
-            $product_variant->size_id = $size;
-            $product_variant->price = $price[$size] ?? 0;
-            $product_variant->stock_quantity = $stock[$size] ?? 0;
-            $product_variant->product_code = $this->generateProductCode($sku, $request->input('colorVatiant'), $size);
+            $product_variant->size_id = $sizeId;
+            $product_variant->price = $price[$sizeName]; // Lấy giá theo size_id
+            $product_variant->stock_quantity = $stock[$sizeName]; // Lấy số lượng theo size_id
+            $product_variant->product_code = $this->generateProductCode($sku, $request->input('colorVatiant'), $sizeId);
             $product_variant->save();
 
             $this->storeProductImages($product_id, $images['images']);
@@ -530,38 +558,27 @@ class ProductController extends Controller
      */
     public function destroyVariant(Request $request, string $id)
     {
-
-        if ($request->has('product_id')) {
-
-            // Tìm tất cả các biến thể có `product_id` và `color_id` tương ứng
-            $variants = ProductVariant::where('product_id', $request->input('product_id'))
-                ->where('color_id', $id)
-                ->get();
-
-            if ($variants->isEmpty()) {
-                return redirect()->back()->with('error', 'Không có biến thể nào với màu này trong sản phẩm được chọn.');
-            }
-
-            // Xóa mềm tất cả các biến thể tìm thấy
-            foreach ($variants as $variant) {
-                $variant->delete();
-            }
-
-            return redirect()->back()->with('success', 'Đã xóa mềm tất cả các biến thể có màu này cho sản phẩm thành công.');
-        } else {
+        try {
+            // Tìm biến thể theo ID
             $variant = ProductVariant::find($id);
-
-            if ($variant) {
-                $variant->delete(); // Xóa mềm biến thể
-                return redirect()->back()->with('success', 'Đã xóa mềm biến thể thành công.');
+    
+            if (!$variant) {
+                // Nếu không tìm thấy, trả về JSON thông báo lỗi
+                return response()->json(['success' => false, 'message' => 'Biến thể không tồn tại.'], 404);
             }
-
-            return redirect()->back()->with('error', 'Biến thể không tồn tại.');
+    
+            // Xóa mềm biến thể
+            $deleted = $variant->delete();
+    
+            if ($deleted) {
+                return response()->json(['success' => true, 'message' => 'Đã xóa mềm biến thể thành công.']);
+            }
+    
+            return response()->json(['success' => false, 'message' => 'Không thể xóa biến thể.'], 500);
+        } catch (\Exception $e) {
+            // Bắt lỗi ngoại lệ và trả về thông báo lỗi
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
-
-
-
-
     }
 
 

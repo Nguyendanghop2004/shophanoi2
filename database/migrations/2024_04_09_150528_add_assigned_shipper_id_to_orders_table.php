@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->unsignedBigInteger('assigned_shipper_id')->nullable()->after('status');
-            $table->foreign('assigned_shipper_id')->references('id')->on('admins')->onDelete('set null');
-        });
+        // Schema::table('orders', function (Blueprint $table) {
+        //     $table->unsignedBigInteger('assigned_shipper_id')->nullable()->after('status');
+        //     $table->foreign('assigned_shipper_id')->references('id')->on('admins')->onDelete('set null');
+        // });
     }
 
     /**

@@ -16,7 +16,8 @@
 <div class="tf-product-info-wrap position-relative">
     <div class="tf-product-info-list">
         <div class="tf-product-info-title">
-            <h5><a class="link" href="{{ route('product-detail', $product->slug) }}">{{ $product->product_name }}</a></h5>
+            <h5><a class="link" href="{{ route('product-detail', $product->slug) }}">{{ $product->product_name }}</a>
+            </h5>
         </div>
         {{-- <div class="tf-product-info-badges">   
             <div class="badges text-uppercase">Best seller</div>
@@ -26,7 +27,14 @@
             </div>
         </div> --}}
         <div class="tf-product-info-price">
-            <div class="price">{{ $product->price }} VNĐ</div>
+            @if ($product->sale_price < $product->price)
+                <span class="sale-price">{{ number_format($product->sale_price, 0, ',', '.') }} VNĐ</span>
+                <span class="original-price" style="text-decoration: line-through; color: #888;">
+                    {{ number_format($product->price, 0, ',', '.') }} VNĐ
+                </span>
+            @else
+                <span class="regular-price">{{ number_format($product->price, 0, ',', '.') }} VNĐ</span>
+            @endif
         </div>
         <div class="tf-product-description">
             <p>{{ $product->short_description }}</p>
@@ -55,7 +63,7 @@
                     <div class="variant-picker-label">
                         Kích thước: <span class="fw-6 variant-picker-label-value selected-size">Không có</span>
                     </div>
-                    <div class="find-size btn-choose-size fw-6">Find your size</div>
+                    <div class="find-size btn-choose-size fw-6">Tìm Kiếm Kích Thước Dành Cho Bạn</div>
                 </div>
                 <div class="variant-picker-values" id="size-options-container">
                     <!-- Các kích thước sẽ được thêm vào đây bằng JavaScript khi chọn màu -->
@@ -74,20 +82,24 @@
             <form class="">
                 <a href="javascript:void(0);"
                     class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Thêm
-                        vào giỏ -&nbsp;</span><span class="tf-qty-price" data-price="{{ $product->price }}">0
-                        VNĐ</span></a>
+                        vào giỏ -&nbsp;<span class="tf-qty-price" data-price="{{ $product->price }}"
+                            data-sale-price="{{ isset($product->sale_price) && $product->sale_price < $product->price ? $product->sale_price : $product->price }}">
+                            {{ number_format(isset($product->sale_price) && $product->sale_price < $product->price ? $product->sale_price : $product->price, 0, ',', '.') }}
+                            VNĐ
+                        </span>
+                </a>
                 <a href="javascript:void(0);"
                     class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
                     <span class="icon icon-heart"></span>
                     <span class="tooltip">Add to Wishlist</span>
                     <span class="icon icon-delete"></span>
                 </a>
-                <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
+                {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                     class="tf-product-btn-wishlist hover-tooltip box-icon bg_white compare btn-icon-action">
                     <span class="icon icon-compare"></span>
                     <span class="tooltip">Add to Compare</span>
                     <span class="icon icon-check"></span>
-                </a>
+                </a> --}}
             </form>
         </div>
         <div>
@@ -111,7 +123,8 @@
 
             $('.btn-size').click(function() {
                 var sizeName = $(this).data('size-name');
-                $('.selected-size').text(sizeName);
+                var sizePrice = $(this).data('size-price');
+                $('.selected-size').text(`${sizeName} + ${formatPrice(sizePrice)}`);
                 updateTotalPrice();
             });
         });
@@ -122,9 +135,10 @@
         updateSizeOptions(defaultColorId);
         updateTotalPrice();
 
-
-
-
+        
+        $('.find-size').click(function() {
+            $("#find_size").modal("show");
+        });
 
         // Thêm vào giỏ hàng
         $('.btn-add-to-cart').click(function(e) {
@@ -174,7 +188,7 @@
                 }
             });
         });
-
+ 
 
 
         // Hàm lấy tồn kho (đã có trong code trước đó)
@@ -194,15 +208,25 @@
 
         // Cập nhật giá trị tổng tiền
         function updateTotalPrice() {
-            let quantity = parseInt($('input[name="quantity_product"]').val()) || 0;
-            let priceBonus = parseInt($('input.btn-size:checked').data('size-price')) || 0;
-            let productPrice = parseInt($('.tf-qty-price').data('price')) || 0;
-            let totalPrice = (productPrice + priceBonus) * quantity;
-            let price = productPrice + priceBonus;
+            // Lấy số lượng sản phẩm
+            let quantity = parseInt($('input[name="quantity_product"]').val()) || 1;
 
-            $('.tf-qty-price').text(`${totalPrice} VNĐ`);
-            // $('.price-product').text(`${price} VNĐ`);
+            // Lấy giá gốc và giá giảm
+            let productPrice = parseFloat($('.tf-qty-price').data('price')) || 0; // Giá gốc
+            let salePrice = parseFloat($('.tf-qty-price').data('sale-price')) ||
+                productPrice; // Giá giảm (nếu có)
+
+            // Lấy giá cộng thêm từ kích thước (nếu có)
+            let sizePrice = parseFloat($('input.btn-size:checked').data('size-price')) || 0;
+
+            // Tính giá tổng
+            let finalPrice = salePrice + sizePrice; // Giá cuối cùng cho 1 sản phẩm
+            let totalPrice = finalPrice * quantity; // Tổng tiền
+
+            // Cập nhật vào giao diện
+            $('.tf-qty-price').text(`${totalPrice.toLocaleString('vi-VN')} VNĐ`);
         }
+
 
         // sự kiện tăng giảm số lượng
         var btnQuantity = function() {
@@ -264,7 +288,7 @@
 
             sizes.forEach(function(sizeInfo, index) {
                 if (index === 0) {
-                    $('.selected-size').text(sizeInfo.size.name);
+                    $('.selected-size').text(`${sizeInfo.size.name} + ${formatPrice(sizeInfo.price)}`);
                 }
 
                 var sizeElement = `
@@ -278,6 +302,13 @@
                 sizeContainer.append(sizeElement);
             });
             updateTotalPrice();
+        }
+        // Hàm định dạng giá tiền
+        function formatPrice(price) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+            }).format(price);
         }
     });
 </script>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Client\CodeRequest;
 use App\Http\Requests\Client\UpdatePasswordRequest;
 use App\Mail\ForgotPassword;
 use App\Models\PasswordResets;
@@ -37,7 +38,7 @@ class ForgotPasswordController extends Controller
         ];
         if (PasswordResets::query()->create($dataToken)) {
             Mail::to($request->email)->send(new ForgotPassword($data, $reset_code));
-            return redirect()->route('account.resetPassword', $token)->with('session', 'kiểm tra email');
+            return redirect()->route('account.resetPassword', $token)->with('success', 'kiểm tra email');
         }
 
         return redirect()->back()->with('erro', 'loi');
@@ -47,7 +48,7 @@ class ForgotPasswordController extends Controller
         $resetRequest = DB::table('password_resets')->where('token', $token)->first();
         return view('client.user.code-password', compact('resetRequest'));
     }
-    public function checkCode(Request $request)
+    public function checkCode(CodeRequest $request)
     {
         $reset = DB::table('password_resets')->where([
             'reset_code' => $request->reset_code,
@@ -79,17 +80,32 @@ class ForgotPasswordController extends Controller
         ];
         if (PasswordResets::query()->create($dataRest)) {
             Mail::to($data->email)->send(new ForgotPassword($data, $reset_code));
-            return redirect()->route('account.resetPassword', $token)->with('session', 'kiểm tra email');
+            return redirect()->route('account.resetPassword', $token)->with('success', 'vui lòng kiểm tra email');
         }
     }
     public function indexChangePassword($token)
     {
-
-        $dataemail = DB::table('password_resets')->where('token', $token)->first();
-
-        $data =  User::where('email', $dataemail->email)->first();
-        return view('client.user.reset-change-password', compact('data'));
+        try {
+        
+            $dataemail = DB::table('password_resets')->where('token', $token)->first();
+    
+         
+            if (!$dataemail) {
+                throw new \Exception('Token không hợp lệ hoặc đã hết hạn.');
+            }
+            $data = User::where('email', $dataemail->email)->first();
+    
+           
+            if (!$data) {
+                throw new \Exception('Người dùng không tồn tại.');
+            }
+     
+            return view('client.user.reset-change-password', compact('data'));
+        } catch (\Exception $e) {
+            return redirect()->route('error')->with('error', $e->getMessage());
+        }
     }
+    
     public function changePassword(string $id, UpdatePasswordRequest $request)
     {
         $dataUser = User::query()->latest('id')->findOrFail($id);

@@ -22,12 +22,12 @@ class ProductVariant extends Model
 
     public function color()
     {
-        return $this->belongsTo(Color::class, 'color_id');
+        return $this->belongsTo(Color::class);
     }
 
     public function size()
     {
-        return $this->belongsTo(Size::class, 'size_id');
+        return $this->belongsTo(Size::class);
     }
 
     public function images()
