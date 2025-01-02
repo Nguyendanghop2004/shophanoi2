@@ -285,6 +285,55 @@
             </div>
         </div>
     </section>
+
+
+    <section class="flat-spacing-15 pb_0">
+        <div class="container">
+            <div class="flat-title wow fadeInUp" data-wow-delay="0s">
+                <span class="title">Bài Viết</span>
+
+            </div>
+            <div class="blog-grid-main">
+                <div class="container">
+                    <div class="row">
+                        @foreach ($data as $item)
+                            <div class="col-xl-4 col-md-6 col-12">
+                                <div class="blog-article-item">
+                                    <div class="article-thumb">
+                                        <a href="{{ route('blog.detail', $item->slug) }}">
+                                            <img class="lazyload" src="{{ Storage::url($item->image) }} "
+                                                style="width: 366px; height: 235px;" alt="img-blog">
+                                        </a>
+
+                                        {{-- <div class="article-label">
+                                    <a href="blog-detail.html"
+                                        class="tf-btn btn-sm radius-3 btn-fill animate-hover-btn">{{$item->category->name}}</a>
+                                </div> --}}
+                                    </div>
+                                    <div class="article-content">
+                                        <div class="article-title">
+                                            <a href="{{ route('blog.detail', $item->slug) }}"
+                                                class="">{{ $item->title }}</a>
+                                        </div>
+                                        <div class="article-btn">
+                                            <a href="{{ route('blog.detail', $item->slug) }}"
+                                                class="tf-btn btn-line fw-6">Xêm Thêm<i
+                                                    class="icon icon-arrow1-top-left"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
     <!-- /Best seller -->
     
     <!-- Shop Collection -->
@@ -591,7 +640,7 @@
     <!-- /Brand --> --}}
 @endsection
 @push('scripts')
-    {{-- <script>
+    <script>
         $(document).ready(function() {
             // Bắt sự kiện click vào nút Quick Add
             $(".quick-add").on("click", function(e) {
@@ -896,10 +945,12 @@
                 updateQuantity(productId, colorId, sizeId, newQuantity, url);
             });
         });
-    </script> --}}
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+
      document.addEventListener("DOMContentLoaded", function() {
+
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -918,7 +969,5 @@
                 });
             @endif
         });
-
-   
-</script>
+    </script>
 @endpush

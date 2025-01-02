@@ -455,6 +455,7 @@
             });
         });
     </script>
+
     <script>
         $(document).ready(function() {
             // Gọi API để lấy số lượng sản phẩm trong giỏ hàng
@@ -479,6 +480,7 @@
             updateCartCount();
         });
     </script>
+
 </body>
 
 </html>
