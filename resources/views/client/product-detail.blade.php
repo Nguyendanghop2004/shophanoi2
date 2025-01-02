@@ -6,10 +6,9 @@
         <div class="container">
             <div class="tf-breadcrumb-wrap d-flex justify-content-between flex-wrap align-items-center">
                 <div class="tf-breadcrumb-list">
-                    <a href="index.html" class="text">Home</a>
+                    <a href="{{route('home')}}" class="text">Home</a>
                     <i class="icon icon-arrow-right"></i>
-                    <a href="#" class="text">Women</a>
-                    <i class="icon icon-arrow-right"></i>
+          
                     <span class="text">{{ $product->product_name }}</span>
                 </div>
                 <div class="tf-breadcrumb-prev-next">
@@ -139,8 +138,7 @@
                                                 Kích thước: <span
                                                     class="fw-6 variant-picker-label-value selected-size">Không có</span>
                                             </div>
-                                            <a href="#find_size" data-bs-toggle="modal" class="find-size fw-6">Find your
-                                                size</a>
+                                            <a href="#find_size" data-bs-toggle="modal" class="find-size fw-6">Bảng Chọn Size</a>
                                         </div>
                                         <div class="variant-picker-values" id="size-options-container">
                                             <!-- Các kích thước sẽ được thêm vào đây bằng JavaScript khi chọn màu -->
@@ -174,14 +172,10 @@
                                             <span class="tooltip">Add to Compare</span>
                                             <span class="icon icon-check"></span>
                                         </a>
-                                        <div class="w-100">
-                                            <a href="#" class="btns-full">Buy with <img
-                                                    src="images/payments/paypal.png" alt=""></a>
-                                            <a href="#" class="payment-more-option">More payment options</a>
-                                        </div>
+
                                     </form>
                                 </div>
-                                <div class="tf-product-info-extra-link">
+                                {{-- <div class="tf-product-info-extra-link">
                                     <a href="#compare_color" data-bs-toggle="modal" class="tf-product-extra-icon">
                                         <div class="icon">
                                             <img src="images/item/compare.svg" alt="">
@@ -211,8 +205,8 @@
                                         </div>
                                         <div class="text fw-6">Share</div>
                                     </a>
-                                </div>
-                                <div class="tf-product-info-delivery-return">
+                                </div> --}}
+                                {{-- <div class="tf-product-info-delivery-return">
                                     <div class="row">
                                         <div class="col-xl-6 col-12">
                                             <div class="tf-product-delivery">
@@ -247,62 +241,14 @@
                                         <img src="images/payments/img-3.png" alt="">
                                         <img src="images/payments/img-4.png" alt="">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="tf-sticky-btn-atc">
-            <div class="container">
-                <div class="tf-height-observer w-100 d-flex align-items-center">
-                    <div class="tf-sticky-atc-product d-flex align-items-center">
-                        <div class="tf-sticky-atc-img">
-                            <img class="lazyloaded" data-src="images/shop/products/p-d1.png" alt=""
-                                src="images/shop/products/p-d1.png">
-                        </div>
-                        <div class="tf-sticky-atc-title fw-5 d-xl-block d-none">Cotton jersey top</div>
-                    </div>
-                    <div class="tf-sticky-atc-infos">
-                        <form class="">
-                            <div class="tf-sticky-atc-variant-price text-center">
-                                <select class="tf-select">
-                                    <option selected="selected">Beige / S - $8.00</option>
-                                    <option>Beige / M - $8.00</option>
-                                    <option>Beige / L - $8.00</option>
-                                    <option>Beige / XL - $8.00</option>
-                                    <option>Black / S - $8.00</option>
-                                    <option>Black / M - $8.00</option>
-                                    <option>Black / L - $8.00</option>
-                                    <option>Black / XL - $8.00</option>
-                                    <option>Blue / S - $8.00</option>
-                                    <option>Blue / M - $8.00</option>
-                                    <option>Blue / L - $8.00</option>
-                                    <option>Blue / XL - $8.00</option>
-                                    <option>White / S - $8.00</option>
-                                    <option>White / M - $8.00</option>
-                                    <option>White / L - $8.00</option>
-                                    <option>White / XL - $8.00</option>
-                                </select>
-                            </div>
-                            <div class="tf-sticky-atc-btns">
-                                <div class="tf-product-info-quantity">
-                                    <div class="wg-quantity">
-                                        <span class="btn-quantity minus-btn">-</span>
-                                        <input type="text" name="number" value="1">
-                                        <span class="btn-quantity plus-btn">+</span>
-                                    </div>
-                                </div>
-                                <a href="javascript:void(0);"
-                                    class="tf-btn btn-fill radius-3 justify-content-center fw-6 fs-14 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Add
-                                        to cart</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+       
     </section>
     <!-- /default -->
     <!-- tabs -->
@@ -313,10 +259,10 @@
                     <div class="widget-tabs style-has-border">
                         <ul class="widget-menu-tab">
                             <li class="item-title active">
-                                <span class="inner">Description</span>
+                                <span class="inner">Mô tả</span>
                             </li>
                             <li class="item-title">
-                                <span class="inner">Review</span>
+                                <span class="inner">Xem màu và kích thước</span>
                             </li>
                             <li class="item-title">
                                 <span class="inner">Shipping</span>
@@ -328,62 +274,9 @@
                         <div class="widget-content-tab">
                             <div class="widget-content-inner active">
                                 <div class="">
-                                    <p class="mb_30">
-                                        Button-up shirt sleeves and a relaxed silhouette. It’s tailored with drapey,
-                                        crinkle-texture fabric that’s made from LENZING™ ECOVERO™ Viscose — responsibly
-                                        sourced wood-based
-                                        fibres produced through a process that reduces impact on forests, biodiversity and
-                                        water supply.
-                                    </p>
-                                    <div class="tf-product-des-demo">
-                                        <div class="right">
-                                            <h3 class="fs-16 fw-5">Features</h3>
-                                            <ul>
-                                                <li>Front button placket</li>
-                                                <li> Adjustable sleeve tabs</li>
-                                                <li>Babaton embroidered crest at placket and hem</li>
-                                            </ul>
-                                            <h3 class="fs-16 fw-5">Materials Care</h3>
-                                            <ul class="mb-0">
-                                                <li>Content: 100% LENZING™ ECOVERO™ Viscose</li>
-                                                <li>Care: Hand wash</li>
-                                                <li>Imported</li>
-                                            </ul>
-                                        </div>
-                                        <div class="left">
-                                            <h3 class="fs-16 fw-5">Materials Care</h3>
-                                            <div class="d-flex gap-10 mb_15 align-items-center">
-                                                <div class="icon">
-                                                    <i class="icon-machine"></i>
-                                                </div>
-                                                <span>Machine wash max. 30ºC. Short spin.</span>
-                                            </div>
-                                            <div class="d-flex gap-10 mb_15 align-items-center">
-                                                <div class="icon">
-                                                    <i class="icon-iron"></i>
-                                                </div>
-                                                <span>Iron maximum 110ºC.</span>
-                                            </div>
-                                            <div class="d-flex gap-10 mb_15 align-items-center">
-                                                <div class="icon">
-                                                    <i class="icon-bleach"></i>
-                                                </div>
-                                                <span>Do not bleach/bleach.</span>
-                                            </div>
-                                            <div class="d-flex gap-10 mb_15 align-items-center">
-                                                <div class="icon">
-                                                    <i class="icon-dry-clean"></i>
-                                                </div>
-                                                <span>Do not dry clean.</span>
-                                            </div>
-                                            <div class="d-flex gap-10 align-items-center">
-                                                <div class="icon">
-                                                    <i class="icon-tumble-dry"></i>
-                                                </div>
-                                                <span>Tumble dry, medium hear.</span>
-                                            </div>
-                                        </div>
-                                    </div>
+
+                                {{$product->description }}
+
                                 </div>
                             </div>
                             <div class="widget-content-inner">
@@ -1179,8 +1072,7 @@
                                             <span class="icon icon-bag"></span>
                                             <span class="tooltip">Quick Add</span>
                                         </a>
-                                        <a href="javascript:void(0);"
-                                            class="box-icon bg_white wishlist btn-icon-action">
+                                        <a href="javascript:void(0);" class="box-icon bg_white wishlist btn-icon-action">
                                             <span class="icon icon-heart"></span>
                                             <span class="tooltip">Add to Wishlist</span>
                                             <span class="icon icon-delete"></span>
@@ -1251,8 +1143,7 @@
                                             <span class="icon icon-bag"></span>
                                             <span class="tooltip">Quick Add</span>
                                         </a>
-                                        <a href="javascript:void(0);"
-                                            class="box-icon bg_white wishlist btn-icon-action">
+                                        <a href="javascript:void(0);" class="box-icon bg_white wishlist btn-icon-action">
                                             <span class="icon icon-heart"></span>
                                             <span class="tooltip">Add to Wishlist</span>
                                             <span class="icon icon-delete"></span>
@@ -1553,176 +1444,176 @@
 @endsection
 
 @push('scripts')
-<script>
-    $(document).ready(function() {
-        $('.btn-color').click(function() {
-            let colorName = $(this).data('color-name');
-            let selectedColorId = $(this).data('color-id');
+    <script>
+        $(document).ready(function() {
+            $('.btn-color').click(function() {
+                let colorName = $(this).data('color-name');
+                let selectedColorId = $(this).data('color-id');
 
-            // Cập nhật màu sắc đã chọn
-            $('.selected-color').text(colorName);
+                // Cập nhật màu sắc đã chọn
+                $('.selected-color').text(colorName);
 
-            updateSizeOptions(selectedColorId);
+                updateSizeOptions(selectedColorId);
 
-            $('.btn-size').click(function() {
-                var sizeName = $(this).data('size-name');
-                $('.selected-size').text(sizeName);
-                updateTotalPrice();
+                $('.btn-size').click(function() {
+                    var sizeName = $(this).data('size-name');
+                    $('.selected-size').text(sizeName);
+                    updateTotalPrice();
+                });
             });
-        });
 
-        // Mặc định màu sắc và ảnh khi tải trang
-        var defaultColorId = $('.btn-color:checked').data('color-id');
-        $('.selected-color').text($('.btn-color:checked').data('color-name'));
-        updateSizeOptions(defaultColorId);
-        updateTotalPrice();
-
+            // Mặc định màu sắc và ảnh khi tải trang
+            var defaultColorId = $('.btn-color:checked').data('color-id');
+            $('.selected-color').text($('.btn-color:checked').data('color-name'));
+            updateSizeOptions(defaultColorId);
+            updateTotalPrice();
 
 
 
 
-        // Thêm vào giỏ hàng
-        $('.btn-add-to-cart').click(function(e) {
-            e.preventDefault();
 
-            var productId = {{ $product->id }};
-            var colorId = $('.btn-color:checked').data('color-id');
-            var sizeId = $('input[name="size"]:checked').data('size-id');
-            var quantity = $('input[name="quantity_product"]').val();
+            // Thêm vào giỏ hàng
+            $('.btn-add-to-cart').click(function(e) {
+                e.preventDefault();
 
-            if (!sizeId) {
-                toastr.warning('Vui lòng chọn kích thước trước khi thêm giỏ', 'Lưu ý ');
-                return;
-            }
-            if (!colorId) {
-                toastr.warning('Vui lòng chọn kích thước trước khi thêm giỏ', 'Lưu ý ');
-                return;
-            }
-            var stock = getStockQuantity(colorId, sizeId); // Lấy số lượng tồn kho từ hàm
-            if (quantity > stock) {
-                toastr.warning(`Hiện tại sản phẩm chỉ còn ${stock} chiếc trong kho.`, 'Lưu ý');
-                return;
-            }
+                var productId = {{ $product->id }};
+                var colorId = $('.btn-color:checked').data('color-id');
+                var sizeId = $('input[name="size"]:checked').data('size-id');
+                var quantity = $('input[name="quantity_product"]').val();
 
-            $.ajax({
-                url: '/add-to-cart',
-                type: 'POST',
-                data: {
-                    product_id: productId,
-                    color_id: colorId,
-                    size_id: sizeId,
-                    quantity: quantity,
-                    _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if (response.success === true) {
-                        // Nếu thành công, hiển thị modal giỏ hàng
-                        $("#shoppingCart").modal("show");
-                    } else {
-                        toastr.error(response.message, 'Cảnh báo');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    toastr.error('Thêm giỏ hàng thất bại!', 'Cảnh báo');
-                    // console.error('Lỗi Ajax:', error);
-                    // console.log(xhr.responseText);
+                if (!sizeId) {
+                    toastr.warning('Vui lòng chọn kích thước trước khi thêm giỏ', 'Lưu ý ');
+                    return;
                 }
-            });
-        });
+                if (!colorId) {
+                    toastr.warning('Vui lòng chọn kích thước trước khi thêm giỏ', 'Lưu ý ');
+                    return;
+                }
+                var stock = getStockQuantity(colorId, sizeId); // Lấy số lượng tồn kho từ hàm
+                if (quantity > stock) {
+                    toastr.warning(`Hiện tại sản phẩm chỉ còn ${stock} chiếc trong kho.`, 'Lưu ý');
+                    return;
+                }
 
-
-
-        // Hàm lấy tồn kho (đã có trong code trước đó)
-        function getStockQuantity(colorId, sizeId) {
-            let stockQuantity = 0; // Mặc định là 0 nếu không tìm thấy
-            var colorSizes = @json($colorSizes);
-            if (colorSizes[colorId]) {
-                colorSizes[colorId].forEach(function(variant) {
-                    if (variant.size.id === sizeId) {
-                        stockQuantity = variant.stock_quantity;
+                $.ajax({
+                    url: '/add-to-cart',
+                    type: 'POST',
+                    data: {
+                        product_id: productId,
+                        color_id: colorId,
+                        size_id: sizeId,
+                        quantity: quantity,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success === true) {
+                            // Nếu thành công, hiển thị modal giỏ hàng
+                            $("#shoppingCart").modal("show");
+                        } else {
+                            toastr.error(response.message, 'Cảnh báo');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        toastr.error('Thêm giỏ hàng thất bại!', 'Cảnh báo');
+                        // console.error('Lỗi Ajax:', error);
+                        // console.log(xhr.responseText);
                     }
                 });
+            });
+
+
+
+            // Hàm lấy tồn kho (đã có trong code trước đó)
+            function getStockQuantity(colorId, sizeId) {
+                let stockQuantity = 0; // Mặc định là 0 nếu không tìm thấy
+                var colorSizes = @json($colorSizes);
+                if (colorSizes[colorId]) {
+                    colorSizes[colorId].forEach(function(variant) {
+                        if (variant.size.id === sizeId) {
+                            stockQuantity = variant.stock_quantity;
+                        }
+                    });
+                }
+
+                return stockQuantity;
             }
 
-            return stockQuantity;
-        }
+            // Cập nhật giá trị tổng tiền
+            function updateTotalPrice() {
+                let quantity = parseInt($('input[name="quantity_product"]').val()) || 0;
+                let priceBonus = parseInt($('input.btn-size:checked').data('size-price')) || 0;
+                let productPrice = parseInt($('.tf-qty-price').data('price')) || 0;
+                let totalPrice = (productPrice + priceBonus) * quantity;
+                let price = productPrice + priceBonus;
 
-        // Cập nhật giá trị tổng tiền
-        function updateTotalPrice() {
-            let quantity = parseInt($('input[name="quantity_product"]').val()) || 0;
-            let priceBonus = parseInt($('input.btn-size:checked').data('size-price')) || 0;
-            let productPrice = parseInt($('.tf-qty-price').data('price')) || 0;
-            let totalPrice = (productPrice + priceBonus) * quantity;
-            let price = productPrice + priceBonus;
+                $('.tf-qty-price').text(`${totalPrice} VNĐ`);
+                // $('.price-product').text(`${price} VNĐ`);
+            }
 
-            $('.tf-qty-price').text(`${totalPrice} VNĐ`);
-            // $('.price-product').text(`${price} VNĐ`);
-        }
+            // sự kiện tăng giảm số lượng
+            var btnQuantity = function() {
+                const validateValue = ($input) => {
+                    let value = parseInt($input.val(), 10);
+                    // Kiểm tra nếu giá trị không hợp lệ hoặc nhỏ hơn 1
+                    if (isNaN(value) || value < 1) {
+                        value = 1; // Đặt giá trị mặc định
+                    }
+                    $input.val(value); // Cập nhật lại giá trị hợp lệ
+                    return value;
+                };
 
-        // sự kiện tăng giảm số lượng
-        var btnQuantity = function() {
-            const validateValue = ($input) => {
-                let value = parseInt($input.val(), 10);
-                // Kiểm tra nếu giá trị không hợp lệ hoặc nhỏ hơn 1
-                if (isNaN(value) || value < 1) {
-                    value = 1; // Đặt giá trị mặc định
-                }
-                $input.val(value); // Cập nhật lại giá trị hợp lệ
-                return value;
+                $(".minus-btn").on("click", function(e) {
+                    e.preventDefault();
+                    var $this = $(this);
+                    var $input = $this.closest("div").find("input");
+                    var value = validateValue($input);
+
+                    if (value > 1) {
+                        $input.val(value - 1);
+                    }
+
+                    updateTotalPrice();
+                });
+
+                $(".plus-btn").on("click", function(e) {
+                    e.preventDefault();
+                    var $this = $(this);
+                    var $input = $this.closest("div").find("input");
+                    var value = validateValue($input);
+
+                    $input.val(value + 1);
+
+                    updateTotalPrice();
+                });
+
+                // Xử lý sự kiện khi người dùng nhập trực tiếp vào input
+                $("input[name='quantity_product']").on("input", function() {
+                    validateValue($(this));
+                    updateTotalPrice();
+                });
+
+                // Đảm bảo giá trị hợp lệ khi rời khỏi ô input
+                $("input[name='quantity_product']").on("blur", function() {
+                    validateValue($(this));
+                    updateTotalPrice();
+                });
             };
 
-            $(".minus-btn").on("click", function(e) {
-                e.preventDefault();
-                var $this = $(this);
-                var $input = $this.closest("div").find("input");
-                var value = validateValue($input);
+            btnQuantity();
+            // Cập nhật kích thước cho màu đã chọn
+            function updateSizeOptions(colorId) {
+                var sizeOptions = @json($colorSizes);
+                var sizes = sizeOptions[colorId] || [];
 
-                if (value > 1) {
-                    $input.val(value - 1);
-                }
+                var sizeContainer = $('#size-options-container');
+                sizeContainer.empty();
 
-                updateTotalPrice();
-            });
+                sizes.forEach(function(sizeInfo, index) {
+                    if (index === 0) {
+                        $('.selected-size').text(sizeInfo.size.name);
+                    }
 
-            $(".plus-btn").on("click", function(e) {
-                e.preventDefault();
-                var $this = $(this);
-                var $input = $this.closest("div").find("input");
-                var value = validateValue($input);
-
-                $input.val(value + 1);
-
-                updateTotalPrice();
-            });
-
-            // Xử lý sự kiện khi người dùng nhập trực tiếp vào input
-            $("input[name='quantity_product']").on("input", function() {
-                validateValue($(this));
-                updateTotalPrice();
-            });
-
-            // Đảm bảo giá trị hợp lệ khi rời khỏi ô input
-            $("input[name='quantity_product']").on("blur", function() {
-                validateValue($(this));
-                updateTotalPrice();
-            });
-        };
-
-        btnQuantity();
-        // Cập nhật kích thước cho màu đã chọn
-        function updateSizeOptions(colorId) {
-            var sizeOptions = @json($colorSizes);
-            var sizes = sizeOptions[colorId] || [];
-
-            var sizeContainer = $('#size-options-container');
-            sizeContainer.empty();
-
-            sizes.forEach(function(sizeInfo, index) {
-                if (index === 0) {
-                    $('.selected-size').text(sizeInfo.size.name);
-                }
-
-                var sizeElement = `
+                    var sizeElement = `
                 <input type="radio" class="btn-size" name="size" id="values-${sizeInfo.size.name}-${colorId}"
                     data-size-name="${sizeInfo.size.name}" data-size-id="${sizeInfo.size.id}"
                     data-size-price="${sizeInfo.price}" ${index === 0 ? 'checked' : ''}>
@@ -1730,10 +1621,10 @@
                     <p>${sizeInfo.size.name}</p>
                 </label>
             `;
-                sizeContainer.append(sizeElement);
-            });
-            updateTotalPrice();
-        }
-    });
-</script>
+                    sizeContainer.append(sizeElement);
+                });
+                updateTotalPrice();
+            }
+        });
+    </script>
 @endpush

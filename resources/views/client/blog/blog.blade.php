@@ -32,7 +32,7 @@
                     <div class="col-xl-4 col-md-6 col-12">
                         <div class="blog-article-item">
                             <div class="article-thumb">
-                                <a href="blog-detail.html">
+                                <a href="{{route('blog.detail',$item->slug)  }}">
                                     <img class="lazyload" src="{{ Storage::url($item->image) }} "
                                         style="width: 366px; height: 235px;" alt="img-blog">
                                 </a>
@@ -44,10 +44,10 @@
                             </div>
                             <div class="article-content">
                                 <div class="article-title">
-                                    <a href="blog-detail.html" class="">{{ $item->title }}</a>
+                                    <a href="{{route('blog.detail',$item->slug)  }}" class="">{{ $item->title }}</a>
                                 </div>
                                 <div class="article-btn">
-                                    <a href="{{route('blog.detail',$item->id)  }}" class="tf-btn btn-line fw-6">Read more<i
+                                    <a href="{{route('blog.detail',$item->slug)  }}" class="tf-btn btn-line fw-6">Xêm Thêm<i
                                             class="icon icon-arrow1-top-left"></i></a>
                                 </div>
                             </div>
