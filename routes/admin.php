@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\SaleProductController;
 use App\Http\Controllers\Admin\ShipperController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SliderController;
@@ -102,9 +103,10 @@ use Illuminate\Support\Facades\Route;
     // Quản lý thanh trượt
     Route::resource('slider', SliderController::class)->except(['show']);
     Route::get('slider/trash', [SliderController::class, 'trash'])->name('slider.trash');
-   
+
+
     Route::post('slider/update-order', [SliderController::class, 'updateOrder'])->name('slider.updateOrder');
-   
+
     Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
     Route::delete('sliders/{id}/force-delete', [SliderController::class, 'forceDelete'])->name('slider.forceDelete');
 
@@ -121,7 +123,10 @@ use Illuminate\Support\Facades\Route;
     // Quản lý sản phẩm
     // quản lí đơn hàng
 
+
+    //end quản lí đơn hàng
     Route::resource('product', ProductController::class);
+    //quản lí coupons
     Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('discount_codes.index');
 
     // Route để hiển thị form tạo mã giảm giá
@@ -211,6 +216,7 @@ use Illuminate\Support\Facades\Route;
     Route::post('blog/{id}/deactivateBlog', [BlogController::class, 'deactivateBlog'])->name('accountsUser.deactivateBlog')->middleware('permission:blog');
     //end blog
     // ORDERS
+
     Route::get('order/getList', [OrderController::class, 'getList'])->name('order.getList')->middleware('permission:order');
     Route::get('order/{id}', [OrderController::class, 'chitiet'])->name('order.chitiet')->middleware('permission:order');
     Route::post('order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.update-status')->middleware('permission:order');
@@ -225,4 +231,11 @@ use Illuminate\Support\Facades\Route;
     Route::post('order/{id}/update-updateStatusShip', [OrderController::class, 'updateStatusShip'])->name('order.update-updateStatusShip')->middleware('permission:Shipper');
   
 
+
+
+    //sale product
+    Route::resource('/sales', SaleProductController::class);
+
 });
+
+

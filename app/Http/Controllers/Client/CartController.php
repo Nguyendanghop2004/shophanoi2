@@ -352,7 +352,6 @@ class CartController extends Controller
         }
 
         // Trả về view với dữ liệu giỏ hàng
-
         return view('client.shopping-cart', compact('cartDetails', 'products'));
     }
 
@@ -519,19 +518,28 @@ class CartController extends Controller
     public function count(Request $request)
     {
         if (Auth::check()) {
-            // Người dùng đã đăng nhập: tính tổng số lượng sản phẩm từ database
-            $totalProducts = CartItem::whereHas('cart', function ($query) {
-                $query->where('user_id', Auth::id());
-            })->sum('quantity');
+            // Người dùng đã đăng nhập: tính số sản phẩm khác nhau từ database
+            $distinctProducts = CartItem::whereHas('cart', function ($query) {
+                    $query->where('user_id', Auth::id());
+                })
+                ->select('product_id', 'color_id', 'size_id')
+                ->distinct()
+                ->count();
         } else {
-            // Người dùng chưa đăng nhập: tính tổng số lượng sản phẩm từ session
+            // Người dùng chưa đăng nhập: tính số sản phẩm khác nhau từ session
             $cart = $request->session()->get('cart', []);
-            $totalProducts = array_sum(array_column($cart, 'quantity'));
+            $distinctProducts = count(
+                collect($cart)
+                    ->map(fn($item) => [
+                        'product_id' => $item['product_id'],
+                        'color' => $item['color_id'],
+                        'size' => $item['size_id']
+                    ])
+                    ->unique()
+            );
         }
     
-        return response()->json(['count' => $totalProducts]);
+        return response()->json(['count' => $distinctProducts]);
     }
     
-
-
 }
