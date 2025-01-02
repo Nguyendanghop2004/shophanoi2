@@ -19,6 +19,7 @@ use App\Http\Controllers\Client\ShopCollectionController;
 use App\Http\Controllers\Client\ShoppingCartController;
 use App\Http\Controllers\Client\TimeLineController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Client\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -123,3 +124,7 @@ Route::post('/select-address', [CheckoutController::class, 'select_address']);
 Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
 Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
 Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
+
+Route::get('/reviews/create/{order_id}', [ReviewController::class, 'create'])->name('client.reviews.create');
+Route::post('/reviews', [ReviewController::class, 'store'])->name('client.reviews.store');
+Route::post('/reviews/store', [ReviewController::class, 'store'])->name('client.reviews.store');

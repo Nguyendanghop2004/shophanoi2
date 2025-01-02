@@ -31,4 +31,9 @@ class Order extends Model
     {
         return $this->belongsTo(Admin::class, 'assigned_shipper_id');
     }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
 }
