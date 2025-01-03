@@ -16,7 +16,7 @@ use Storage;
 
 class AccountController extends Controller
 {
-    public function acc(Request $request, $section = null)
+   public function acc(Request $request, $section = null)
     {
         if ($request->ajax()) {
             switch ($section) {
@@ -31,27 +31,26 @@ class AccountController extends Controller
         return view('client.my-account', ['section' => $section]);
     }
 
-    public function login(\App\Http\Requests\Client\LoginRequest $request)
+    public function login(Request $request)
     {
+
+   
+
+        // dd($request->all());
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
             // Đăng nhập thành công
-            if (Auth::user()->status) {
-                Auth::logout();
-                session()->flash('error', 'Tài khoản của bạn đã bị khóa.');
-                return redirect()->back();
-            }
-            return redirect()->back()->with('error', 'Mật khẩu hoặc Email không đúng');
+            $request->session()->regenerate();
+            return redirect()->route('home');
         }
-        // return redirect()->back();
-
+        return redirect()->route('accountUser.login') ->with('error', 'Mật khẩu hoặc Email không đúng');
     }
     public function logout(Request $request)
     {
         if (Auth::check()) {
-            Auth::logout(); // Thực hiện logout
-            return redirect()->route('home')->with('success', 'Đăng xuất thành công');
+            Auth::logout(); 
+            return redirect()->route('home');
         }
     }
     public function Register(RegisterRequest $request)
@@ -60,19 +59,19 @@ class AccountController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password), // Mã hóa mật khẩu
+            'password' => Hash::make($request->password), 
         ]);
 
         auth()->login($user);
 
-        return redirect()->route('home')->with('success', 'Đăng ký thành công');
+        return redirect()->route('home');
     }
     public function loginIndex()
     {
         if (Auth::check()) {
             return redirect()->route('home');
         }
-
+    
         return response()->view('client.login')
             ->header('Cache-Control', 'no-store, no-cache, must-revalidate')
             ->header('Pragma', 'no-cache')
@@ -84,9 +83,9 @@ class AccountController extends Controller
         return view('client.register');
     }
 
-    public function ResePasswordIndex()
-    {
+    public function ResePasswordIndex(){
         return view('client.ResetPassword');
+
     }
     public function profile(String $id)
     {

@@ -91,6 +91,20 @@
                             <li>
                                 <a href="{{route('accountUser.login')}}" class="footer-menu_item">Tài khoản</a>
                             </li>
+                            <li class="nav-search footer-menu-list tf-collapse-content">
+                                <form action="{{ route('order.search') }}" method="GET" class="search-form" onsubmit="return validateSearchForm()">
+                                    <div class="search-input-wrapper">
+                                        <input type="text" name="query" id="searchQuery" placeholder="Tra cứu đơn hàng....." class="search-input">
+                                        <button class="nav-icon-item search-button" type="submit">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </li>
+                            <br>
+                           
+                            
+
                         </ul>
                     </div>
                     <div class="col-xl-3 col-md-6 col-12">
@@ -123,22 +137,13 @@
                                 </form>
                                 <div class="tf-cur">
                                     <div class="tf-currencies">
-                                        <select class="image-select center style-default type-currencies">
-                                            <option data-thumbnail="images/country/fr.svg">EUR <span>€ | Pháp</span></option>
-                                            <option data-thumbnail="images/country/de.svg">EUR <span>€ | Đức</span></option>
-                                            <option selected data-thumbnail="images/country/us.svg">USD
-                                                <span>$ | Hoa Kỳ</span></option>
-                                            <option data-thumbnail="images/country/vn.svg">VND <span>₫ | Việt Nam</span></option>
-                                        </select>
+                                        <li class="categories-item footer-menu-list tf-collapse-content">
+                                            <a href="{{ route('contact') }}" class="text-uppercase">
+                                                <i class="fas fa-map-marker-alt"></i> Vị Trí Cửa Hàng
+                                            </a>
+                                        </li>
                                     </div>
-                                    <div class="tf-languages">
-                                        <select class="image-select center style-default type-languages">
-                                            <option>Tiếng Anh</option>
-                                            <option>العربية</option>
-                                            <option>简体中文</option>
-                                            <option>اردو</option>
-                                        </select>
-                                    </div>
+                                  
                                 </div>
                             </div>
                         </div>

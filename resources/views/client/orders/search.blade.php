@@ -186,22 +186,16 @@
                         <div class="info-section">
                             <h5>Thông tin khách hàng</h5>
                             <p>Họ tên: {{ $order->name }}</p>
-                            <p>Điện thoại: {{ $order->phone_number }}</p>
-                            <p>Email: {{ $order->email }}</p>
-                            <p>Địa chỉ: {{ $order->address }}</p>
-                            <p>Phường/Xã: {{ $order->ward->name_xaphuong }}</p>
+                            <p>Điện thoại: {{ substr($order->phone_number, 0, 4) . str_repeat('x', strlen($order->phone_number) - 4) }}</p>
                             <p>Quận/Huyện: {{ $order->province->name_quanhuyen }}</p>
                             <p>Thành phố/Tỉnh: {{ $order->city->name_thanhpho }}</p>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="info-section">
-                            <h5>Thông tin giao nhận</h5>
+                            <h5>Thông tin khách hàng</h5>
                             <p>Họ tên: {{ $order->name }}</p>
-                            <p>Điện thoại: {{ $order->phone_number }}</p>
-                            <p>Email: {{ $order->email }}</p>
-                            <p>Địa chỉ: {{ $order->address }}</p>
-                            <p>Phường/Xã: {{ $order->ward->name_xaphuong }}</p>
+                            <p>Điện thoại: {{ substr($order->phone_number, 0, 4) . str_repeat('x', strlen($order->phone_number) - 4) }}</p>
                             <p>Quận/Huyện: {{ $order->province->name_quanhuyen }}</p>
                             <p>Thành phố/Tỉnh: {{ $order->city->name_thanhpho }}</p>
                         </div>

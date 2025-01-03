@@ -28,7 +28,7 @@
                                             @enderror
                                         </div>
                                         <div class="tf-field style-1">
-                                            <input class="form-control @error('email') is-invalid @enderror" placeholder=" "
+                                            <input class="form-control @error('email') is-invalid @enderror" placeholder="Mật khẩu"
                                                 type="password" name="password" @error('password') is-invalid @enderror>
                                             <label class="tf-field-label" for="">Mật khẩu *</label>
                                             @error('password')
