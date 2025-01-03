@@ -24,6 +24,7 @@
     <link rel="stylesheet"type="text/css" href="{{ asset('client/assets/css/styles.css') }}" />
     <!-- Toastr CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Favicon and Touch Icons  -->
     <link rel="shortcut icon" href="{{ asset('client/assets/images/logo/favicon.png') }}">

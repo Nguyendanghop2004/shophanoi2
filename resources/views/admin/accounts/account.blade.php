@@ -62,11 +62,7 @@
                                                 class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-<<<<<<< HEAD
-                                            
-=======
-                                          
->>>>>>> 5a6ee19b9729a054b484f6dd3f75ab8a2b83e543
+
                                             {{-- <!-- Xóa tài khoản -->
                                             <form action="{{ route('admin.accounts.destroy', $admin->id) }}" method="POST" class="ml-2">
                                                 @csrf

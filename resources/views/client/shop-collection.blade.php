@@ -194,8 +194,8 @@
                             </div>
                             <div class="filter-price">
                                 <div class="range-input">
-                                    <input id="price-min" class="range-min" type="range" min="200" max="200" value="0" />
-                                    <input id="price-max" class="range-max" type="range" min="200" max="2000000" value="2000000" />
+                                    <input id="price-min" class="range-min" type="range" min="0" max="5000" value="0" />
+                                    <input id="price-max" class="range-max" type="range" min="0" max="5000" value="5000" />
                                 </div>
                                 <div class="box-title-price">
                                     <span>Price:</span>

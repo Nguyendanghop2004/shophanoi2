@@ -171,15 +171,12 @@
                                     <p class="card-text mb-1"><strong>Số tiền hoàn: </strong>{{ number_format($order->refund_amount, 0, ',', '.') }} VND</p>
                                 </div>
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ route('client.orders.show', ['id' => Crypt::encryptString($order->id)]) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
-                                    @if ($order->status === 'giao hàng thành công')
-                                    <form action="{{ route('orders.confirm', $order->id) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success btn-sm">Đã nhận hàng</button>
-                                    </form>
+                                    <a href="{{ route('client.orders.show', $order->id) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                    @if ($order->status === 'đã_nhận_hàng')
+                                        <a href="{{ route('client.reviews.create', ['orderId' => $order->id]) }}" class="btn btn-warning btn-sm">Viết đánh giá</a>
                                     @endif
-                                    @if (in_array($order->status, ['chờ xác nhận', 'đã xác nhận']))
-                                    <button class="btn btn-danger cancelOrderBtn" data-order-id="{{ $order->id }}" data-action="{{ route('client.orders.cancel', $order->id) }}">Hủy đơn hàng</button>
+                                    @if (in_array($order->status, ['chờ_xác_nhận', 'đã_xác_nhận']))
+                                        <button class="btn btn-danger cancelOrderBtn" data-order-id="{{ $order->id }}" data-action="{{ route('client.orders.cancel', $order->id) }}">Hủy đơn hàng</button>
                                     @endif                         
                                 </div>
                             </div>
