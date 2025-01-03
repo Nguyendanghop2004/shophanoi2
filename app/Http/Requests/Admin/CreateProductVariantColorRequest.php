@@ -26,7 +26,7 @@ class CreateProductVariantColorRequest extends FormRequest
         return [
             'product_id' => 'required|exists:products,id', // Kiểm tra rằng product_id tồn tại trong bảng products
             'color_id' => 'required|exists:colors,id', // Kiểm tra rằng color_id tồn tại trong bảng colors
-            'sizes' => 'required|array', // Kiểm tra rằng sizes là mảng
+            'sizes' => 'required', // Kiểm tra rằng sizes là mảng
             'sizes.*' => 'required|string', // Mỗi phần tử trong sizes phải là chuỗi (hoặc kiểu dữ liệu khác nếu cần)
             'pricevariantcolor' => 'required|numeric|min:0', // Kiểm tra giá phải là số và không âm
             'quantityvariantcolor' => 'required|integer|min:0', // Kiểm tra số lượng phải là số nguyên và không âm
@@ -49,7 +49,6 @@ class CreateProductVariantColorRequest extends FormRequest
             'product_id.required' => 'Product ID là bắt buộc.',
             'color_id.required' => 'Color ID là bắt buộc.',
             'sizes.required' => 'Kích thước là bắt buộc.',
-            'sizes.array' => 'Kích thước phải là một mảng.',
             'sizes.*.required' => 'Mỗi kích thước là bắt buộc.',
             'pricevariantcolor.required' => 'Giá là bắt buộc.',
             'quantityvariantcolor.required' => 'Số lượng là bắt buộc.',

@@ -159,6 +159,84 @@
                                Vui lòng nhập từ khóa tìm kiếm
                            </div>
                            @include('client.layouts.particals.navright')
+
+                          @if (Auth::check())
+                            <a href="{{ route('accountUser.logout') }}">Logout</a>
+                        @else
+                            <li>
+                                <a href="{{ route('accountUser.login') }}" class="nav-icon-item">
+                                    <i class="icon icon-account"></i>
+                                </a>
+                            </li>
+
+                        @endif -->
+                        <li class="nav-notify">
+                               <div class="btn-group">
+                                   <a class="icon icon-notify" data-bs-toggle="dropdown" aria-expanded="false">
+                                   </a>
+                                   <ul class="dropdown-menu">
+                                       <li>
+                                           <a class="dropdown-item" href="#">
+                                               <div class="notification-icon">
+                                                   <i class="icon icon-notify"></i>
+                                               </div>
+                                               <div class="notification-content">
+                                                   <p class="notification-title">Thông báo 1</p>
+                                                   <span class="notification-time">1 phút trước</span>
+                                               </div>
+                                           </a>
+                                       </li>
+                                       <li>
+                                           <a class="dropdown-item" href="#">
+                                               <div class="notification-icon">
+                                                   <i class="icon icon-notify"></i>
+                                               </div>
+                                               <div class="notification-content">
+                                                   <p class="notification-title">Thông báo 2</p>
+                                                   <span class="notification-time">10 phút trước</span>
+                                               </div>
+                                           </a>
+                                       </li>
+                                       <li>
+                                           <a class="dropdown-item" href="#">
+                                               <div class="notification-icon">
+                                                   <i class="icon icon-notify"></i>
+                                               </div>
+                                               <div class="notification-content">
+                                                   <p class="notification-title">Thông báo 3</p>
+                                                   <span class="notification-time">30 phút trước</span>
+                                               </div>
+                                           </a>
+                                       </li>
+                                       <li>
+                                           <hr class="dropdown-divider">
+                                       </li>
+                                       <li class="text-center">
+                                           <a class="dropdown-item text-primary" href="#">Xem tất cả thông báo</a>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </li>
+                        <li class="nav-wishlist">
+                            <a href="{{route('wishlist')}}" class="nav-icon-item">
+                                <i class="icon icon-heart"></i>
+                             
+                                <span class="count-box">0</span>
+                            </a>
+                        </li>
+                        <li class="nav-cart">
+                            <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
+                                <i class="icon icon-bag"></i>
+                                <span class="count-box cart-count">0</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+
+                                     
+                      
+=======
                            <li class="nav-wishlist">
                                <a href="wishlist.html" class="nav-icon-item">
                                    <i class="icon icon-heart"></i>

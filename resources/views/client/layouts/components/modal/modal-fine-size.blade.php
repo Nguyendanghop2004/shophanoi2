@@ -2,20 +2,20 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="header">
-                <div class="demo-title">Bảng size</div>
+                <div class="demo-title">Biểu đồ kích thước</div>
                 <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
             </div>
             <div class="tf-rte">
                 <div class="tf-table-res-df">
-                    <h6>Hướng dẫn chọn size</h6>
+                    <h6>Hướng dẫn kích thước</h6>
                     <table class="tf-sizeguide-table">
                         <thead>
                             <tr>
-                                <th>Size</th>
-                                <th>US</th>
-                                <th>Vòng ngực</th>
-                                <th>Vòng eo</th>
-                                <th>Vòng hông</th>
+                                <th>Kích cỡ</th>
+                                <th>Tôi</th>
+                                <th>Vòng 1 ( Bust )</th>
+                                <th>Vòng 2 ( waist )</th>
+                                <th>Vòng 3 ( low-hips )</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,7 +31,7 @@
                                 <td>4</td>
                                 <td>34 - 35</td>
                                 <td>26 - 27</td>
-                                <td>35 - 36</td>
+                                <td>35 - 26</td>
                             </tr>
                             <tr>
                                 <td>M</td>
@@ -43,7 +43,7 @@
                             <tr>
                                 <td>L</td>
                                 <td>8</td>
-                                <td>38 - 39</td>
+                                <td>38 - 29</td>
                                 <td>30 - 31</td>
                                 <td>42 - 44</td>
                             </tr>
@@ -66,17 +66,20 @@
                 </div>
                 <div class="tf-page-size-chart-content">
                     <div>
-                        <h6>Cách đo</h6>
-                        <div class="title">Vòng ngực</div>
-                        <p>Đo quanh phần đầy nhất của vòng ngực.</p>
-                        <div class="title">Vòng eo</div>
-                        <p>Đo quanh phần hẹp nhất của cơ thể bạn.</p>
-                        <div class="title">Vòng hông</div>
-                        <p class="mb-0">Đứng với hai chân sát nhau, đo quanh phần đầy nhất của hông/mông.</p>
+                        <h6>Mẹo đo lường</h6>
+                        <div class="title">Vòng 1</div>
+                        <p>Đo xung quanh phần đầy nhất của bức tượng bán thân của bạn.</p>
+                        <div class="title">Vòng 2</div>
+                        <p>Đo xung quanh phần hẹp nhất của cơ thể bạn.</p>
+                        <div class="title">Vòng 3</div>
+                        <p class="mb-0">Chắp hai chân lại và đo xung quanh phần đầy đặn nhất của hông/phía sau của
+                            bạn.
+                        </p>
                     </div>
                     <div>
-                        <img class="sizechart lazyload" data-src="images/shop/products/size_chart2.jpg"
-                            src="images/shop/products/size_chart2.jpg" alt="">
+                        <img class="sizechart lazyload"
+                            data-src="{{ asset('client/assets/images/shop/products/size_chart2.jpg') }}"
+                            src="{{ asset('client/assets/images/shop/products/size_chart2.jpg') }}" alt="">
                     </div>
                 </div>
             </div>
