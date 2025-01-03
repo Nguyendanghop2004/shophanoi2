@@ -7,47 +7,51 @@
     <form action="{{ route('client.reviews.store') }}" method="POST">
         @csrf
         <input type="hidden" name="order_id" value="{{ $order->id }}">
-        <input type="hidden" name="product_id" value="{{ $product->id }}"> <!-- Đảm bảo truyền product_id -->
 
-        <!-- Thông tin sản phẩm -->
-        <div class="mb-4">
-            <div class="d-flex gap-3 align-items-center">
-                <img src="{{ Storage::url($order->orderItems->first()->image_url) }}" alt="Product Image" class="img-fluid" style="width: 100px; height: auto;">
-
-                <div>
-                    <h5 class="mb-1">{{ $order->orderItems->first()->product_name }}</h5>
-                    <p class="text-muted mb-1">Size: {{ $order->orderItems->first()->size_name }}</p>
-                    <p class="text-muted mb-1">Màu sắc: {{ $order->orderItems->first()->color_name }}</p>
+        @foreach ($order->orderItems as $orderItem)
+            <div class="mb-4">
+                <div class="d-flex gap-3 align-items-center">
+                    <img src="{{ Storage::url($orderItem->image_url) }}" alt="Product Image" class="img-fluid" style="width: 100px; height: auto;">
+                    <div>
+                        <h5 class="mb-1">{{ $orderItem->product_name }}</h5>
+                        <p class="text-muted mb-1">Size: {{ $orderItem->size_name }}</p>
+                        <p class="text-muted mb-1">Màu sắc: {{ $orderItem->color_name }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Đánh giá sao -->
-        <div class="mb-4">
-            <label for="rating" class="form-label fw-bold fs-5">Đánh giá của bạn</label>
-            <div class="rating-stars-container d-flex gap-2">
-                @for ($i = 1; $i <= 5; $i++)
-                    <span class="star {{ old('rating') >= $i ? 'selected' : '' }}" data-star-value="{{ $i }}">
-                        <i class="bi bi-star fs-3"></i>
-                    </span>
-                @endfor
+            <!-- Đánh giá sao cho sản phẩm -->
+            <div class="mb-4">
+                <label for="rating_{{ $orderItem->product_id }}" class="form-label fw-bold fs-5">Đánh giá cho {{ $orderItem->product_name }}</label>
+                <div class="rating-stars-container d-flex gap-2" data-product-id="{{ $orderItem->product_id }}">
+                    @for ($i = 1; $i <= 5; $i++)
+                        <span class="star" data-star-value="{{ $i }}" data-product-id="{{ $orderItem->product_id }}">
+                            <i class="bi {{ (old('ratings.' . $orderItem->product_id, 0) >= $i) ? 'bi-star-fill' : 'bi-star' }} fs-3"></i>
+                        </span>
+                    @endfor
+                </div>
+                <input type="hidden" name="ratings[{{ $orderItem->product_id }}]" id="rating_{{ $orderItem->product_id }}" value="{{ old('ratings.' . $orderItem->product_id, 0) }}">
+                @error("ratings.{$orderItem->product_id}")
+                    <div class="text-danger">Bạn cần chọn số sao</div>
+                @enderror
             </div>
-            <input type="hidden" name="rating" id="rating" value="{{ old('rating') }}">
-            @error('rating') <!-- Hiển thị lỗi nếu có -->
-                <div class="text-danger">Bạn cần chọn số sao</div>
-            @enderror
-        </div>
-        
-        <!-- Nhận xét -->
-        <div class="mb-3">
-            <label for="comment" class="form-label">Nhận xét</label>
-            <textarea name="comment" id="comment" class="form-control" rows="4" placeholder="Viết nhận xét (tùy chọn)">{{ old('comment') }}</textarea>
-            @error('comment') <!-- Hiển thị lỗi nếu có -->
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
+
+            <!-- Nhận xét cho sản phẩm -->
+            <div class="mb-3">
+                <label for="comment_{{ $orderItem->product_id }}" class="form-label">Nhận xét cho {{ $orderItem->product_name }}</label>
+                <textarea name="comments[{{ $orderItem->product_id }}]" id="comment_{{ $orderItem->product_id }}" class="form-control" rows="4" placeholder="Viết nhận xét (tùy chọn)">{{ old('comments.' . $orderItem->product_id) }}</textarea>
+                @error("comments.{$orderItem->product_id}")
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Input hidden để lưu product_id -->
+            <input type="hidden" name="product_ids[]" value="{{ $orderItem->product_id }}">
+        @endforeach
+
         <button type="submit" class="btn btn-success">Gửi đánh giá</button>
     </form>
+
 </div>
 @endsection
 
@@ -75,17 +79,19 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const stars = document.querySelectorAll('.rating-stars-container .star');
-        const ratingInput = document.getElementById('rating');
 
-        stars.forEach((star, index) => {
+        stars.forEach(star => {
             star.addEventListener('click', function () {
-                const selectedRating = index + 1;
+                const selectedRating = parseInt(star.getAttribute('data-star-value'));
+                const productId = star.getAttribute('data-product-id');
+                const ratingInput = document.getElementById('rating_' + productId);
 
-                // Gán giá trị rating vào input ẩn
+                // Gán giá trị rating vào input ẩn cho sản phẩm
                 ratingInput.value = selectedRating;
 
                 // Cập nhật giao diện sao đã chọn
-                stars.forEach((s, idx) => {
+                const productStars = document.querySelectorAll(`.rating-stars-container[data-product-id="${productId}"] .star`);
+                productStars.forEach((s, idx) => {
                     const icon = s.querySelector('i');
                     if (idx < selectedRating) {
                         icon.classList.remove('bi-star'); 

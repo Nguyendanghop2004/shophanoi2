@@ -29,16 +29,7 @@ use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\WishlistController;
 
 use Illuminate\Support\Facades\Route;
-A
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+
 
 
 
@@ -193,7 +184,7 @@ Route::middleware('checkPassword')->group(function () {
     Route::post('/select-address', [CheckoutController::class, 'select_address']);
 
 
-oute::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
+Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
 Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
 Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
 Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
@@ -209,4 +200,3 @@ Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetch
 Route::get('/reviews/create/{orderId}', [ReviewController::class, 'create'])->name('client.reviews.create');
 Route::post('/reviews/store', [ReviewController::class, 'store'])->name('client.reviews.store');
 
-});

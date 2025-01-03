@@ -43,7 +43,6 @@
                 </li>
             </div>
         </nav>
-    @else
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <li class="nav-item dropdown">
