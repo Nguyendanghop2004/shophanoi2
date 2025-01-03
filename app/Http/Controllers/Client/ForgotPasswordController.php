@@ -85,12 +85,27 @@ class ForgotPasswordController extends Controller
     }
     public function indexChangePassword($token)
     {
-
-        $dataemail = DB::table('password_resets')->where('token', $token)->first();
-
-        $data =  User::where('email', $dataemail->email)->first();
-        return view('client.user.reset-change-password', compact('data'));
+        try {
+        
+            $dataemail = DB::table('password_resets')->where('token', $token)->first();
+    
+         
+            if (!$dataemail) {
+                throw new \Exception('Token không hợp lệ hoặc đã hết hạn.');
+            }
+            $data = User::where('email', $dataemail->email)->first();
+    
+           
+            if (!$data) {
+                throw new \Exception('Người dùng không tồn tại.');
+            }
+     
+            return view('client.user.reset-change-password', compact('data'));
+        } catch (\Exception $e) {
+            return redirect()->route('error')->with('error', $e->getMessage());
+        }
     }
+    
     public function changePassword(string $id, UpdatePasswordRequest $request)
     {
         $dataUser = User::query()->latest('id')->findOrFail($id);

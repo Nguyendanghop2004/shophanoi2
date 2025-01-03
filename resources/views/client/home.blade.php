@@ -4,6 +4,7 @@
 @endsection
 
 @section('content')
+
     <!-- categories -->
     <section class="flat-spacing-20">
         <div class="container">
@@ -176,6 +177,21 @@
                 <span class="title">Sản Phẩm Yêu Thích</span>
                 <p class="sub-title">Thời trang đẹp mắt, tiện lợi và bền vững – dành cho mọi phong cách của bạn.</p>
             </div>
+            @if(session('success'))
+            <div style="position: relative; padding: 15px; margin: 15px 0; background: linear-gradient(to right, #a8e063, #56ab2f); color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <strong style="font-size: 16px;">🎉 Thành công!</strong>
+                <p style="margin: 5px 0; font-size: 14px;">{{ session('success') }}</p>
+                <button style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
+            </div>
+        @endif
+        
+        @if(session('error'))
+            <div style="position: relative; padding: 15px; margin: 15px 0; background: linear-gradient(to right, #ff416c, #ff4b2b); color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <strong style="font-size: 16px;">⚠️ Lỗi!</strong>
+                <p style="margin: 5px 0; font-size: 14px;">{{ session('error') }}</p>
+                <button style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
+            </div>
+        @endif
             <div class="hover-sw-nav hover-sw-3">
                 <div class="swiper tf-sw-product-sell wrap-sw-over" data-preview="4" data-tablet="3" data-mobile="2"
                     data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3" data-pagination-lg="3">
@@ -191,10 +207,11 @@
                                                 src="{{ asset('storage/' . $product['main_image_url']) }}"
                                                 alt="image-product">
                                             <img class="lazyload img-hover"
-                                                data-src="{{ asset('storage/' . $product['hover_main_image_url']) }}"
-                                                src="{{ asset('storage/' . $product['hover_main_image_url']) }}"
+                                                data-src="{{ isset($product['hover_main_image_url']) && $product['hover_main_image_url'] ? asset('storage/' . $product['hover_main_image_url']) : asset('storage/' . $product['main_image_url']) }}"
+                                                src="{{ isset($product['hover_main_image_url']) && $product['hover_main_image_url'] ? asset('storage/' . $product['hover_main_image_url']) : asset('storage/' . $product['main_image_url']) }}"
                                                 alt="image-product">
                                         </a>
+                                        
                                         <div class="list-product-btn">
                                             {{-- <a href="#quick_add" data-bs-toggle="modal"
                                                 data-product-id="{{ $product['id'] }}"
@@ -202,12 +219,35 @@
                                                 <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick Add</span>
                                             </a> --}}
-                                            <a href="javascript:void(0);"
-                                                class="box-icon bg_white wishlist btn-icon-action">
-                                                <span class="icon icon-heart"></span>
-                                                <span class="tooltip">Add to Wishlist</span>
-                                                <span class="icon icon-delete"></span>
-                                            </a>
+                                            <form action="{{ route('wishlist.add', $product['id']) }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                <button type="submit" class="box-icon bg_white wishlist btn-icon-action">
+                                                    <span class="icon icon-heart"></span>
+                                                    <span class="tooltip">Add to Wishlist</span>
+                                                </button>
+                                            </form>
+                                            <div class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
+    @if(in_array($product['id'], $wishlist))
+        <form action="{{ route('wishlist.remove') }}" method="POST" style="display: inline;">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <button type="submit" class="wishlist-btn remove-wishlist">
+                <span class="icon icon-delete"></span>
+            </button>
+        </form>
+    @else
+        <form action="{{ route('wishlist.add') }}" method="POST" style="display: inline;">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <button type="submit" class="wishlist-btn add-wishlist">
+                <span class="icon icon-heart"></span>
+            </button>
+        </form>
+    @endif
+</div>
+
+
+
                                             {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                                                 class="box-icon bg_white compare btn-icon-action">
                                                 <span class="icon icon-compare"></span>
@@ -228,7 +268,14 @@
                                     <div class="card-product-info">
                                         <a href="{{ route('product-detail', $product['slug']) }}"
                                             class="title link">{{ $product['name'] }}</a>
-                                        <span class="price">{{ $product['price'] }} VNĐ</span>
+                                        <span class="price">   @if ($product['sale_price'] < $product['price'])
+                                            <span class="sale-price">{{ number_format($product['sale_price'], 0, ',', '.') }} VNĐ</span>
+                                            <span class="original-price" style="text-decoration: line-through; color: #888;">
+                                                {{ number_format($product['price'], 0, ',', '.') }} VNĐ
+                                            </span>
+                                        @else
+                                            <span class="regular-price">{{ number_format($product['price'], 0, ',', '.') }} VNĐ</span>
+                                        @endif</span>
                                         <ul class="list-color-product">
                                             @foreach ($product['colors'] as $index => $color)
                                                 <li
@@ -260,6 +307,7 @@
             </div>
         </div>
     </section>
+
 
     <section class="flat-spacing-15 pb_0">
         <div class="container">
@@ -309,7 +357,7 @@
 
 
     <!-- /Best seller -->
-    {{--
+    
     <!-- Shop Collection -->
     <section class="flat-spacing-19">
         <div class="container">
@@ -319,17 +367,17 @@
                         src="{{ asset('client/assets/images/collections/collection-58.jpg') }}" alt="collection-img">
                 </div>
                 <div class="tf-content-wrap wow fadeInUp" data-wow-delay="0s">
-                    <div class="heading">Redefining Fashion <br> Excellence</div>
-                    <p class="description">Here is your chance to upgrade your wardrobe with a variation of styles
+                    <div class="heading">Định nghĩa lại thời trang <br> Xuất sắc</div>
+                    <p class="description">Đây là cơ hội để bạn nâng cấp tủ quần áo của mình với nhiều phong cách khác nhau
                     </p>
                     <a href="shop-collection-list.html"
-                        class="tf-btn style-2 btn-fill rounded-full animate-hover-btn">Read our stories</a>
+                        class="tf-btn style-2 btn-fill rounded-full animate-hover-btn">Đọc câu chuyện của chúng tôi</a>
                 </div>
             </div>
         </div>
     </section>
     <!-- /Shop Collection -->
-    <!-- Testimonial -->
+    {{-- <!-- Testimonial -->
     <section class="flat-testimonial-v2 py-0 wow fadeInUp" data-wow-delay="0s">
         <div class="container">
             <div class="wrapper-thumbs-testimonial-v2 type-1 flat-thumbs-testimonial">
@@ -467,9 +515,9 @@
             </div>
         </div>
     </section>
-    <!-- /Testimonial -->
+    <!-- /Testimonial --> --}}
     <!-- Icon box -->
-    <section class="flat-spacing-11 pb_0 flat-iconbox wow fadeInUp" data-wow-delay="0s">
+    <section class="flat-spacing-11 pb_0 flat-iconbox wow fadeInUp mb-4" data-wow-delay="0s">
         <div class="container">
             <div class="wrap-carousel wrap-mobile">
                 <div class="swiper tf-sw-mobile" data-preview="1" data-space="15">
@@ -480,8 +528,8 @@
                                     <i class="icon-shipping"></i>
                                 </div>
                                 <div class="content">
-                                    <div class="title">Free Shipping</div>
-                                    <p>Free shipping over order $120</p>
+                                    <div class="title">Miễn phí vận chuyển</div>
+                                    <p>Miễn phí vận chuyển cho đơn hàng 300.000</p>
                                 </div>
                             </div>
                         </div>
@@ -491,8 +539,8 @@
                                     <i class="icon-payment fs-22"></i>
                                 </div>
                                 <div class="content">
-                                    <div class="title">Flexible Payment</div>
-                                    <p>Pay with Multiple Credit Cards</p>
+                                    <div class="title">Thanh toán linh hoạt</div>
+                                    <p>Thanh toán bằng nhiều thẻ tín dụng</p>
                                 </div>
                             </div>
                         </div>
@@ -502,8 +550,8 @@
                                     <i class="icon-return fs-22"></i>
                                 </div>
                                 <div class="content">
-                                    <div class="title">14 Day Returns</div>
-                                    <p>Within 30 days for an exchange</p>
+                                    <div class="title">Trả hàng trong 14 ngày</div>
+                                    <p>Trong vòng 30 ngày cho một cuộc trao đổi</p>
                                 </div>
                             </div>
                         </div>
@@ -513,8 +561,8 @@
                                     <i class="icon-suport"></i>
                                 </div>
                                 <div class="content">
-                                    <div class="title">Premium Support</div>
-                                    <p>Outstanding premium support</p>
+                                    <div class="title">Hỗ trợ cao cấp</div>
+                                    <p>Hỗ trợ cao cấp vượt trội</p>
                                 </div>
                             </div>
                         </div>
@@ -525,9 +573,45 @@
             </div>
         </div>
     </section>
+    <style>
+    
+    /* Đặt kiểu mặc định cho nút */
+/* Kiểu mặc định cho nút */
+.wishlist-btn {
+    background-color: #fff; /* Nền trắng mặc định */
+    border: none;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 50%; /* Tùy chỉnh để có thể làm nút tròn */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng nổi nhẹ */
+}
+
+=
+.wishlist-btn .icon {
+    font-size: 1.5rem;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+
+.wishlist-btn:hover {
+    background-color: #000;
+}
+
+.wishlist-btn:hover .icon {
+    color: #fff;
+}
+
+
+
+    </style>
     <!-- /Icon box -->
 
-    <!-- Brand -->
+    {{-- <!-- Brand -->
     <section class="flat-spacing-12">
         <div class="">
             <div class="wrap-carousel wrap-brand wrap-brand-v2 autoplay-linear">
@@ -577,7 +661,6 @@
     </section>
     <!-- /Brand --> --}}
 @endsection
-
 @push('scripts')
     <script>
         $(document).ready(function() {
@@ -887,14 +970,16 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+
+     document.addEventListener("DOMContentLoaded", function() {
+
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
                     title: 'Thành công!',
                     text: '{{ session('success') }}',
                     showConfirmButton: false,
-                    timer: 5000
+                    timer: 2000
                 });
             @elseif (session('error'))
                 Swal.fire({
@@ -902,7 +987,7 @@
                     title: 'Lỗi!',
                     text: '{{ session('error') }}',
                     showConfirmButton: false,
-                    timer: 5000
+                    timer: 2000
                 });
             @endif
         });

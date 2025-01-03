@@ -207,6 +207,7 @@
                                 delay: 3000,
                             },
                         });
+                        updateCartCount();
                     },
                     error: function() {
                         toastr.error('Sản Phẩm Không Tồn Tại, Hãy Thử Tải Lại Trang!',
@@ -231,7 +232,7 @@
                 success: function(response) {
                     if (response.success) {
                         renderModalCart(response.cart); // Cập nhật lại nội dung modal giỏ hàng
-
+                        updateCartCount();
                     } else {
                         toastr.error(response.message, 'Cảnh báo');
 
@@ -361,6 +362,7 @@
                 success: function(response) {
                     if (response.success) {
                         loadModalCart();
+                        updateCartCount();
                     } else {
                         toastr.error(response.message, 'Cảnh báo');
 
@@ -392,9 +394,11 @@
                         if (response.success) {
                             console.log('Cập nhật thành công');
                             loadModalCart();
+                            updateCartCount();
                         } else {
                             toastr.error(response.message, 'Cảnh báo');
                             loadModalCart();
+                            updateCartCount();
                         }
                     },
                     error: function(xhr) {
@@ -452,7 +456,32 @@
             });
         });
     </script>
-    
+
+    <script>
+        $(document).ready(function() {
+            // Gọi API để lấy số lượng sản phẩm trong giỏ hàng
+            function updateCartCount() {
+                $.ajax({
+                    url: '/cart/count',
+                    method: 'GET',
+                    success: function(response) {
+                        $('.cart-count').text(response.count);
+                    },
+                    error: function() {
+                        // toastr.error('Không thể lấy thông tin giỏ hàng', 'Lỗi');
+                        console.error('Lỗi API:', error);
+            console.error('Chi tiết lỗi:', xhr.responseText); // Log chi tiết lỗi
+            toastr.error('Không thể lấy thông tin giỏ hàng', 'Lỗi');
+
+                    }
+                });
+            }
+
+            // Gọi hàm khi trang được tải
+            updateCartCount();
+        });
+    </script>
+
 </body>
 
 </html>

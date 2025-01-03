@@ -61,4 +61,15 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
+
+    public function sales()
+    {
+        return $this->hasOne(ProductSale::class)
+                    ->where('start_date', '<=', now())
+                    ->where(function ($query) {
+                        $query->whereNull('end_date')
+                              ->orWhere('end_date', '>=', now());
+                    });
+    }
+    
 }

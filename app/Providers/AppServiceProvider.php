@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Models\Product;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
@@ -24,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // Sử dụng Bootstrap cho phân trang
         Paginator::useBootstrap();
-
+        Carbon::setLocale('vi');
         // Lấy danh mục (categories) và truyền vào view menu
         View::composer('client.layouts.particals.menu', function ($view) {
             $categories = Category::with([

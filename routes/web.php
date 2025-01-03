@@ -23,10 +23,13 @@ use App\Http\Controllers\Client\ShopCollectionController;
 use App\Http\Controllers\Client\ShoppingCartController;
 use App\Http\Controllers\Client\TimeLineController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Client\ReviewController;
-use Illuminate\Support\Facades\Route;
 
-/*
+use App\Http\Controllers\Client\ReviewController;
+
+use App\Http\Controllers\WishlistController;
+
+use Illuminate\Support\Facades\Route;
+A
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -44,20 +47,7 @@ Route::middleware('checkPassword')->group(function () {
 
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
-
-    Route::get('/login', [HomeController::class, 'home'])->name('home');
-
-
-
-
-    Route::get('/', [HomeController::class, 'home'])->name('home');
-
-
-
-
     Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
-
-    Route::get('error', [ErrorController::class, 'error'])->name('error');
 
 
     Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
@@ -197,13 +187,20 @@ Route::middleware('checkPassword')->group(function () {
         });
 
 
-    // end profile
+
 
     Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
     Route::post('/select-address', [CheckoutController::class, 'select_address']);
 
 
+oute::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
+Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
+Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
+Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
 
+// Route cho xóa sản phẩm khỏi danh sách yêu thích
+Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
+Route::get('/wishlist/list', [WishlistController::class, 'getWishlist'])->name('wishlist');
 
 Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
 Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
@@ -212,3 +209,4 @@ Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetch
 Route::get('/reviews/create/{orderId}', [ReviewController::class, 'create'])->name('client.reviews.create');
 Route::post('/reviews/store', [ReviewController::class, 'store'])->name('client.reviews.store');
 
+});
