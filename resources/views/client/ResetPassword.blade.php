@@ -18,7 +18,7 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="header">
-                                    <div class="demo-title">Reset your password</div>
+                                    <div class="demo-title">Quên mật khẩu</div>
                                 </div>
 
                                 <div class="tf-login-form">
@@ -37,7 +37,7 @@
                                         <div class="bottom">
                                             <div class="w-100">
                                                 <button type="submit"
-                                                    class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span> Change Password</span></button>
+                                                    class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span> Gửi mã</span></button>
                                             </div>
                                             
                                         </div>

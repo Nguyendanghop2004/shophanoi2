@@ -1,7 +1,6 @@
 @extends('admin.layouts.master')
 
 @section('content')
-
     <section class="section">
         <div class="section-header">
             <h1>Lịch sử </h1>
@@ -11,7 +10,7 @@
             <div class="card-header">
                 <h4>Danh Sách Quản Trị</h4>
                 <div class="card-header-action">
-                    
+
                 </div>
             </div>
             <div class="card-body">
@@ -27,31 +26,26 @@
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             @foreach ($histories as $admin)
-                            {{-- @dd($admin->changes) --}}
                                 <tr>
                                     <th scope="row">{{ $admin->id }}</th>
-                                    <td>  {{$admin->admin->name}}</td>
+                                    <td> {{ $admin->admin->name }}</td>
                                     <td>{{ $admin->action }}</td>
-                                    
+
                                     <td>
-                                        {{$admin->model_id}}
-                                       
+                                        {{ $admin->model_id }}
+
                                     </td>
                                     <td>
-                                      {{($admin->updated_at)}}
+                                        {{ $admin->updated_at }}
                                     </td>
                                     <td>
                                         <div class="d-flex">
-                                            <a href="{{ route('admin.show', $admin->id) }}"
-                                                class="btn btn-warning">
+                                            <a href="{{ route('admin.show', $admin->id) }}" class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                     
-                                           
-
-                                          
                                         </div>
                                     </td>
 
@@ -86,5 +80,4 @@
             @endif
         });
     </script>
-
 @endsection

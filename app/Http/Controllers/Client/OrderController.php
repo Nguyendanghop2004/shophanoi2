@@ -195,7 +195,7 @@ class OrderController extends Controller
     
      
         if (in_array($order->status, $nonCancelableStatuses)) {
-            return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
+            return redirect()->route('home')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
         }
 
       
@@ -220,14 +220,14 @@ class OrderController extends Controller
         $order = Order::where('order_code', $order_code)->first();
     
         if (!$order) {
-            return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
+            return redirect()->route('home')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
         }
     
        
         $nonCancelableStatuses = ['đã xác nhận', 'đang giao hàng', 'giao hàng thành công'];
     
         if (in_array($order->status, $nonCancelableStatuses)) {
-            return redirect()->route('cart')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
+            return redirect()->route('home')->with('error', 'Không thể hủy đơn hàng này vì đã chuyển sang trạng thái khác.');
         }
     
      
@@ -250,7 +250,7 @@ class OrderController extends Controller
             }
         }
     
-        return redirect()->route('home')->with('success', 'Đơn hàng đã được hủy và số lượng sản phẩm đã được cộng lại.');
+        return redirect()->route('home')->with('success', 'Đơn hàng đã được hủy thành công.');
     }
     
     public function showOrderDetail($encryptedOrderCode)

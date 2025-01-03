@@ -57,6 +57,7 @@
                                             </td>
                                             <td>{{ $order->phone_number }}</td>
                                             <td>
+                                                @if (auth()->user()->hasRole('Shipper'))
                                                 @if (
                                                     !in_array($order->status, [
                                                         'ship đã nhận',
@@ -81,9 +82,11 @@
                                                         <input type="hidden" name="status" value="ship đã nhận">
                                                         <button type="button" class="btn btn-success btn-sm mt-2"
                                                             onclick="confirmUpdateForms(this)">
-                                                            nhận đợn</button>
+                                                            nhận đơn</button>
                                                     </form>
                                                 @endif
+                                            @endif
+                                            
                                                 <form
                                                     action="{{ route('admin.order.update-updateStatusShip', $order->id) }}"
                                                     method="POST">
@@ -133,9 +136,9 @@
                                                             </option>
                                                         @endif
                                                     </select>
-
+                                                    @if (auth()->user()->hasRole('Shipper'))
                                                     @if (
-                                                        $order->status != 'hủy' &&
+                                                            $order->status != 'hủy' &&
                                                             $order->status != 'giao hàng thành công' &&
                                                             $order->status != 'đã nhận hàng' &&
                                                             $order->status != 'giao hàng không thành công' &&
@@ -145,6 +148,8 @@
                                                             onclick="confirmUpdateFormss(this)">
                                                             cập nhật</button>
                                                     @endif
+                                                    @endif
+
                                                 </form>
 
                                             </td>

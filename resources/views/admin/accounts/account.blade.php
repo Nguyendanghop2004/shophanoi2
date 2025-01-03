@@ -60,14 +60,14 @@
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             
-                                            <!-- Xóa tài khoản -->
+                                            {{-- <!-- Xóa tài khoản -->
                                             <form action="{{ route('admin.accounts.destroy', $admin->id) }}" method="POST" class="ml-2">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
-                                            </form>
+                                            </form> --}}
 
                                             <!-- Vô hiệu hóa tài khoản -->
                                             @if ($admin->status)
