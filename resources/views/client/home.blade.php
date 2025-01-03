@@ -177,6 +177,21 @@
                 <span class="title">Sản Phẩm Yêu Thích</span>
                 <p class="sub-title">Thời trang đẹp mắt, tiện lợi và bền vững – dành cho mọi phong cách của bạn.</p>
             </div>
+            @if(session('success'))
+            <div style="position: relative; padding: 15px; margin: 15px 0; background: linear-gradient(to right, #a8e063, #56ab2f); color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <strong style="font-size: 16px;">🎉 Thành công!</strong>
+                <p style="margin: 5px 0; font-size: 14px;">{{ session('success') }}</p>
+                <button style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
+            </div>
+        @endif
+        
+        @if(session('error'))
+            <div style="position: relative; padding: 15px; margin: 15px 0; background: linear-gradient(to right, #ff416c, #ff4b2b); color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <strong style="font-size: 16px;">⚠️ Lỗi!</strong>
+                <p style="margin: 5px 0; font-size: 14px;">{{ session('error') }}</p>
+                <button style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
+            </div>
+        @endif
             <div class="hover-sw-nav hover-sw-3">
                 <div class="swiper tf-sw-product-sell wrap-sw-over" data-preview="4" data-tablet="3" data-mobile="2"
                     data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3" data-pagination-lg="3">
@@ -204,6 +219,13 @@
                                                 <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick Add</span>
                                             </a> --}}
+                                            <form action="{{ route('wishlist.add', $product['id']) }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                <button type="submit" class="box-icon bg_white wishlist btn-icon-action">
+                                                    <span class="icon icon-heart"></span>
+                                                    <span class="tooltip">Add to Wishlist</span>
+                                                </button>
+                                            </form>
                                             <div class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
     @if(in_array($product['id'], $wishlist))
         <form action="{{ route('wishlist.remove') }}" method="POST" style="display: inline;">

@@ -25,8 +25,7 @@ use App\Http\Controllers\Client\TimeLineController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
-
-/*
+A
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -44,20 +43,7 @@ Route::middleware('checkPassword')->group(function () {
 
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
-
-    Route::get('/login', [HomeController::class, 'home'])->name('home');
-
-
-
-
-    Route::get('/', [HomeController::class, 'home'])->name('home');
-
-
-
-
     Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
-
-    Route::get('error', [ErrorController::class, 'error'])->name('error');
 
 
     Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
@@ -196,15 +182,13 @@ Route::middleware('checkPassword')->group(function () {
         });
 
 
-    // end profile
+
 
     Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
     Route::post('/select-address', [CheckoutController::class, 'select_address']);
 
 
-
-
-Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
+oute::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
 Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
 Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
 Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');

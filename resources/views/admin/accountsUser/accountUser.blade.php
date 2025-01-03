@@ -44,9 +44,9 @@
 
                                     <td>
                                         @if ($user->status)
-                                            <span class="badge badge-success">Hoạt động</span>
+                                        <span class="badge badge-danger">Không hoạt động</span>
                                         @else
-                                            <span class="badge badge-danger">Không hoạt động</span>
+                                            <span class="badge badge-success">Hoạt động</span>
                                         @endif
                                     </td>
                                     <td>
@@ -63,7 +63,7 @@
                                                 <i class="fas fa-edit"></i>
                                             </a>
 
-                                            <form action="{{ route('admin.accountsUser.destroy', $user->id) }}"
+                                            {{-- <form action="{{ route('admin.accountsUser.destroy', $user->id) }}"
                                                 method="POST" id="delete-user-{{ $user->id }}">
                                                 @csrf
                                                 @method('DELETE')
@@ -71,7 +71,7 @@
                                                     data-user-id="{{ $user->id }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
-                                            </form>
+                                            </form> --}}
 
                                             @if ($user->status)
                                                 <form action="{{ route('admin.accountsUser.deactivateUser', $user->id) }}"
@@ -79,7 +79,7 @@
                                                     @csrf
                                                     <button type="button" class="btn btn-success activate-btn"
                                                         data-user-id="{{ $user->id }}">
-                                                        <i class="fas fa-lock"></i>
+                                                        <i class="fas fa-unlock"></i>
                                                     </button>
                                                 </form>
                                             @else
@@ -88,7 +88,7 @@
                                                     @csrf
                                                     <button type="button" class="btn btn-danger deactivate-btn"
                                                         data-user-id="{{ $user->id }}">
-                                                        <i class="fas fa-unlock"></i>
+                                                        <i class="fas fa-lock"></i>   
                                                     </button>
                                                 </form>
                                             @endif
