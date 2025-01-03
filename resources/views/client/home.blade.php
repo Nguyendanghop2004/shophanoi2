@@ -276,52 +276,54 @@
             </div>
         </div>
     </section>
-    
+
     <section class="flat-spacing-15 pb_0">
         <div class="container">
             <div class="flat-title wow fadeInUp" data-wow-delay="0s">
                 <span class="title">Bài Viết</span>
-              
+
             </div>
             <div class="blog-grid-main">
-        <div class="container">
-            <div class="row">
-                @foreach ($data as $item)
-                    <div class="col-xl-4 col-md-6 col-12">
-                        <div class="blog-article-item">
-                            <div class="article-thumb">
-                                <a href="{{route('blog.detail',$item->slug)  }}">
-                                    <img class="lazyload" src="{{ Storage::url($item->image) }} "
-                                        style="width: 366px; height: 235px;" alt="img-blog">
-                                </a>
-                                 
-                                {{-- <div class="article-label">
+                <div class="container">
+                    <div class="row">
+                        @foreach ($data as $item)
+                            <div class="col-xl-4 col-md-6 col-12">
+                                <div class="blog-article-item">
+                                    <div class="article-thumb">
+                                        <a href="{{ route('blog.detail', $item->slug) }}">
+                                            <img class="lazyload" src="{{ Storage::url($item->image) }} "
+                                                style="width: 366px; height: 235px;" alt="img-blog">
+                                        </a>
+
+                                        {{-- <div class="article-label">
                                     <a href="blog-detail.html"
                                         class="tf-btn btn-sm radius-3 btn-fill animate-hover-btn">{{$item->category->name}}</a>
                                 </div> --}}
-                            </div>
-                            <div class="article-content">
-                                <div class="article-title">
-                                    <a href="{{route('blog.detail',$item->slug)  }}" class="">{{ $item->title }}</a>
+                                    </div>
+                                    <div class="article-content">
+                                        <div class="article-title">
+                                            <a href="{{ route('blog.detail', $item->slug) }}"
+                                                class="">{{ $item->title }}</a>
+                                        </div>
+                                        <div class="article-btn">
+                                            <a href="{{ route('blog.detail', $item->slug) }}"
+                                                class="tf-btn btn-line fw-6">Xêm Thêm<i
+                                                    class="icon icon-arrow1-top-left"></i></a>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="article-btn">
-                                    <a href="{{route('blog.detail',$item->slug)  }}" class="tf-btn btn-line fw-6">Xêm Thêm<i
-                                            class="icon icon-arrow1-top-left"></i></a>
-                                </div>
                             </div>
-                        </div>
-                    </div>
-                @endforeach
+                        @endforeach
 
-               
+
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-        </div>
-</section>
-    
- 
- 
+    </section>
+
+
+
     <!-- /Best seller -->
     {{--
     <!-- Shop Collection -->
@@ -541,67 +543,59 @@
     </section>
     <!-- /Icon box -->
 
-    <!-- Tags -->
+    <!-- Brand -->
     <section class="flat-spacing-12">
-        <div class="container">
-            <div class="swiper tf-sw-brand border-0" data-play="true" data-loop="true" data-preview="6" data-tablet="4" data-mobile="2" data-space-lg="30" data-space-md="15">
-                <div class="swiper-wrapper">
-                    @foreach ($tags as $tag)
+        <div class="">
+            <div class="wrap-carousel wrap-brand wrap-brand-v2 autoplay-linear">
+                <div class="swiper tf-sw-brand border-0" data-play="true" data-loop="true" data-preview="6"
+                    data-tablet="4" data-mobile="2" data-space-lg="30" data-space-md="15">
+                    <div class="swiper-wrapper">
                         <div class="swiper-slide">
-                            <div class="tag-item">
-                                <!-- Ảnh bộ sưu tập -->
-                                <img src="{{ asset('storage/' . $tag->background_image) }}" 
-                                     alt="{{ $tag->name }}" 
-                                     class="tag-image">
-    
-                                <!-- Tên bộ sưu tập -->
-                                <h6 class="tag-name">{{ $tag->name }}</h6>
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-01.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-01.png') }}" alt="image-brand">
                             </div>
                         </div>
-                    @endforeach
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-02.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-02.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-03.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-03.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-04.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-04.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-05.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-05.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand-item-v2">
+                                <img class="lazyload" data-src="{{ asset('client/assets/images/brand/brand-06.png') }}"
+                                    src="{{ asset('client/assets/images/brand/brand-06.png') }}" alt="image-brand">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-<<<<<<< HEAD
-    
-    <!-- CSS -->
-    <style>
-        .tag-item {
-            text-align: center;
-        }
-    
-        .tag-image {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin: 0 auto;
-            display: block;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-    
-        .tag-image:hover {
-            transform: scale(1.05);
-        }
-    
-        .tag-name {
-            margin-top: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-        }
-    </style>
-   
-    
-    
-    
     <!-- /Brand --> --}}
 @endsection
 
 @push('scripts')
-    {{-- <script>
+    <script>
         $(document).ready(function() {
             // Bắt sự kiện click vào nút Quick Add
             $(".quick-add").on("click", function(e) {
@@ -906,11 +900,10 @@
                 updateQuantity(productId, colorId, sizeId, newQuantity, url);
             });
         });
-    </script> --}}
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-     document.addEventListener("DOMContentLoaded", function() {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -929,7 +922,5 @@
                 });
             @endif
         });
-
-   
-</script>
+    </script>
 @endpush
