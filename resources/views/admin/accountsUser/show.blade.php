@@ -95,9 +95,9 @@
                                 </div>
                                 <td>
                                     @if ($user->status)
-                                        <span class="badge badge-success">Hoạt động</span>
-                                    @else
                                         <span class="badge badge-danger">Không hoạt động</span>
+                                    @else
+                                        <span class="badge badge-success"> Hoạt động</span>
                                     @endif
                                 </td>
 

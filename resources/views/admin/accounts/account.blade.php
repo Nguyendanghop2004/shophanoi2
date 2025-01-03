@@ -33,9 +33,7 @@
                             @foreach ($admins as $admin)
                                 <tr>
                                     <th scope="row">{{ $admin->id }}</th>
-                                    <td><a class="text-primary"
-                                            href="{{ route('admin.accounts.show', $admin->id) }}">{{ $admin->name }}</a>
-                                    </td>
+                                    <td> {{$admin->name}}</td>
                                     <td>{{ $admin->email }}</td>
                                     <td>
                                         <img src="{{ Storage::url($admin->image_path) }}" alt="Ảnh quản trị viên"
@@ -55,11 +53,16 @@
                                     </td>
                                     <td>
                                         <div class="d-flex">
+                                            <a href="{{ route('admin.accounts.show', $admin->id) }}"
+                                                class="btn btn-primary mx-2">
+                                                <i class="fas fa-eye "></i>
+                                            </a>
+                                        <div class="d-flex">
                                             <a href="{{ route('admin.accounts.edit', $admin->id) }}"
                                                 class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            
+                                          
                                             {{-- <!-- Xóa tài khoản -->
                                             <form action="{{ route('admin.accounts.destroy', $admin->id) }}" method="POST" class="ml-2">
                                                 @csrf
