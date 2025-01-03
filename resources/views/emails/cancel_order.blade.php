@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('client.layouts.master')
+
+@section('header-home')
+    @include('client.layouts.particals.header-home')
+@endsection
+
+@section('content')
     <title>Chọn lý do hủy đơn hàng</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
+    
 
-        .container {
+        .containers {
             max-width: 600px;
             margin: 50px auto;
             padding: 30px;
@@ -87,7 +84,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="containers">
         <h2>Chọn lý do hủy đơn hàng {{ $order->order_code }}</h2>
 
         @if (session('error'))
@@ -119,4 +116,5 @@
         </form>
     </div>
 </body>
-</html>
+
+@endsection

@@ -899,7 +899,7 @@ document.getElementById('show-week').addEventListener('click', function(e) {
                     backgroundColor: '#6777ef',
                     borderColor: '#6777ef',
                     borderWidth: 2,
-                    tension: 0.2,
+                    tension: 0.4,
                     pointBackgroundColor: '#ffffff',
                     pointRadius: 4
                 }]

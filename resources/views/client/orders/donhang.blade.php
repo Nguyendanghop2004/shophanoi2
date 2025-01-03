@@ -211,7 +211,7 @@
                             <option value="Thay đổi địa chỉ giao hàng">Thay đổi địa chỉ giao hàng</option>
                             <option value="Sản phẩm không còn cần thiết">Sản phẩm không còn cần thiết</option>
                             <option value="Thay đổi quyết định">Thay đổi quyết định</option>
-                            <option value="Lý do khác">Lý do khác</option>
+                     
                         </select>
                     </div>
                     <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
@@ -246,5 +246,30 @@
             }
         });
     });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+     document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+            @endif
+        });
+
+   
 </script>
 @endsection

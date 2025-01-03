@@ -26,7 +26,7 @@ class SizeController extends Controller
             return $query->where('name', 'like', '%' . $searchColor . '%');
         })->paginate(5); // Phân trang với 10 bản ghi mỗi trang
         // Truyền cả $colors và $sizes vào view
-        return view('admin.colors_sizes.index', compact( 'sizes', 'colors'));
+        return view('admin.sizes.index', compact( 'sizes', 'colors'));
     }
     
     /**
@@ -48,7 +48,7 @@ class SizeController extends Controller
 
         Size::create($request->only('name'));
 
-        return redirect()->route('admin.colors_sizes.index')->with('success', 'Size created successfully.');
+        return redirect()->route('admin.sizes.index')->with('success', 'Size created successfully.');
     }
 
     /**
@@ -74,7 +74,7 @@ class SizeController extends Controller
 
         $size->update($request->only('name'));
 
-        return redirect()->route('admin.colors_sizes.index')->with('success', 'Size updated successfully.');
+        return redirect()->route('admin.sizes.index')->with('success', 'Size updated successfully.');
     }
 
     /**
@@ -94,7 +94,7 @@ class SizeController extends Controller
         // Nếu không có sản phẩm nào sử dụng kích thước này, tiến hành xóa
         $size->delete();
 
-        return redirect()->route('admin.colors_sizes.index')->with('success', 'Kích thước đã được xóa thành công.');
+        return redirect()->route('admin.sizes.index')->with('success', 'Kích thước đã được xóa thành công.');
     }
 
 }

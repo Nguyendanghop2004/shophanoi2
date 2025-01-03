@@ -3,7 +3,7 @@
     @include('client.layouts.particals.header-home')
 @endsection
 @section('content')
-    <!-- categories -->
+    <!-- danh mục -->
     <section class="flat-spacing-20">
         <div class="container">
             <div class="row">
@@ -12,7 +12,7 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="header">
-                                    <div class="demo-title">Log in</div>
+                                    <div class="demo-title">Đăng nhập</div>
                                 </div>
 
                                 <div class="tf-login-form">
@@ -29,25 +29,28 @@
                                         <div class="tf-field style-1">
                                             <input class="tf-field-input tf-input" placeholder=" " type="password"
                                                 name="password" @error('password') is-invalid @enderror>
-                                            <label class="tf-field-label" for="">Password *</label>
+                                            <label class="tf-field-label" for="">Mật khẩu *</label>
                                             @error('password')
                                             <p style="color: red; font-size: 14px;">{{ $message }}</p>
                                         @enderror
                                         </div>
                                         <div>
-                                            <a href="#forgotPassword" data-bs-toggle="modal" class="btn-link link">Forgot
-                                                your
-                                                password?</a>
+
+                                            <a href="{{route('account.ResePassword')}}"  class="btn-link link">Quên Mật Khẩu</a>
+
                                         </div>
                                         <div class="bottom">
                                             <div class="w-100">
                                                 <button type="submit"
-                                                    class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Log
-                                                        in</span></button>
+                                                    class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Đăng nhập</span></button>
                                             </div>
                                             <div class="w-100">
+
+
                                                 <a href="{{route('account.register')}}" class="btn-link fw-6 w-100 link">
-                                                    New customer? Create your account
+                                                    Khách hàng mới? Tạo tài khoản
+
+
                                                     <i class="icon icon-arrow1-top-left"></i>
                                                 </a>
                                             </div>
@@ -65,24 +68,30 @@
 @endsection
    
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            @if (session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Thành công!',
-                    text: '{{ session('success') }}',
-                    showConfirmButton: false,
-                    timer: 5000
-                });
-            @elseif (session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi!',
-                    text: '{{ session('error') }}',
-                    showConfirmButton: false,
-                    timer: 5000
-                });
-            @endif
-        });
-    </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 5000
+            });
+        @elseif (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: '{{ session('error') }}',
+                showConfirmButton: false,
+                timer: 5000
+            });
+        @endif
+
+
+
+    });
+</script>
+
+
