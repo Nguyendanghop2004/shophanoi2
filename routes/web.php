@@ -188,7 +188,13 @@ Route::middleware('checkPassword')->group(function () {
     Route::post('/select-address', [CheckoutController::class, 'select_address']);
 
 
+oute::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
+Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
+Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
+Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
 
-
+// Route cho xóa sản phẩm khỏi danh sách yêu thích
+Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
+Route::get('/wishlist/list', [WishlistController::class, 'getWishlist'])->name('wishlist');
 
 });

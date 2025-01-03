@@ -152,5 +152,6 @@ class WishlistController extends Controller
 
         return response()->json(['count' => $count]);
     }
+
 }
 

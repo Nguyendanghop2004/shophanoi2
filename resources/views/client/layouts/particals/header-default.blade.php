@@ -345,7 +345,7 @@
              <div class="col-xl-6 tf-md-hidden">
                  <!-- list menu -->
                  @include('client.layouts.particals.menu')
-                 <!-- list menu -->
+                 <!-- list menu --> 
              </div>
              <div class="col-xl-3 col-md-4 col-3">
                  <!-- chu y -->
@@ -353,6 +353,7 @@
                      <li class="nav-search"><a href="#canvasSearch" data-bs-toggle="offcanvas"
                              aria-controls="offcanvasLeft" class="nav-icon-item"><i class="icon icon-search"></i></a>
                      </li>
+                     
                      <li class="nav-account"><a href="#login" data-bs-toggle="modal" class="nav-icon-item"><i
                                  class="icon icon-account"></i></a></li>
                      <li class="nav-wishlist"><a href="wishlist.html" class="nav-icon-item"><i

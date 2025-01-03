@@ -317,7 +317,11 @@
             container.innerHTML = ''; // Xóa các thẻ biến thể hiện tại
 
             if (selectedColorIds.length === 0) {
-                alert('Vui lòng chọn ít nhất một màu để tạo biến thể!');
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi !",
+                    text: "Vui lòng chọn ít nhất một màu để tạo biến thể!",
+                });
                 return;
             }
 
@@ -366,7 +370,7 @@
                 </label>
             `;
                 });
- 
+
                 sizeVariantHtml += `</div>`;
 
                 // Thêm các trường quantity collapsible cho mỗi kích thước và ẩn mặc định

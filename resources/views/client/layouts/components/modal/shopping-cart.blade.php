@@ -119,8 +119,7 @@
                             <div class="tf-mini-cart-line"></div>
                             <div class="tf-cart-checkbox">
                                 <div class="tf-checkbox-wrapp">
-                                    <input class="" type="checkbox" id="CartDrawer-Form_agree"
-                                        name="agree_checkbox">
+                                    <input type="checkbox" id="CartDrawer-Form_agree" name="agree_checkbox">
                                     <div>
                                         <i class="icon-check"></i>
                                     </div>
@@ -131,14 +130,35 @@
                                 </label>
                             </div>
                             <div class="tf-mini-cart-view-checkout">
-                                <a href="{{ route('cart') }}"
-                                    class="tf-btn btn-outline radius-3 link w-100 justify-content-center">View cart</a>
-                                <a href="{{ route('checkout') }}"
-                                    class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Check
-                                        out</span></a>
+                                <a href="{{ route('cart') }}" 
+                                   class="tf-btn btn-outline radius-3 link w-100 justify-content-center" 
+                                   id="viewCartBtn" 
+                                   disabled>View cart</a>
+                                <a href="checkout.html" 
+                                   class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center" 
+                                   id="checkOutBtn" 
+                                   disabled><span>Check out</span></a>
                             </div>
+                            
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            <script>
+                                $(document).ready(function () {
+                                    // Theo dõi sự kiện thay đổi của checkbox
+                                    $('#CartDrawer-Form_agree').on('change', function () {
+                                        if ($(this).is(':checked')) {
+                                            // Nếu checkbox được chọn, bật hai nút
+                                            $('#viewCartBtn, #checkOutBtn').removeAttr('disabled');
+                                        } else {
+                                            // Nếu checkbox chưa được chọn, tắt hai nút
+                                            $('#viewCartBtn, #checkOutBtn').attr('disabled', 'disabled');
+                                        }
+                                    });
+                                });
+                            </script>
+                            
                         </div>
                     </div>
+                    
                     {{-- <div class="tf-mini-cart-tool-openable add-note">
                         <div class="overplay tf-mini-cart-tool-close"></div>
                         <div class="tf-mini-cart-tool-content">

@@ -232,6 +232,8 @@ namespace App\Models{
  * @property-read int|null $product_variants_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $products
  * @property-read int|null $products_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductVariant> $variants
+ * @property-read int|null $variants_count
  * @method static \Illuminate\Database\Eloquent\Builder|Color newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Color newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Color query()
@@ -277,14 +279,12 @@ namespace App\Models{
  * @property string $code
  * @property string $discount_type
  * @property string $discount_value
- * @property int $min_quantity
- * @property string|null $min_total
+ * @property int $usage_limit
+ * @property int $times_used
  * @property string $start_date
  * @property string|null $end_date
- * @property int $usage_limit
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserDiscountCode> $userDiscountCodes
  * @property-read int|null $user_discount_codes_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
@@ -294,14 +294,12 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode query()
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereDiscountType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereDiscountValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereEndDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereMinQuantity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereMinTotal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereTimesUsed($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereUsageLimit($value)
  */
@@ -485,6 +483,7 @@ namespace App\Models{
  * @property string $sku
  * @property int $price
  * @property int $status
+ * @property int $is_best_seller
  * @property string|null $short_description
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -497,6 +496,7 @@ namespace App\Models{
  * @property-read int|null $colors_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductImage> $images
  * @property-read int|null $images_count
+ * @property-read \App\Models\ProductSale|null $sales
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Size> $sizes
  * @property-read int|null $sizes_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
@@ -512,6 +512,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereIsBestSeller($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereProductName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereShortDescription($value)
@@ -552,6 +553,34 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|ProductImage withoutTrashed()
  */
 	class ProductImage extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $product_id
+ * @property string $discount_type
+ * @property string $discount_value
+ * @property \Illuminate\Support\Carbon $start_date
+ * @property \Illuminate\Support\Carbon|null $end_date
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Product $product
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSale newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSale newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSale query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSale whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSale whereDiscountType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSale whereDiscountValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSale whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSale whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSale whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSale whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSale whereUpdatedAt($value)
+ */
+	class ProductSale extends \Eloquent {}
 }
 
 namespace App\Models{
