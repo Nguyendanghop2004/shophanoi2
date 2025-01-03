@@ -3,6 +3,7 @@
 @section('content')
 <div class="container mt-4">
     <h5 class="text-center">Viết đánh giá cho đơn hàng #{{ $order->order_code }}</h5>
+
     <form action="{{ route('client.reviews.store') }}" method="POST">
         @csrf
         <input type="hidden" name="order_id" value="{{ $order->id }}">
@@ -26,18 +27,24 @@
             <label for="rating" class="form-label fw-bold fs-5">Đánh giá của bạn</label>
             <div class="rating-stars-container d-flex gap-2">
                 @for ($i = 1; $i <= 5; $i++)
-                    <span class="star" data-star-value="{{ $i }}">
+                    <span class="star {{ old('rating') >= $i ? 'selected' : '' }}" data-star-value="{{ $i }}">
                         <i class="bi bi-star fs-3"></i>
                     </span>
                 @endfor
             </div>
-            <input type="hidden" name="rating" id="rating" required>
+            <input type="hidden" name="rating" id="rating" value="{{ old('rating') }}">
+            @error('rating') <!-- Hiển thị lỗi nếu có -->
+                <div class="text-danger">Bạn cần chọn số sao</div>
+            @enderror
         </div>
         
         <!-- Nhận xét -->
         <div class="mb-3">
             <label for="comment" class="form-label">Nhận xét</label>
-            <textarea name="comment" id="comment" class="form-control" rows="4" placeholder="Viết nhận xét (tùy chọn)"></textarea>
+            <textarea name="comment" id="comment" class="form-control" rows="4" placeholder="Viết nhận xét (tùy chọn)">{{ old('comment') }}</textarea>
+            @error('comment') <!-- Hiển thị lỗi nếu có -->
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
         <button type="submit" class="btn btn-success">Gửi đánh giá</button>
     </form>

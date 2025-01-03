@@ -82,6 +82,7 @@ Route::middleware('checkPassword')->group(function () {
     Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
     Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
 
+});
 
 
     Route::get('brand', [BrandController::class, 'index'])->name('brand');
@@ -207,3 +208,7 @@ Route::middleware('checkPassword')->group(function () {
 Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
 Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
 Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
+
+Route::get('/reviews/create/{orderId}', [ReviewController::class, 'create'])->name('client.reviews.create');
+Route::post('/reviews/store', [ReviewController::class, 'store'])->name('client.reviews.store');
+

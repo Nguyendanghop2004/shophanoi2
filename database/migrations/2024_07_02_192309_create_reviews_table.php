@@ -15,13 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->integer('rating');
             $table->text('comment')->nullable();
             $table->timestamps();
         });
-        
     }
-    
 
     /**
      * Reverse the migrations.
