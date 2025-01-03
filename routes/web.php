@@ -29,19 +29,6 @@ use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\WishlistController;
 
 use Illuminate\Support\Facades\Route;
-A
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-
-
 Route::middleware('checkPassword')->group(function () {
 
 
@@ -72,7 +59,7 @@ Route::middleware('checkPassword')->group(function () {
     Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
     Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
 
-});
+
 
 
     Route::get('brand', [BrandController::class, 'index'])->name('brand');
@@ -110,6 +97,9 @@ Route::middleware('checkPassword')->group(function () {
     Route::get('/accountUser/profile-profileAccountDetails/{id}', [AccountController::class, 'profileAccountDetails'])->name('account.profileAccountDetails');
     Route::put('accountsUser/profile-AccountDetails/{id}', [AccountController::class, 'storeProfile'])->name('accountsUser.storeProfile');
     Route::get('/accountUser/profile-profileWishlist', [AccountController::class, 'profileWishlist'])->name('account.profileWishlist');
+    Route::get('/accountUser/checkPassword/{id}', [AccountController::class, 'checkPassword'])->name('account.checkPassword');
+    Route::get('/accountUser/change-email', [AccountController::class, 'profileEmail'])->name('account.profileEmail');
+    Route::put('/accountUser/Store-email/{id}', [AccountController::class, 'StoreEmail'])->name('account.StoreEmail');
 
     Route::get('/accountUser/profile-order', [AccountController::class, 'profileOrders'])->name('account.profileOrders');
 
@@ -193,7 +183,7 @@ Route::middleware('checkPassword')->group(function () {
     Route::post('/select-address', [CheckoutController::class, 'select_address']);
 
 
-oute::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
+Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
 Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
 Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
 Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');

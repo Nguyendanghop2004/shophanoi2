@@ -46,7 +46,8 @@ class HomeController extends Controller
                         $q->whereNull('end_date')
                             ->orWhere('end_date', '>=', now());
                     }),
-            ])
+                ])
+                // dd($products);
             ->select([
                 'products.id',
                 'products.product_name',

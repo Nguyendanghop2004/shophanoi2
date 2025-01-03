@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('wishlists', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id'); // ID sản phẩm
-            $table->string('user_id'); // ID session của người dùng chưa đăng nhập
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('product_id');
             $table->timestamps();
-
-            // Unique constraint để tránh thêm sản phẩm nhiều lần vào wishlist của cùng session
-            $table->unique(['product_id', 'user_id']);
-
+    
+            $table->unique(['user_id', 'product_id']); 
+    
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
