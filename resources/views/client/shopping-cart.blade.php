@@ -15,10 +15,10 @@
     <section class="flat-spacing-11">
         <div class="container">
             <!-- <div class="tf-page-cart text-center mt_140 mb_200">
-                                                                    <h5 class="mb_24">Your cart is empty</h5>
-                                                                    <p class="mb_24">You may check out all the available products and buy some in the shop</p>
-                                                                    <a href="shop-default.html" class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Return to shop<i class="icon icon-arrow1-top-left"></i></a>
-                                                                </div> -->
+                                                                        <h5 class="mb_24">Your cart is empty</h5>
+                                                                        <p class="mb_24">You may check out all the available products and buy some in the shop</p>
+                                                                        <a href="shop-default.html" class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Return to shop<i class="icon icon-arrow1-top-left"></i></a>
+                                                                    </div> -->
 
             <div class="tf-page-cart-wrap">
                 <div class="tf-page-cart-item">
@@ -357,22 +357,30 @@
 @push('scripts')
     <script>
         function updateCartTotal() {
+            let grandTotal = 0; // Biến lưu tổng tiền của tất cả các sản phẩm
+
             $('.tf-cart-item').each(function() {
                 var cartTotalDiv = $(this).find('.cart-total');
-                var price = parseFloat(cartTotalDiv.data('price'));
-                var quantity = $(this).find('.quantity-input-update').val();
-                console.log(quantity);
+                var price = parseFloat(cartTotalDiv.data('price')); // Giá sản phẩm
+                var quantity = $(this).find('.quantity-input-update').val(); // Số lượng sản phẩm
 
                 // Tính toán lại subtotal
                 var subtotal = price * quantity;
 
+                // Cộng dồn vào tổng tiền giỏ hàng
+                grandTotal += subtotal;
+
                 // Định dạng lại subtotal (thêm dấu phân cách hàng nghìn và tiền tệ)
-                var formattedSubtotal = subtotal.toLocaleString('vi-VN') + ' VND';
+                var formattedSubtotal = subtotal.toLocaleString('vi-VN') + ' VNĐ';
 
                 // Cập nhật giá trị subtotal cho mỗi sản phẩm
                 cartTotalDiv.text(formattedSubtotal);
             });
+
+            // Cập nhật tổng tiền giỏ hàng
+            $('.total-value').text(grandTotal.toLocaleString('vi-VN') + ' VNĐ');
         }
+
 
         function removeFromCart(productId, colorId, sizeId) {
             console.log("Input data:", {
