@@ -177,6 +177,7 @@
                     if (response.success === true) {
                         // Nếu thành công, hiển thị modal giỏ hàng
                         $("#shoppingCart").modal("show");
+                        updateCartCount();
                     } else {
                         toastr.error(response.message, 'Cảnh báo');
                     }
