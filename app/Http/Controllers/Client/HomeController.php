@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\BlogClient;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -115,8 +116,8 @@ class HomeController extends Controller
                 ->pluck('product_id')
                 ->toArray(); 
         }
-        // return response()->json($products);
-        return view('client.home', compact('products', 'collections', 'sliders','wishlist'));
+        $data = BlogClient::where('status', 1)->get();
+        return view('client.home', compact('products', 'collections', 'sliders','wishlist','data'));
     }
     public function getProductInfo(Request $request)
     {

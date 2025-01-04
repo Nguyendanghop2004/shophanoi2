@@ -3,7 +3,7 @@
     @include('client.layouts.particals.header-home')
 @endsection
 @section('content')
-@include('client.layouts.particals.page-title')
+
 
 <!-- map -->
 <section class="flat-spacing-9">

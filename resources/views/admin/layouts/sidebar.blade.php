@@ -352,6 +352,7 @@
                         <span>Sản Phẩm</span></a>
                     <ul class="dropdown-menu">
                         <li><a class="nav-link" href="{{ route('admin.product.index') }}"><span>Danh Sách</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.sales.index') }}"><span>Giảm Giá</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.product.create') }}"><span>Tạo Mới</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Thùng Rác</span></a>
                         </li>
