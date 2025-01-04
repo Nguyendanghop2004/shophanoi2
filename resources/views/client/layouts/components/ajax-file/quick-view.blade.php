@@ -161,7 +161,7 @@
             if (quantity > stock) {
                 toastr.warning(`Hiện tại sản phẩm chỉ còn ${stock} chiếc trong kho.`, 'Lưu ý');
                 return;
-            }
+            } 
 
             $.ajax({
                 url: '/add-to-cart',

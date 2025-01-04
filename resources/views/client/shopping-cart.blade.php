@@ -262,7 +262,7 @@
             </form>
         </div>
     </section>
-    <section class="flat-spacing-15 pb_0">
+    {{-- <section class="flat-spacing-15 pb_0">
         <div class="container">
             <div class="flat-title wow fadeInUp" data-wow-delay="0s">
                 <span class="title">Sản Phẩm Liên Quan</span>
@@ -351,7 +351,7 @@
                         class="icon icon-arrow-right"></span></div>
             </div>
         </div>
-    </section>
+    </section> --}}
 @endsection
 
 @push('scripts')
