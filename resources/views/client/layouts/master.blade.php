@@ -244,7 +244,7 @@
             if (cartDetails.length === 0) {
                 modalCartContainer.append(`<div class="tf-mini-cart-items d-flex justify-content-center align-items-center" style="height: 100px;">
                                          <div class="tf-mini-cart-item">
-                                             <p><i class="fa-solid fa-cart-arrow-down"></i> Giỏ hàng trống</p>
+                                             <p><i class="fa-solid fa-cart-arrow-down"></i> Giỏ hàng trốnggggggg</p>
                                          </div>
                                   </div>    `);
                 return;
@@ -271,7 +271,7 @@
                 <div class="tf-mini-cart-info">
                     <a class="title link" href="${productDetailUrl}">${item.product_name}</a>
                     <div class="meta-variant">${item.color_name} / ${item.size_name} + ${formattecBonusPrice}</div>
-                    <div class="price fw-6" data-price-bonus="${item.pricebonus * item.quantity}" data-price="${itemTotalPrice}">${formattedPrice} ₫</div>
+                    <div class="price fw-6" data-price-bonus="${item.pricebonus * item.quantity}" data-price="${itemTotalPrice}">${formattedPrice} VNĐ</div>
                     <div class="tf-mini-cart-btns">
                         <div class="wg-quantity small">
                             <!-- Nút giảm số lượng -->
@@ -332,7 +332,7 @@
             });
 
             // Cập nhật tổng giá với định dạng
-            $('.tf-totals-total-value').text(formatPrice(total) + ' ₫');
+            $('.tf-totals-total-value').text(formatPrice(total) + ' VNĐ');
         }
     </script>
     <script>
