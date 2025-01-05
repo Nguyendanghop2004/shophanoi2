@@ -50,7 +50,19 @@
                                                                             style="width: 80px;" />
                                                                     @endif
 
-                                                                    <h5>{{ auth()->user()->name }}</h5>
+                                                                    <h5>{{ auth()->user()->name }} <p>
+                                                                            <a href=""><svg
+                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                    width="16" height="16"
+                                                                                    fill="currentColor"
+                                                                                    class="bi bi-caret-up-fill"
+                                                                                    viewBox="0 0 16 16">
+                                                                                    <path
+                                                                                        d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                                                                                </svg></a>
+                                                                        </p>
+                                                                    </h5>
+
                                                                     <p>Web Designer</p>
                                                                     <i class="far fa-edit mb-5"></i>
                                                                 </div>
@@ -59,19 +71,41 @@
                                                                         <h6>Thông tin</h6>
                                                                         <hr class="mt-0 mb-4">
                                                                         <div class="row pt-1">
-                                                                            <div class="col-6 mb-3">
+                                                                            <div class="col-7 mb-4">
                                                                                 <h6>Email</h6>
-                                                                                <p class="text-muted">
-                                                                                    {{ auth()->user()->email }}</p>
+                                                                                <p>
+                                                                                    {{ auth()->user()->email }} <a
+                                                                                        href="{{route('account.checkPassword',auth()->user()->id)}}"><svg
+                                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                                            width="16" height="16"
+                                                                                            fill="currentColor"
+                                                                                            class="bi bi-caret-up-fill"
+                                                                                            viewBox="0 0 16 16">
+                                                                                            <path
+                                                                                                d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                                                                                        </svg></a>
+                                                                                </p>
                                                                             </div>
-                                                                            <div class="col-6 mb-3">
+
+
+                                                                            <div class="col-5 mb-3">
                                                                                 <h6>Phone</h6>
-                                                                                <p class="text-muted">
-                                                                                    {{ auth()->user()->phone_number }}</p>
+                                                                                <p>
+                                                                                    {{ auth()->user()->phone_number }} <a
+                                                                                        href=""><svg
+                                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                                            width="16" height="16"
+                                                                                            fill="currentColor"
+                                                                                            class="bi bi-caret-up-fill"
+                                                                                            viewBox="0 0 16 16">
+                                                                                            <path
+                                                                                                d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                                                                                        </svg></a>
+                                                                                </p>
                                                                             </div>
                                                                         </div>
-                                                                        
-                                                                        
+
+
                                                                         <div class="d-flex justify-content-start">
                                                                             <a href="#!"><i
                                                                                     class="fab fa-facebook-f fa-lg me-3"></i></a>
@@ -117,7 +151,8 @@
                                                                     <p class="mb-0">Xã Phường</p>
                                                                 </div>
                                                                 <div class="col-sm-9">
-                                                                    <p class="text-muted mb-0">{{ $user->ward->name_xaphuong ?? '' }}</p>
+                                                                    <p class="text-muted mb-0">
+                                                                        {{ $user->ward->name_xaphuong ?? '' }}</p>
                                                                 </div>
                                                             </div>
                                                             <hr>
@@ -126,7 +161,7 @@
                                                                     <p class="mb-0">Đỉa chỉ củ thể</p>
                                                                 </div>
                                                                 <div class="col-sm-9">
-                                                                    <p class="text-muted mb-0">{{$user->address}}</p>
+                                                                    <p class="text-muted mb-0">{{ $user->address }}</p>
                                                                 </div>
                                                             </div>
                                                             <hr>

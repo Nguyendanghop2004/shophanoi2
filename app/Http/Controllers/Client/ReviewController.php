@@ -41,37 +41,39 @@ class ReviewController extends Controller
      * Lưu đánh giá của người dùng vào cơ sở dữ liệu.
      */
     public function store(Request $request)
-    {
-        // Kiểm tra xem người dùng đã đánh giá cho đơn hàng này chưa
-        $existingReview = Review::where('order_id', $request->order_id)
-                                ->where('user_id', auth()->id()) // Kiểm tra người dùng hiện tại đã đánh giá chưa
-                                ->first();
+{
+    // Validate dữ liệu từ form
+    $validated = $request->validate([
+        'order_id' => 'required|exists:orders,id',
+        'ratings.*' => 'required|integer|between:1,5',
+        'comments.*' => 'nullable|string|max:255',
+        'product_ids' => 'required|array',
+        'product_ids.*' => 'exists:products,id',
+    ]);
 
-        if ($existingReview) {
-            // Nếu đã có đánh giá, không cho phép đánh giá lại
-            return redirect()->route('order.donhang', ['status' => 'đã_nhận_hàng'])
-                             ->with('error', 'Bạn đã đánh giá đơn hàng này rồi.');
-        }
+    // Kiểm tra xem đã đánh giá đơn hàng này chưa
+    $existingReviews = Review::where('order_id', $validated['order_id'])
+                             ->where('user_id', auth()->id())
+                             ->exists();
 
-        // Validate input
-        $request->validate([
-            'order_id' => 'required|exists:orders,id',
-            'product_id' => 'required|exists:products,id',
-            'rating' => 'required|integer|between:1,5', // Đánh giá từ 1 đến 5
-            'comment' => 'nullable|string|max:255', // Bình luận tối đa 255 ký tự
-        ]);
-
-        // Lưu đánh giá vào bảng reviews, thêm user_id
-        Review::create([
-            'order_id' => $request->order_id,
-            'product_id' => $request->product_id,
-            'rating' => $request->rating,
-            'comment' => $request->comment,
-            'user_id' => auth()->id(),  // Lưu ID người dùng hiện tại
-        ]);
-
-        // Điều hướng sau khi lưu thành công
-        return redirect()->route('order.donhang', ['status' => 'đã_nhận_hàng'])
-                         ->with('success', 'Đánh giá của bạn đã được lưu!');
+    if ($existingReviews) {
+        return redirect()->route('order.donhang', ['status' => 'đã nhận hàng'])
+                         ->with('error', 'Bạn đã đánh giá đơn hàng này rồi.');
     }
+
+    // Lưu đánh giá cho từng sản phẩm
+    foreach ($validated['product_ids'] as $productId) {
+        Review::create([
+            'order_id' => $validated['order_id'],
+            'product_id' => $productId,
+            'rating' => $validated['ratings'][$productId],
+            'comment' => $validated['comments'][$productId] ?? null,
+            'user_id' => auth()->id(),
+        ]);
+    }
+
+    return redirect()->route('order.donhang', ['status' => 'đã nhận hàng'])
+                     ->with('success', 'Đánh giá của bạn đã được lưu thành công.');
+}
+
 }

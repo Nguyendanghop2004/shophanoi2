@@ -124,19 +124,15 @@
                    <div class="col-xl-2 col-md-4 col-6 text-center" style="max-width:80%;">
 
                        <a href="home-multi-brand.html" class="logo-header">
-
-                        
-
-
-                       <a href="{{route('home')}}" class="logo-header">
-                           <img src="{{asset('client/assets/images/logo/logo4.png')}}" alt="logo" class="logo">
-                       </a>
+                           <a href="{{ route('home') }}" class="logo-header">
+                               <img src="{{ asset('client/assets/images/logo/logo4.png') }}" alt="logo"
+                                   class="logo">
+                           </a>
                    </div>
 
 
                    <div class="col-xl-5 col-md-4 col-3">
 
-                 
                        <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
                            <li class="nav-search">
                                <form action="{{ route('order.search') }}" method="GET" class="search-form"
@@ -156,8 +152,19 @@
                                Vui lòng nhập từ khóa tìm kiếm
                            </div>
                            @include('client.layouts.particals.navright')
-
                         <li class="nav-notify">
+                           {{-- @if (Auth::check())
+                               <a href="{{ route('accountUser.logout') }}">Logout</a>
+                           @else
+                               <li>
+                                   <a href="{{ route('accountUser.login') }}" class="nav-icon-item">
+                                       <i class="icon icon-account"></i>
+                                   </a>
+                               </li>
+
+
+                           @endif  --}}
+                           <li class="nav-notify">
                                <div class="btn-group">
                                    <a class="icon icon-notify" data-bs-toggle="dropdown" aria-expanded="false">
                                    </a>
@@ -224,10 +231,9 @@
                        </ul>
                    </div>
 
-
-
-
-                        @endif -->
+                   </ul>
+               </div>
+           </div>
                         <li class="nav-notify">
                                <div class="btn-group">
                                    <a class="icon icon-notify" data-bs-toggle="dropdown" aria-expanded="false">
@@ -297,8 +303,10 @@
            </div>
 
        </div>
-      
-    
+
+       </div>
+
+
        <div class="header-bottom line">
            <div class="container-full px_15 lg-px_40">
                <div class="wrapper-header d-flex justify-content-center align-items-center">
