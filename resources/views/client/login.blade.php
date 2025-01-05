@@ -3,7 +3,6 @@
     @include('client.layouts.particals.header-home')
 @endsection
 @section('content')
-    <!-- danh mục -->
     <section class="flat-spacing-20">
         <div class="container">
             <div class="row">
@@ -28,8 +27,9 @@
                                             @enderror
                                         </div>
                                         <div class="tf-field style-1">
-                                            <input class="form-control @error('password') is-invalid @enderror" placeholder="Nhập mật khẩu "
-                                                type="password" name="password" @error('password') is-invalid @enderror>
+                                            <input class="form-control @error('password') is-invalid @enderror"
+                                                placeholder="Nhập mật khẩu " type="password" name="password"
+                                                @error('password') is-invalid @enderror>
                                             @error('password')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -63,7 +63,6 @@
 @endsection
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         @if (session('success'))
@@ -83,7 +82,6 @@
                 timer: 5000
             });
         @endif
-
 
 
     });
