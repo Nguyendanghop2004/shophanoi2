@@ -199,4 +199,3 @@ Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetch
 Route::get('/reviews/create/{orderId}', [ReviewController::class, 'create'])->name('client.reviews.create');
 Route::post('/reviews/store', [ReviewController::class, 'store'])->name('client.reviews.store');
 
-});

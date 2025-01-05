@@ -317,6 +317,10 @@
             </div>
             <div class="blog-grid-main">
                 <div class="container">
+
+                    <div class="row">
+                  
+
                     {{-- <div class="row">
                         @foreach ($data as $item)
                             <div class="col-xl-4 col-md-6 col-12">
@@ -341,6 +345,7 @@
                                 </div>
                             </div>
                         @endforeach
+
 
 
                     </div> --}}
