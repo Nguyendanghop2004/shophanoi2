@@ -124,10 +124,6 @@
                    <div class="col-xl-2 col-md-4 col-6 text-center" style="max-width:80%;">
 
                        <a href="home-multi-brand.html" class="logo-header">
-
-
-
-
                            <a href="{{ route('home') }}" class="logo-header">
                                <img src="{{ asset('client/assets/images/logo/logo4.png') }}" alt="logo"
                                    class="logo">
@@ -136,7 +132,6 @@
 
 
                    <div class="col-xl-5 col-md-4 col-3">
-
 
                        <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
                            <li class="nav-search">
@@ -157,6 +152,7 @@
                                Vui lòng nhập từ khóa tìm kiếm
                            </div>
                            @include('client.layouts.particals.navright')
+                        <li class="nav-notify">
                            {{-- @if (Auth::check())
                                <a href="{{ route('accountUser.logout') }}">Logout</a>
                            @else
@@ -215,28 +211,29 @@
                                    </ul>
                                </div>
                            </li>
-                           <li class="nav-wishlist">
-                               <a href="{{ route('wishlist') }}" class="nav-icon-item">
-                                   <i class="icon icon-heart"></i>
+                        <li class="nav-wishlist">
+                            <a href="{{route('wishlist')}}" class="nav-icon-item">
+                                <i class="icon icon-heart"></i>
+                             
+                                <span class="count-box">0</span>
+                            </a>
+                        </li>
+                        <li class="nav-cart">
+                            <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
+                                <i class="icon icon-bag"></i>
+                                <span class="count-box cart-count">0</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-                                   <span class="count-box">0</span>
-                               </a>
-                           </li>
-                           <li class="nav-cart">
-                               <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
-                                   <i class="icon icon-bag"></i>
-                                   <span class="count-box cart-count">0</span>
-                               </a>
-                           </li>
+
                        </ul>
                    </div>
 
                    </ul>
                </div>
            </div>
-
-
-
                         <li class="nav-notify">
                                <div class="btn-group">
                                    <a class="icon icon-notify" data-bs-toggle="dropdown" aria-expanded="false">

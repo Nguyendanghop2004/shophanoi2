@@ -8,6 +8,8 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
 use App\Models\Size;
+use App\Models\Wishlist;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -33,9 +35,16 @@ class ShopCollectionController extends Controller
         if ($request->ajax()) {
             return view('client.partials.product_list', compact('products'))->render();
         }
-    
+        $wishlist = [];
+
+        if (Auth::check()) {
+           
+            $wishlist = Wishlist::where('user_id', Auth::id())
+                ->pluck('product_id')
+                ->toArray(); 
+        }
         // Trả về view với tất cả các dữ liệu cần thiết
-        return view('client.shop-collection', compact('categories', 'brands', 'colors', 'sizes', 'products'));
+        return view('client.shop-collection', compact('categories', 'brands', 'colors', 'sizes', 'products','wishlist'));
     }
 
 
@@ -126,7 +135,14 @@ class ShopCollectionController extends Controller
             'colors' => $product->colors, // Danh sách màu sắc của sản phẩm
         ];
     });
+    $wishlist = [];
 
+    if (Auth::check()) {
+       
+        $wishlist = Wishlist::where('user_id', Auth::id())
+            ->pluck('product_id')
+            ->toArray(); 
+    }
     return $products;
 }
 
@@ -149,6 +165,7 @@ class ShopCollectionController extends Controller
      */
     public function fetchProducts(Request $request)
     {
+        
         $products = $this->getFilteredProducts($request);
         return view('client.partials.product_list', compact('products'))->render();
     }

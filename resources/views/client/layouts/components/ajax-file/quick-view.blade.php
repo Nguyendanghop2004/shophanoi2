@@ -91,7 +91,7 @@
                 <a href="javascript:void(0);"
                     class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
                     <span class="icon icon-heart"></span>
-                    <span class="tooltip">Add to Wishlist</span>
+                    <span class="tooltip">yêu thích</span>
                     <span class="icon icon-delete"></span>
                 </a>
                 {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
@@ -103,7 +103,7 @@
             </form>
         </div>
         <div>
-            <a href="{{ route('product-detail', $product->slug) }}" class="tf-btn fw-6 btn-line">View full details<i
+            <a href="{{ route('product-detail', $product->slug) }}" class="tf-btn fw-6 btn-line">Xem Chi Tiết<i
                     class="icon icon-arrow1-top-left"></i></a>
         </div>
     </div>

@@ -3,54 +3,39 @@
     <div class="mb-canvas-content">
         <div class="mb-body">
             <ul class="nav-ul-mb" id="wrapper-menu-navigation">
-                <li class="nav-mb-item">
-                    <a href="#dropdown-menu-one" class="collapsed mb-menu-link current" data-bs-toggle="collapse"
-                        aria-expanded="true" aria-controls="dropdown-menu-one">
-                        <span>Trang Chủ</span>
-                       
-                    </a>
-                 
+            <li class="nav-mb-item">
+    <a href="{{ route('home') }}" class="mb-menu-link current">
+        <span>Trang Chủ</span>
+    </a>
+</li>
 
-                </li>
-                <li class="nav-mb-item">
-                    <a href="#dropdown-menu-two" class="collapsed mb-menu-link current" data-bs-toggle="collapse"
-                        aria-expanded="true" aria-controls="dropdown-menu-two">
-                        <span>Sản Phẩm</span>
-                 
-                  </a>
-                </li>
-                <li class="nav-mb-item">
-                    <a href="{{route('blog.show')}}" class="collapsed mb-menu-link current"
-                        data-bs-toggle="collapse" aria-expanded="true" aria-controls="dropdown-menu-three">
-                        <span>Bài viết</span>
-                       
-                    </a>
-                    
-                </li>
-                <li class="nav-mb-item">
-                    <a href="{{route('about-us')}}" class="collapsed mb-menu-link current"
-                        data-bs-toggle="collapse" aria-expanded="true" aria-controls="dropdown-menu-four">
-                        <span>Giới Thiệu</span>
-                       
-                    </a>
-                  
+<li class="nav-mb-item">
+    <a href="{{ route('shop-collection.index') }}" class="mb-menu-link current">
+        <span>Sản Phẩm</span>
+    </a>
+</li>
 
-                </li>
-                <li class="nav-mb-item">
-                   <a href="{{route('contact')}}" class="collapsed mb-menu-link current"
-                        data-bs-toggle="collapse" aria-expanded="true" aria-controls="dropdown-menu-five">
-                        <span>Liên hệ</span>
-                       
-                    </a>
-                   
-
-                </li>
+<li class="nav-mb-item">
+    <a href="{{ route('blog.show') }}" class="mb-menu-link current">
+        <span>Bài Viết</span>
+    </a>
+</li>
+<li class="nav-mb-item">
+    <a href="{{ route('about-us') }}" class="mb-menu-link current">
+        <span>Giới Thiệu</span>
+    </a>
+</li>
+<li class="nav-mb-item">
+    <a href="{{ route('contact') }}" class="mb-menu-link current">
+        <span>Liên Hệ</span>
+    </a>
+</li>
               
             </ul>
           
         </div>
         <div class="mb-bottom">
-            <a href="login.html" class="site-nav-icon"><i class="icon icon-account"></i>Login</a>
+            <a href="{{route('accountUser.logout')}}" class="site-nav-icon"><i class="icon icon-account"></i>Đăng Xuất</a>
             <div class="bottom-bar-language">
                 <div class="tf-currencies">
                     <select class="image-select center style-default type-currencies">

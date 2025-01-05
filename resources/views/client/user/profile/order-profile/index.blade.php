@@ -110,31 +110,19 @@
                                                                 </p>
                                                             </div>
                                                         </li> --}}
-                                                        @if ($order->status = 'hủy')
+                                                     
                                                         <li>
                                                             <div class="timeline-badge "></div>
                                                             <div class="timeline-box">
 
-                                                                <div class="text-2 fw-6">Trang thái:</div>
-                                                                <span>Đơn hàng của bạn đã hủy</span>
+                                                                <div class="text-2 fw-6">Trang thái:{{$order->status}}</div>
+                                                               
                                                                 <div class="text-2 fw-6">Thời gian cập nhật:</div>
                                                                 <span>{{ $order->updated_at->format('d/m/Y H:i:s') }}</span>
 
                                                             </div>
                                                         </li>
-                                                        @else
-                                                            <li>
-                                                                <div class="timeline-badge success"></div>
-                                                                <div class="timeline-box">
-
-                                                                    <div class="text-2 fw-6">Trang thái:</div>
-                                                                    <span>{{ $order->status }}</span>
-                                                                    <div class="text-2 fw-6">Thời gian cập nhật:</div>
-                                                                    <span>{{ $order->updated_at->format('d/m/Y H:i:s') }}</span>
-
-                                                                </div>
-                                                            </li>
-                                                        @endif
+                                                       
 
 
                                                     </ul>
@@ -167,11 +155,7 @@
                                                         <span>Tổng giá</span>
                                                         <span class="fw-6">{{ $order->total_price }}</span>
                                                     </li>
-                                                    <li class="d-flex justify-content-between text-2 mt_4 pb_8 line">
-                                                        <span>Giảm</span>
-                                                        <span class="fw-6">$10</span>
-
-                                                    </li>
+                                               
                                                     <li class="d-flex justify-content-between text-2 mt_8">
                                                         <span>Tổng đơn hàng</span>
                                                         <span class="fw-6">{{ $order->total_price }}</span>
