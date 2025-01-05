@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Client\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Mail\ForgotPassword;
 use App\Models\City;
 use App\Models\Order;
 use App\Models\Province;
@@ -12,6 +14,7 @@ use App\Models\Wards;
 use Auth;
 use Hash;
 use Illuminate\Http\Request;
+use Mail;
 use Storage;
 
 class AccountController extends Controller
@@ -31,12 +34,15 @@ class AccountController extends Controller
         return view('client.my-account', ['section' => $section]);
     }
 
-    public function login(\App\Http\Requests\Client\LoginRequest $request)
+    public function login(LoginRequest $request)
     {
+        //  $request->validate([
+        //     'email' => 'required|email|exists:users,email',
+        //     'password' => 'required|string|min:8',     
+        // ]);
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            // Đăng nhập thành công
             if (Auth::user()->status) {
                 Auth::logout();
                 session()->flash('error', 'Tài khoản của bạn đã bị khóa.');
@@ -44,8 +50,6 @@ class AccountController extends Controller
             }
             return redirect()->back()->with('error', 'Mật khẩu hoặc Email không đúng');
         }
-        // return redirect()->back();
-
     }
     public function logout(Request $request)
     {
@@ -116,37 +120,53 @@ class AccountController extends Controller
             $provinces = Province::where('matp', $user->city_id)->orderBy('name_quanhuyen', 'ASC')->get();
             $wards = Wards::where('maqh', $user->province_id)->orderBy('name_xaphuong', 'ASC')->get();
             return view('client.user.profile.account-details', compact('user', 'cities', 'provinces', 'wards'));
-        }else {
+        } else {
             return view('errors.404');
         }
     }
     public function storeProfile(Request $request, String $id)
     {
         $dataUser = User::findOrFail($id);
-    if(  $dataUser->id == auth()->user()->id){
-        $data = $request->only('name', 'email', 'phone_number', 'address', 'city_id', 'province_id', 'wards_id');
-        if ($request->password) {
-            $data['password'] = Hash::make($request->password);
-        } else {
-            $data['password'] = $dataUser->password;
-        }
-        if ($request->hasFile('image')) {
-           
-            if ($dataUser->image && Storage::exists($dataUser->image)) {
-                Storage::delete($dataUser->image);
+        if ($dataUser->id == auth()->user()->id) {
+            $data = $request->only('name', 'email', 'phone_number', 'address', 'city_id', 'province_id', 'wards_id');
+            if ($request->password) {
+                $data['password'] = Hash::make($request->password);
+            } else {
+                $data['password'] = $dataUser->password;
             }
-         
-            $data['image'] = Storage::put('public/images/User', $request->file('image'));
-        }
-        $dataUser->update($data);
-        return redirect()->back()->with('success', 'Cập nhật thành công!');
-    }else{
-        return view('errors.404');
+            if ($request->hasFile('image')) {
 
-    }
+                if ($dataUser->image && Storage::exists($dataUser->image)) {
+                    Storage::delete($dataUser->image);
+                }
+
+                $data['image'] = Storage::put('public/images/User', $request->file('image'));
+            }
+            $dataUser->update($data);
+            return redirect()->back()->with('success', 'Cập nhật thành công!');
+        } else {
+            return view('errors.404');
+        }
     }
     public function profileWishlist()
     {
         return view('client.user.profile.wishlist');
+    }
+    public function checkPassword()
+    {
+        return view('client.user.profile.change.checkpassword');
+    }
+    public function profileEmail()
+    {
+        return view('client.user.profile.change.email');
+    }
+    public function StoreEmail(Request $request, String $id)
+    {
+        $dataUser = User::query()->findOrFail($id);
+        $data = [ 
+            'email' => $request->email 
+        ];
+        $dataUser->update($data);
+        return redirect()->route('account.profile',$dataUser->id);
     }
 }
