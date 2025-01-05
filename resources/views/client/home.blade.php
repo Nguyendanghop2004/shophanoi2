@@ -317,7 +317,7 @@
             </div>
             <div class="blog-grid-main">
                 <div class="container">
-                    <div class="row">
+                    {{-- <div class="row">
                         @foreach ($data as $item)
                             <div class="col-xl-4 col-md-6 col-12">
                                 <div class="blog-article-item">
@@ -326,11 +326,6 @@
                                             <img class="lazyload" src="{{ Storage::url($item->image) }} "
                                                 style="width: 366px; height: 235px;" alt="img-blog">
                                         </a>
-
-                                        {{-- <div class="article-label">
-                                    <a href="blog-detail.html"
-                                        class="tf-btn btn-sm radius-3 btn-fill animate-hover-btn">{{$item->category->name}}</a>
-                                </div> --}}
                                     </div>
                                     <div class="article-content">
                                         <div class="article-title">
@@ -348,7 +343,7 @@
                         @endforeach
 
 
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

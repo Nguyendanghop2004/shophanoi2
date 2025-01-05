@@ -28,18 +28,15 @@
                                             @enderror
                                         </div>
                                         <div class="tf-field style-1">
-                                            <input class="form-control @error('email') is-invalid @enderror" placeholder=" "
+                                            <input class="form-control @error('password') is-invalid @enderror" placeholder="Nhập mật khẩu "
                                                 type="password" name="password" @error('password') is-invalid @enderror>
-                                            <label class="tf-field-label" for="">Mật khẩu *</label>
                                             @error('password')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div>
-
                                             <a href="{{ route('account.ResePassword') }}" class="btn-link link">Quên mật
                                                 khẩu ?</a>
-
                                         </div>
                                         <div class="bottom">
                                             <div class="w-100">
@@ -48,12 +45,8 @@
                                                         nhập</span></button>
                                             </div>
                                             <div class="w-100">
-
-
                                                 <a href="{{ route('account.register') }}" class="btn-link fw-6 w-100 link">
                                                     Khách hàng mới? Tạo tài khoản
-
-
                                                     <i class="icon icon-arrow1-top-left"></i>
                                                 </a>
                                             </div>

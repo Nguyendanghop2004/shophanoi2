@@ -15,8 +15,9 @@
                         {{ $admin->created_at->format('d/m/Y H:i') }}
                     </div>
                     <div class="card-body">
-                        <p><strong>Name: </strong>{{ $admin->name }}</p>
+                        <p><strong>Tên: </strong>{{ $admin->name }}</p>
                         <p><strong>Email: </strong>{{ $admin->email }}</p>
+                        <p><strong>phone: </strong>{{ $admin->phone }}</p>
                    
                     </div>
                 </div>
@@ -35,11 +36,18 @@
                     </div>
                     <div class="card-body">
                         @foreach ($data->changes as $key => $old)
-                            @if ($key == 'name')
-                                <p><strong>Tên:</strong>{{ $old }}</p>
+                        
+                        @if ($key == 'name')
+                                <p><strong>Tên: </strong>{{ $old }}</p>
                             @endif
                             @if ($key == 'email')
-                                <p><strong>Email:</strong> {{ $old }}</p>
+                                <p><strong>Email: </strong> {{ $old }}</p>
+                            @endif
+                            @if ($key == 'address')
+                                <p><strong>Đỉa chỉ: </strong> {{ $old }}</p>
+                            @endif
+                            @if ($key == 'phone_number')
+                                <p><strong>Số điện thoại: </strong> {{ $old }}</p>
                             @endif
                             
                         @endforeach

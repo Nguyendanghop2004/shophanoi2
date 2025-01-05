@@ -39,18 +39,9 @@
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="row">
-                                                    <div class="col-lg-6 col-md-6 col-12">
+                                                    <div class="col-lg-12 col-md-12 col-12">
                                                         <!-- Tên -->
-                                                        <div class="form-group">
-                                                            <label for="name">Tên</label>
-                                                            <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}">
-                                                        </div>
-                            
-                                                        <!-- Email -->
-                                                        <div class="form-group">
-                                                            <label for="email">Email</label>
-                                                            <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}">
-                                                        </div>
+                                                       
                             
                                                         <!-- Thành phố -->
                                                         <div class="form-group">
@@ -106,7 +97,7 @@
                                                         </div>
                                                     </div>
                             
-                                                    <div class="col-lg-6 col-md-6 col-12">
+                                                    {{-- <div class="col-lg-6 col-md-6 col-12">
                                                         <!-- Xem trước hình ảnh -->
                                                         <div id="image-preview" class="image-preview mx-auto">
                                                             <img id="image-preview-img" src="{{ Storage::url($user['image']) }}" width="250px" height="250px" alt="Ảnh xem trước">
@@ -120,7 +111,7 @@
                                                                 {{ $message }}
                                                             </div>
                                                         @enderror
-                                                    </div>
+                                                    </div> --}}
                             
                                                     <!-- Nút cập nhật -->
                                                     <div class="form-group">

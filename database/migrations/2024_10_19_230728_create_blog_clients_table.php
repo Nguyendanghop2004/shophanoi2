@@ -11,19 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-<<<<<<< HEAD
-        Schema::create('blog_clients', function (Blueprint $table) {
-            $table->id();
-            $table->text('content');
-            $table->string('title');
-            $table->string('unique');
-            $table->string('image');
-            $table->string('slug')->unique();
-            $table->boolean('status')->default(true);
 
-            $table->timestamps();
-        });
-=======
         // Schema::create('blog_clients', function (Blueprint $table) {
         //     $table->id();
         //     $table->text('content');
@@ -35,7 +23,6 @@ return new class extends Migration
 
         //     $table->timestamps();
         // });
->>>>>>> 5a6ee19b9729a054b484f6dd3f75ab8a2b83e543
     }
 
     /**
