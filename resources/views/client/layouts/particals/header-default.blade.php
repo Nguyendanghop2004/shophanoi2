@@ -197,8 +197,8 @@
                         <!-- Thông báo lỗi -->
                         <div id="searchError" class="alert alert-danger" style="display: none;">
                             Vui lòng nhập từ khóa tìm kiếm
+                            @include('client.layouts.particals.navright')
                         </div>
-                        @include('client.layouts.particals.navright')
                         <li class="nav-notify">
                             <div class="btn-group">
                                 <a class="icon icon-notify" data-bs-toggle="dropdown" aria-expanded="false">
