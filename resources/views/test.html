@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biểu đồ giao dịch</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header div {
+      text-align: center;
+    }
+    .chart-container {
+      margin-bottom: 40px;
+    }
+    .total {
+      font-size: 18px;
+      text-align: right;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>Giao dịch thành công: <strong>0 VND</strong></div>
+      <div>Giao dịch lỗi: <strong>0 VND</strong></div>
+      <div>Giao dịch đang thực hiện: <strong>0 VND</strong></div>
+      <div>Tổng: <strong>0 VND</strong></div>
+    </div>
+
+    <div class="chart-container">
+      <div class="total">Tổng: 1,213,120 VND</div>
+      <canvas id="totalChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <div class="total">Giao dịch thành công: 1,213,120 VND</div>
+      <canvas id="successChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <div class="total">Giao dịch đang thực hiện: 0 VND</div>
+      <canvas id="processingChart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    // Dữ liệu mẫu
+    const labels = ["27/12", "28/12", "29/12", "30/12", "31/12", "01/01", "02/01", "03/01"];
+    const totalData = [0, 0, 0, 0, 0, 1000, 2000, 1000];
+    const successData = [0, 0, 0, 0, 0, 1000, 2000, 1000];
+    const processingData = [0, 0, 0, 0, 0, 0, 0, 0];
+
+    // Cấu hình biểu đồ tổng
+    const ctxTotal = document.getElementById("totalChart").getContext("2d");
+    new Chart(ctxTotal, {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Tổng tiền giao dịch",
+          data: totalData,
+          borderColor: "blue",
+          backgroundColor: "rgba(0, 123, 255, 0.2)",
+          fill: true,
+          tension: 0.3,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    // Cấu hình biểu đồ giao dịch thành công
+    const ctxSuccess = document.getElementById("successChart").getContext("2d");
+    new Chart(ctxSuccess, {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Giao dịch thành công",
+          data: successData,
+          borderColor: "green",
+          backgroundColor: "rgba(40, 167, 69, 0.2)",
+          fill: true,
+          tension: 0.3,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    // Cấu hình biểu đồ giao dịch đang thực hiện
+    const ctxProcessing = document.getElementById("processingChart").getContext("2d");
+    new Chart(ctxProcessing, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Giao dịch đang thực hiện",
+          data: processingData,
+          backgroundColor: "rgba(255, 193, 7, 0.6)",
+          borderColor: "orange",
+          borderWidth: 1,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

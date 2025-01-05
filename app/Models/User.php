@@ -19,9 +19,9 @@ class User extends Authenticatable
         'image',
         'address',
         'phone_number',
-        'city_id', // Thêm trường city_id
-        'province_id', // Thêm trường province_id
-        'wards_id', // Thêm trường wards_id
+        'city_id',
+        'province_id',
+        'wards_id',
     ];
 
     protected $hidden = [
@@ -51,8 +51,15 @@ class User extends Authenticatable
         return $this->belongsTo(Wards::class, 'wards_id', 'xaid');
     }
     
+    // Định nghĩa quan hệ với bảng reviews
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    // Định nghĩa quan hệ với bảng discount_codes
     public function discountCodes()
-{
-    return $this->belongsToMany(DiscountCode::class, 'discount_code_user');
-}
+    {
+        return $this->belongsToMany(DiscountCode::class, 'discount_code_user');
+    }
 }

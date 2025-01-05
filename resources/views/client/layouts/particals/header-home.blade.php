@@ -124,22 +124,19 @@
                    <div class="col-xl-2 col-md-4 col-6 text-center" style="max-width:80%;">
 
                        <a href="home-multi-brand.html" class="logo-header">
-                           <a href="{{ route('home') }}" class="logo-header">
-                               <img src="{{ asset('client/assets/images/logo/logo4.png') }}" alt="logo"
-                                   class="logo">
-                           </a>
+
+                        
+
+
+                       <a href="{{route('home')}}" class="logo-header">
+                           <img src="{{asset('client/assets/images/logo/logo4.png')}}" alt="logo" class="logo">
+                       </a>
                    </div>
 
 
                    <div class="col-xl-5 col-md-4 col-3">
 
-
-                       {{-- @if (Auth::check())
-                           <a href="{{ route('order.donhang') }}">Đơn hàng của tôi</a>
-                       @else
-                           <a href="{{ route('accountUser.login') }}">Đơn hàng của tôi</a>
-                       @endif --}}
-
+                 
                        <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
                            <li class="nav-search">
                                <form action="{{ route('order.search') }}" method="GET" class="search-form"
@@ -160,7 +157,77 @@
                            </div>
                            @include('client.layouts.particals.navright')
 
-                      
+                        <li class="nav-notify">
+                               <div class="btn-group">
+                                   <a class="icon icon-notify" data-bs-toggle="dropdown" aria-expanded="false">
+                                   </a>
+                                   <ul class="dropdown-menu">
+                                       <li>
+                                           <a class="dropdown-item" href="#">
+                                               <div class="notification-icon">
+                                                   <i class="icon icon-notify"></i>
+                                               </div>
+                                               <div class="notification-content">
+                                                   <p class="notification-title">Thông báo 1</p>
+                                                   <span class="notification-time">1 phút trước</span>
+                                               </div>
+                                           </a>
+                                       </li>
+                                       <li>
+                                           <a class="dropdown-item" href="#">
+                                               <div class="notification-icon">
+                                                   <i class="icon icon-notify"></i>
+                                               </div>
+                                               <div class="notification-content">
+                                                   <p class="notification-title">Thông báo 2</p>
+                                                   <span class="notification-time">10 phút trước</span>
+                                               </div>
+                                           </a>
+                                       </li>
+                                       <li>
+                                           <a class="dropdown-item" href="#">
+                                               <div class="notification-icon">
+                                                   <i class="icon icon-notify"></i>
+                                               </div>
+                                               <div class="notification-content">
+                                                   <p class="notification-title">Thông báo 3</p>
+                                                   <span class="notification-time">30 phút trước</span>
+                                               </div>
+                                           </a>
+                                       </li>
+                                       <li>
+                                           <hr class="dropdown-divider">
+                                       </li>
+                                       <li class="text-center">
+                                           <a class="dropdown-item text-primary" href="#">Xem tất cả thông báo</a>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </li>
+                        <li class="nav-wishlist">
+                            <a href="{{route('wishlist')}}" class="nav-icon-item">
+                                <i class="icon icon-heart"></i>
+                             
+                                <span class="count-box">0</span>
+                            </a>
+                        </li>
+                        <li class="nav-cart">
+                            <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
+                                <i class="icon icon-bag"></i>
+                                <span class="count-box cart-count">0</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+
+                       </ul>
+                   </div>
+
+
+
+
+                        @endif -->
                         <li class="nav-notify">
                                <div class="btn-group">
                                    <a class="icon icon-notify" data-bs-toggle="dropdown" aria-expanded="false">
@@ -227,33 +294,26 @@
 
                                      
                       
-
-                       </ul>
-                   </div>
-
-
-
-
-               </div>
-
            </div>
 
+       </div>
+      
+    
+       <div class="header-bottom line">
+           <div class="container-full px_15 lg-px_40">
+               <div class="wrapper-header d-flex justify-content-center align-items-center">
+                   <!-- list menu -->
+                   @include('client.layouts.particals.menu')
+                   <!-- list menu -->
+                   <ul class="header-list-categories tf-lg-hidden">
+                       <!-- cate -->
+                       @include('client.layouts.particals.navleft')
+                       <!-- cate -->
+                   </ul>
 
-           <div class="header-bottom line">
-               <div class="container-full px_15 lg-px_40">
-                   <div class="wrapper-header d-flex justify-content-center align-items-center">
-                       <!-- list menu -->
-                       @include('client.layouts.particals.menu')
-                       <!-- list menu -->
-                       <ul class="header-list-categories tf-lg-hidden">
-                           <!-- cate -->
-                           @include('client.layouts.particals.navleft')
-                           <!-- cate -->
-                       </ul>
-
-                   </div>
                </div>
            </div>
+       </div>
 
    </header>
    <!-- /header -->

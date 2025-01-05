@@ -141,6 +141,17 @@ class WishlistController extends Controller
         return view('client.wishlist', compact('products','wishlist'));
     }
     
+    public function getCount()
+    {
+        if (!Auth::check()) {
+            return response()->json(['count' => 0]);
+        }
+
+        $userId = Auth::id();
+        $count = Wishlist::where('user_id', $userId)->count();
+
+        return response()->json(['count' => $count]);
+    }
 
 }
 
