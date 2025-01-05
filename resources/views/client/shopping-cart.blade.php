@@ -245,42 +245,60 @@
                     data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3" data-pagination-lg="3">
                     <div class="swiper-wrapper">
 
-                        @foreach ($products as $product)
+                    @foreach ($products as $product)
                             <div class="swiper-slide" lazy="true">
                                 <div class="card-product">
                                     <div class="card-product-wrapper">
-                                        <a href="{{route('product-detail',$product['slug'])}}" class="product-img">
+                                        <a href="{{ route('product-detail', $product['slug']) }}" class="product-img">
                                             <img class="lazyload img-product"
                                                 data-src="{{ asset('storage/' . $product['main_image_url']) }}"
                                                 src="{{ asset('storage/' . $product['main_image_url']) }}"
                                                 alt="image-product">
                                             <img class="lazyload img-hover"
-                                                data-src="{{ asset('storage/' . $product['hover_main_image_url']) }}"
-                                                src="{{ asset('storage/' . $product['hover_main_image_url']) }}"
+                                                data-src="{{ isset($product['hover_main_image_url']) && $product['hover_main_image_url'] ? asset('storage/' . $product['hover_main_image_url']) : asset('storage/' . $product['main_image_url']) }}"
+                                                src="{{ isset($product['hover_main_image_url']) && $product['hover_main_image_url'] ? asset('storage/' . $product['hover_main_image_url']) : asset('storage/' . $product['main_image_url']) }}"
                                                 alt="image-product">
                                         </a>
+                                        
                                         <div class="list-product-btn">
-                                            <a href="#quick_add" data-bs-toggle="modal"
+                                            {{-- <a href="#quick_add" data-bs-toggle="modal"
                                                 data-product-id="{{ $product['id'] }}"
                                                 class="box-icon bg_white quick-add tf-btn-loading">
                                                 <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick Add</span>
-                                            </a>
-                                            <a href="javascript:void(0);"
-                                                class="box-icon bg_white wishlist btn-icon-action">
-                                                <span class="icon icon-heart"></span>
-                                                <span class="tooltip">Add to Wishlist</span>
-                                                <span class="icon icon-delete"></span>
-                                            </a>
-                                            <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
+                                            </a> --}}
+                                            <div class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
+    @if(in_array($product['id'], $wishlist))
+        <form action="{{ route('wishlist.remove') }}" method="POST" style="display: inline;">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <button type="submit" class="wishlist-btn remove-wishlist">
+                <span class="icon icon-delete"></span>
+            </button>
+        </form>
+    @else
+        <form action="{{ route('wishlist.add') }}" method="POST" style="display: inline;">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <button type="submit" class="wishlist-btn add-wishlist">
+                <span class="icon icon-heart"></span>
+            </button>
+        </form>
+    @endif
+</div>
+
+
+
+                                            {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                                                 class="box-icon bg_white compare btn-icon-action">
                                                 <span class="icon icon-compare"></span>
                                                 <span class="tooltip">Add to Compare</span>
                                                 <span class="icon icon-check"></span>
-                                            </a>
+                                            </a> --}}
                                             <a href="#quick_view" data-bs-toggle="modal"
+                                                data-product-id="{{ $product['id'] }}"
                                                 class="box-icon bg_white quickview tf-btn-loading">
-                                                <span class="icon icon-view"></span>
+                                                <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick View</span>
                                             </a>
                                         </div>
@@ -289,8 +307,16 @@
                                         </div>
                                     </div>
                                     <div class="card-product-info">
-                                        <a href="{{route('product-detail',$product['slug'])}}" class="title link">{{ $product['name'] }}</a>
-                                        <span class="price">${{ $product['price'] }}</span>
+                                        <a href="{{ route('product-detail', $product['slug']) }}"
+                                            class="title link">{{ $product['name'] }}</a>
+                                        <span class="price">   @if ($product['sale_price'] < $product['price'])
+                                            <span class="sale-price">{{ number_format($product['sale_price'], 0, ',', '.') }} VNĐ</span>
+                                            <span class="original-price" style="text-decoration: line-through; color: #888;">
+                                                {{ number_format($product['price'], 0, ',', '.') }} VNĐ
+                                            </span>
+                                        @else
+                                            <span class="regular-price">{{ number_format($product['price'], 0, ',', '.') }} VNĐ</span>
+                                        @endif</span>
                                         <ul class="list-color-product">
                                             @foreach ($product['colors'] as $index => $color)
                                                 <li
@@ -322,6 +348,42 @@
             </div>
         </div>
     </section>
+    <style>
+    
+    /* Đặt kiểu mặc định cho nút */
+/* Kiểu mặc định cho nút */
+.wishlist-btn {
+    background-color: #fff; /* Nền trắng mặc định */
+    border: none;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 50%; /* Tùy chỉnh để có thể làm nút tròn */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng nổi nhẹ */
+}
+
+=
+.wishlist-btn .icon {
+    font-size: 1.5rem;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+
+.wishlist-btn:hover {
+    background-color: #000;
+}
+
+.wishlist-btn:hover .icon {
+    color: #fff;
+}
+
+
+
+    </style>
 @endsection
 
 @push('scripts')

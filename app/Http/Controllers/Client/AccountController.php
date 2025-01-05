@@ -45,7 +45,7 @@ class AccountController extends Controller
     {
 
         $credentials = $request->only('email', 'password');
-
+    
         if (Auth::attempt($credentials)) {
             if (Auth::user()->status) {
                 Auth::logout();
@@ -59,11 +59,14 @@ class AccountController extends Controller
             'error' => 'Mật khẩu hoặc Email không đúng.',
         ]);
     }
+    
     public function logout(Request $request)
     {
         if (Auth::check()) {
+
             Auth::logout(); // Thực hiện logout
             return redirect()->route('home')->with('success', 'Đăng xuất thành công');
+
         }
     }
     public function Register(RegisterRequest $request)
@@ -72,7 +75,7 @@ class AccountController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password), // Mã hóa mật khẩu
+            'password' => Hash::make($request->password), 
         ]);
 
         auth()->login($user);

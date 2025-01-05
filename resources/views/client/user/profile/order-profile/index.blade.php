@@ -174,11 +174,7 @@
                                                         <span class="fw-6">
                                                             {{ number_format($order->total_price, 0, ',', '.') }}₫ </span>
                                                     </li>
-                                                    <li class="d-flex justify-content-between text-2 mt_4 pb_8 line">
-                                                        <span>Giảm</span>
-                                                        <span class="fw-6">$10</span>
-
-                                                    </li>
+                                               
                                                     <li class="d-flex justify-content-between text-2 mt_8">
                                                         <span>Tổng đơn hàng</span>
                                                         <span

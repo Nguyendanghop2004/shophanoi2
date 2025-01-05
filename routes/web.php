@@ -113,7 +113,7 @@ Route::get('/accountUser/profile-order', [AccountController::class, 'profileOrde
 Route::post('/password/email', [ForgotPasswordController::class, 'sendResetCode'])->name('password.email');
 Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->name('account.resetPassword');
 Route::post('/check-code', [ForgotPasswordController::class, 'checkCode'])->name('account.checkcode');
-Route::post('/reset-code/{token}', [ForgotPasswordController::class, 'resetCode'])->name('account.resetCode');
+Route::get('/reset-code/{token}', [ForgotPasswordController::class, 'resetCode'])->name('account.resetCode');
 Route::get('/reset-change-password/{token}', [ForgotPasswordController::class, 'indexChangePassword'])->name('account.changePassword');
 Route::post('/reset-change-password/{id}', [ForgotPasswordController::class, 'changePassword'])->name('account.indexchangePassword');
 

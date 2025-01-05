@@ -33,6 +33,7 @@
                                             @enderror
 
                                         </div>
+                                        <a class="mt-2" href="{{ route('account.resetCode', $resetRequest->token) }}">Gửi lại mã code</a>
 
                                         <input class="tf-field-input tf-input" placeholder=" " type="hidden" name="token"
                                             value="{{ $resetRequest->token }}">
@@ -49,11 +50,7 @@
 
                                             </div>
                                     </form>
-                                    <form action="{{ route('account.resetCode', $resetRequest->token) }}" method="post">
-                                        @csrf
-                                        <button type="submit" class=" btn mt-2 mb-2 btn-outline-secondary">Gửi lại mã code
-                                        </button>
-                                    </form>
+                                  
                                 </div>
                             </div>
                         </div>
@@ -101,6 +98,6 @@
     });
     
 </script>
-<script>
+<style>
     
-</script>
+</style>
