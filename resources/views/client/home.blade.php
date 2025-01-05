@@ -285,6 +285,12 @@
             </div>
         </div>
     </section>
+
+
+   
+
+
+
     <!-- /Best seller -->
     
     <!-- Shop Collection -->
@@ -637,7 +643,7 @@
     <!-- /Brand --> --}}
 @endsection
 @push('scripts')
-    {{-- <script>
+    <script>
         $(document).ready(function() {
             // Bắt sự kiện click vào nút Quick Add
             $(".quick-add").on("click", function(e) {
@@ -942,17 +948,19 @@
                 updateQuantity(productId, colorId, sizeId, newQuantity, url);
             });
         });
-    </script> --}}
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+
      document.addEventListener("DOMContentLoaded", function() {
+
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
                     title: 'Thành công!',
                     text: '{{ session('success') }}',
                     showConfirmButton: false,
-                    timer: 2000
+                    timer: 5000
                 });
             @elseif (session('error'))
                 Swal.fire({
@@ -960,11 +968,9 @@
                     title: 'Lỗi!',
                     text: '{{ session('error') }}',
                     showConfirmButton: false,
-                    timer: 2000
+                    timer: 5000
                 });
             @endif
         });
-
-   
-</script>
+    </script>
 @endpush

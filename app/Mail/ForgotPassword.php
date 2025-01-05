@@ -12,15 +12,14 @@ use Illuminate\Queue\SerializesModels;
 class ForgotPassword extends Mailable
 {
     use Queueable, SerializesModels;
-    public $customer;
-    public $token;
+    public $data;
     public $reset_code;
     /**
      * Create a new message instance.
      */
-    public function __construct($customer, $reset_code)
+    public function __construct($data, $reset_code)
     {
-        $this->customer = $customer;
+        $this->data = $data;
         $this->reset_code = $reset_code;
     }
 

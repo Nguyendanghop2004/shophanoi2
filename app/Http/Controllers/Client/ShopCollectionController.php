@@ -135,7 +135,14 @@ class ShopCollectionController extends Controller
             'colors' => $product->colors, // Danh sách màu sắc của sản phẩm
         ];
     });
+    $wishlist = [];
 
+    if (Auth::check()) {
+       
+        $wishlist = Wishlist::where('user_id', Auth::id())
+            ->pluck('product_id')
+            ->toArray(); 
+    }
     return $products;
 }
 
@@ -158,6 +165,7 @@ class ShopCollectionController extends Controller
      */
     public function fetchProducts(Request $request)
     {
+        
         $products = $this->getFilteredProducts($request);
         return view('client.partials.product_list', compact('products'))->render();
     }

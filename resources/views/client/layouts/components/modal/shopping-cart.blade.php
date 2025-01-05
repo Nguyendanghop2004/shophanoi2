@@ -112,7 +112,7 @@
                         <div class="tf-mini-cart-bottom-wrap">
                             <div class="tf-cart-totals-discounts">
                                 <div class="tf-cart-total">Tổng Tiền</div>
-                                <div class="tf-totals-total-value fw-6">$49.99 USD</div>
+                                <div class="tf-totals-total-value fw-6"></div>
                             </div>
                             {{-- <div class="tf-cart-tax">Taxes and <a href="#">shipping</a> calculated at checkout
                             </div> --}}
