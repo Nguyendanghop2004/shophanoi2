@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ColorRequest;
 use App\Models\Color;
-use App\Models\Size;
 use Illuminate\Http\Request;
 
 class ColorController extends Controller
@@ -15,24 +14,13 @@ class ColorController extends Controller
      */
     public function index(Request $request)
     {
-        $searchColor = $request->input('searchColor');
-        
-        $colors = Color::when($searchColor, function ($query, $searchColor) {
+        $colors = Color::when($request->input('searchColor'), function ($query, $searchColor) {
             return $query->where('name', 'like', '%' . $searchColor . '%');
+        })->paginate(5);
 
-        })->paginate(5); 
-
-        $searchSize = $request->input('searchSize');
-        
-        $sizes = Size::when($searchSize, function ($query, $searchSize) {
-            return $query->where('name', 'like', '%' . $searchSize . '%');
-
-        })->paginate(5); 
-        
-
-        return view('admin.colors.index', compact('colors','sizes'));
+        return view('admin.colors.index', compact('colors'));
     }
-    
+
     /**
      * Hiển thị form tạo màu mới.
      */
@@ -46,9 +34,9 @@ class ColorController extends Controller
      */
     public function store(ColorRequest $request)
     {
-        Color::create($request->only('name', 'sku_color'));
-    
-        return redirect()->route('admin.colors_sizes.index')->with('success', 'Màu sắc đã được tạo thành công.');
+        Color::create($request->validated());
+
+        return redirect()->route('admin.colors.index')->with('success', 'Màu sắc đã được tạo thành công.');
     }
 
     /**
@@ -64,51 +52,34 @@ class ColorController extends Controller
     /**
      * Cập nhật màu sắc trong cơ sở dữ liệu.
      */
+    public function update(ColorRequest $request, $id)
+    {
+        $color = Color::findOrFail($id);
 
-    public function update(Request $request, $id)
-{
-    // Tìm màu sắc theo ID
-    $color = Color::findOrFail($id);
+        // Kiểm tra nếu màu sắc đang được sử dụng trong biến thể sản phẩm
+        if ($color->productVariants()->count() > 0) {
+            return redirect()->route('admin.colors.index')->with('error', 'Không thể sửa màu sắc này vì nó đang được sử dụng trong sản phẩm.');
+        }
 
-    // Kiểm tra nếu màu sắc đang được sử dụng trong biến thể sản phẩm
-    if ($color->productVariants()->count() > 0) {
-        // Trả về thông báo lỗi nếu không thể sửa
-        return redirect()->route('admin.colors_sizes.index')->with('error', 'Không thể sửa màu sắc này vì nó đang được sử dụng trong sản phẩm.');
+        $color->update($request->validated());
+
+        return redirect()->route('admin.colors.index')->with('success', 'Màu sắc đã được cập nhật thành công.');
     }
-
-    // Nếu không bị ràng buộc, thực hiện cập nhật
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'sku_color' => 'required|string|max:255|unique:colors,sku_color,' . $id,
-    ]);
-
-    $color->update($request->only('name', 'sku_color'));
-
-    return redirect()->route('admin.colors_sizes.index')->with('success', 'Color updated successfully.');
-}
-
-
 
     /**
      * Xóa màu sắc khỏi cơ sở dữ liệu.
      */
     public function destroy($id)
-{
+    {
+        $color = Color::findOrFail($id);
 
-  
-    $color = Color::findOrFail($id);
+        // Kiểm tra nếu màu sắc đang được sử dụng trong sản phẩm
+        if ($color->productVariants()->count() > 0) {
+            return redirect()->route('admin.colors.index')->with('error', 'Không thể xóa màu sắc này vì nó đang được sử dụng trong nhiều sản phẩm. Bạn cần xử lí bên sản phẩm trước.');
+        }
 
-    
-    if ($color->productVariants()->count() > 0) {
-       
-        return redirect()->route('admin.colors.index')->with('error', 'Không thể xóa màu sắc này vì nó đang được sử dụng trong nhiều sản phẩm. Bạn cần xử lí bên sản phẩm trước.');
+        $color->delete();
+
+        return redirect()->route('admin.colors.index')->with('success', 'Màu sắc đã được xóa thành công.');
     }
-
-  
-
-    $color->delete();
-
-    return redirect()->route('admin.colors.index')->with('success', 'Màu sắc đã được xóa thành công.');
-}
-
 }

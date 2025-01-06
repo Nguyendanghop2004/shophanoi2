@@ -18,7 +18,6 @@ class HistoryUserController extends Controller
     public function  showUser(string $id)
     {
         $data = History::findOrFail($id);
-        dd( $data ->changes);
         $dataold = $data->model_id;
         $admin = Admin::findOrFail($dataold);
         return view('admin.history.show', compact('data', 'admin'));

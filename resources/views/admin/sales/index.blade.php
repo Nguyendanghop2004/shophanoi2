@@ -3,12 +3,12 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Sản Phẩm Giảm Giá </h1>
+            <h1>Sản Phẩm Giảm Giá</h1>
         </div>
 
         <div class="card card-primary">
             <div class="card-header">
-                <h4>Danh Sách Sản Phẩm Được Giảm </h4>
+                <h4>Danh Sách Sản Phẩm Được Giảm</h4>
                 <div class="card-header-action">
                     <a href="{{ route('admin.sales.create') }}" class="btn btn-primary">
                         Tạo Mới
@@ -27,7 +27,6 @@
                                 <button class="btn" type="submit"><i class="fas fa-search"></i></button>
                             </div>
                         </form>
-
                     </div>
                 </div>
                 <div class="card-body p-0">
@@ -40,6 +39,7 @@
                                     <th>Loại giảm giá</th>
                                     <th>Giá trị giảm</th>
                                     <th>Thời gian</th>
+                                    <th>Trạng thái</th>
                                     <th>Hành động</th>
                                 </tr>
                             </thead>
@@ -52,10 +52,15 @@
                                         <td>{{ $sale->discount_value }}</td>
                                         <td>{{ $sale->start_date }} - {{ $sale->end_date }}</td>
                                         <td>
-                                            <a href="{{ route('admin.sales.edit', $sale->id) }}" class="btn btn-warning">Chỉnh
-                                                sửa</a>
-                                            <form action="{{ route('admin.sales.destroy', $sale->id) }}" method="POST"
-                                                style="display:inline-block;">
+                                            @if (now()->between($sale->start_date, $sale->end_date))
+                                                <span class="badge badge-success">Đang giảm</span>
+                                            @else
+                                                <span class="badge badge-danger">Hết hạn giảm</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.sales.edit', $sale->id) }}" class="btn btn-warning">Chỉnh sửa</a>
+                                            <form action="{{ route('admin.sales.destroy', $sale->id) }}" method="POST" style="display:inline-block;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger">Xóa</button>

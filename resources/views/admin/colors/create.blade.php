@@ -12,22 +12,33 @@
                 @csrf
                 <div class="form-group">
                     <label for="name">Tên Màu Sắc</label>
-                    <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" value="{{ old('name') }}" >
+                    <input 
+                        type="text" 
+                        class="form-control @error('name') is-invalid @enderror" 
+                        name="name" 
+                        id="name" 
+                        value="{{ old('name') }}" 
+                        placeholder="Nhập tên màu sắc">
                     @error('name')
-                                <div class="invalid-feedback" style="display: block;">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="sku_color">Chọn Màu</label>
-                    <input type="color" class="form-control @error('sku_color') is-invalid @enderror" name="sku_color" id="sku_color" value="{{ old('sku_color') }}" >
+                    <input 
+                        type="color" 
+                        class="form-control @error('sku_color') is-invalid @enderror" 
+                        name="sku_color" 
+                        id="sku_color" 
+                        value="{{ old('sku_color') }}" >
                     @error('sku_color')
-                                <div class="invalid-feedback" style="display: block;">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <button type="submit" class="btn btn-primary">Lưu</button>

@@ -14,21 +14,17 @@ class SizeController extends Controller
      */
     public function index(Request $request)
     {
-        $searchSize = $request->input('searchSize');
-        
-        $sizes = Size::when($searchSize, function ($query, $searchSize) {
+        $sizes = Size::when($request->input('searchSize'), function ($query, $searchSize) {
             return $query->where('name', 'like', '%' . $searchSize . '%');
-        })->paginate(5); // Phân trang với 10 bản ghi mỗi trang
-    
-        $searchColor = $request->input('searchColor');
-        
-        $colors = Color::when($searchColor, function ($query, $searchColor) {
+        })->paginate(5);
+
+        $colors = Color::when($request->input('searchColor'), function ($query, $searchColor) {
             return $query->where('name', 'like', '%' . $searchColor . '%');
-        })->paginate(5); // Phân trang với 10 bản ghi mỗi trang
-        // Truyền cả $colors và $sizes vào view
-        return view('admin.sizes.index', compact( 'sizes', 'colors'));
+        })->paginate(5);
+
+        return view('admin.sizes.index', compact('sizes', 'colors'));
     }
-    
+
     /**
      * Hiển thị form tạo kích thước mới.
      */
@@ -43,12 +39,15 @@ class SizeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:sizes,name',
+        ], [
+            'name.required' => 'Tên kích thước là bắt buộc.',
+            'name.unique' => 'Tên kích thước đã tồn tại.',
         ]);
 
         Size::create($request->only('name'));
 
-        return redirect()->route('admin.sizes.index')->with('success', 'Size created successfully.');
+        return redirect()->route('admin.sizes.index')->with('success', 'Kích thước đã được tạo thành công.');
     }
 
     /**
@@ -56,7 +55,7 @@ class SizeController extends Controller
      */
     public function edit($id)
     {
-        $size = Size::findOrFail($id); // Tìm size theo ID
+        $size = Size::findOrFail($id);
 
         return view('admin.sizes.edit', compact('size'));
     }
@@ -65,48 +64,39 @@ class SizeController extends Controller
      * Cập nhật kích thước trong cơ sở dữ liệu.
      */
     public function update(Request $request, $id)
-{
-    // Tìm kích thước theo ID
-    $size = Size::findOrFail($id);
+    {
+        $size = Size::findOrFail($id);
 
-    // Kiểm tra nếu kích thước đang được sử dụng trong biến thể sản phẩm
-    if ($size->productVariants()->count() > 0) {
-        // Trả về thông báo lỗi nếu không thể sửa
-        return redirect()->route('admin.colors_sizes.index')->with('error', 'Không thể sửa kích thước này vì nó đang được sử dụng trong sản phẩm.');
+        // Kiểm tra nếu kích thước đang được sử dụng trong biến thể sản phẩm
+        if ($size->productVariants()->count() > 0) {
+            return redirect()->route('admin.sizes.index')->with('error', 'Không thể sửa kích thước này vì nó đang được sử dụng trong sản phẩm.');
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255|unique:sizes,name,' . $id,
+        ], [
+            'name.required' => 'Tên kích thước là bắt buộc.',
+            'name.unique' => 'Tên kích thước đã tồn tại.',
+        ]);
+
+        $size->update($request->only('name'));
+
+        return redirect()->route('admin.sizes.index')->with('success', 'Kích thước đã được cập nhật thành công.');
     }
-
-    // Nếu không bị ràng buộc, thực hiện cập nhật
-    $request->validate([
-        'name' => 'required|string|max:255',
-    ]);
-
-    $size->update($request->only('name'));
-
-
-
-
-        return redirect()->route('admin.sizes.index')->with('success', 'Size updated successfully.');
-    }
-
 
     /**
      * Xóa kích thước khỏi cơ sở dữ liệu.
      */
     public function destroy($id)
     {
-        // Lấy kích thước theo ID
         $size = Size::findOrFail($id);
 
-        // Kiểm tra xem kích thước này có đang được sử dụng trong bất kỳ biến thể sản phẩm nào không
         if ($size->productVariants()->count() > 0) {
-            // Nếu kích thước được sử dụng trong ít nhất 1 biến thể sản phẩm
-            return redirect()->route('admin.colors_sizes.index')->with('error', 'Không thể xóa kích thước này vì nó đang được sử dụng trong nhiều sản phẩm. Bạn cần lí bên sản phẩm trước.');
+            return redirect()->route('admin.sizes.index')->with('error', 'Không thể xóa kích thước này vì nó đang được sử dụng trong nhiều sản phẩm. Bạn cần xử lý bên sản phẩm trước.');
         }
 
-        // Nếu không có sản phẩm nào sử dụng kích thước này, tiến hành xóa
         $size->delete();
 
         return redirect()->route('admin.sizes.index')->with('success', 'Kích thước đã được xóa thành công.');
     }
-
 }
