@@ -59,7 +59,7 @@
                                                     {{$item->total_price}}
                                                 </td>
                                                 <td>
-                                                    <a href="{{route('profile.profileOrder',$item->id)}}" class="tf-btn btn-fill animate-hover-btn rounded-0 justify-content-center">
+                                                <a href="{{route('profile.profileOrder',$item->id)}}" class="tf-btn btn-fill animate-hover-btn rounded-0 justify-content-center">
                                                         <span>Chi tiết</span>
                                                     </a>
                                                 </td>

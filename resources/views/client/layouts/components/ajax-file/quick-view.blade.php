@@ -103,7 +103,7 @@
             </form>
         </div>
         <div>
-            <a href="{{ route('product-detail', $product->slug) }}" class="tf-btn fw-6 btn-line">View full details<i
+            <a href="{{ route('product-detail', $product->slug) }}" class="tf-btn fw-6 btn-line">Chi Tiết<i
                     class="icon icon-arrow1-top-left"></i></a>
         </div>
     </div>

@@ -13,14 +13,14 @@
                         <div class="tf-categories-container">
                             @foreach ($collections as $collection)
                                 <div class="collection-item-circle hover-img">
-                                    <a href="shop-collection-sub.html" class="collection-image img-style">
+                                    <a href="{{route('shop-collection.index')}}" class="collection-image img-style">
                                         <img class="lazyload"
                                             data-src="{{ asset('storage/' . $collection->background_image) }}"
                                             src="{{ asset('storage/' . $collection->background_image) }}"
                                             alt="collection-img">
                                     </a>
                                     <div class="collection-content text-center">
-                                        <a href="shop-collection-sub.html"
+                                        <a href="{{route('shop-collection.index')}}"
                                             class="link title fw-6">{{ $collection->name }}</a>
                                     </div>
                                 </div>
@@ -28,11 +28,11 @@
                         </div>
                         <div class="tf-shopall-wrap">
                             <div class="collection-item-circle tf-shopall">
-                                <a href="shop-collection-sub.html" class="collection-image img-style tf-shopall-icon">
+                                <a href="{{route('shop-collection.index')}}" class="collection-image img-style tf-shopall-icon">
                                     <i class="icon icon-arrow1-top-left"></i>
                                 </a>
                                 <div class="collection-content text-center">
-                                    <a href="shop-collection-sub.html" class="link title fw-6">Shop all</a>
+                                    <a href="{{route('shop-collection.index')}}" class="link title fw-6">Shop all</a>
                                 </div>
                             </div>
                         </div>
@@ -371,7 +371,7 @@
                     <div class="heading">Định nghĩa lại thời trang <br> Xuất sắc</div>
                     <p class="description">Đây là cơ hội để bạn nâng cấp tủ quần áo của mình với nhiều phong cách khác nhau
                     </p>
-                    <a href="shop-collection-list.html"
+                    <a href="{{route('shop-collection.index')}}"
                         class="tf-btn style-2 btn-fill rounded-full animate-hover-btn">Đọc câu chuyện của chúng tôi</a>
                 </div>
             </div>
