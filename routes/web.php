@@ -23,41 +23,18 @@ use App\Http\Controllers\Client\ShopCollectionController;
 use App\Http\Controllers\Client\ShoppingCartController;
 use App\Http\Controllers\Client\TimeLineController;
 use App\Http\Controllers\ProfileController;
+
+use App\Http\Controllers\Client\ReviewController;
+
 use App\Http\Controllers\WishlistController;
+
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-
-
 Route::middleware('checkPassword')->group(function () {
 
 
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
-
-    Route::get('/login', [HomeController::class, 'home'])->name('home');
-
-
-
-
-    Route::get('/', [HomeController::class, 'home'])->name('home');
-
-
-
-
     Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
-
-    Route::get('error', [ErrorController::class, 'error'])->name('error');
 
 
     Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
@@ -81,6 +58,7 @@ Route::middleware('checkPassword')->group(function () {
 
     Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
     Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
+
 
 
 
@@ -119,6 +97,9 @@ Route::middleware('checkPassword')->group(function () {
     Route::get('/accountUser/profile-profileAccountDetails/{id}', [AccountController::class, 'profileAccountDetails'])->name('account.profileAccountDetails');
     Route::put('accountsUser/profile-AccountDetails/{id}', [AccountController::class, 'storeProfile'])->name('accountsUser.storeProfile');
     Route::get('/accountUser/profile-profileWishlist', [AccountController::class, 'profileWishlist'])->name('account.profileWishlist');
+    Route::get('/accountUser/checkPassword/{id}', [AccountController::class, 'checkPassword'])->name('account.checkPassword');
+    Route::get('/accountUser/change-email', [AccountController::class, 'profileEmail'])->name('account.profileEmail');
+    Route::put('/accountUser/Store-email/{id}', [AccountController::class, 'StoreEmail'])->name('account.StoreEmail');
 
     Route::get('/accountUser/profile-order', [AccountController::class, 'profileOrders'])->name('account.profileOrders');
 
@@ -196,12 +177,10 @@ Route::middleware('checkPassword')->group(function () {
         });
 
 
-    // end profile
+
 
     Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
     Route::post('/select-address', [CheckoutController::class, 'select_address']);
-
-
 
 
 Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
@@ -213,4 +192,10 @@ Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist
 Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
 Route::get('/wishlist/list', [WishlistController::class, 'getWishlist'])->name('wishlist');
 
-});
+Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
+Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
+Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
+
+Route::get('/reviews/create/{orderId}', [ReviewController::class, 'create'])->name('client.reviews.create');
+Route::post('/reviews/store', [ReviewController::class, 'store'])->name('client.reviews.store');
+    });

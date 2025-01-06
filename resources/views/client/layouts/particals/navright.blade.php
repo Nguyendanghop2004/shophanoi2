@@ -16,7 +16,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item"
-                                href="{{route('account.profile',auth()->user()->id)}}">{{ \Illuminate\Support\Str::words(auth()->user()->name, 2, '...') }}</a>
+                                href="{{route('account.profile', auth()->user()->id)}}">{{ \Illuminate\Support\Str::words(auth()->user()->name, 2, '...') }}</a>
                         </li>
                         <li> <a class="dropdown-item" href="{{ route('order.donhang') }}">Đơn hàng</a></li>
                         <li>

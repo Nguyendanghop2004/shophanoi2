@@ -11,19 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Schema::create('blog_clients', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->text('content');
-        //     $table->string('title');
-        //     $table->string('unique');
-        //     $table->string('image');
-        //     $table->string('slug')->unique();
-        //     $table->boolean('status')->default(true);
+        Schema::create('blog_clients', function (Blueprint $table) {
+            $table->id();
+            $table->text('content');
+            $table->string('title');
+            $table->string('unique');
+            $table->string('image');
+            $table->string('slug')->unique();
+            $table->boolean('status')->default(true);
 
-        //     $table->timestamps();
-        // });
+            $table->timestamps();
+        });
     }
-
     /**
      * Reverse the migrations.
      */

@@ -172,6 +172,12 @@
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('client.orders.show', ['id' => Crypt::encryptString($order->id)]) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                    
+                                    @if ($order->status === 'đã nhận hàng')
+                                        @foreach ($order->orderItems as $orderItem)
+                                            <a href="{{ route('client.reviews.create', ['orderId' => $order->id, 'productId' => $orderItem->product_id]) }}" class="btn btn-warning btn-sm">Viết đánh giá cho {{ $orderItem->product_name }}</a>
+                                        @endforeach
+                                    @endif
                                     @if ($order->status === 'giao hàng thành công')
                                     <form action="{{ route('orders.confirm', $order->id) }}" method="POST">
                                         @csrf
@@ -179,9 +185,10 @@
                                     </form>
                                     @endif
                                     @if (in_array($order->status, ['chờ xác nhận', 'đã xác nhận']))
-                                    <button class="btn btn-danger cancelOrderBtn" data-order-id="{{ $order->id }}" data-action="{{ route('client.orders.cancel', $order->id) }}">Hủy đơn hàng</button>
-                                    @endif                         
+                                        <button class="btn btn-danger cancelOrderBtn" data-order-id="{{ $order->id }}" data-action="{{ route('client.orders.cancel', $order->id) }}">Hủy đơn hàng</button>
+                                    @endif
                                 </div>
+                                
                             </div>
                         </div>
                     </div>

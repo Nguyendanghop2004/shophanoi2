@@ -176,6 +176,7 @@
                 <span class="title">Sản Phẩm Yêu Thích</span>
                 <p class="sub-title">Thời trang đẹp mắt, tiện lợi và bền vững – dành cho mọi phong cách của bạn.</p>
             </div>
+        
             <div class="hover-sw-nav hover-sw-3">
                 <div class="swiper tf-sw-product-sell wrap-sw-over" data-preview="4" data-tablet="3" data-mobile="2"
                     data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3" data-pagination-lg="3">
@@ -203,6 +204,7 @@
                                                 <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick Add</span>
                                             </a> --}}
+                                           
                                             <div class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
     @if(in_array($product['id'], $wishlist))
         <form action="{{ route('wishlist.remove') }}" method="POST" style="display: inline;">
@@ -281,6 +283,7 @@
             </div>
         </div>
     </section>
+
     <style>
     
     /* Đặt kiểu mặc định cho nút */
@@ -305,7 +308,7 @@
     transition: color 0.3s ease;
 }
 
-
+    
 .wishlist-btn:hover {
     background-color: #000;
 }
@@ -317,6 +320,43 @@
 
 
     </style>
+
+                    <div class="row">
+                  
+
+                    {{-- <div class="row">
+                        @foreach ($data as $item)
+                            <div class="col-xl-4 col-md-6 col-12">
+                                <div class="blog-article-item">
+                                    <div class="article-thumb">
+                                        <a href="{{ route('blog.detail', $item->slug) }}">
+                                            <img class="lazyload" src="{{ Storage::url($item->image) }} "
+                                                style="width: 366px; height: 235px;" alt="img-blog">
+                                        </a>
+                                    </div>
+                                    <div class="article-content">
+                                        <div class="article-title">
+                                            <a href="{{ route('blog.detail', $item->slug) }}"
+                                                class="">{{ $item->title }}</a>
+                                        </div>
+                                        <div class="article-btn">
+                                            <a href="{{ route('blog.detail', $item->slug) }}"
+                                                class="tf-btn btn-line fw-6">Xêm Thêm<i
+                                                    class="icon icon-arrow1-top-left"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+
+
+                    </div> --}}
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- /Best seller -->
     
     <!-- Shop Collection -->
