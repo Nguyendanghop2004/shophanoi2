@@ -7,12 +7,19 @@ use App\Http\Requests\Client\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\ForgotPassword;
 use App\Models\City;
+use App\Models\History;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Province;
 use App\Models\User;
 use App\Models\Wards;
+use App\Models\Wishlist;
 use Auth;
+use Crypt;
+use DB;
 use Hash;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Mail;
 use Storage;
@@ -36,21 +43,21 @@ class AccountController extends Controller
 
     public function login(LoginRequest $request)
     {
-        //  $request->validate([
-        //     'email' => 'required|email|exists:users,email',
-        //     'password' => 'required|string|min:8',     
-        // ]);
+
         $credentials = $request->only('email', 'password');
     
         if (Auth::attempt($credentials)) {
             if (Auth::user()->status) {
                 Auth::logout();
-                session()->flash('error', 'Tài khoản của bạn đã bị khóa.');
-                return redirect()->back();
+                return back()->with('error', 'Tài khoản của bạn đã bị khóa.');
             }
-            return redirect()->route('home')->with('success', 'Đăng nhập thành công');
+            $request->session()->regenerate();
+            return redirect()->intended('/')->with('success', 'Đăng nhập thành công');
         }
-        return redirect()->back()->with('error', 'Mật khẩu hoặc Email không đúng');
+
+        return back()->with([
+            'error' => 'Mật khẩu hoặc Email không đúng.',
+        ]);
     }
     
     public function logout(Request $request)
@@ -106,10 +113,25 @@ class AccountController extends Controller
             return view('errors.404');
         }
     }
-    public function profileOrders()
+    public function profileOrders(Request $request)
     {
-        $order = Order::query()->get();
-        return view('client.user.profile.order', compact('order'));
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+    
+        $user = Auth::user();
+        
+        $status = $request->query('status', '');
+        
+        $query = Order::where('user_id', $user->id);
+        
+        if ($status !== '') {
+            $query->where('status', $status);
+        }
+        
+        $order = $query->orderBy('created_at', 'desc')->paginate(10);
+        
+        return view('client.user.profile.order', compact('order', 'status'));
     }
     public function profileAddress()
     {
@@ -152,9 +174,118 @@ class AccountController extends Controller
             return view('errors.404');
         }
     }
+    public function ProfileUpdate(Request $request, string $id)
+    {
+        $dataUser = User::findOrFail($id);
+        $data = $request->only('name', 'email', 'phone_number', 'address', 'city_id', 'province_id', 'wards_id');
+        if ($request->password) {
+            $data['password'] = Hash::make($request->password);
+        } else {
+            $data['password'] = $dataUser->password;
+        }
+        if ($request->hasFile('image')) {
+
+            if ($dataUser->image && Storage::exists($dataUser->image)) {
+                Storage::delete($dataUser->image);
+            }
+            $data['image'] = Storage::put('public/images/User', $request->file('image'));
+        }
+        $idadmin = Auth()->user()->id;
+        $data1 = $dataUser->toArray();
+        History::create([
+            'user_id' =>  $dataUser->id,
+            'action' => 'update',
+            'model_type' => Auth()->user()->name,
+            'model_id' =>  $idadmin,
+            'changes' => array_diff($data1, $data),
+        ]);
+        $dataUser->update($data);
+        return redirect()->back()->with('success', 'Cập nhật thành công!');
+    }
+
     public function profileWishlist()
     {
-        return view('client.user.profile.wishlist');
+        if (!Auth::check()) {
+            return redirect()->route('accountUser.login')->with('error', 'Bạn cần đăng nhập để xem danh sách yêu thích.');
+        }
+
+
+        $userId = Auth::id();
+
+
+        $wishlistProductIds = Wishlist::where('user_id', $userId)->pluck('product_id')->toArray();
+
+        if (empty($wishlistProductIds)) {
+            return view('client.user.profile.wishlist', ['message' => 'Danh sách yêu thích của bạn trống.']);
+        }
+
+
+        $products = Product::query()
+            ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+            ->with([
+                'colors' => fn($query) => $query->select('colors.id', 'colors.name', 'colors.sku_color'),
+                'images' => fn($query) => $query->select('product_images.id', 'product_images.product_id', 'product_images.color_id', 'product_images.image_url'),
+            ])
+            ->select([
+                'products.id',
+                'products.product_name',
+                'products.price',
+                'products.slug',
+                DB::raw('COUNT(DISTINCT product_variants.size_id) as distinct_size_count'),
+                DB::raw('(SELECT SUM(stock_quantity) FROM product_variants WHERE product_variants.product_id = products.id) as total_stock_quantity')
+            ])
+            ->whereIn('products.id', $wishlistProductIds)
+            ->groupBy('products.id')
+            ->get();
+
+        $products = $products->map(function ($product) {
+
+            $imagesByColor = $product->images->groupBy('color_id');
+
+
+            $product->colors = $product->colors->map(function ($color) use ($imagesByColor) {
+                $images = $imagesByColor->get($color->id, collect());
+                $mainImage = $images->first()?->image_url ?? null;
+                $hoverImage = $images->skip(1)->first()?->image_url ?? null;
+
+                return [
+                    'id' => $color->id,
+                    'name' => $color->name,
+                    'sku_color' => $color->sku_color,
+                    'main_image' => $mainImage,
+                    'hover_image' => $hoverImage,
+                ];
+            });
+
+
+            $firstColor = $product->colors->first();
+            $product->main_image_url = $firstColor ? $firstColor['main_image'] : null;
+            $product->hover_main_image_url = $firstColor ? $firstColor['hover_image'] : null;
+
+
+            return [
+                'id' => $product->id,
+                'name' => $product->product_name,
+                'price' => $product->price,
+                'slug' => $product->slug,
+                'distinct_size_count' => $product->distinct_size_count,
+                'total_stock_quantity' => $product->total_stock_quantity,
+                'main_image_url' => $product->main_image_url,
+                'hover_main_image_url' => $product->hover_main_image_url,
+                'colors' => $product->colors,
+            ];
+        });
+        $wishlist = [];
+
+        if (Auth::check()) {
+
+            $wishlist = Wishlist::where('user_id', Auth::id())
+                ->pluck('product_id')
+                ->toArray();
+        }
+
+        return view('client.user.profile.wishlist', compact('products', 'wishlist'));
     }
     public function checkPassword()
     {
@@ -167,10 +298,51 @@ class AccountController extends Controller
     public function StoreEmail(Request $request, String $id)
     {
         $dataUser = User::query()->findOrFail($id);
-        $data = [ 
-            'email' => $request->email 
+        $data = [
+            'email' => $request->email
         ];
         $dataUser->update($data);
-        return redirect()->route('account.profile',$dataUser->id);
+        return redirect()->route('account.profile', $dataUser->id);
+    }
+    public function checkPasswordProfile(Request $request)
+    {
+        $request->validate([
+            'password' => 'required',
+        ]);
+
+        if (Hash::check($request->password, auth()->user()->password)) {
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 401);
+    }
+    public function editPassword()
+    {
+        $id = Auth::id();
+        $dataUser = User::query()->findOrFail($id);
+        return view('client.user.profile.change.indexpassword', compact('dataUser'));
+    }
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'password' => 'required|min:6|confirmed',
+            'password_confirmation' => 'required',
+        ], [
+            'old_password.required' => 'Mật khẩu cũ là bắt buộc.',
+            'password.required' => 'Mật khẩu mới là bắt buộc.',
+            'password.min' => 'Mật khẩu mới phải có ít nhất 6 ký tự.',
+            'password.confirmed' => 'Mật khẩu mới và xác nhận mật khẩu không khớp.',
+            'password_confirmation.required' => 'Xác nhận mật khẩu là bắt buộc.',
+        ]);
+        // dd($request->all());
+        if (Hash::check($request->old_password, Auth::user()->password)) {
+            Auth::user()->update([
+                'password' => Hash::make($request->password),
+            ]);
+            return back()->with('success', 'Đổi mật khẩu thành công');
+        } else {
+            return back()->with('error', 'Mật khẩu cũ không chính xác');
+        }
     }
 }

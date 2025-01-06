@@ -18,7 +18,7 @@
                     <!-- page-title -->
                     <div class="tf-page-title">
                         <div class="container-full">
-                            <div class="heading text-center">Thay đổi Đỉa chỉ Email</div>
+                            <div class="heading text-center">Thay đổi mật khâu</div>
                         </div>
                     </div>
                     <!-- /page-title -->
@@ -36,28 +36,54 @@
                                     <div class="my-account-content account-edit">
                                         <div class="">
                                             <form id="update-admin-form"
-                                                action="{{ route('account.StoreEmail', auth()->user()->id) }}"
+                                                action="{{ route('account.updatePassword', auth()->user()->id) }}"
                                                 method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="row">
                                                     <div class="col-lg-12 col-md-12 col-12"> <!-- Địa chỉ cụ thể -->
-                                                        <!-- Số điện thoại -->
+                                                        <!-- Mật khẩu cũ -->
                                                         <div class="form-group">
-                                                            <label for="phone_number">Email</label>
-                                                            <input type="email" name="email" class="form-control"
-                                                                value="" placeholder="Nhập vào số Email"
-                                                                @error('email') is-invalid @enderror>
-                                                            @error('email')
+                                                            <label for="old_password">Nhập mật khẩu cũ </label>
+                                                            <input
+                                                                class="form-control @error('old_password') is-invalid @enderror"
+                                                                placeholder=" Nhập mật khẩu cũ " type="password"
+                                                                name="old_password" value="{{ old('old_password') }}">
+                                                            {{-- <label  for="tf-field-label">Email *</label> --}}
+                                                            @error('old_password')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
                                                         </div>
                                                     </div>
 
+                                                    <div class="form-group">
+                                                        <label for="password">Nhập mật khẩu mới </label>
+                                                        <input
+                                                            class="form-control @error('password') is-invalid @enderror"
+                                                            placeholder=" Nhập mật khẩu mới" type="password"
+                                                            name="password" value="{{ old('password') }}">
+                                                        {{-- <label  for="tf-field-label">Email *</label> --}}
+                                                        @error('password')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="password_confirmation">Nhập lại mật khẩu </label>
+                                                        <input
+                                                            class="form-control @error('password_confirmation') is-invalid @enderror"
+                                                            placeholder="Nhập lại mật khẩu " type="password"
+                                                            name="password_confirmation" value="{{ old('password_confirmation') }}">
+                                                        {{-- <label  for="tf-field-label">Email *</label> --}}
+                                                        @error('password_confirmation')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+
                                                     <!-- Nút cập nhật -->
                                                     <div class="form-group mt-2">
                                                         <button type="submit" name="edit_user" id="submit-btn"
-                                                            class="btn btn-primary edit_user">Cập nhật</button>
+                                                            class="btn btn-primary edit_user">Thay đổi </button>
                                                     </div>
                                                 </div>
                                             </form>

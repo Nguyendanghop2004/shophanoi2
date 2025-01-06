@@ -22,7 +22,7 @@ class CodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'reset_code' => 'required|string|size:6|exists:codes,code',
+            'reset_code' => 'required|string|size:6',
         ];
     }
     public function messages()
@@ -31,7 +31,6 @@ class CodeRequest extends FormRequest
             'reset_code.required' => 'Mã code là bắt buộc.',
             'reset_code.string' => 'Mã code phải là một chuỗi ký tự.',
             'reset_code.size' => 'Mã code phải có độ dài 6 ký tự.',
-            'reset_code.exists' => 'Mã code không tồn tại trong hệ thống.',
         ];
     }
 }

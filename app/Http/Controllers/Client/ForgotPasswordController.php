@@ -8,6 +8,7 @@ use App\Http\Requests\Client\UpdatePasswordRequest;
 use App\Mail\ForgotPassword;
 use App\Models\PasswordResets;
 use App\Models\User;
+use Cache;
 use Carbon\Carbon;
 use DB;
 use Hash;
@@ -18,7 +19,7 @@ class ForgotPasswordController extends Controller
 {
     public function sendResetCode(Request $request)
     {
-
+        // dd(1);
         $request->validate([
             'email' => 'required|email|exists:users,email',
         ], [
@@ -30,18 +31,21 @@ class ForgotPasswordController extends Controller
         $reset_code = \Str::random(6);
         $expiresAt = Carbon::now()->addMinutes(1);
         $data =  User::where('email', $request->email)->first();
-        $dataToken = [
-            'email' => $request->email,
-            'token' => $token,
-            'reset_code' => $reset_code,
-            'expires_at' => $expiresAt,
-        ];
-        if (PasswordResets::query()->create($dataToken)) {
-            Mail::to($request->email)->send(new ForgotPassword($data, $reset_code));
-            return redirect()->route('account.resetPassword', $token)->with('success', 'kiểm tra email');
+        if (!$data->status) {
+            $dataToken = [
+                'email' => $request->email,
+                'token' => $token,
+                'reset_code' => $reset_code,
+                'expires_at' => $expiresAt,
+            ];
+            if (PasswordResets::query()->create($dataToken)) {
+                Mail::to($request->email)->send(new ForgotPassword($data, $reset_code));
+                return redirect()->route('account.resetPassword', $token)->with('success', 'kiểm tra email');
+            }
+            return redirect()->back()->with('error', 'Lỗi');
+        } else {
+            return redirect()->back()->with('error', 'tài khoản của bạn đã bị khóa');
         }
-
-        return redirect()->back()->with('erro', 'loi');
     }
     public function resetPassword($token)
     {
@@ -62,10 +66,22 @@ class ForgotPasswordController extends Controller
         if (Carbon::now()->greaterThan($reset->expires_at)) {
             return redirect()->back()->with('error', 'Mã code đã hết hạn');;
         }
-        return redirect()->route('account.changePassword', $request->token)->with('success','Thành công');
+        return redirect()->route('account.changePassword', $request->token)->with('success', 'Thành công');
     }
-    public function resetCode($token)
+    public function resetCode($token, Request $request)
     {
+        $key = 'last_send_action_' . $request->ip();
+        $cooldown = 60; // 10 giây
+
+        $lastActionTime = Cache::get($key);
+
+        if ($lastActionTime && now()->diffInSeconds($lastActionTime) < $cooldown) {
+            $remainingTime = $cooldown - now()->diffInSeconds($lastActionTime);
+            return redirect()->back()->with('error', "Vui lòng đợi 60 giây trước khi thử lại.", );
+        }
+        // Cập nhật thời gian gửi lần cuối
+        Cache::put($key, now(), $cooldown);
+        // Xử lý logic gửi
         $expiresAt = Carbon::now()->addMinutes(1);
         $data =  PasswordResets::where('token', $token)->first();
         $reset_code = \Str::random(6);
@@ -86,26 +102,26 @@ class ForgotPasswordController extends Controller
     public function indexChangePassword($token)
     {
         try {
-        
+
             $dataemail = DB::table('password_resets')->where('token', $token)->first();
-    
-         
+
+
             if (!$dataemail) {
                 throw new \Exception('Token không hợp lệ hoặc đã hết hạn.');
             }
             $data = User::where('email', $dataemail->email)->first();
-    
-           
+
+
             if (!$data) {
                 throw new \Exception('Người dùng không tồn tại.');
             }
-     
+
             return view('client.user.reset-change-password', compact('data'));
         } catch (\Exception $e) {
             return redirect()->route('error')->with('error', $e->getMessage());
         }
     }
-    
+
     public function changePassword(string $id, UpdatePasswordRequest $request)
     {
         $dataUser = User::query()->latest('id')->findOrFail($id);
