@@ -112,7 +112,7 @@
                         <div class="tf-mini-cart-bottom-wrap">
                             <div class="tf-cart-totals-discounts">
                                 <div class="tf-cart-total">Tổng Tiền</div>
-                                <div class="tf-totals-total-value fw-6"></div>
+                                <div class="tf-totals-total-value fw-6">0 VNĐ</div>
                             </div>
                             {{-- <div class="tf-cart-tax">Taxes and <a href="#">shipping</a> calculated at checkout
                             </div> --}}
@@ -133,11 +133,11 @@
                                 <a href="{{ route('cart') }}" 
                                    class="tf-btn btn-outline radius-3 link w-100 justify-content-center" 
                                    id="viewCartBtn" 
-                                   disabled>View cart</a>
-                                <a href="checkout.html" 
+                                   disabled>Xem Giỏ</a>
+                                <a href="{{route('checkout')}}" 
                                    class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center" 
                                    id="checkOutBtn" 
-                                   disabled><span>Check out</span></a>
+                                   disabled><span>Thanh Toán</span></a>
                             </div>
                             
                             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
