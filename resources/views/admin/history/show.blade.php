@@ -80,10 +80,12 @@ h2 {
                         <strong>Cập nhật mới: </strong>{{ $admin->updated_at }}
                     </div>
                     <div class="card-body">
-                        <p><strong>Name: </strong>{{ $admin->name }}</p>
+                        <p><strong>Tên: </strong>{{ $admin->name }}</p>
                         <p><strong>Email: </strong>{{ $admin->email }}</p>
+                   
                     </div>
                 </div>
+
             </div>
 
             <!-- Người dùng 2 -->
@@ -99,17 +101,23 @@ h2 {
                     </div>
                     <div class="card-body">
                         @foreach ($data->changes as $key => $old)
+                        {{-- @dd($data->changes) --}}
                             @if ($key == 'name')
-                                <p><strong>Tên:</strong> {{ $old }}</p>
+                                <p><strong>Tên:</strong>{{ $old }}</p>
                             @endif
                             @if ($key == 'email')
-                                <p><strong>Email:</strong> {{ $old }}</p>
+                                <p><strong>Email: </strong> {{ $old }}</p>
                             @endif
-                            {{-- Hiển thị hình ảnh nếu có --}}
+                            @if ($key == 'address')
+                                <p><strong>Đỉa chỉ: </strong> {{ $old }}</p>
+                            @endif
+                            @if ($key == 'phone_number')
+                                <p><strong>Số điện thoại: </strong> {{ $old }}</p>
+                            @endif
                             {{-- @if ($key == 'image_path')
                                 <p><strong>Ảnh:</strong>
-                                    <img src="{{ Storage::url($old) }}" alt="Ảnh quản trị viên" class="img-fluid rounded" style="width: 100px; height: 60px;">
-                                </p>
+                                    <img src="{{ Storage::url($old) }}" alt="Ảnh quản trị viên" width="100px"
+                                        height="60px">
                             @endif --}}
                         @endforeach
                     </div>

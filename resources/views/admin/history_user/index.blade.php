@@ -19,7 +19,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Name update</th>
+                                <th scope="col">Tài khoản update</th>
                                 <th scope="col">Chức năng thay đổi</th>
                                 <th scope="col"> Id Tài khoản bị thay đổi</th>
                                 <th scope="col">updated_at</th>
@@ -28,7 +28,8 @@
                         </thead>
                         <tbody>
                             @foreach ($histories as $admin)
-                            {{-- @dd($admin->admin) --}}
+                           
+
                                 <tr>
                                     <th scope="row"> {{ $admin->id}}</th>
                                     <td> {{$admin->model_type}} </td>
