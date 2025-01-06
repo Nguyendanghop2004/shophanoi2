@@ -179,7 +179,6 @@ Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetch
 Route::prefix('profile')
     ->as('profile.')
     ->group(function () {
-
         Route::get('/order/{id}', [ProfileOrderController::class, 'showProfileOrder'])->name('profileOrder');
     });
 
