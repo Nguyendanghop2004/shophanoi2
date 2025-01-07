@@ -11,15 +11,7 @@
                 <h4>Danh Sách Đơn Hàng Cần Giao Shipper</h4>
             </div>
             <div class="card-body">
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @elseif (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif
+              
 
                 <div class="table-responsive">
                     <table class="table table-hover">

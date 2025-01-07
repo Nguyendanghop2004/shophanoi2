@@ -24,7 +24,7 @@ class OrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_number' => 'required|string|regex:/^(0[3-9])[0-9]{8}$/', 
+            'phone_number' => 'required|string|regex:/^[0-9]{10}$/', 
             'address' => 'required|string|max:255',
             'city_id' => 'required|integer',
             'wards_id' => 'required|integer',
@@ -44,7 +44,7 @@ class OrderRequest extends FormRequest
     {
         return [
             'phone_number.required' => 'Số điện thoại là bắt buộc.',
-            'phone_number.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại hợp lệ (ví dụ: 0912345678).',
+        'phone_number.regex' => 'Số điện thoại phải bao gồm đúng 10 chữ số.',
             'address.required' => 'Địa chỉ là bắt buộc.',
             'city_id.required' => 'Thành phố là bắt buộc.',
             'wards_id.required' => 'Xã/Phường là bắt buộc.',

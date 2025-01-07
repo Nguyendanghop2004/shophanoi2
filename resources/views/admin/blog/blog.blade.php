@@ -10,7 +10,7 @@
             <div class="card-header">
                 <h4>Danh sách bài viết</h4>
                 <div class="card-header-action">
-                    <a href="{{ route('admin.accounts.create') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.blog.index') }}" class="btn btn-primary">
                         Tạo Mới
                     </a>
                 </div>

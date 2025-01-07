@@ -46,5 +46,4 @@ public function ward()
     {
         return $this->belongsTo(Admin::class, 'assigned_shipper_id');
     }
-    
 }

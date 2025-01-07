@@ -31,7 +31,9 @@ class CheckOutController extends Controller
 {
     public function checkout()
     {
+        
         $cartDetails = [];
+       
         $totalPrice = 0;
         $user = auth()->user();
     
@@ -49,14 +51,14 @@ class CheckOutController extends Controller
                     ])->first();
     
                     if (!$variant) {
-                        return redirect()->route('cart')->with('error', "Không tìm thấy biến thể sản phẩm.");
+                        return redirect()->route('cart')->with('error', "Một số sản phẩm đã bị xóa hoặc không còn tồn tại trong kho.");
                     }
     
                    
                     if ($item->quantity > $variant->stock_quantity) {
                         return redirect()->route('cart')->with(
                             'error',
-                            "Sản phẩm '{$item->product->product_name}' chỉ còn lại {$variant->stock_quantity} trong kho."
+                            "Sản phẩm trong kho không đủ số lượng."
                         );
                     }
     
@@ -96,14 +98,14 @@ class CheckOutController extends Controller
                     ])->first();
     
                     if (!$variant) {
-                        return redirect()->route('cart')->with('error', "Không tìm thấy biến thể sản phẩm.");
+                        return redirect()->route('cart')->with('error', "Một số sản phẩm đã bị xóa hoặc không còn tồn tại trong kho.");
                     }
     
-                    // Kiểm tra tồn kho
+                   
                     if ($item['quantity'] > $variant->stock_quantity) {
                         return redirect()->route('cart')->with(
                             'error',
-                            "Sản phẩm '{$item['product_name']}' chỉ còn lại {$variant->stock_quantity} trong kho."
+                            "Sản phẩm trong kho không đủ số lượng."
                         );
                     }
     
@@ -177,62 +179,105 @@ class CheckOutController extends Controller
     {
         $paymentMethod = $request->input('payment');
         $cartDetails = $this->getCartDetails();
+        
         $totalPrice = $cartDetails['totalPrice'];
         $orderCode = 'HN' . strtoupper(uniqid());
-       
-        $outOfStockItems = []; 
+        
+        $outOfStockItems = [];
+        $deletedItems = [];
+        $notAvailableItems = []; 
     
-       
         DB::beginTransaction();
     
         try {
             foreach ($cartDetails['items'] as $item) {
+                
                 $productVariant = ProductVariant::where('product_id', $item['product_id'])
                     ->where('color_id', $item['color_id'])
                     ->where('size_id', $item['size_id'])
                     ->lockForUpdate()
                     ->first();
     
-                if ($productVariant) {
-                  
-                    if ($productVariant->stock_quantity == 0) {
-                        $outOfStockItems[] = [
-                            'product_name' => $item['product_name'],
-                            'requested_quantity' => $item['quantity'],
-                            'remaining_quantity' => 0
-                        ];
-                    } elseif ($productVariant->stock_quantity < $item['quantity']) {
-                        $outOfStockItems[] = [
-                            'product_name' => $item['product_name'],
-                            'requested_quantity' => $item['quantity'],
-                            'remaining_quantity' => $productVariant->stock_quantity
-                        ];
-                    } else {
-                     
-                        $productVariant->decrement('stock_quantity', $item['quantity']);
-                    }
+              
+                if (!$productVariant) {
+                    $outOfStockItems[] = [
+                        'product_name' => $item['product_name'],
+                        'requested_quantity' => $item['quantity'],
+                        'remaining_quantity' => 0
+                    ];
+                    continue;
                 }
+    
+                
+                $product = Product::find($item['product_id']);
+                if ($product && $product->deleted_at !== null) {
+                    $deletedItems[] = $item; 
+                    continue;
+                }
+    
+               
+                if ($product && $product->status == 0) {
+                    $notAvailableItems[] = $item; 
+                    continue;
+                }
+    
+               
+                if ($productVariant->stock_quantity < $item['quantity']) {
+                    $outOfStockItems[] = [
+                        'product_name' => $item['product_name'],
+                        'requested_quantity' => $item['quantity'],
+                        'remaining_quantity' => $productVariant->stock_quantity
+                    ];
+                    continue;
+                }
+    
+               
+                $productVariant->stock_quantity -= $item['quantity'];
             }
     
-     
+           
+            if (!empty($deletedItems)) {
+                DB::rollBack();
+                return redirect()->route('cart')
+                    ->with('error', 'Một số sản phẩm đã bị xóa hoặc không còn tồn tại trong kho.');
+            }
+    
+           
             if (!empty($outOfStockItems)) {
                 DB::rollBack();
                 return redirect()->route('cart')
-                  
                     ->with('error', 'Một số sản phẩm không đủ số lượng trong kho hoặc đã hết hàng.');
             }
     
            
+            if (!empty($notAvailableItems)) {
+                DB::rollBack();
+                return redirect()->route('cart')
+                    ->with('error', 'Một số sản phẩm không còn kinh doanh.');
+            }
+    
+        
             if (empty($cartDetails['items'])) {
                 DB::rollBack();
                 return redirect()->back()->with('error', 'Giỏ hàng của bạn trống!');
             }
     
-       
+          
             $order = $this->createOrder($request, $cartDetails['items'], $totalPrice, $orderCode, $paymentMethod);
     
-            
+         
             if ($paymentMethod === 'cod') {
+                foreach ($cartDetails['items'] as $item) {
+                    $productVariant = ProductVariant::where('product_id', $item['product_id'])
+                        ->where('color_id', $item['color_id'])
+                        ->where('size_id', $item['size_id'])
+                        ->first();
+    
+                    if ($productVariant) {
+                        $productVariant->save();
+                    }
+                }
+    
                 DB::commit();
                 return $this->handleCOD($order);
             } elseif ($paymentMethod === 'vnpay') {
@@ -244,35 +289,48 @@ class CheckOutController extends Controller
             return redirect()->route('home')->with('error', 'Phương thức thanh toán không hợp lệ.');
     
         } catch (\Exception $e) {
-          
             DB::rollBack();
             return redirect()->back()->with('error', 'Đã có lỗi xảy ra trong quá trình đặt hàng.');
         }
     }
     
     
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     public function getCartDetails()
 {
-    
     $cartDetails = [];
     $totalPrice = 0;
 
-    
     if (auth()->check()) {
-     
         $cart = Cart::where('user_id', auth()->id())
             ->with(['cartItems.product.images', 'cartItems.color', 'cartItems.size'])
             ->first();
 
         if ($cart && $cart->cartItems->isNotEmpty()) {
-          
             $cartDetails = $cart->cartItems->map(function ($item) {
                 $product = $item->product;
                 $color = $item->color;
                 $size = $item->size;
-                $image = $product->images->firstWhere('color_id', $color->id);
+                
+                
+                if (!$product || !$color || !$size) {
+                    return null; 
+                }
+                
+                
+                $image = $product->images ? $product->images->firstWhere('color_id', $color->id) : null;
                 $imageUrl = $image ? $image->image_url : '/default-image.jpg';
 
                 return [
@@ -289,11 +347,14 @@ class CheckOutController extends Controller
                 ];
             });
 
-     
+           
+            $cartDetails = $cartDetails->filter(function ($item) {
+                return $item !== null;
+            });
+
             $totalPrice = $cartDetails->sum('subtotal');
         }
     } else {
- 
         $cart = session()->get('cart', []);
 
         if (!empty($cart)) {
@@ -301,9 +362,14 @@ class CheckOutController extends Controller
                 $product = Product::find($item['product_id']);
                 $color = Color::find($item['color_id']);
                 $size = Size::find($item['size_id']);
-                $image = $product->images->firstWhere('color_id', $color->id);
-
+                
                
+                if (!$product || !$color || !$size) {
+                    continue;
+                }
+
+              
+                $image = $product->images ? $product->images->firstWhere('color_id', $color->id) : null;
                 $imageUrl = $image ? $image->image_url : '/default-image.jpg';
 
                 $cartDetails[] = [
@@ -320,13 +386,14 @@ class CheckOutController extends Controller
                 ];
             }
 
-           
             $totalPrice = array_sum(array_column($cartDetails, 'subtotal'));
         }
     }
 
     return ['items' => $cartDetails, 'totalPrice' => $totalPrice];
 }
+
+    
 
 private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $orderCode, $paymentMethod)
 {

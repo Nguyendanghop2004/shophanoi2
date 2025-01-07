@@ -1,4 +1,4 @@
-<footer id="footer" class="footer background-gray md-pb-70">
+<footer id="footer" class="footer background-gray md-pb-70 mt-5">
     <div class="footer-wrap">
         <div class="footer-body">
             <div class="container">

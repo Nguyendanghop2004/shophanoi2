@@ -3,12 +3,12 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Sản Phẩm Giảm Giá</h1>
+            <h1>Sản Phẩm Giảm Giá </h1>
         </div>
 
         <div class="card card-primary">
             <div class="card-header">
-                <h4>Danh Sách Sản Phẩm Được Giảm</h4>
+                <h4>Danh Sách Sản Phẩm Được Giảm </h4>
                 <div class="card-header-action">
                     <a href="{{ route('admin.sales.create') }}" class="btn btn-primary">
                         Tạo Mới
@@ -19,11 +19,11 @@
             <div class="card-body">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <div class="section-title mt-0"></div>
-                    <div class="card-header-action">
-                        <form class="form-inline" method="GET" action="">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <form class="form-inline" method="GET" action="{{ route('admin.sales.index') }}">
                             <div class="search-element">
-                                <input class="form-control" type="search" placeholder="Tìm kiếm..." aria-label="Search"
-                                    name="name" value="" data-width="250">
+                                <input class="form-control" name="search" type="search" placeholder="Search"
+                                    aria-label="Search" data-width="250" value="{{ request()->input('search') }}">
                                 <button class="btn" type="submit"><i class="fas fa-search"></i></button>
                             </div>
                         </form>
@@ -39,7 +39,6 @@
                                     <th>Loại giảm giá</th>
                                     <th>Giá trị giảm</th>
                                     <th>Thời gian</th>
-                                    <th>Trạng thái</th>
                                     <th>Hành động</th>
                                 </tr>
                             </thead>
@@ -48,19 +47,37 @@
                                     <tr>
                                         <td>{{ $sale->id }}</td>
                                         <td>{{ $sale->product->product_name }}</td>
-                                        <td>{{ $sale->discount_type }}</td>
-                                        <td>{{ $sale->discount_value }}</td>
-                                        <td>{{ $sale->start_date }} - {{ $sale->end_date }}</td>
                                         <td>
-                                            @if (now()->between($sale->start_date, $sale->end_date))
-                                                <span class="badge badge-success">Đang giảm</span>
+                                            @if ($sale->discount_type == 'fixed')
+                                                Giá tiền
                                             @else
-                                                <span class="badge badge-danger">Hết hạn giảm</span>
+                                                Phần Trăm
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.sales.edit', $sale->id) }}" class="btn btn-warning">Chỉnh sửa</a>
-                                            <form action="{{ route('admin.sales.destroy', $sale->id) }}" method="POST" style="display:inline-block;">
+                                            @if ($sale->discount_type == 'fixed')
+                                                {{ number_format($sale->discount_value, 0, ',', '.') }} VNĐ
+                                            @else
+                                                {{ number_format($sale->discount_value, 0, ',', '.') }} %
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($sale->start_date)
+                                                {{ $sale->start_date }}
+                                            @endif
+                                        
+                                            @if ($sale->end_date)
+                                                 - {{ $sale->end_date }}
+                                            @else
+                                              -  Vô Hạn 
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.sales.edit', $sale->id) }}"
+                                                class="btn btn-warning">Chỉnh
+                                                sửa</a>
+                                            <form action="{{ route('admin.sales.destroy', $sale->id) }}" method="POST"
+                                                style="display:inline-block;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger">Xóa</button>

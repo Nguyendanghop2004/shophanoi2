@@ -5,21 +5,22 @@ namespace App\Http\Controllers\Admin;
 use App\Models\City;
 use App\Models\Admin;
 use App\Models\Order;
-use App\Models\ProductVariant;
 use App\Models\Wards;
 use App\Models\Shipper;
 use App\Models\Province;
 use App\Models\OrderItem;
+use Illuminate\Http\Request;
+use App\Models\ProductVariant;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Crypt;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\File;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Illuminate\Support\Facades\Auth;
 
 
 class OrderController extends Controller
@@ -40,10 +41,15 @@ class OrderController extends Controller
         if ($request->has('status') && !empty($request->status)) {
             $query->where('status', $request->status);
         }
-        
+        $query->where(function($query) {
+            $query->where('payment_method', '!=', 'vnpay')
+                  ->orWhere('payment_status', '!=', 'chờ thanh toán');
+        });
         if ($request->has('payment_method') && !empty($request->payment_method)) {
             $query->where('payment_method', $request->payment_method);
         }
+        $query->orderBy(DB::raw("status = 'chờ xác nhận'"), 'desc')
+      ->orderBy('updated_at', 'desc');
 
         $orders = $query->paginate(10);
 
@@ -160,6 +166,7 @@ public function showAssignShipperForm()
     $orders = Order::whereNull('assigned_shipper_id')
                    ->whereIn('status', ['đã xác nhận'])
                    ->get();
+
 
   
     $shippers = Admin::whereHas('roles', function ($query) {

@@ -109,8 +109,8 @@ class CartController extends Controller
     {
         $cart = Session::get('cart', []);
         $newItem = $request->only(['product_id', 'color_id', 'size_id', 'quantity']);
-
         $found = false;
+            
         foreach ($cart as &$item) {
             if (
                 $item['product_id'] == $newItem['product_id'] &&

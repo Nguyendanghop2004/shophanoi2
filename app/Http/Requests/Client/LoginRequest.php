@@ -23,7 +23,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => 'required|email|exists:users,email', // Kiểm tra email hợp lệ và có tồn tại trong bảng users
-            'password' => 'required|string|min:6',         // Kiểm tra mật khẩu không rỗng và có độ dài tối thiểu
+            'password' => 'required|string|min:8',         // Kiểm tra mật khẩu không rỗng và có độ dài tối thiểu
         ];
     }
     public function messages()
@@ -33,7 +33,7 @@ class LoginRequest extends FormRequest
             'email.email' => 'Email không hợp lệ.',
             'email.exists' => 'Email không tồn tại.',
             'password.required' => 'Mật khẩu là bắt buộc.',
-            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
         ];
     }
 }
