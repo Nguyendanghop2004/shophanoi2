@@ -23,10 +23,10 @@ use App\Http\Controllers\Client\ShopCollectionController;
 use App\Http\Controllers\Client\ShoppingCartController;
 use App\Http\Controllers\Client\TimeLineController;
 use App\Http\Controllers\ProfileController;
-
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Client\ReviewController;
 
-use App\Http\Controllers\WishlistController;
+
 
 use Illuminate\Support\Facades\Route;
 Route::middleware('checkPassword')->group(function () {

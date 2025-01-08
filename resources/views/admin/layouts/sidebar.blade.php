@@ -245,6 +245,7 @@
         </div>
         <ul class="sidebar-menu">
             <li class="dropdown ">
+                @can('account_admin')
             <li class="menu-header">Quản Lí</li>
 
 
@@ -258,7 +259,7 @@
 
                 </ul>
             </li>
-
+@endcan
             @can('blog')
                 <li class="dropdown">
                     <a href="{{ route('admin.blog.index') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
@@ -289,8 +290,10 @@
                     </ul>
                 </li>
             @endcan
-
+            @can('account_admin')
             <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
+            @endcan
+
             @can('contact')
                 <li><a class="nav-link" href="{{ route('admin.contact.index') }}"><i class="fas fa-envelope"></i>
                         <span>Liên Hệ</span></a></li>

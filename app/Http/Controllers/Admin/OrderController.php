@@ -70,9 +70,9 @@ class OrderController extends Controller
             $city = City::where('matp', $order->city_id)->first();
             $province = Province::where('maqh', $order->province_id)->first();
             $ward = Wards::where('xaid', $order->wards_id)->first();
-            
+            $shipper = Admin::where('id', $order->assigned_shipper_id)->first();
            
-            return view('admin.order.chitiet', compact('order', 'city', 'province', 'ward', 'orderitems'));
+            return view('admin.order.chitiet', compact('order', 'city', 'province', 'ward', 'orderitems','shipper'));
         } catch (DecryptException $e) {
            
             return redirect()->route('admin.error')->with('error', 'Dữ liệu không hợp lệ!');
@@ -80,6 +80,7 @@ class OrderController extends Controller
            
             return redirect()->route('admin.error')->with('error', 'Không tìm thấy đơn hàng!');
         }
+        
     }
     
 
@@ -132,34 +133,49 @@ class OrderController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $order = Order::find($id);
-        $order->status = $request->input('status');
-        
-       
-        if ($order->status == 'hủy') {
+        $currentStatus = $order->status;
+        $newStatus = $request->input('status'); 
+    
+        if (
+            ($currentStatus == 'chờ xác nhận' && !in_array($newStatus, ['chờ xác nhận', 'đã xác nhận', 'hủy'])) ||
+            ($currentStatus == 'đã xác nhận' && !in_array($newStatus, ['đã xác nhận', 'hủy'])) ||
+            ($currentStatus == 'ship đã nhận' && !in_array($newStatus, ['ship đã nhận', 'đang giao hàng'])) ||
+            ($currentStatus == 'đang giao hàng' && !in_array($newStatus, ['đang giao hàng', 'giao hàng thành công', 'giao hàng không thành công'])) ||
+            ($currentStatus == 'giao hàng thành công' && !in_array($newStatus, ['giao hàng thành công'])) ||
+            ($currentStatus == 'giao hàng không thành công' && !in_array($newStatus, ['giao hàng không thành công'])) ||
+            ($currentStatus == 'đã nhận hàng' && !in_array($newStatus, ['đã nhận hàng'])) ||
+            ($currentStatus == 'hủy' && !in_array($newStatus, ['hủy']))
+        ) {
+            return redirect()->route('admin.order.getList')->with('error', 'Trạng thái đã thay đổi.');
+        }
+    
+      
+        $order->status = $newStatus;
+    
+   
+        if ($newStatus == 'hủy') {
             $order->reason = $request->input('reason');
-            
-           
+    
             foreach ($order->orderItems as $orderItem) {
-               
                 $variant = ProductVariant::where('product_id', $orderItem->product_id)
-                    ->where('color_id', $orderItem->color_id) 
-                    ->where('size_id', $orderItem->size_id)  
+                    ->where('color_id', $orderItem->color_id)
+                    ->where('size_id', $orderItem->size_id)
                     ->first();
-        
-             
+    
                 if ($variant) {
-                    $variant->stock_quantity += $orderItem->quantity;  
-                    $variant->save();  
+                    $variant->stock_quantity += $orderItem->quantity;
+                    $variant->save();
                 }
             }
         } else {
-            $order->reason = null; 
+            $order->reason = null;
         }
-        
+    
         $order->save();
     
-        return redirect()->route('admin.order.getList')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+        return redirect()->route('admin.order.getList')->with('success', 'Trạng thái đơn hàng đã được cập nhật từ ' . $currentStatus . ' sang ' . $newStatus . '.');
     }
+    
 
 public function showAssignShipperForm()
 {
@@ -220,32 +236,58 @@ public function removeShipper($orderId)
 {
     $order = Order::findOrFail($orderId);
 
+    $errship = [
+        'ship đã nhận',
+        'đang giao hàng',
+        'giao hàng thành công',
+        'đã nhận hàng',
+        'giao hàng không thành công'
+    ];
+
+    if (in_array($order->status, $errship)) {
+        return redirect()->route('admin.order.danhsachgiaohang')
+            ->with('error', 'Không thể loại bỏ shipper vì đơn hàng đang ở trạng thái: ' . $order->status . '.');
+    }
+
     if ($order->assigned_shipper_id) {
         $order->assigned_shipper_id = null;
         $order->save();
 
-        return redirect()->route('admin.order.danhsachgiaohang')->with('success', 'Đã loại bỏ đơn hàng.');
+        return redirect()->route('admin.order.danhsachgiaohang')
+            ->with('success', 'Đã loại bỏ shipper khỏi đơn hàng.');
     }
 
-    return redirect()->route('admin.order.danhsachgiaohang')->with('error', 'Đơn hàng không có shipper.');
+    return redirect()->route('admin.order.danhsachgiaohang')
+        ->with('error', 'Đơn hàng không có shipper.');
 }
+
 public function updateStatusShip(Request $request, $id)
 {
     $order = Order::find($id);
+
+    if ($order->status == 'hủy') {
+        return redirect()->route('admin.order.danhsachgiaohang')
+            ->with('error', 'Đơn hàng đã bị hủy trước đó, không thể cập nhật trạng thái mới.');
+    }
+
     $order->status = $request->input('status');
-    
+
     if ($order->status == 'hủy') {
         $order->reason = $request->input('reason');
     } else {
         $order->reason = null; 
     }
+
     if ($order->status == 'giao hàng thành công') {
         $order->payment_status = 'đã thanh toán'; 
     }
+
     $order->save();
 
-    return redirect()->route('admin.order.danhsachgiaohang')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+    return redirect()->route('admin.order.danhsachgiaohang')
+        ->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
 }
+
 
 
 

@@ -7,26 +7,7 @@
     background-color: #ffc107;
     color: #000;
 }
-.status-da-xac-nhan {
-    background-color: #28a745;
-    color: #fff;
-}
-.status-ship-da-nhan {
-    background-color: #17a2b8; 
-    color: #fff;
-}
-.status-dang-giao-hang {
-    background-color: #007bff; 
-    color: #fff;
-}
-.status-giao-hang-thanh-cong {
-    background-color: #20c997; 
-    color: #fff;
-}
-.status-giao-hang-khong-thanh-cong {
-    background-color:#BB0000; 
-    color: #fff;
-}
+
 .status-huy {
     background-color:#FF0000; 
     color: #fff;
