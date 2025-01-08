@@ -72,32 +72,22 @@ class OrderController extends Controller
     public function show($encryptedId)
     {
         try {
-          
             $id = Crypt::decryptString($encryptedId);
     
-            
             $order = Order::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
     
-            
             $orderitems = $order->orderItems->map(function ($item) {
-                $product = $item->product; 
-                $image = $product->images()->where('color_id', $item->color_id)->first(); 
-                $item->image_url = $image ? $image->image_url : null; 
                 return $item;
             });
     
-           
             $city = City::where('matp', $order->city_id)->first();
             $province = Province::where('maqh', $order->province_id)->first();
             $ward = Wards::where('xaid', $order->wards_id)->first();
     
-            
             return view('client.orders.show', compact('order', 'orderitems', 'city', 'province', 'ward'));
         } catch (DecryptException $e) {
-            
             return redirect()->back();
         } catch (ModelNotFoundException $e) {
-           
             return redirect()->back();
         }
     }

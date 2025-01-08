@@ -20,6 +20,7 @@
                                 <th scope="col">ID Đơn Hàng</th>
                                 <th scope="col">Tên Người Mua</th>
                                 <th scope="col">Email</th>
+                                <th scope="col">Mã đơn hàng</th>
                                 <th scope="col">Trạng Thái</th>
                                 <th scope="col">Giao cho Shipper</th>
                             </tr>
@@ -30,7 +31,9 @@
                                     <td>{{ $order->id }}</td>
                                     <td>{{ $order->name }}</td>
                                     <td>{{ $order->email }}</td>
+                                    <td>{{ $order->order_code }}</td>
                                     <td>{{ $order->status }}</td>
+                                    
                                     <td>
                                         <form action="{{ route('admin.order.assignShipper', $order->id) }}" method="POST">
                                             @csrf
