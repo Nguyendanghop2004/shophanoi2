@@ -186,22 +186,16 @@
                         <div class="info-section">
                             <h5>Thông tin khách hàng</h5>
                             <p>Họ tên: {{ $order->name }}</p>
-                            <p>Điện thoại: {{ $order->phone_number }}</p>
-                            <p>Email: {{ $order->email }}</p>
-                            <p>Địa chỉ: {{ $order->address }}</p>
-                            <p>Phường/Xã: {{ $order->ward->name_xaphuong }}</p>
+                            <p>Điện thoại: {{ substr($order->phone_number, 0, 4) . str_repeat('x', strlen($order->phone_number) - 4) }}</p>
                             <p>Quận/Huyện: {{ $order->province->name_quanhuyen }}</p>
                             <p>Thành phố/Tỉnh: {{ $order->city->name_thanhpho }}</p>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="info-section">
-                            <h5>Thông tin giao nhận</h5>
+                            <h5>Thông tin khách hàng</h5>
                             <p>Họ tên: {{ $order->name }}</p>
-                            <p>Điện thoại: {{ $order->phone_number }}</p>
-                            <p>Email: {{ $order->email }}</p>
-                            <p>Địa chỉ: {{ $order->address }}</p>
-                            <p>Phường/Xã: {{ $order->ward->name_xaphuong }}</p>
+                            <p>Điện thoại: {{ substr($order->phone_number, 0, 4) . str_repeat('x', strlen($order->phone_number) - 4) }}</p>
                             <p>Quận/Huyện: {{ $order->province->name_quanhuyen }}</p>
                             <p>Thành phố/Tỉnh: {{ $order->city->name_thanhpho }}</p>
                         </div>
@@ -218,7 +212,7 @@
                                         <div class="ml-3">
                                             <p class="mx-4">{{ $item->product_name }}</p>
                                             <p class="mx-4">Giá: {{ number_format($item->price, 0, ',', '.') }} VND</p>
-                                            <p class="mx-4">Size: {{ $item->size }}</p>
+                                            <p class="mx-4">Size: {{ $item->size_name }}</p>
                                             <p class="mx-4">Số lượng: {{ $item->quantity }}</p>
                                         </div>
                                     </div>
@@ -231,10 +225,9 @@
                         <div class="info-section">
                             <h5>Thanh toán</h5>
                             <p>Trị giá đơn hàng: {{ number_format($order->total_price, 0, ',', '.') }} VND</p>
-                            <p>Giảm giá: 0 VND</p>
-                            <p>Phí giao hàng: 30.000 VND</p>
+                            <p>Phí giao hàng: Free Ship</p>
                             <p>Phí thanh toán: 0 VND</p>
-                            <p>Tổng thanh toán: {{ number_format($order->total_price + 30000, 0, ',', '.') }} VND</p>
+                            <p>Tổng thanh toán: {{ number_format($order->total_price, 0, ',', '.') }} VND</p>
                         </div>
                     </div>
                 </div>

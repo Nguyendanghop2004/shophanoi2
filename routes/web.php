@@ -187,7 +187,11 @@ Route::prefix('profile')
 
 
 Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
+// 1 cái của đặt hàng
 Route::post('/select-address', [CheckoutController::class, 'select_address']);
+// 1 cái của profile user
+Route::post('/select-address', [AccountController::class, 'select_address']);
+
 
 
 Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');

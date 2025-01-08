@@ -223,7 +223,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '{{ url('admin/accountsUser/select-address') }}',
+                                    url: '{{ url('select-address') }}',
                                     method: 'POST',
                                     data: {
                                         action: action,

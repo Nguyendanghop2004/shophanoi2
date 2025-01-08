@@ -34,7 +34,10 @@ class OrderController extends Controller
     $status = $request->query('status', '');
     
     $query = Order::where('user_id', $user->id);
-    
+    $query->where(function($query) {
+        $query->where('payment_method', '!=', 'vnpay')
+              ->orWhere('payment_status', '!=', 'chờ thanh toán');
+    });
     if ($status !== '') {
         $query->where('status', $status);
     }

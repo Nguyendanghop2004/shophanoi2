@@ -4,25 +4,28 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
-use App\Models\History;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\HistorieAdmins;
 
-class HistoryUserController extends Controller
+class HistoryController extends Controller
 {
-    public function  historyUser()
+    public function  history()
     {
-        $histories = History::get();
-      
-        return view('admin.history_user.index', compact('histories'));
+        $histories = HistorieAdmins::get();
+
+        return view('admin.history.index', compact('histories'));
     }
-    public function  showUser(string $id)
+    public function  show(string $id)
     {
-        $data = History::findOrFail($id);
-        $dataold = $data->user_id ;
-        $admin = User::findOrFail(  $dataold);
+        $data = HistorieAdmins::findOrFail($id);
+        $dataold = $data->model_id;
+        $admin = Admin::findOrFail($dataold);
         return view('admin.history.show', compact('data', 'admin'));
     }
-    
-    
+    public function  delete(string $id)
+    {
+
+        $dataUser = HistorieAdmins::findOrFail($id);
+        $dataUser->delete();
+        return back()->with('success', 'Xóa thành công');
+    }
 }

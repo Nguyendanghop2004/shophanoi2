@@ -1233,6 +1233,15 @@
     </section>
     <!-- /recent --> --}}
 @endsection
+<style>
+    .review-rating .bi-star-fill {
+    color: #FFD700; 
+}
+
+.review-rating .bi-star {
+    color: #ccc; 
+}
+</style>
 @section('product-detail')
     <!-- modal compare_color -->
     <div class="modal fade modalDemo tf-product-modal modal-part-content" id="compare_color">

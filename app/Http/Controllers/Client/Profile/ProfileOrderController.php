@@ -27,5 +27,6 @@ class ProfileOrderController extends Controller
         $ward = Wards::where('xaid', $order->wards_id)->first();
         return view('client.user.profile.order-profile.index', compact('order', 'orderitems', 'city', 'province', 'ward'));
     }
+   
 }
 

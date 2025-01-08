@@ -2,7 +2,41 @@
 
 @section('content')
 <section class="section">
-    
+    <style>
+        .status-cho-xac-nhan {
+    background-color: #ffc107;
+    color: #000;
+}
+.status-da-xac-nhan {
+    background-color: #28a745;
+    color: #fff;
+}
+.status-ship-da-nhan {
+    background-color: #17a2b8; 
+    color: #fff;
+}
+.status-dang-giao-hang {
+    background-color: #007bff; 
+    color: #fff;
+}
+.status-giao-hang-thanh-cong {
+    background-color: #20c997; 
+    color: #fff;
+}
+.status-giao-hang-khong-thanh-cong {
+    background-color:#BB0000; 
+    color: #fff;
+}
+.status-huy {
+    background-color:#FF0000; 
+    color: #fff;
+}
+.status-da-nhan-hang {
+    background-color: #00EE00; 
+    color: #fff;
+}
+
+    </style>
     <div class="section-header">
         <h1>Danh Mục Đơn Hàng</h1>
     </div>
@@ -110,7 +144,7 @@
                                             <button type="button" class="btn btn-danger btn-sm mt-2 mx-2 close-btn" onclick="resetStatus(this)">X</button>
                                         </div>
                                         @if($order->status != 'hủy' &&  $order->status != 'giao hàng thành công'  &&  $order->status != 'giao hàng không thành công' &&  $order->status != 'đã nhận hàng')
-                                    <button type="button"  class="btn btn-success btn-sm mt-2" onclick="confirmUpdateForm(this)">Cập Nhật</button>
+                                    <button type="button"  class="btn btn-success btn-sm mx-2 mt-2" onclick="confirmUpdateForm(this)">Cập Nhật</button>
                                          
                                     @endif
 
@@ -200,6 +234,37 @@
                 });
             @endif
         });
+
+</script>
+<script>
+    function applyStatusColor(selectElement) {
+    const statusClasses = {
+        'chờ xác nhận': 'status-cho-xac-nhan',
+        'đã xác nhận': 'status-da-xac-nhan',
+        'ship đã nhận': 'status-ship-da-nhan',
+        'đang giao hàng': 'status-dang-giao-hang',
+        'giao hàng thành công': 'status-giao-hang-thanh-cong',
+        'giao hàng không thành công': 'status-giao-hang-khong-thanh-cong',
+        'hủy': 'status-huy',
+        'đã nhận hàng': 'status-da-nhan-hang'
+    };
+
+    selectElement.className = selectElement.className.replace(/status-\w+/g, '');
+
+    const selectedStatus = selectElement.value.trim();
+    if (statusClasses[selectedStatus]) {
+        selectElement.classList.add(statusClasses[selectedStatus]);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('select[name="status"]').forEach(select => {
+        applyStatusColor(select);
+        select.addEventListener('change', function () {
+            applyStatusColor(this);
+        });
+    });
+});
 
 </script>
 @endsection

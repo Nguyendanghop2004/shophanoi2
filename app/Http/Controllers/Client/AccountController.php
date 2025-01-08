@@ -345,4 +345,25 @@ class AccountController extends Controller
             return back()->with('error', 'Mật khẩu cũ không chính xác');
         }
     }
+    public function select_address(Request $request)
+    {
+        $data = $request->all();
+        if (isset($data['action'])) {
+            $output = '';
+            if ($data['action'] == "city") {
+                $select_province = Province::where('matp', $data['ma_id'])->orderBy('maqh', 'ASC')->get();
+                $output .= '<option>--Chọn Quận Huyện---</option>';
+                foreach ($select_province as $province) {
+                    $output .= '<option value="' . $province->maqh . '">' . $province->name_quanhuyen . '</option>';
+                }
+            } else {
+                $select_wards = Wards::where('maqh', $data['ma_id'])->orderBy('xaid', 'ASC')->get();
+                $output .= '<option>--Chọn Xã Phường---</option>';
+                foreach ($select_wards as $ward) {
+                    $output .= '<option value="' . $ward->xaid . '">' . $ward->name_xaphuong . '</option>';
+                }
+            }
+            echo $output;
+        }
+    }
 }

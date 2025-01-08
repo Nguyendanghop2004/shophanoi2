@@ -32,9 +32,10 @@ class ReviewController extends Controller
 
         // Lấy sản phẩm từ đơn hàng (giả sử mỗi đơn hàng chỉ có một sản phẩm, nếu có nhiều sản phẩm thì xử lý thêm)
         $product = $order->orderItems->first();
-
+        $reviews = Review::where('order_id', $order->id)->get();
+        $reviewedProducts = $reviews->pluck('product_id')->toArray(); 
         // Trả về view để người dùng có thể đánh giá
-        return view('client.reviews.create', compact('order', 'product'));
+        return view('client.reviews.create', compact('order', 'product' ,'reviewedProducts'));
     }
 
     /**
