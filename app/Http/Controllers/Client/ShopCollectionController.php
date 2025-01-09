@@ -131,10 +131,10 @@ class ShopCollectionController extends Controller
                 'total_stock_quantity' => $product->total_stock_quantity,
                 'main_image_url' => $product->main_image_url,
                 'hover_main_image_url' => $product->hover_main_image_url,
-                'colors' => $product->colors, // Danh sách màu sắc của sản phẩm
+                'colors' => $product->colors,
             ];
         });
-
+      
         return $products;
     }
 

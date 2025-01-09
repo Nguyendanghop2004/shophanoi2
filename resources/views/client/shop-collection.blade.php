@@ -76,7 +76,7 @@
                                 <div class="box-title-price">
                                     <span>Price:</span>
                                     <div>
-                                        $<span id="display-min">0</span> - $<span id="display-max">2000000</span>
+                                        $<span id="display-min">0</span> - <span id="display-max">2.000.000 VNĐ</span>
                                     </div>
                                 </div>
                             </div>

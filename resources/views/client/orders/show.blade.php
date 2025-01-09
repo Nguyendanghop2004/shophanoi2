@@ -39,10 +39,7 @@
             <tbody>
                 @foreach ($orderitems as $item)
                 <tr>
-<<<<<<< HEAD
-                   
-=======
->>>>>>> 87728ad2e1edfb82580c712e489d7c2ad2c4e9f9
+
                     <td> <img src="{{Storage::url($item->image_url)}}" alt="" width="50px">{{ $item->product_name }}</td>
                     <td>{{ $item->quantity }}</td>
                     <td>{{ number_format($item->price, 0, ',', '.') }}₫</td>

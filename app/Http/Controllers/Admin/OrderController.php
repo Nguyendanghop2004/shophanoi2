@@ -265,25 +265,35 @@ public function updateStatusShip(Request $request, $id)
 {
     $order = Order::find($id);
 
+   
     if ($order->status == 'hủy') {
         return redirect()->route('admin.order.danhsachgiaohang')
-            ->with('error', 'Đơn hàng đã bị hủy trước đó, không thể cập nhật trạng thái mới.');
+            ->with('error', 'Đơn hàng đã bị hủy trước đó, không thể nhận đơn.');
     }
-
     $order->status = $request->input('status');
-
     if ($order->status == 'hủy') {
         $order->reason = $request->input('reason');
     } else {
         $order->reason = null; 
     }
-
     if ($order->status == 'giao hàng thành công') {
         $order->payment_status = 'đã thanh toán'; 
     }
+    if ($order->status == 'giao hàng không thành công') {
+        foreach ($order->orderItems as $orderItem) {
+            $variant = ProductVariant::where('product_id', $orderItem->product_id)
+                ->where('color_id', $orderItem->color_id)
+                ->where('size_id', $orderItem->size_id)
+                ->first();
 
+            if ($variant) {
+               
+                $variant->stock_quantity += $orderItem->quantity;
+                $variant->save();
+            }
+        }
+    }
     $order->save();
-
     return redirect()->route('admin.order.danhsachgiaohang')
         ->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
 }

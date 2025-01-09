@@ -51,6 +51,10 @@ class CheckOutController extends Controller
                     if (!$variant) {
                         return redirect()->route('cart')->with('error', "Một số sản phẩm đã bị xóa hoặc không còn tồn tại trong kho.");
                     }
+   
+                    if ($item->quantity <= 0) {
+                        return redirect()->route('cart')->with('error', "Sản phẩm không có đủ số lượng để thanh toán.");
+                    }
     
                     if ($item->quantity > $variant->stock_quantity) {
                         return redirect()->route('cart')->with(
@@ -65,7 +69,6 @@ class CheckOutController extends Controller
                     $image = $product->images->firstWhere('color_id', $color->id);
                     $imageUrl = $image ? $image->image_url : '/default-image.jpg';
     
-                  
                     $finalPrice = $product->price + $variant->price;
     
                     $cartDetails[] = [
@@ -101,6 +104,11 @@ class CheckOutController extends Controller
                         return redirect()->route('cart')->with('error', "Một số sản phẩm đã bị xóa hoặc không còn tồn tại trong kho.");
                     }
     
+          
+                    if ($item['quantity'] <= 0) {
+                        return redirect()->route('cart')->with('error', "Sản phẩm không có đủ số lượng để thanh toán.");
+                    }
+    
                     if ($item['quantity'] > $variant->stock_quantity) {
                         return redirect()->route('cart')->with(
                             'error',
@@ -114,7 +122,6 @@ class CheckOutController extends Controller
                     $image = $product->images->firstWhere('color_id', $color->id);
                     $imageUrl = $image ? $image->image_url : '/default-image.jpg';
     
-                    
                     $finalPrice = $product->price + $variant->price;
     
                     $cartDetails[] = [
@@ -148,6 +155,7 @@ class CheckOutController extends Controller
     
         return view('client.check-out', compact('cartDetails', 'totalPrice', 'cities', 'provinces', 'wards', 'user'));
     }
+    
     
     
     
