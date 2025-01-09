@@ -253,7 +253,7 @@
                             <a href="{{ route('wishlist') }}" class="nav-icon-item">
                                 <i class="icon icon-heart"></i>
 
-                                <span class="count-box">0</span>
+                                <span class="count-box">{{$wishlistCount}}</span>
                             </a>
                         </li>
                         <li class="nav-cart">

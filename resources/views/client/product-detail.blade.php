@@ -189,6 +189,10 @@
                                         </a> --}}
 
                                     </form>
+                                   
+                                        
+                                </div>
+                                <div class="tf-product-info-buy-button">
                                     <a href="javascript:void(0);"
                                             class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
                                             @if(in_array($product['id'], $wishlist))
@@ -215,8 +219,7 @@
                                                 </form>
                                             @endif
                                         </a>
-                                        
-                                </div>
+                                        </div>
                                 {{-- <div class="tf-product-info-extra-link">
                                     <a href="#compare_color" data-bs-toggle="modal" class="tf-product-extra-icon">
                                         <div class="icon">
@@ -1233,6 +1236,15 @@
     </section>
     <!-- /recent --> --}}
 @endsection
+<style>
+    .review-rating .bi-star-fill {
+    color: #FFD700; 
+}
+
+.review-rating .bi-star {
+    color: #ccc; 
+}
+</style>
 @section('product-detail')
     <!-- modal compare_color -->
     <div class="modal fade modalDemo tf-product-modal modal-part-content" id="compare_color">

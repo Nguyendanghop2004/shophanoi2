@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    @include('client.layouts.particals.page-title')
+ 
 
     <section class="flat-spacing-1">
         <div class="container">
@@ -26,7 +26,6 @@
                     </li>
 
                 </ul>
-                
             </div>
             <div class="tf-row-flex">
                 <div class="tf-shop-sidebar wrap-sidebar-mobile">
@@ -77,7 +76,7 @@
                                 <div class="box-title-price">
                                     <span>Price:</span>
                                     <div>
-                                        $<span id="display-min">0</span> - $<span id="display-max">2000000</span>
+                                        $<span id="display-min">0</span> - <span id="display-max">2.000.000 VNĐ</span>
                                     </div>
                                 </div>
                             </div>
@@ -172,129 +171,127 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const elements = {
-                rangeMin: document.getElementById('price-min'),
-                rangeMax: document.getElementById('price-max'),
-                displayMin: document.getElementById('display-min'),
-                displayMax: document.getElementById('display-max'),
-                productList: document.querySelector('.wrapper-shop'),
-                brandFilters: document.querySelectorAll('input[name="brand"]'),
-                colorFilters: document.querySelectorAll('input[name="color[]"]'),
-                sizeFilters: document.querySelectorAll('input[name="size"]'),
-            };
-        
-            const updatePrices = () => {
-                elements.displayMin.textContent = elements.rangeMin.value;
-                elements.displayMax.textContent = elements.rangeMax.value;
-            };
-        
-            const filterProducts = debounce(() => {
-                const url = new URL(window.location.href);
-        
-                url.searchParams.set('price_min', elements.rangeMin.value);
-                url.searchParams.set('price_max', elements.rangeMax.value);
-        
-                const selectedBrand = document.querySelector('input[name="brand"]:checked');
-                if (selectedBrand) {
-                    url.searchParams.set('brand', selectedBrand.dataset.brandId);
-                } else {
-                    url.searchParams.delete('brand');
-                }
-        
-                const selectedColors = Array.from(elements.colorFilters)
-                    .filter(input => input.checked)
-                    .map(input => input.value);
-                if (selectedColors.length > 0) {
-                    url.searchParams.set('color', selectedColors.join(','));
-                } else {
-                    url.searchParams.delete('color');
-                }
-        
-                const selectedSize = document.querySelector('input[name="size"]:checked');
-                if (selectedSize) {
-                    url.searchParams.set('size', selectedSize.value);
-                } else {
-                    url.searchParams.delete('size');
-                }
-        
-                fetch(url.toString(), { method: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-                    .then(response => response.text())
-                    .then(html => {
-                        if (elements.productList) {
-                            elements.productList.innerHTML = html;
-                        }
-                    })
-                    .catch(error => console.error('Lỗi:', error));
-            }, 300);
-        
-            const handleRangeInput = (isMin) => {
-                const minValue = parseInt(elements.rangeMin.value);
-                const maxValue = parseInt(elements.rangeMax.value);
-        
-                if (isMin && minValue > maxValue) {
-                    elements.rangeMin.value = maxValue;
-                } else if (!isMin && maxValue < minValue) {
-                    elements.rangeMax.value = minValue;
-                }
-        
-                updatePrices();
-                filterProducts();
-            };
-        
-            elements.rangeMin.addEventListener('input', () => handleRangeInput(true));
-            elements.rangeMax.addEventListener('input', () => handleRangeInput(false));
-        
-            elements.brandFilters.forEach(input => {
-                input.addEventListener('change', filterProducts);
-            });
-        
-            elements.colorFilters.forEach(input => {
-                input.addEventListener('change', filterProducts);
-            });
-        
-            elements.sizeFilters.forEach(input => {
-                input.addEventListener('change', filterProducts);
-            });
-        
-            updatePrices();
-        });
-        
-        function debounce(func, wait) {
-            let timeout;
-            return (...args) => {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func(...args), wait);
-            };
-        }
-        
-        document.getElementById('reset-filters').addEventListener('click', function() {
-            const radios = document.querySelectorAll('#facet-filter-form input[type="radio"], #facet-filter-form input[type="checkbox"]');
-            radios.forEach(radio => radio.checked = false);
-        
-            const rangeInputs = document.querySelectorAll('#facet-filter-form input[type="range"]');
-            rangeInputs.forEach(input => input.value = input.defaultValue);
-        
-            document.getElementById('display-min').innerText = document.getElementById('price-min').value;
-            document.getElementById('display-max').innerText = document.getElementById('price-max').value;
-        
-            document.getElementById('facet-filter-form').submit();
-        });
-        document.addEventListener('DOMContentLoaded', function () {
-    const colorFilters = document.querySelectorAll('input[name="color[]"]');
+    const elements = {
+        rangeMin: document.getElementById('price-min'),
+        rangeMax: document.getElementById('price-max'),
+        displayMin: document.getElementById('display-min'),
+        displayMax: document.getElementById('display-max'),
+        productList: document.querySelector('.wrapper-shop'),
+        brandFilters: document.querySelectorAll('input[name="brand"]'),
+        colorFilters: document.querySelectorAll('input[name="color[]"]'),
+        sizeFilters: document.querySelectorAll('input[name="size"]'),
+    };
 
-    colorFilters.forEach(input => {
-        input.addEventListener('change', function () {
-            const label = input.closest('label');
-            if (input.checked) {
-                label.classList.add('checked');
-            } else {
-                label.classList.remove('checked');
-            }
-        });
+    // Cập nhật giá trị hiển thị giá
+    const updatePrices = () => {
+        elements.displayMin.textContent = elements.rangeMin.value;
+        elements.displayMax.textContent = elements.rangeMax.value;
+    };
+
+    // Cập nhật URL với các tham số lọc
+    const updateURL = () => {
+        const url = new URL(window.location.href);
+
+        // Lọc giá
+        url.searchParams.set('price_min', elements.rangeMin.value);
+        url.searchParams.set('price_max', elements.rangeMax.value);
+
+        // Lọc thương hiệu
+        const selectedBrand = document.querySelector('input[name="brand"]:checked');
+        if (selectedBrand) {
+            url.searchParams.set('brand', selectedBrand.dataset.brandId);
+        } else {
+            url.searchParams.delete('brand');
+        }
+
+        // Lọc màu sắc
+        const selectedColors = Array.from(elements.colorFilters)
+            .filter(input => input.checked)
+            .map(input => input.value);
+        if (selectedColors.length > 0) {
+            url.searchParams.set('color', selectedColors.join(','));
+        } else {
+            url.searchParams.delete('color');
+        }
+
+        // Lọc kích thước
+        const selectedSize = document.querySelector('input[name="size"]:checked');
+        if (selectedSize) {
+            url.searchParams.set('size', selectedSize.value);
+        } else {
+            url.searchParams.delete('size');
+        }
+
+        // Cập nhật URL mà không tải lại trang
+        history.pushState(null, '', url.toString());
+    };
+
+    // Hàm lọc sản phẩm
+    const filterProducts = debounce(() => {
+        updateURL();
+        // Thực hiện gọi AJAX để lấy sản phẩm sau khi URL được cập nhật
+        fetch(window.location.href, { method: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(response => response.text())
+            .then(html => {
+                if (elements.productList) {
+                    elements.productList.innerHTML = html;
+                }
+            })
+            .catch(error => console.error('Lỗi:', error));
+    }, 300);
+
+    // Lắng nghe thay đổi giá
+    elements.rangeMin.addEventListener('input', () => {
+        updatePrices();
+        filterProducts();
     });
+    elements.rangeMax.addEventListener('input', () => {
+        updatePrices();
+        filterProducts();
+    });
+
+    // Lắng nghe thay đổi các bộ lọc khác
+    elements.brandFilters.forEach(input => {
+        input.addEventListener('change', filterProducts);
+    });
+
+    elements.colorFilters.forEach(input => {
+        input.addEventListener('change', filterProducts);
+    });
+
+    elements.sizeFilters.forEach(input => {
+        input.addEventListener('change', filterProducts);
+    });
+
+    // Cập nhật giá trị hiển thị giá ban đầu
+    updatePrices();
 });
 
-        </script>
+// Hàm debounce
+function debounce(func, wait) {
+    let timeout;
+    return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
+}
+
+// Xử lý sự kiện khi người dùng reset các bộ lọc
+document.getElementById('reset-filters').addEventListener('click', function () {
+    const radios = document.querySelectorAll('#facet-filter-form input[type="radio"], #facet-filter-form input[type="checkbox"]');
+    radios.forEach(radio => radio.checked = false);
+
+    const rangeInputs = document.querySelectorAll('#facet-filter-form input[type="range"]');
+    rangeInputs.forEach(input => input.value = input.defaultValue);
+
+    document.getElementById('display-min').innerText = document.getElementById('price-min').value;
+    document.getElementById('display-max').innerText = document.getElementById('price-max').value;
+
+    document.getElementById('facet-filter-form').submit();
+});
+
+
+</script>
         
     
     

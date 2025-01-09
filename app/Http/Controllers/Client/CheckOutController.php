@@ -31,9 +31,7 @@ class CheckOutController extends Controller
 {
     public function checkout()
     {
-        
         $cartDetails = [];
-       
         $totalPrice = 0;
         $user = auth()->user();
     
@@ -53,8 +51,11 @@ class CheckOutController extends Controller
                     if (!$variant) {
                         return redirect()->route('cart')->with('error', "Một số sản phẩm đã bị xóa hoặc không còn tồn tại trong kho.");
                     }
+   
+                    if ($item->quantity <= 0) {
+                        return redirect()->route('cart')->with('error', "Sản phẩm không có đủ số lượng để thanh toán.");
+                    }
     
-                   
                     if ($item->quantity > $variant->stock_quantity) {
                         return redirect()->route('cart')->with(
                             'error',
@@ -68,6 +69,8 @@ class CheckOutController extends Controller
                     $image = $product->images->firstWhere('color_id', $color->id);
                     $imageUrl = $image ? $image->image_url : '/default-image.jpg';
     
+                    $finalPrice = $product->price + $variant->price;
+    
                     $cartDetails[] = [
                         'product_id' => $product->id,
                         'color_id' => $color->id ?? null,
@@ -76,9 +79,9 @@ class CheckOutController extends Controller
                         'color_name' => $color->name ?? 'N/A',
                         'size_name' => $size->name ?? 'N/A',
                         'quantity' => $item->quantity,
-                        'price' => $item->price ?? $product->price,
+                        'price' => $finalPrice,
                         'image_url' => $imageUrl,
-                        'subtotal' => ($item->price ?? $product->price) * $item->quantity,
+                        'subtotal' => $finalPrice * $item->quantity,
                     ];
                 }
     
@@ -101,7 +104,11 @@ class CheckOutController extends Controller
                         return redirect()->route('cart')->with('error', "Một số sản phẩm đã bị xóa hoặc không còn tồn tại trong kho.");
                     }
     
-                   
+          
+                    if ($item['quantity'] <= 0) {
+                        return redirect()->route('cart')->with('error', "Sản phẩm không có đủ số lượng để thanh toán.");
+                    }
+    
                     if ($item['quantity'] > $variant->stock_quantity) {
                         return redirect()->route('cart')->with(
                             'error',
@@ -115,6 +122,8 @@ class CheckOutController extends Controller
                     $image = $product->images->firstWhere('color_id', $color->id);
                     $imageUrl = $image ? $image->image_url : '/default-image.jpg';
     
+                    $finalPrice = $product->price + $variant->price;
+    
                     $cartDetails[] = [
                         'product_id' => $product->id,
                         'color_id' => $color->id ?? null,
@@ -123,9 +132,9 @@ class CheckOutController extends Controller
                         'color_name' => $color->name ?? 'N/A',
                         'size_name' => $size->name ?? 'N/A',
                         'quantity' => $item['quantity'],
-                        'price' => $item['price'] ?? $product->price,
+                        'price' => $finalPrice,
                         'image_url' => $imageUrl,
-                        'subtotal' => ($item['price'] ?? $product->price) * $item['quantity'],
+                        'subtotal' => $finalPrice * $item['quantity'],
                     ];
                 }
     
@@ -146,6 +155,8 @@ class CheckOutController extends Controller
     
         return view('client.check-out', compact('cartDetails', 'totalPrice', 'cities', 'provinces', 'wards', 'user'));
     }
+    
+    
     
     
     
@@ -294,104 +305,114 @@ class CheckOutController extends Controller
         }
     }
     
-    
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     public function getCartDetails()
-{
-    $cartDetails = [];
-    $totalPrice = 0;
-
-    if (auth()->check()) {
-        $cart = Cart::where('user_id', auth()->id())
-            ->with(['cartItems.product.images', 'cartItems.color', 'cartItems.size'])
-            ->first();
-
-        if ($cart && $cart->cartItems->isNotEmpty()) {
-            $cartDetails = $cart->cartItems->map(function ($item) {
-                $product = $item->product;
-                $color = $item->color;
-                $size = $item->size;
-                
-                
-                if (!$product || !$color || !$size) {
-                    return null; 
-                }
-                
-                
-                $image = $product->images ? $product->images->firstWhere('color_id', $color->id) : null;
-                $imageUrl = $image ? $image->image_url : '/default-image.jpg';
-
-                return [
-                    'product_id' => $product->id,
-                    'color_id' => $color->id ?? null,
-                    'size_id' => $size->id ?? null,
-                    'product_name' => $product->product_name ?? 'N/A',
-                    'color_name' => $color->name ?? 'N/A',
-                    'size_name' => $size->name ?? 'N/A',
-                    'quantity' => $item->quantity,
-                    'price' => $item->price ?? $product->price,
-                    'image_url' => $imageUrl,
-                    'subtotal' => ($item->price ?? $product->price) * $item->quantity,
-                ];
-            });
-
-           
-            $cartDetails = $cartDetails->filter(function ($item) {
-                return $item !== null;
-            });
-
-            $totalPrice = $cartDetails->sum('subtotal');
-        }
-    } else {
-        $cart = session()->get('cart', []);
-
-        if (!empty($cart)) {
-            foreach ($cart as $item) {
-                $product = Product::find($item['product_id']);
-                $color = Color::find($item['color_id']);
-                $size = Size::find($item['size_id']);
-                
-               
-                if (!$product || !$color || !$size) {
-                    continue;
-                }
-
-              
-                $image = $product->images ? $product->images->firstWhere('color_id', $color->id) : null;
-                $imageUrl = $image ? $image->image_url : '/default-image.jpg';
-
-                $cartDetails[] = [
-                    'product_id' => $product->id,
-                    'color_id' => $color->id ?? null,
-                    'size_id' => $size->id ?? null,
-                    'product_name' => $product->product_name ?? 'N/A',
-                    'color_name' => $color->name ?? 'N/A',
-                    'size_name' => $size->name ?? 'N/A',
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'] ?? $product->price,
-                    'image_url' => $imageUrl,
-                    'subtotal' => ($item['price'] ?? $product->price) * $item['quantity'],
-                ];
+    {
+        $cartDetails = [];
+        $totalPrice = 0;
+    
+        if (auth()->check()) {
+            $cart = Cart::where('user_id', auth()->id())
+                ->with(['cartItems.product.images', 'cartItems.color', 'cartItems.size'])
+                ->first();
+    
+            if ($cart && $cart->cartItems->isNotEmpty()) {
+                $cartDetails = $cart->cartItems->map(function ($item) {
+                    $product = $item->product;
+                    $color = $item->color;
+                    $size = $item->size;
+    
+                    if (!$product || !$color || !$size) {
+                        return null;
+                    }
+    
+                   
+                    $variant = ProductVariant::where([
+                        ['product_id', $product->id],
+                        ['color_id', $color->id],
+                        ['size_id', $size->id],
+                    ])->first();
+    
+                    if (!$variant) {
+                        return null;
+                    }
+    
+                   
+                    $finalPrice = $product->price + $variant->price;
+    
+                    $image = $product->images ? $product->images->firstWhere('color_id', $color->id) : null;
+                    $imageUrl = $image ? $image->image_url : '/default-image.jpg';
+    
+                    return [
+                        'product_id' => $product->id,
+                        'color_id' => $color->id ?? null,
+                        'size_id' => $size->id ?? null,
+                        'product_name' => $product->product_name ?? 'N/A',
+                        'color_name' => $color->name ?? 'N/A',
+                        'size_name' => $size->name ?? 'N/A',
+                        'quantity' => $item->quantity,
+                        'price' => $finalPrice,
+                        'image_url' => $imageUrl,
+                        'subtotal' => $finalPrice * $item->quantity,
+                    ];
+                });
+    
+                $cartDetails = $cartDetails->filter(function ($item) {
+                    return $item !== null;
+                });
+    
+                $totalPrice = $cartDetails->sum('subtotal');
             }
-
-            $totalPrice = array_sum(array_column($cartDetails, 'subtotal'));
+        } else {
+            $cart = session()->get('cart', []);
+    
+            if (!empty($cart)) {
+                foreach ($cart as $item) {
+                    $product = Product::find($item['product_id']);
+                    $color = Color::find($item['color_id']);
+                    $size = Size::find($item['size_id']);
+    
+                    if (!$product || !$color || !$size) {
+                        continue;
+                    }
+    
+                   
+                    $variant = ProductVariant::where([
+                        ['product_id', $product->id],
+                        ['color_id', $color->id],
+                        ['size_id', $size->id],
+                    ])->first();
+    
+                    if (!$variant) {
+                        continue;
+                    }
+    
+                   
+                    $finalPrice = $product->price + $variant->price;
+    
+                    $image = $product->images ? $product->images->firstWhere('color_id', $color->id) : null;
+                    $imageUrl = $image ? $image->image_url : '/default-image.jpg';
+    
+                    $cartDetails[] = [
+                        'product_id' => $product->id,
+                        'color_id' => $color->id ?? null,
+                        'size_id' => $size->id ?? null,
+                        'product_name' => $product->product_name ?? 'N/A',
+                        'color_name' => $color->name ?? 'N/A',
+                        'size_name' => $size->name ?? 'N/A',
+                        'quantity' => $item['quantity'],
+                        'price' => $finalPrice,
+                        'image_url' => $imageUrl,
+                        'subtotal' => $finalPrice * $item['quantity'],
+                    ];
+                }
+    
+                $totalPrice = array_sum(array_column($cartDetails, 'subtotal'));
+            }
         }
+    
+        return ['items' => $cartDetails, 'totalPrice' => $totalPrice];
     }
-
-    return ['items' => $cartDetails, 'totalPrice' => $totalPrice];
-}
+    
 
     
 
@@ -618,7 +639,7 @@ private function createOrder(OrderRequest $request, $cartDetails, $totalPrice, $
                    $order->delete(); 
                }
    
-               return redirect()->route('home')->with('error', 'Thanh toán thất bại, đơn hàng đã bị hủy và xóa');
+               return redirect()->route('home')->with('error', 'Thanh toán thất bại');
            }
        } else {
            return redirect()->route('home')->with('error', 'Lỗi bảo mật, vui lòng thử lại');

@@ -36,30 +36,31 @@ class HomeController extends Controller
         $sliders = Slider::where('is_active', 1)->get();
 
         $products = Product::query()
-            ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
-            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
-            ->with([
-                'colors' => fn($query) => $query->select('colors.id', 'colors.name', 'colors.sku_color'),
-                'images' => fn($query) => $query->select('product_images.id', 'product_images.product_id', 'product_images.color_id', 'product_images.image_url'),
-                'sales' => fn($query) => $query->select('product_sales.product_id', 'product_sales.discount_type', 'product_sales.discount_value')
-                    ->where('start_date', '<=', now())
-                    ->where(function ($q) {
-                        $q->whereNull('end_date')
-                            ->orWhere('end_date', '>=', now());
-                    }),
-                ])
-                // dd($products);
-            ->select([
-                'products.id',
-                'products.product_name',
-                'products.price',
-                'products.slug',
-                DB::raw('COUNT(DISTINCT product_variants.size_id) as distinct_size_count'), // Số size khác nhau
-                DB::raw('(SELECT SUM(stock_quantity) FROM product_variants WHERE product_variants.product_id = products.id) as total_stock_quantity'), // Tổng tồn kho chính xác
-            ])
-            ->groupBy('products.id')
-            ->limit(10)
-            ->get();
+    ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+    ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+    ->with([
+        'colors' => fn($query) => $query->select('colors.id', 'colors.name', 'colors.sku_color'),
+        'images' => fn($query) => $query->select('product_images.id', 'product_images.product_id', 'product_images.color_id', 'product_images.image_url'),
+        'sales' => fn($query) => $query->select('product_sales.product_id', 'product_sales.discount_type', 'product_sales.discount_value')
+            ->where('start_date', '<=', now())
+            ->where(function ($q) {
+                $q->whereNull('end_date')
+                    ->orWhere('end_date', '>=', now());
+            }),
+    ])
+    ->select([
+        'products.id',
+        'products.product_name',
+        'products.price',
+        'products.slug',
+        'products.status',  // Lấy status của sản phẩm
+        DB::raw('COUNT(DISTINCT product_variants.size_id) as distinct_size_count'), // Số size khác nhau
+        DB::raw('(SELECT SUM(stock_quantity) FROM product_variants WHERE product_variants.product_id = products.id) as total_stock_quantity'), // Tổng tồn kho chính xác
+    ])
+    ->where('products.status', 1)  // Thêm điều kiện để chỉ lấy sản phẩm có status = 1
+    ->groupBy('products.id')
+    ->limit(10)
+    ->get();
 
         $products = $products->map(function ($product) {
             // Nhóm ảnh theo color_id

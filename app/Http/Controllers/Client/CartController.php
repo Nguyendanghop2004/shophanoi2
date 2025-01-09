@@ -305,12 +305,12 @@ class CartController extends Controller
                 ];
             });
 
-            // Thiết lập main_image_url và hover_main_image_url cho sản phẩm
+            
             $firstColor = $product->colors->first();
             $product->main_image_url = $firstColor ? $firstColor['main_image'] : null;
             $product->hover_main_image_url = $firstColor ? $firstColor['hover_image'] : null;
 
-            // Chỉ giữ lại các trường cần thiết
+          
             return [
                 'id' => $product->id,
                 'name' => $product->product_name,
@@ -326,7 +326,7 @@ class CartController extends Controller
         $cartDetails = [];
 
         if (Auth::guard('web')->check()) {
-            // Lấy giỏ hàng từ cơ sở dữ liệu
+        
             $cart = Cart::where('user_id', auth()->id())
                 ->with([
                     'cartItems.product.images' => function ($query) {
