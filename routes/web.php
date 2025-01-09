@@ -33,6 +33,8 @@ Route::middleware('checkPassword')->group(function () {
 
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/home', [HomeController::class, 'home'])->name('home');
+
 
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 

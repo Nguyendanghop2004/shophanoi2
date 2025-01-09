@@ -27,7 +27,10 @@ class AccoutAdminController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+     public function trangchu(){
 
+        return view('admin.trangchu.trangchu');
+     }
     public function __construct()
     {
         //  $this->middleware('permission:publish User|create User|edit User|delete User', ['only' => ['index', 'show']]);

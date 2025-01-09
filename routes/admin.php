@@ -36,7 +36,8 @@ use Illuminate\Support\Facades\Route;
     Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus'])->group(function () {
     // Login admin
     Route::get('error', [ErrorController::class, 'error'])->name('error');
-    Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard')->middleware('permission:account_admin');
+    Route::get('trangchu', [AccoutAdminController::class, 'trangchu'])->name('trangchu');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
     Route::get('account', [AccoutAdminController::class, 'account'])->name('accounts.account')->middleware('permission:account_admin');
     Route::get('accounts/create', [AccoutAdminController::class, 'create'])->name('accounts.create')->middleware('permission:account_admin');
@@ -52,7 +53,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('accountsUser/create', [AccoutUserController::class, 'create'])->name('accountsUser.create')->middleware('permission:account_user');
     Route::post('accountsUser/store', [AccoutUserController::class, 'store'])->name('accountsUser.store')->middleware('permission:account_user');
     Route::get('accountsUser/edit/{id}', [AccoutUserController::class, 'edit'])->name('accountsUser.edit')->middleware('permission:account_user');
-Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update')->middleware('permission:account_user');    
+    Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update')->middleware('permission:account_user');    
     Route::delete('accountsUser/destroy/{id}', [AccoutUserController::class, 'destroy'])->name('accountsUser.destroy')->middleware('permission:account_user');
 
     Route::get('accountsUser/change/{id}', [AccoutUserController::class, 'change'])->name('accountsUser.change')->middleware('permission:account_user');
@@ -240,7 +241,7 @@ Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])-
 
 
     //sale product
-    Route::resource('/sales', SaleProductController::class);
+    Route::resource('/sales', SaleProductController::class)->middleware('permission:product');
 
 });
 
