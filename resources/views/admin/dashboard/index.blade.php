@@ -313,7 +313,7 @@
                     <div class="card-body">
                         @foreach ($banitnhat as $item )
                             
-                        
+                          
                         <div class="mb-4">
                             <div class="text-small float-right font-weight-bold text-muted">{{$item->total_sold}}</div>
                             <div class="font-weight-bold mb-1">{{$item->product_name}}</div>
@@ -898,7 +898,7 @@ document.getElementById('show-week').addEventListener('click', function(e) {
                     borderWidth: 2,
                     backgroundColor: '#6777ef',
                     borderColor: '#6777ef',
-                    borderWidth: 3.5,
+                    borderWidth: 2,
                     tension: 0.4,
                     pointBackgroundColor: '#ffffff',
                     pointRadius: 4

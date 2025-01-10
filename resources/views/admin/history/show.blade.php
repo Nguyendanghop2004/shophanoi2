@@ -15,14 +15,13 @@
                         {{ $admin->created_at->format('d/m/Y H:i') }}
                     </div>
                     <div class="card-body">
-                        <p><strong>Name: </strong>{{ $admin->name }}</p>
+                        <p><strong>Tên: </strong>{{ $admin->name }}</p>
                         <p><strong>Email: </strong>{{ $admin->email }}</p>
-                        <p><strong>Ảnh: </strong></p>
-                        <img src="{{ Storage::url($admin->image_path) }}" alt="Ảnh quản trị viên" width="100px"
-                            height="px">
+                        <p><strong>Đỉa chỉ: </strong>{{ $admin->address }}</p>
+                        <p><strong>Phone: </strong>{{ $admin->phone_number}}</p>
                     </div>
                 </div>
-
+                
             </div>
 
             <!-- Người dùng 2 -->
@@ -37,17 +36,20 @@
                     </div>
                     <div class="card-body">
                         @foreach ($data->changes as $key => $old)
+                        {{-- @dd($data->changes) --}}
                             @if ($key == 'name')
-                                <p><strong>Tên:</strong>{{ $old }}</p>
+                                <p><strong>Tên: </strong>{{ $old }}</p>
                             @endif
                             @if ($key == 'email')
-                                <p><strong>Email:</strong> {{ $old }}</p>
+                                <p><strong>Email: </strong> {{ $old }}</p>
                             @endif
-                            @if ($key == 'image_path')
-                                <p><strong>Ảnh:</strong>
-                                    <img src="{{ Storage::url($old) }}" alt="Ảnh quản trị viên" width="100px"
-                                        height="60px">
+                            @if ($key == 'address')
+                                <p><strong>Đỉa chỉ: </strong> {{ $old }}</p>
                             @endif
+                            @if ($key == 'phone_number')
+                                <p><strong>Số điện thoại: </strong> {{ $old }}</p>
+                            @endif
+                          
                         @endforeach
                     </div>
                 </div>

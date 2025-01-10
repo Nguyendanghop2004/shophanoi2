@@ -1,100 +1,99 @@
    <!-- announcement-bar -->
    <style>
-    /* Custom search form styles */
-.search-form {
-    position: relative;
-}
+       /* Custom search form styles */
+       .search-form {
+           position: relative;
+       }
 
-.search-input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
+       .search-input-wrapper {
+           position: relative;
+           display: flex;
+           align-items: center;
+       }
 
-.search-input {
-    width: 100%;
-    max-width: 400px;
-    height: 40px;
-    padding: 0 15px; 
-    border-radius: 5px; 
-    border: 1px solid #ccc; 
-}
+       .search-input {
+           width: 100%;
+           max-width: 400px;
+           height: 40px;
+           padding: 0 15px;
+           border-radius: 5px;
+           border: 1px solid #ccc;
+       }
 
-.search-button {
-    position: absolute;
-    right: 30px; 
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-}
+       .search-button {
+           position: absolute;
+           right: 30px;
+           background: none;
+           border: none;
+           cursor: pointer;
+           padding: 0;
+       }
 
-.icon-search {
-    font-size: 20px;
-    color: #333; 
-}
-#searchError {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 14px;
-}
+       .icon-search {
+           font-size: 20px;
+           color: #333;
+       }
 
-
+       #searchError {
+           position: fixed;
+           top: 20px;
+           right: 20px;
+           z-index: 9999;
+           padding: 10px 20px;
+           border-radius: 5px;
+           font-size: 14px;
+       }
    </style>
    <div class="announcement-bar bg_dark">
-   <div class="wrap-announcement-bar">
-    <div class="box-sw-announcement-bar">
-        <div class="announcement-bar-item">
-            <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
-        </div>
-        <div class="announcement-bar-item">
-            <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
-        </div>
-    </div>
-</div>
+       <div class="wrap-announcement-bar">
+           <div class="box-sw-announcement-bar">
+               <div class="announcement-bar-item">
+                   <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>MIỄN PHÍ VẬN CHUYỂN VÀ HOÀN TRẢ</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>MÙA MỚI, KIỂU DÁNG MỚI: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ BỎ LỠ</p>
+               </div>
+               <div class="announcement-bar-item">
+                   <p>ƯU ĐÃI CÓ THỜI GIAN GIỚI HẠN: KHUYẾN MÃI THỜI TRANG KHÔNG THỂ CƯỠNG LẠI</p>
+               </div>
+           </div>
+       </div>
 
        <span class="icon-close close-announcement-bar"></span>
 
@@ -123,63 +122,191 @@
                        </a>
                    </div>
                    <div class="col-xl-2 col-md-4 col-6 text-center" style="max-width:80%;">
-                       <a href="{{route('home')}}" class="logo-header">
-                           <img src="{{asset('client/assets/images/logo/logo4.png')}}" alt="logo" class="logo">
-                       </a>
+
+                       <a href="home-multi-brand.html" class="logo-header">
+                           <a href="{{ route('home') }}" class="logo-header">
+                               <img src="{{ asset('client/assets/images/logo/logo4.png') }}" alt="logo"
+                                   class="logo">
+                           </a>
                    </div>
 
 
                    <div class="col-xl-5 col-md-4 col-3">
-                    @if (Auth::check())
-                        <a href="{{ route('order.donhang') }}">Đơn hàng của tôi</a>
-                    @else
-                        <a href="{{ route('accountUser.login') }}">Đơn hàng của tôi</a>
-                    @endif
-                    <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
-                        <li class="nav-search">
-                            <form action="{{ route('order.search') }}" method="GET"  class="search-form" onsubmit="return validateSearchForm()">
-                                <div class="search-input-wrapper">
-                                    <input type="text" name="query" id="searchQuery" placeholder="Search orders..." class="search-input">
-                                    <button class="nav-icon-item search-button" type="submit">
-                                        <i class="icon icon-search"></i>
-                                    </button>
-                                </div>
-                            </form>
-                        </li>
-                        
-                        <!-- Thông báo lỗi -->
-                        <div id="searchError" class="alert alert-danger" style="display: none;">
-                            Vui lòng nhập từ khóa tìm kiếm
-                        </div>
-                        @if (Auth::check())
-                            <a href="{{ route('accountUser.logout') }}">Logout</a>
-                        @else
-                            <li>
-                                <a href="{{ route('accountUser.login') }}" class="nav-icon-item">
-                                    <i class="icon icon-account"></i>
-                                </a>
-                            </li>
-                        @endif
+
+                       <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
+                           <li class="nav-search">
+                               <form action="{{ route('order.search') }}" method="GET" class="search-form"
+                                   onsubmit="return validateSearchForm()">
+                                   <div class="search-input-wrapper">
+                                       <input type="text" name="query" id="searchQuery"
+                                           placeholder="Search orders..." class="search-input">
+                                       <button class="nav-icon-item search-button" type="submit">
+                                           <i class="icon icon-search"></i>
+                                       </button>
+                                   </div>
+                               </form>
+                           </li>
+
+                           <!-- Thông báo lỗi -->
+                           <div id="searchError" class="alert alert-danger" style="display: none;">
+                               Vui lòng nhập từ khóa tìm kiếm
+                           </div>
+                           @include('client.layouts.particals.navright')
+                        <li class="nav-notify">
+                           {{-- @if (Auth::check())
+                               <a href="{{ route('accountUser.logout') }}">Logout</a>
+                           @else
+                               <li>
+                                   <a href="{{ route('accountUser.login') }}" class="nav-icon-item">
+                                       <i class="icon icon-account"></i>
+                                   </a>
+                               </li>
+
+
+                           @endif  --}}
+                           <li class="nav-notify">
+                               <div class="btn-group">
+                                   <a class="icon icon-notify" data-bs-toggle="dropdown" aria-expanded="false">
+                                   </a>
+                                   <ul class="dropdown-menu">
+                                       <li>
+                                           <a class="dropdown-item" href="#">
+                                               <div class="notification-icon">
+                                                   <i class="icon icon-notify"></i>
+                                               </div>
+                                               <div class="notification-content">
+                                                   <p class="notification-title">Thông báo 1</p>
+                                                   <span class="notification-time">1 phút trước</span>
+                                               </div>
+                                           </a>
+                                       </li>
+                                       <li>
+                                           <a class="dropdown-item" href="#">
+                                               <div class="notification-icon">
+                                                   <i class="icon icon-notify"></i>
+                                               </div>
+                                               <div class="notification-content">
+                                                   <p class="notification-title">Thông báo 2</p>
+                                                   <span class="notification-time">10 phút trước</span>
+                                               </div>
+                                           </a>
+                                       </li>
+                                       <li>
+                                           <a class="dropdown-item" href="#">
+                                               <div class="notification-icon">
+                                                   <i class="icon icon-notify"></i>
+                                               </div>
+                                               <div class="notification-content">
+                                                   <p class="notification-title">Thông báo 3</p>
+                                                   <span class="notification-time">30 phút trước</span>
+                                               </div>
+                                           </a>
+                                       </li>
+                                       <li>
+                                           <hr class="dropdown-divider">
+                                       </li>
+                                       <li class="text-center">
+                                           <a class="dropdown-item text-primary" href="#">Xem tất cả thông báo</a>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </li>
                         <li class="nav-wishlist">
-                            <a href="{{route('wishlist.index')}}" class="nav-icon-item">
+                            <a href="{{route('wishlist')}}" class="nav-icon-item">
                                 <i class="icon icon-heart"></i>
+                             
                                 <span class="count-box">0</span>
                             </a>
                         </li>
                         <li class="nav-cart">
                             <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
                                 <i class="icon icon-bag"></i>
+                                <span class="count-box cart-count">0</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+
+                       </ul>
+                   </div>
+
+                   </ul>
+               </div>
+           </div>
+                        <li class="nav-notify">
+                               <div class="btn-group">
+                                   <a class="icon icon-notify" data-bs-toggle="dropdown" aria-expanded="false">
+                                   </a>
+                                   <ul class="dropdown-menu">
+                                       <li>
+                                           <a class="dropdown-item" href="#">
+                                               <div class="notification-icon">
+                                                   <i class="icon icon-notify"></i>
+                                               </div>
+                                               <div class="notification-content">
+                                                   <p class="notification-title">Thông báo 1</p>
+                                                   <span class="notification-time">1 phút trước</span>
+                                               </div>
+                                           </a>
+                                       </li>
+                                       <li>
+                                           <a class="dropdown-item" href="#">
+                                               <div class="notification-icon">
+                                                   <i class="icon icon-notify"></i>
+                                               </div>
+                                               <div class="notification-content">
+                                                   <p class="notification-title">Thông báo 2</p>
+                                                   <span class="notification-time">10 phút trước</span>
+                                               </div>
+                                           </a>
+                                       </li>
+                                       <li>
+                                           <a class="dropdown-item" href="#">
+                                               <div class="notification-icon">
+                                                   <i class="icon icon-notify"></i>
+                                               </div>
+                                               <div class="notification-content">
+                                                   <p class="notification-title">Thông báo 3</p>
+                                                   <span class="notification-time">30 phút trước</span>
+                                               </div>
+                                           </a>
+                                       </li>
+                                       <li>
+                                           <hr class="dropdown-divider">
+                                       </li>
+                                       <li class="text-center">
+                                           <a class="dropdown-item text-primary" href="#">Xem tất cả thông báo</a>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </li>
+                        <li class="nav-wishlist">
+                            <a href="{{route('wishlist')}}" class="nav-icon-item">
+                                <i class="icon icon-heart"></i>
+                             
                                 <span class="count-box">0</span>
+                            </a>
+                        </li>
+                        <li class="nav-cart">
+                            <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
+                                <i class="icon icon-bag"></i>
+                                <span class="count-box cart-count">0</span>
                             </a>
                         </li>
                     </ul>
                 </div>
                 
 
+                                     
+                      
            </div>
+
        </div>
-      
-    
+
+       </div>
+
+
        <div class="header-bottom line">
            <div class="container-full px_15 lg-px_40">
                <div class="wrapper-header d-flex justify-content-center align-items-center">
@@ -191,6 +318,7 @@
                        @include('client.layouts.particals.navleft')
                        <!-- cate -->
                    </ul>
+
                </div>
            </div>
        </div>
@@ -198,23 +326,23 @@
    </header>
    <!-- /header -->
    <script>
-    function validateSearchForm() {
-        var query = document.getElementById('searchQuery').value.trim();
-        if (query === '') {
-            showError('Vui lòng nhập từ khóa tìm kiếm');
-            return false;
-        }
-        return true;
-    }
+       function validateSearchForm() {
+           var query = document.getElementById('searchQuery').value.trim();
+           if (query === '') {
+               showError('Vui lòng nhập từ khóa tìm kiếm');
+               return false;
+           }
+           return true;
+       }
 
-    function showError(message) {
-        var errorDiv = document.getElementById('searchError');
-        errorDiv.innerHTML = message;
-        errorDiv.style.display = 'block';
+       function showError(message) {
+           var errorDiv = document.getElementById('searchError');
+           errorDiv.innerHTML = message;
+           errorDiv.style.display = 'block';
 
-        // Tự động ẩn thông báo sau 3 giây
-        setTimeout(function() {
-            errorDiv.style.display = 'none';
-        }, 3000);
-    }
-</script>
+           // Tự động ẩn thông báo sau 3 giây
+           setTimeout(function() {
+               errorDiv.style.display = 'none';
+           }, 3000);
+       }
+   </script>

@@ -3,14 +3,14 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Account Quản trị viên</h1>
+            <h1>Danh sách bài viết</h1>
         </div>
 
         <div class="card card-primary">
             <div class="card-header">
-                <h4>Danh Sách Quản Trị</h4>
+                <h4>Danh sách bài viết</h4>
                 <div class="card-header-action">
-                    <a href="{{ route('admin.accounts.create') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.blog.index') }}" class="btn btn-primary">
                         Tạo Mới
                     </a>
                 </div>
@@ -32,7 +32,11 @@
                             @foreach ($data as $admin)
                                 <tr>
                                     <th scope="row">{{ $admin->id }}</th>
+
+
                                     <td>{{ $admin->title }}</td>
+
+
                                     <td>{{ $admin->unique }}</td>
                                     <td>
                                         <img src="{{ Storage::url($admin->image) }}" alt="Ảnh quản trị viên"

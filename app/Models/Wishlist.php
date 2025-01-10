@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -8,8 +8,7 @@ class Wishlist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['product_id', 'user_id'];
-
+    protected $fillable = ['user_id', 'product_id'];
     public function product()
     {
         return $this->belongsTo(Product::class);

@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Review;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductDetailController extends Controller
 {
@@ -16,7 +19,12 @@ class ProductDetailController extends Controller
             'brand',
             'variants.color',
             'variants.size',
-            'images'
+            'images',
+            'sales' => fn($query) => $query->where('start_date', '<=', now())
+                ->where(function ($q) {
+                    $q->whereNull('end_date')
+                        ->orWhere('end_date', '>=', now());
+                })
         ])->where('slug', $slug)->first();
 
         // Kiểm tra nếu không tìm thấy sản phẩm
@@ -26,29 +34,65 @@ class ProductDetailController extends Controller
             ], 404);
         }
 
-       // Tạo danh sách size và giá cho mỗi màu
-       $colorSizes = [];
-       foreach ($product->variants as $variant) {
-           $colorId = $variant->color_id;
-           $size = $variant->size;
-           $price = $variant->price;
+        // Tạo danh sách size và giá cho mỗi màu
+        $colorSizes = [];
+        foreach ($product->variants as $variant) {
+            $colorId = $variant->color_id;
+            $size = $variant->size;
+            $price = (float) $variant->price; // Ép kiểu float để đảm bảo tính toán chính xác
+            $stockQuantity = $variant->stock_quantity;
 
-           // Nếu chưa có màu này trong danh sách $colorSizes thì tạo mới
-           if (!isset($colorSizes[$colorId])) {
-               $colorSizes[$colorId] = [];
-           }
+            // Tính giá giảm (sale price)
+            $salePrice = $product->price; // Mặc định là giá gốc
 
-           // Thêm size và giá nếu chưa có
-           if (!in_array($size, array_column($colorSizes[$colorId], 'size'))) {
-               $colorSizes[$colorId][] = [
-                   'size' => $size,
-                   'price' => $price,
-               ];
-           }
-       }
+            if ($product->sales) {
+                $discountValue = $product->sales->discount_value;
+                if ($product->sales->discount_type === 'percent') {
+                    if ($discountValue > 0 && $discountValue <= 100) {
+                        $salePrice = $product->price * (1 - $discountValue / 100);           
+                    }
+                } elseif ($product->sales->discount_type === 'fixed') {
+                    if ($discountValue >= 0 && $discountValue <= $product->price) {
+                        $salePrice = $product->price - $discountValue;
+                    }
+                }
+            }
 
-        return view('client.product-detail', compact('product',  'colorSizes'));
+              $product->sale_price = max(0, $salePrice);// Đảm bảo không có giá trị âm
+            // Nếu chưa có màu này trong danh sách $colorSizes thì tạo mới
+            if (!isset($colorSizes[$colorId])) {
+                $colorSizes[$colorId] = [];
+            }
+
+            // Thêm size và giá nếu chưa có
+            $exists = collect($colorSizes[$colorId])->firstWhere('size', $size);
+            if (!$exists) {
+                $colorSizes[$colorId][] = [
+                    'size' => $size,
+                    'price' => $price,
+                    'sale_price' => $salePrice, // Thêm giá sale
+                    'stock_quantity' => $stockQuantity
+                ];
+            }
+
+            // return response()->json($colorSizes);
+
+        }
+        $reviews = Review::where('product_id', $product->id)
+        ->with('user') // Load thông tin người dùng
+        ->latest()
+        ->get();
+        $wishlist = [];
+
+        if (Auth::check()) {
+           
+            $wishlist = Wishlist::where('user_id', Auth::id())
+                ->pluck('product_id')
+                ->toArray(); 
+        }
+        return view('client.product-detail', compact('product', 'colorSizes','wishlist','reviews'));
     }
+
 
 
 

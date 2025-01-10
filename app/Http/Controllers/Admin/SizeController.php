@@ -26,7 +26,7 @@ class SizeController extends Controller
             return $query->where('name', 'like', '%' . $searchColor . '%');
         })->paginate(5); // Phân trang với 10 bản ghi mỗi trang
         // Truyền cả $colors và $sizes vào view
-        return view('admin.colors_sizes.index', compact( 'sizes', 'colors'));
+        return view('admin.sizes.index', compact( 'sizes', 'colors'));
     }
     
     /**
@@ -48,7 +48,7 @@ class SizeController extends Controller
 
         Size::create($request->only('name'));
 
-        return redirect()->route('admin.colors_sizes.index')->with('success', 'Size created successfully.');
+        return redirect()->route('admin.sizes.index')->with('success', 'Size created successfully.');
     }
 
     /**
@@ -65,17 +65,29 @@ class SizeController extends Controller
      * Cập nhật kích thước trong cơ sở dữ liệu.
      */
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+{
+    // Tìm kích thước theo ID
+    $size = Size::findOrFail($id);
 
-        $size = Size::findOrFail($id); // Tìm size theo ID
-
-        $size->update($request->only('name'));
-
-        return redirect()->route('admin.colors_sizes.index')->with('success', 'Size updated successfully.');
+    // Kiểm tra nếu kích thước đang được sử dụng trong biến thể sản phẩm
+    if ($size->productVariants()->count() > 0) {
+        // Trả về thông báo lỗi nếu không thể sửa
+        return redirect()->route('admin.colors_sizes.index')->with('error', 'Không thể sửa kích thước này vì nó đang được sử dụng trong sản phẩm.');
     }
+
+    // Nếu không bị ràng buộc, thực hiện cập nhật
+    $request->validate([
+        'name' => 'required|string|max:255',
+    ]);
+
+    $size->update($request->only('name'));
+
+
+
+
+        return redirect()->route('admin.sizes.index')->with('success', 'Size updated successfully.');
+    }
+
 
     /**
      * Xóa kích thước khỏi cơ sở dữ liệu.
@@ -94,7 +106,7 @@ class SizeController extends Controller
         // Nếu không có sản phẩm nào sử dụng kích thước này, tiến hành xóa
         $size->delete();
 
-        return redirect()->route('admin.colors_sizes.index')->with('success', 'Kích thước đã được xóa thành công.');
+        return redirect()->route('admin.sizes.index')->with('success', 'Kích thước đã được xóa thành công.');
     }
 
 }

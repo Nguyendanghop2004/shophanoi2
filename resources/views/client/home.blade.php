@@ -4,7 +4,8 @@
 @endsection
 
 @section('content')
-    {{-- <!-- categories -->
+
+    <!-- categories -->
     <section class="flat-spacing-20">
         <div class="container">
             <div class="row">
@@ -76,7 +77,7 @@
             </div>
         </div>
     </div>
-    <!-- /slider --> --}}
+    <!-- /slider -->
 
     {{-- <!-- Categories -->
     <section class="flat-spacing-5 pb_0">
@@ -206,10 +207,11 @@
                                                 src="{{ asset('storage/' . $product['main_image_url']) }}"
                                                 alt="image-product">
                                             <img class="lazyload img-hover"
-                                                data-src="{{ asset('storage/' . $product['hover_main_image_url']) }}"
-                                                src="{{ asset('storage/' . $product['hover_main_image_url']) }}"
+                                                data-src="{{ isset($product['hover_main_image_url']) && $product['hover_main_image_url'] ? asset('storage/' . $product['hover_main_image_url']) : asset('storage/' . $product['main_image_url']) }}"
+                                                src="{{ isset($product['hover_main_image_url']) && $product['hover_main_image_url'] ? asset('storage/' . $product['hover_main_image_url']) : asset('storage/' . $product['main_image_url']) }}"
                                                 alt="image-product">
                                         </a>
+                                        
                                         <div class="list-product-btn">
                                             {{-- <a href="#quick_add" data-bs-toggle="modal"
                                                 data-product-id="{{ $product['id'] }}"
@@ -224,6 +226,28 @@
                                                     <span class="tooltip">Add to Wishlist</span>
                                                 </button>
                                             </form>
+                                            <div class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
+    @if(in_array($product['id'], $wishlist))
+        <form action="{{ route('wishlist.remove') }}" method="POST" style="display: inline;">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <button type="submit" class="wishlist-btn remove-wishlist">
+                <span class="icon icon-delete"></span>
+            </button>
+        </form>
+    @else
+        <form action="{{ route('wishlist.add') }}" method="POST" style="display: inline;">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <button type="submit" class="wishlist-btn add-wishlist">
+                <span class="icon icon-heart"></span>
+            </button>
+        </form>
+    @endif
+</div>
+
+
+
                                             {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                                                 class="box-icon bg_white compare btn-icon-action">
                                                 <span class="icon icon-compare"></span>
@@ -244,7 +268,14 @@
                                     <div class="card-product-info">
                                         <a href="{{ route('product-detail', $product['slug']) }}"
                                             class="title link">{{ $product['name'] }}</a>
-                                        <span class="price">{{ $product['price'] }} VNĐ</span>
+                                        <span class="price">   @if ($product['sale_price'] < $product['price'])
+                                            <span class="sale-price">{{ number_format($product['sale_price'], 0, ',', '.') }} VNĐ</span>
+                                            <span class="original-price" style="text-decoration: line-through; color: #888;">
+                                                {{ number_format($product['price'], 0, ',', '.') }} VNĐ
+                                            </span>
+                                        @else
+                                            <span class="regular-price">{{ number_format($product['price'], 0, ',', '.') }} VNĐ</span>
+                                        @endif</span>
                                         <ul class="list-color-product">
                                             @foreach ($product['colors'] as $index => $color)
                                                 <li
@@ -276,12 +307,77 @@
             </div>
         </div>
     </section>
-    
     <section class="flat-spacing-15 pb_0">
         <div class="container">
             <div class="flat-title wow fadeInUp" data-wow-delay="0s">
                 <span class="title">Bài Viết</span>
-              
+
+            </div>
+            <div class="blog-grid-main">
+                <div class="container">
+
+                    <div class="row">
+                  
+
+                    {{-- <div class="row">
+                        @foreach ($data as $item)
+                            <div class="col-xl-4 col-md-6 col-12">
+                                <div class="blog-article-item">
+                                    <div class="article-thumb">
+                                        <a href="{{ route('blog.detail', $item->slug) }}">
+                                            <img class="lazyload" src="{{ Storage::url($item->image) }} "
+                                                style="width: 366px; height: 235px;" alt="img-blog">
+                                        </a>
+                                    </div>
+                                    <div class="article-content">
+                                        <div class="article-title">
+                                            <a href="{{ route('blog.detail', $item->slug) }}"
+                                                class="">{{ $item->title }}</a>
+                                        </div>
+                                        <div class="article-btn">
+                                            <a href="{{ route('blog.detail', $item->slug) }}"
+                                                class="tf-btn btn-line fw-6">Xêm Thêm<i
+                                                    class="icon icon-arrow1-top-left"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+
+
+                    </div> --}}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /Best seller -->
+    
+    <!-- Shop Collection -->
+    <section class="flat-spacing-19">
+        <div class="container">
+            <div class="tf-grid-layout md-col-2 tf-img-with-text style-1">
+                <div class="tf-image-wrap wow fadeInUp" data-wow-delay="0s">
+                    <img class="lazyload" data-src="{{ asset('client/assets/images/collections/collection-58.jpg') }}"
+                        src="{{ asset('client/assets/images/collections/collection-58.jpg') }}" alt="collection-img">
+                </div>
+                <div class="tf-content-wrap wow fadeInUp" data-wow-delay="0s">
+                    <div class="heading">Định nghĩa lại thời trang <br> Xuất sắc</div>
+                    <p class="description">Đây là cơ hội để bạn nâng cấp tủ quần áo của mình với nhiều phong cách khác nhau
+                    </p>
+                    <a href="{{route('shop-collection.index')}}"
+                        class="tf-btn style-2 btn-fill rounded-full animate-hover-btn">Đọc câu chuyện của chúng tôi</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- /page-title -->
+    <section class="flat-spacing-15 pb_0">
+        <div class="container">
+            <div class="flat-title wow fadeInUp" data-wow-delay="0s">
+                <span class="title">Bài viết</span>
+            
             </div>
             <div class="blog-grid-main">
         <div class="container">
@@ -318,32 +414,11 @@
         </div>
     </div>
         </div>
-</section>
-    
- 
- 
-    <!-- /Best seller -->
-    {{--
-    <!-- Shop Collection -->
-    <section class="flat-spacing-19">
-        <div class="container">
-            <div class="tf-grid-layout md-col-2 tf-img-with-text style-1">
-                <div class="tf-image-wrap wow fadeInUp" data-wow-delay="0s">
-                    <img class="lazyload" data-src="{{ asset('client/assets/images/collections/collection-58.jpg') }}"
-                        src="{{ asset('client/assets/images/collections/collection-58.jpg') }}" alt="collection-img">
-                </div>
-                <div class="tf-content-wrap wow fadeInUp" data-wow-delay="0s">
-                    <div class="heading">Redefining Fashion <br> Excellence</div>
-                    <p class="description">Here is your chance to upgrade your wardrobe with a variation of styles
-                    </p>
-                    <a href="shop-collection-list.html"
-                        class="tf-btn style-2 btn-fill rounded-full animate-hover-btn">Read our stories</a>
-                </div>
-            </div>
-        </div>
     </section>
+    <!-- blog-grid-main -->
+   
     <!-- /Shop Collection -->
-    <!-- Testimonial -->
+    {{-- <!-- Testimonial -->
     <section class="flat-testimonial-v2 py-0 wow fadeInUp" data-wow-delay="0s">
         <div class="container">
             <div class="wrapper-thumbs-testimonial-v2 type-1 flat-thumbs-testimonial">
@@ -481,9 +556,9 @@
             </div>
         </div>
     </section>
-    <!-- /Testimonial -->
+    <!-- /Testimonial --> --}}
     <!-- Icon box -->
-    <section class="flat-spacing-11 pb_0 flat-iconbox wow fadeInUp" data-wow-delay="0s">
+    <section class="flat-spacing-11 pb_0 flat-iconbox wow fadeInUp mb-4" data-wow-delay="0s">
         <div class="container">
             <div class="wrap-carousel wrap-mobile">
                 <div class="swiper tf-sw-mobile" data-preview="1" data-space="15">
@@ -494,8 +569,8 @@
                                     <i class="icon-shipping"></i>
                                 </div>
                                 <div class="content">
-                                    <div class="title">Free Shipping</div>
-                                    <p>Free shipping over order $120</p>
+                                    <div class="title">Miễn phí vận chuyển</div>
+                                    <p>Miễn phí vận chuyển cho đơn hàng 300.000</p>
                                 </div>
                             </div>
                         </div>
@@ -505,8 +580,8 @@
                                     <i class="icon-payment fs-22"></i>
                                 </div>
                                 <div class="content">
-                                    <div class="title">Flexible Payment</div>
-                                    <p>Pay with Multiple Credit Cards</p>
+                                    <div class="title">Thanh toán linh hoạt</div>
+                                    <p>Thanh toán bằng nhiều thẻ tín dụng</p>
                                 </div>
                             </div>
                         </div>
@@ -516,8 +591,8 @@
                                     <i class="icon-return fs-22"></i>
                                 </div>
                                 <div class="content">
-                                    <div class="title">14 Day Returns</div>
-                                    <p>Within 30 days for an exchange</p>
+                                    <div class="title">Trả hàng trong 14 ngày</div>
+                                    <p>Trong vòng 30 ngày cho một cuộc trao đổi</p>
                                 </div>
                             </div>
                         </div>
@@ -527,8 +602,8 @@
                                     <i class="icon-suport"></i>
                                 </div>
                                 <div class="content">
-                                    <div class="title">Premium Support</div>
-                                    <p>Outstanding premium support</p>
+                                    <div class="title">Hỗ trợ cao cấp</div>
+                                    <p>Hỗ trợ cao cấp vượt trội</p>
                                 </div>
                             </div>
                         </div>
@@ -539,9 +614,45 @@
             </div>
         </div>
     </section>
+    <style>
+    
+    /* Đặt kiểu mặc định cho nút */
+/* Kiểu mặc định cho nút */
+.wishlist-btn {
+    background-color: #fff; /* Nền trắng mặc định */
+    border: none;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 50%; /* Tùy chỉnh để có thể làm nút tròn */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng nổi nhẹ */
+}
+
+=
+.wishlist-btn .icon {
+    font-size: 1.5rem;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+
+.wishlist-btn:hover {
+    background-color: #000;
+}
+
+.wishlist-btn:hover .icon {
+    color: #fff;
+}
+
+
+
+    </style>
     <!-- /Icon box -->
 
-    <!-- Brand -->
+    {{-- <!-- Brand -->
     <section class="flat-spacing-12">
         <div class="">
             <div class="wrap-carousel wrap-brand wrap-brand-v2 autoplay-linear">
@@ -591,9 +702,8 @@
     </section>
     <!-- /Brand --> --}}
 @endsection
-
 @push('scripts')
-    {{-- <script>
+    <script>
         $(document).ready(function() {
             // Bắt sự kiện click vào nút Quick Add
             $(".quick-add").on("click", function(e) {
@@ -898,6 +1008,29 @@
                 updateQuantity(productId, colorId, sizeId, newQuantity, url);
             });
         });
-    </script> --}}
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
 
+     document.addEventListener("DOMContentLoaded", function() {
+
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+            @endif
+        });
+    </script>
 @endpush

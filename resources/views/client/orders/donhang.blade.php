@@ -172,16 +172,18 @@
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('client.orders.show', ['id' => Crypt::encryptString($order->id)]) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
-                                    @if ($order->status === 'giao hàng thành công')
-                                    <form action="{{ route('orders.confirm', $order->id) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success btn-sm">Đã nhận hàng</button>
-                                    </form>
+                                    
+                                    @if ($order->status === 'đã nhận hàng')
+                                        @foreach ($order->orderItems as $orderItem)
+                                            <a href="{{ route('client.reviews.create', ['orderId' => $order->id, 'productId' => $orderItem->product_id]) }}" class="btn btn-warning btn-sm">Viết đánh giá cho {{ $orderItem->product_name }}</a>
+                                        @endforeach
                                     @endif
+                                    
                                     @if (in_array($order->status, ['chờ xác nhận', 'đã xác nhận']))
-                                    <button class="btn btn-danger cancelOrderBtn" data-order-id="{{ $order->id }}" data-action="{{ route('client.orders.cancel', $order->id) }}">Hủy đơn hàng</button>
-                                    @endif                         
+                                        <button class="btn btn-danger cancelOrderBtn" data-order-id="{{ $order->id }}" data-action="{{ route('client.orders.cancel', $order->id) }}">Hủy đơn hàng</button>
+                                    @endif
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -211,7 +213,7 @@
                             <option value="Thay đổi địa chỉ giao hàng">Thay đổi địa chỉ giao hàng</option>
                             <option value="Sản phẩm không còn cần thiết">Sản phẩm không còn cần thiết</option>
                             <option value="Thay đổi quyết định">Thay đổi quyết định</option>
-                            <option value="Lý do khác">Lý do khác</option>
+                     
                         </select>
                     </div>
                     <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
@@ -246,5 +248,30 @@
             }
         });
     });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+     document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+            @endif
+        });
+
+   
 </script>
 @endsection

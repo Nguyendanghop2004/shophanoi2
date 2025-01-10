@@ -1,4 +1,4 @@
-<footer id="footer" class="footer background-gray md-pb-70">
+<footer id="footer" class="footer background-gray md-pb-70 mt-5">
     <div class="footer-wrap">
         <div class="footer-body">
             <div class="container">
@@ -21,7 +21,7 @@
                                     <p>Điện thoại: <a href="#">03973525321</a></p>
                                 </li>
                             </ul>
-                            <a href="contact-1.html" class="tf-btn btn-line">Chỉ đường<i
+                            <a href="{{route('about-us')}}" class="tf-btn btn-line">Chỉ đường<i
                                     class="icon icon-arrow1-top-left"></i></a>
                             <ul class="tf-social-icon d-flex gap-10">
                                 <li><a href="#"
@@ -49,25 +49,25 @@
                         </div>
                         <ul class="footer-menu-list tf-collapse-content">
                             <li>
-                                <a href="privacy-policy.html" class="footer-menu_item">Chính sách bảo mật</a>
+                                <a href="" class="footer-menu_item">Chính sách bảo mật</a>
                             </li>
                             <li>
-                                <a href="delivery-return.html" class="footer-menu_item">Đổi trả hàng</a>
+                                <a href="" class="footer-menu_item">Đổi trả hàng</a>
                             </li>
                             <li>
-                                <a href="shipping-delivery.html" class="footer-menu_item">Vận chuyển</a>
+                                <a href="" class="footer-menu_item">Vận chuyển</a>
                             </li>
                             <li>
-                                <a href="terms-conditions.html" class="footer-menu_item">Điều khoản & Điều kiện</a>
+                                <a href="" class="footer-menu_item">Điều khoản & Điều kiện</a>
                             </li>
                             <li>
-                                <a href="faq-1.html" class="footer-menu_item">Câu hỏi thường gặp</a>
+                                <a href="" class="footer-menu_item">Câu hỏi thường gặp</a>
                             </li>
                             <li>
-                                <a href="compare.html" class="footer-menu_item">So sánh</a>
+                                <a href="" class="footer-menu_item">So sánh</a>
                             </li>
                             <li>
-                                <a href="wishlist.html" class="footer-menu_item">Danh sách yêu thích</a>
+                                <a href="" class="footer-menu_item">Danh sách yêu thích</a>
                             </li>
                         </ul>
                     </div>
@@ -80,16 +80,16 @@
                         </div>
                         <ul class="footer-menu-list tf-collapse-content">
                             <li>
-                                <a href="about-us.html" class="footer-menu_item">Câu chuyện của chúng tôi</a>
+                                <a href="{{route('about-us')}}" class="footer-menu_item">Câu chuyện của chúng tôi</a>
                             </li>
                             <li>
-                                <a href="our-store.html" class="footer-menu_item">Thăm cửa hàng của chúng tôi</a>
+                                <a href="{{route('home')}}" class="footer-menu_item">Thăm cửa hàng của chúng tôi</a>
                             </li>
                             <li>
-                                <a href="contact-1.html" class="footer-menu_item">Liên hệ</a>
+                                <a href="{{route('contact')}}" class="footer-menu_item">Liên hệ</a>
                             </li>
                             <li>
-                                <a href="login.html" class="footer-menu_item">Tài khoản</a>
+                                <a href="{{route('accountUser.login')}}" class="footer-menu_item">Tài khoản</a>
                             </li>
                         </ul>
                     </div>

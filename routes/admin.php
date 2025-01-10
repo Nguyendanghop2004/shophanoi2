@@ -17,11 +17,12 @@ use App\Http\Controllers\Admin\ContactMessageController;
 
 use App\Http\Controllers\Admin\ErrorController;
 use App\Http\Controllers\Admin\HistoryController;
-
+use App\Http\Controllers\Admin\HistoryUserController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\SaleProductController;
 use App\Http\Controllers\Admin\ShipperController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SliderController;
@@ -51,7 +52,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('accountsUser/create', [AccoutUserController::class, 'create'])->name('accountsUser.create')->middleware('permission:account_user');
     Route::post('accountsUser/store', [AccoutUserController::class, 'store'])->name('accountsUser.store')->middleware('permission:account_user');
     Route::get('accountsUser/edit/{id}', [AccoutUserController::class, 'edit'])->name('accountsUser.edit')->middleware('permission:account_user');
-    Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update')->middleware('permission:account_user');
+Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update')->middleware('permission:account_user');    
     Route::delete('accountsUser/destroy/{id}', [AccoutUserController::class, 'destroy'])->name('accountsUser.destroy')->middleware('permission:account_user');
 
     Route::get('accountsUser/change/{id}', [AccoutUserController::class, 'change'])->name('accountsUser.change')->middleware('permission:account_user');
@@ -102,9 +103,10 @@ use Illuminate\Support\Facades\Route;
     // Quản lý thanh trượt
     Route::resource('slider', SliderController::class)->except(['show']);
     Route::get('slider/trash', [SliderController::class, 'trash'])->name('slider.trash');
-   
+
+
     Route::post('slider/update-order', [SliderController::class, 'updateOrder'])->name('slider.updateOrder');
-   
+
     Route::patch('sliders/{id}/restore', [SliderController::class, 'restore'])->name('slider.restore');
     Route::delete('sliders/{id}/force-delete', [SliderController::class, 'forceDelete'])->name('slider.forceDelete');
 
@@ -121,7 +123,10 @@ use Illuminate\Support\Facades\Route;
     // Quản lý sản phẩm
     // quản lí đơn hàng
 
+
+    //end quản lí đơn hàng
     Route::resource('product', ProductController::class);
+    //quản lí coupons
     Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('discount_codes.index');
 
     // Route để hiển thị form tạo mã giảm giá
@@ -180,23 +185,31 @@ use Illuminate\Support\Facades\Route;
     Route::delete('colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy')->middleware('permission:product');
 
     // Route cho BrandController
-    Route::get('brands', [BrandController::class, 'index'])->name('brands.index')->middleware('permission:product');
-    Route::get('brands/create', [BrandController::class, 'create'])->name('brands.create')->middleware('permission:product');
-    Route::post('brands', [BrandController::class, 'store'])->name('brands.store')->middleware('permission:product');
-    Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show')->middleware('permission:product');
-    Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit')->middleware('permission:product');
-    Route::put('brands/{id}/edit', [BrandController::class, 'update'])->name('brands.update')->middleware('permission:product');
-    Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy')->middleware('permission:product');
-    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update')->middleware('permission:product');
+    Route::get('brands', [BrandController::class, 'index'])->name('brands.index');
+    Route::get('brands/create', [BrandController::class, 'create'])->name('brands.create');
+    Route::post('brands', [BrandController::class, 'store'])->name('brands.store');
+    Route::get('brands/{id}', [BrandController::class, 'show'])->name('brands.show');
+    Route::get('brands/{id}/edit', [BrandController::class, 'edit'])->name('brands.edit');
+    Route::put('brands/{id}/edit', [BrandController::class, 'update'])->name('brands.update');
+    Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
 
     Route::get('colors-sizes', [ColorSizeController::class, 'index'])->name('colors_sizes.index')->middleware('permission:product');
+
+
 
 
     // lịch sử cập nhật admin.
     Route::get('history', [HistoryController::class, 'history'])->name('history')->middleware('permission:account_admin');
     Route::get('history/show/{id}', [HistoryController::class, 'show'])->name('show')->middleware('permission:account_admin');
     Route::delete('history/delete/{id}', [HistoryController::class, 'delete'])->name('delete')->middleware('permission:account_admin');
+// end  lịch sử cập nhật admin
 
+ // lịch sử cập nhật user
+ Route::get('history-user', [HistoryUserController::class, 'historyUser'])->name('historyUser')->middleware('permission:account_admin');
+ Route::get('history-user/show/{id}', [HistoryUserController::class, 'showUser'])->name('showUser')->middleware('permission:account_admin');
+
+ // end  lịch sử cập nhật admin
     //start blog
     Route::get('blog/index', [BlogController::class, 'index'])->name('blog.index')->middleware('permission:blog');
     Route::post('blog/store', [BlogController::class, 'store'])->name('blog.store')->middleware('permission:blog');
@@ -209,6 +222,7 @@ use Illuminate\Support\Facades\Route;
     Route::post('blog/{id}/deactivateBlog', [BlogController::class, 'deactivateBlog'])->name('accountsUser.deactivateBlog')->middleware('permission:blog');
     //end blog
     // ORDERS
+
     Route::get('order/getList', [OrderController::class, 'getList'])->name('order.getList')->middleware('permission:order');
     Route::get('order/{id}', [OrderController::class, 'chitiet'])->name('order.chitiet')->middleware('permission:order');
     Route::post('order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.update-status')->middleware('permission:order');
@@ -223,4 +237,11 @@ use Illuminate\Support\Facades\Route;
     Route::post('order/{id}/update-updateStatusShip', [OrderController::class, 'updateStatusShip'])->name('order.update-updateStatusShip')->middleware('permission:Shipper');
   
 
+
+
+    //sale product
+    Route::resource('/sales', SaleProductController::class);
+
 });
+
+

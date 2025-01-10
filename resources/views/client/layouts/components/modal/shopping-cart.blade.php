@@ -81,7 +81,7 @@
                     </div>
                     <div class="tf-mini-cart-bottom">
                         <div class="tf-mini-cart-tool">
-                            <div class="tf-mini-cart-tool-btn btn-add-note">
+                            {{-- <div class="tf-mini-cart-tool-btn btn-add-note">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18"
                                     viewBox="0 0 16 18" fill="currentColor">
                                     <path
@@ -91,7 +91,7 @@
                                         d="M15.3882 10.0971C14.5724 9.28136 13.2452 9.28132 12.43 10.0965L8.60127 13.9168C8.51997 13.9979 8.45997 14.0979 8.42658 14.2078L7.59276 16.9528C7.55646 17.0723 7.55292 17.1993 7.58249 17.3207C7.61206 17.442 7.67367 17.5531 7.76087 17.6425C7.84807 17.7319 7.95768 17.7962 8.07823 17.8288C8.19879 17.8613 8.32587 17.8609 8.44621 17.8276L11.261 17.0479C11.3769 17.0158 11.4824 16.9543 11.5675 16.8694L15.3882 13.0559C16.2039 12.2401 16.2039 10.9129 15.3882 10.0971ZM10.712 15.7527L9.29586 16.145L9.71028 14.7806L12.2937 12.2029L13.2801 13.1893L10.712 15.7527ZM14.4025 12.0692L14.2673 12.204L13.2811 11.2178L13.4157 11.0834C13.6876 10.8115 14.1301 10.8115 14.402 11.0834C14.6739 11.3553 14.6739 11.7977 14.4025 12.0692Z">
                                     </path>
                                 </svg>
-                            </div>
+                            </div> --}}
                             {{-- <div class="tf-mini-cart-tool-btn btn-add-gift">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="18"
                                     viewBox="0 0 17 18" fill="currentColor">
@@ -112,15 +112,14 @@
                         <div class="tf-mini-cart-bottom-wrap">
                             <div class="tf-cart-totals-discounts">
                                 <div class="tf-cart-total">Tổng Tiền</div>
-                                <div class="tf-totals-total-value fw-6">$49.99 USD</div>
+                                <div class="tf-totals-total-value fw-6"></div>
                             </div>
                             {{-- <div class="tf-cart-tax">Taxes and <a href="#">shipping</a> calculated at checkout
                             </div> --}}
                             <div class="tf-mini-cart-line"></div>
                             <div class="tf-cart-checkbox">
                                 <div class="tf-checkbox-wrapp">
-                                    <input class="" type="checkbox" id="CartDrawer-Form_agree"
-                                        name="agree_checkbox">
+                                    <input type="checkbox" id="CartDrawer-Form_agree" name="agree_checkbox">
                                     <div>
                                         <i class="icon-check"></i>
                                     </div>
@@ -131,15 +130,36 @@
                                 </label>
                             </div>
                             <div class="tf-mini-cart-view-checkout">
-                                <a href="{{ route('cart') }}"
-                                    class="tf-btn btn-outline radius-3 link w-100 justify-content-center">View cart</a>
-                                <a href="checkout.html"
-                                    class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Check
-                                        out</span></a>
+                                <a href="{{ route('cart') }}" 
+                                   class="tf-btn btn-outline radius-3 link w-100 justify-content-center" 
+                                   id="viewCartBtn" 
+                                   disabled>View cart</a>
+                                <a href="checkout.html" 
+                                   class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center" 
+                                   id="checkOutBtn" 
+                                   disabled><span>Check out</span></a>
                             </div>
+                            
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            <script>
+                                $(document).ready(function () {
+                                    // Theo dõi sự kiện thay đổi của checkbox
+                                    $('#CartDrawer-Form_agree').on('change', function () {
+                                        if ($(this).is(':checked')) {
+                                            // Nếu checkbox được chọn, bật hai nút
+                                            $('#viewCartBtn, #checkOutBtn').removeAttr('disabled');
+                                        } else {
+                                            // Nếu checkbox chưa được chọn, tắt hai nút
+                                            $('#viewCartBtn, #checkOutBtn').attr('disabled', 'disabled');
+                                        }
+                                    });
+                                });
+                            </script>
+                            
                         </div>
                     </div>
-                    <div class="tf-mini-cart-tool-openable add-note">
+                    
+                    {{-- <div class="tf-mini-cart-tool-openable add-note">
                         <div class="overplay tf-mini-cart-tool-close"></div>
                         <div class="tf-mini-cart-tool-content">
                             <label for="Cart-note" class="tf-mini-cart-tool-text">
@@ -162,7 +182,7 @@
                                     Close</div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     {{-- <div class="tf-mini-cart-tool-openable add-gift">
                         <div class="overplay tf-mini-cart-tool-close"></div>
                         <form class="tf-product-form-addgift">
