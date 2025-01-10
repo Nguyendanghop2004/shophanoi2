@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/modules/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/assets/modules/jquery-selectric/selectric.css') }}">
     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="{{ asset('admin/assets/modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
@@ -81,6 +83,11 @@
     <script src="{{ asset('admin/assets/js/stisla.js') }}"></script>
 
     <!-- JS Libraies -->
+    <script src="{{ asset('admin/assets/modules/cleave-js/dist/cleave.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/modules/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+
+    <script src="{{ asset('admin/assets/modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('admin/assets/modules/simple-weather/jquery.simpleWeather.min.js') }}"></script>
     <script src="{{ asset('admin/assets/modules/chart.min.js') }}"></script>
@@ -95,11 +102,12 @@
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('admin/assets/js/page/index-0.js') }}"></script>
-    
+    <script src="{{ asset('admin/assets/js/page/forms-advanced-forms.js') }}"></script>
+
     <!-- Template JS File -->
     <script src="{{ asset('admin/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
-    
+
 
     @stack('scripts')
 </body>
