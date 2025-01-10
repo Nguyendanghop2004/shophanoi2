@@ -546,15 +546,19 @@
                                     <a href="{{route('blog.detail',$item->slug)  }}" class="">{{ $item->title }}</a>
                                 </div>
                                 <div class="article-btn">
-                                    <a href="{{route('blog.detail',$item->slug)  }}" class="tf-btn btn-line fw-6">Xêm Thêm<i
+                                    <a href="{{route('blog.detail',$item->slug)  }}" class="tf-btn btn-line fw-6">Chi tiết<i
                                             class="icon icon-arrow1-top-left"></i></a>
                                 </div>
+                                
                             </div>
+                           
+                
                         </div>
                     </div>
                 @endforeach
-
-               
+                <div>
+                <a  href="{{ route('blog.show') }}" class="btn btn-dark">Xem thêm bài viết</a>
+            </div>
             </div>
         </div>
     </div>

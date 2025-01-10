@@ -118,7 +118,10 @@ class HomeController extends Controller
                 ->pluck('product_id')
                 ->toArray(); 
         }
-        $data = BlogClient::where('status', 1)->get();
+        $data = BlogClient::where('status', 1)
+        ->take(3) 
+        ->get();
+    
         // return response()->json($products);
         return view('client.home', compact('products', 'collections', 'sliders','wishlist','data'));
     }
