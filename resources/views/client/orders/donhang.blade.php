@@ -161,10 +161,10 @@
                             </div>
                             <div class="col-9">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title mb-1">{{ $order->orderItems->first()->product_name }} - {{ $order->orderItems->first()->product_description }}</h5>
+                                    <h5 class="card-title mb-1">{{ $order->order_code }}</h5>
                                     <span class="badge badge-{{ str_replace(' ', '-', strtolower($order->status)) }}">{{ $order->status }}</span>
                                 </div>
-                                <p class="card-text mb-1">{{ $order->order_code }}</p>
+
                                 <p class="card-text mb-1"><small class="text-muted">{{ $order->created_at }}</small></p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <p class="card-text mb-1"><strong>Giá: </strong> <span class="text-danger"> {{ number_format($order->total_price, 0, ',', '.') }} VND</span></p>
@@ -174,11 +174,16 @@
                                     <a href="{{ route('client.orders.show', ['id' => Crypt::encryptString($order->id)]) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
                                     
                                     @if ($order->status === 'đã nhận hàng')
-                                        @foreach ($order->orderItems as $orderItem)
-                                            <a href="{{ route('client.reviews.create', ['orderId' => $order->id, 'productId' => $orderItem->product_id]) }}" class="btn btn-warning btn-sm">Viết đánh giá cho {{ $orderItem->product_name }}</a>
-                                        @endforeach
+                                       
+                                            <a href="{{ route('client.reviews.create', ['orderId' => $order->id, 'productId' => $order->product_id]) }}" class="btn btn-warning btn-sm">Viết đánh giá cho</a>
+                                       
                                     @endif
-                                    
+                                    @if ($order->status === 'giao hàng thành công')
+                                    <form action="{{ route('orders.confirm', $order->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success btn-sm">Đã nhận hàng</button>
+                                    </form>
+                                    @endif
                                     @if (in_array($order->status, ['chờ xác nhận', 'đã xác nhận']))
                                         <button class="btn btn-danger cancelOrderBtn" data-order-id="{{ $order->id }}" data-action="{{ route('client.orders.cancel', $order->id) }}">Hủy đơn hàng</button>
                                     @endif

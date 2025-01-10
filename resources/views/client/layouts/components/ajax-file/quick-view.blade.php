@@ -103,7 +103,7 @@
             </form>
         </div>
         <div>
-            <a href="{{ route('product-detail', $product->slug) }}" class="tf-btn fw-6 btn-line">View full details<i
+            <a href="{{ route('product-detail', $product->slug) }}" class="tf-btn fw-6 btn-line">Chi Tiết<i
                     class="icon icon-arrow1-top-left"></i></a>
         </div>
     </div>
@@ -161,7 +161,7 @@
             if (quantity > stock) {
                 toastr.warning(`Hiện tại sản phẩm chỉ còn ${stock} chiếc trong kho.`, 'Lưu ý');
                 return;
-            }
+            } 
 
             $.ajax({
                 url: '/add-to-cart',
@@ -177,6 +177,7 @@
                     if (response.success === true) {
                         // Nếu thành công, hiển thị modal giỏ hàng
                         $("#shoppingCart").modal("show");
+                        updateCartCount();
                     } else {
                         toastr.error(response.message, 'Cảnh báo');
                     }

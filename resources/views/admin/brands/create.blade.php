@@ -14,12 +14,12 @@
             <form action="{{ route('admin.brands.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
+                    <!-- Ảnh Thương Hiệu -->
                     <div class="col-lg-3 col-md-6 col-12">
-                        <!-- Ảnh Thương Hiệu -->
                         <div class="form-group">
                             <label>Ảnh Thương Hiệu</label>
-                            <div class="image-preview mx-auto" @error('image_brand_url') style="border:2px dashed red" @enderror>
-                                <label for="image-upload" id="image-label">Chọn Tập Tin</label>
+                            <div class="image-preview mx-auto @error('image_brand_url') border-danger @enderror" style="border: 2px dashed #ccc; padding: 20px;">
+                                <label for="image-upload" id="image-label" style="cursor: pointer;">Chọn Tập Tin</label>
                                 <input type="file" name="image_brand_url" id="image-upload" accept="image/*" style="display: none;" />
                                 <span id="image-preview" style="display: none;">
                                     <img src="" alt="Preview Image" style="width: 100%; height: 100%; object-fit: cover;" />
@@ -33,21 +33,22 @@
                         </div>
                     </div>
 
+                    <!-- Thông tin Thương Hiệu -->
                     <div class="col-lg-9 col-md-6 col-12">
-                        <!-- Tên Thương Hiệu -->
                         <div class="form-group">
-                            <label>Tên Thương Hiệu</label>
-                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
+                            <label for="name">Tên Thương Hiệu</label>
+                            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="Nhập tên thương hiệu">
+                            @error('name')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
-                        @error('name')
-                            <div class="invalid-feedback" style="display: block;">
-                                {{ $message }}
-                            </div>
-                        @enderror
 
                         <!-- Nút Lưu -->
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Lưu</button>
+                            <a href="{{ route('admin.brands.index') }}" class="btn btn-secondary">Hủy</a>
                         </div>
                     </div>
                 </div>

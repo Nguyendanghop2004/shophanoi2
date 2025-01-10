@@ -697,13 +697,7 @@
                     <div class="heading text-center">Your wishlist</div>
                 </div>
             </div>
-            @if(session('success'))
-        <div style="position: relative; padding: 15px; margin: 15px 0; background: linear-gradient(to right, #a8e063, #56ab2f); color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <strong style="font-size: 16px;">🎉 Thành công!</strong>
-            <p style="margin: 5px 0; font-size: 14px;">{{ session('success') }}</p>
-            <button style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
-        </div>
-    @endif
+          
             <!-- /page-title -->
            
             <!-- Section Product -->
@@ -719,15 +713,25 @@
                                     <img class="lazyload img-hover" data-src="images/products/white-1.jpg" src="images/products/white-1.jpg" alt="image-product">
                                 </a>
                                 
-                                <div class="list-product-btn">
-                                <form action="{{ route('wishlist.remove', $item->id) }}" method="POST" class="mt-2">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="box-icon bg_white quick-add tf-btn-loading">
-                                        <span class="tooltip">Remove Wishlist</span>
-                                        <span class="icon icon-delete"></span>
-                                    </button>
-                                </form>
+                                <div class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
+    @if(in_array($product['id'], $wishlist))
+        <form action="{{ route('wishlist.remove') }}" method="POST" style="display: inline;">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <button type="submit" class="wishlist-btn remove-wishlist">
+                <span class="icon icon-delete"></span>
+            </button>
+        </form>
+    @else
+        <form action="{{ route('wishlist.add') }}" method="POST" style="display: inline;">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <button type="submit" class="wishlist-btn add-wishlist">
+                <span class="icon icon-heart"></span>
+            </button>
+        </form>
+    @endif
+</div>
     
                                
                              

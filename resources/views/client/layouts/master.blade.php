@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>HanoiClothesshop</title>
+    <title>Hanoiclothesshop</title>
 
     <meta name="author" content="themesflat.com">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -143,36 +143,24 @@
             "hideMethod": "fadeOut"
         };
     </script>
-    @stack('scripts')
 
     <script>
         $(document).ready(function() {
-            // Bắt sự kiện click vào nút Quick Add
-            $(".quick-add").on("click", function(e) {
-                e.preventDefault();
-
-                // Lấy ID sản phẩm từ thuộc tính data
-                let productId = $(this).data("product-id");
-
-                // Gửi yêu cầu AJAX
+            window.updateCartCount = function() {
                 $.ajax({
-                    url: "/get-product-info", // Đường dẫn API xử lý
-                    method: "GET",
-                    data: {
-                        id: productId
-                    },
+                    url: '/cart/count',
+                    method: 'GET',
                     success: function(response) {
-                        // Chèn nội dung nhận được vào modal
-                        $("#product-modal-content").html(response);
-                        // Hiển thị modal
-                        $("#quick_add").modal("show");
+                        $('.cart-count').text(response.count);
                     },
                     error: function() {
-                        toastr.error('Sản Phẩm Không Tồn Tại, Hãy Thử Tải Lại Trang!',
-                            'Cảnh báo');
-                    },
+                        toastr.error('Không thể lấy thông tin giỏ hàng', 'Lỗi');
+                    }
                 });
-            });
+            };
+
+            // Gọi hàm ngay khi trang tải
+            updateCartCount();
         });
     </script>
     <script>
@@ -253,98 +241,99 @@
         function renderModalCart(cartDetails) {
             const modalCartContainer = $('.tf-mini-cart-items'); // Container của modal cart
             modalCartContainer.empty(); // Xóa nội dung cũ trước khi cập nhật mới
-
+console.log('ádsadasdas');
             if (cartDetails.length === 0) {
                 modalCartContainer.append(`<div class="tf-mini-cart-items d-flex justify-content-center align-items-center" style="height: 100px;">
-                                                 <div class="tf-mini-cart-item">
-                                                     <p><i class="fa-solid fa-cart-arrow-down"></i> Giỏ hàng trống</p>
-                                                 </div>
-                                          </div>    `);
+                                         <div class="tf-mini-cart-item">
+                                             <p><i class="fa-solid fa-cart-arrow-down"></i> Giỏ hàng trống</p>
+                                         </div>
+                                  </div>    `);
                 return;
+            }
+
+            // Hàm định dạng giá tiền
+            function formatPrice(price) {
+                return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Thêm dấu "." mỗi 3 chữ số
             }
 
             // Thêm từng sản phẩm vào modal
             cartDetails.forEach(item => {
                 const productDetailUrl = `/product/${item.slug}`;
+                const itemTotalPrice = item.price * item.quantity; // Tổng giá sản phẩm
+                const formattedPrice = formatPrice(itemTotalPrice); // Định dạng giá sản phẩm
+                const formattecBonusPrice = formatPrice(item.pricebonus * item.quantity);
                 modalCartContainer.append(`
-                                    <div class="tf-mini-cart-item">
-                                        <div class="tf-mini-cart-image">
-                                            <a href="${productDetailUrl}">
-                                                <img src="/storage/${item.image_url}" alt="">
-                                            </a>
-                                        </div>
-                                        <div class="tf-mini-cart-info">
-                                            <a class="title link"
-                                                href="${productDetailUrl}">${item.product_name}</a>
-                                            <div class="meta-variant">${item.color_name} / ${item.size_name}</div>
-                                            <div class="price fw-6" data-price="${item.price * item.quantity}">${item.price * item.quantity}</div>
-                                            <div class="tf-mini-cart-btns">
-                                                <div class="wg-quantity small">
-                                                    <!-- Nút giảm số lượng -->
-                                                    <span class="btn-quantity minus-btn-cart"
-                                                        data-url="{{ route('cart.update') }}"
-                                                        data-id="${item.product_id}"
-                                                        data-color="${item.color_id}"
-                                                        data-size="${item.size_id}">
-                                                        <svg class="d-inline-block" width="9" height="1"
-                                                            viewBox="0 0 9 1" fill="currentColor">
-                                                            <path
-                                                                d="M9 1H5.14286H3.85714H0V1.50201e-05H3.85714L5.14286 0L9 1.50201e-05V1Z">
-                                                            </path>
-                                                        </svg>
-                                                    </span>
-                                                    <!-- Trường nhập số lượng -->
-                                                    <input type="text" class="quantity-input quantity-input-cart" name="number"
-                                                        value="${item.quantity}"
-                                                        data-url="{{ route('cart.update') }}"
-                                                        data-id="${item.product_id}"
-                                                        data-color="${item.color_id}"
-                                                        data-size="${item.size_id}">
-
-                                                    <!-- Nút tăng số lượng -->
-                                                    <span class="btn-quantity plus-btn-cart"
-                                                        data-url="{{ route('cart.update') }}"
-                                                        data-id="${item.product_id}"
-                                                        data-color="${item.color_id}"
-                                                        data-size="${item.size_id}">
-                                                        <svg class="d-inline-block" width="9" height="9"
-                                                            viewBox="0 0 9 9" fill="currentColor">
-                                                            <path
-                                                                d="M9 5.14286H5.14286V9H3.85714V5.14286H0V3.85714H3.85714V0H5.14286V3.85714H9V5.14286Z">
-                                                            </path>
-                                                        </svg>
-                                                    </span>
-                                                </div>
-                                                  <div class="tf-mini-cart-remove"
-                                                    data-id="${item.product_id}"
-                                                    data-color="${item.color_id}"
-                                                    data-size="${item.size_id}">
-                                                              Remove
-                                                  </div>
-                                            </div>
-                                        </div>
-                                    </div>
-             `);
+            <div class="tf-mini-cart-item">
+                <div class="tf-mini-cart-image">
+                    <a href="${productDetailUrl}">
+                        <img src="/storage/${item.image_url}" alt="">
+                    </a>
+                </div>
+                <div class="tf-mini-cart-info">
+                    <a class="title link" href="${productDetailUrl}">${item.product_name}</a>
+                    <div class="meta-variant">${item.color_name} / ${item.size_name} + ${formattecBonusPrice}</div>
+                    <div class="price fw-6" data-price-bonus="${item.pricebonus * item.quantity}" data-price="${itemTotalPrice}">${formattedPrice} VNĐ</div>
+                    <div class="tf-mini-cart-btns">
+                        <div class="wg-quantity small">
+                            <!-- Nút giảm số lượng -->
+                            <span class="btn-quantity minus-btn-cart"
+                                data-url="{{ route('cart.update') }}"
+                                data-id="${item.product_id}"
+                                data-color="${item.color_id}"
+                                data-size="${item.size_id}">
+                                <svg class="d-inline-block" width="9" height="1" viewBox="0 0 9 1" fill="currentColor">
+                                    <path d="M9 1H5.14286H3.85714H0V1.50201e-05H3.85714L5.14286 0L9 1.50201e-05V1Z"></path>
+                                </svg>
+                            </span>
+                            <!-- Trường nhập số lượng -->
+                            <input type="text" class="quantity-input quantity-input-cart" name="number"
+                                value="${item.quantity}"
+                                data-url="{{ route('cart.update') }}"
+                                data-id="${item.product_id}"
+                                data-color="${item.color_id}"
+                                data-size="${item.size_id}">
+                            <!-- Nút tăng số lượng -->
+                            <span class="btn-quantity plus-btn-cart"
+                                data-url="{{ route('cart.update') }}"
+                                data-id="${item.product_id}"
+                                data-color="${item.color_id}"
+                                data-size="${item.size_id}">
+                                <svg class="d-inline-block" width="9" height="9" viewBox="0 0 9 9" fill="currentColor">
+                                    <path d="M9 5.14286H5.14286V9H3.85714V5.14286H0V3.85714H3.85714V0H5.14286V3.85714H9V5.14286Z"></path>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="tf-mini-cart-remove"
+                            data-id="${item.product_id}"
+                            data-color="${item.color_id}"
+                            data-size="${item.size_id}">
+                            Remove
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
             });
+
             // Gắn sự kiện click cho nút "Remove"
             $('.tf-mini-cart-remove').off('click').on('click', function() {
                 const productId = $(this).data('id');
                 const colorId = $(this).data('color');
                 const sizeId = $(this).data('size');
                 removeFromCart(productId, colorId, sizeId); // Gọi hàm xóa
-
             });
-            // Lấy tất cả các phần tử <div> có class "price"
-            const priceDivs = document.querySelectorAll('.price');
 
-            // Tính tổng giá trị của tất cả các data-price
+            // Tính tổng giá trị
+            const priceDivs = document.querySelectorAll('.price');
             let total = 0;
             priceDivs.forEach(div => {
-                const price = parseFloat(div.getAttribute('data-price')) ||
-                    0; // Lấy giá trị data-price, mặc định là 0 nếu không tồn tại
-                total += price;
+                const price = parseFloat(div.getAttribute('data-price')) || 0;
+                const bonusPrice = parseFloat(div.getAttribute('data-price-bonus')) || 0;
+                total = (price + bonusPrice) + total;
             });
-            $('.tf-totals-total-value').text(total.toFixed(2));
+
+            // Cập nhật tổng giá với định dạng
+            $('.tf-totals-total-value').text(formatPrice(total) + ' VNĐ');
         }
     </script>
     <script>
@@ -365,10 +354,11 @@
                         updateCartCount();
                     } else {
                         toastr.error(response.message, 'Cảnh báo');
-
+                        updateCartCount();
                     }
                 },
                 error: function(xhr, status, error) {
+                    updateCartCount();
                     console.error("AJAX Error:", status, error, xhr.responseText); // Ghi log lỗi AJAX
                     alert('There was an error processing your request.');
                 }
@@ -453,35 +443,11 @@
 
                 // Gửi AJAX cập nhật
                 updateQuantity(productId, colorId, sizeId, newQuantity, url);
+                updateCartCount();
             });
         });
     </script>
-
-    <script>
-        $(document).ready(function() {
-            // Gọi API để lấy số lượng sản phẩm trong giỏ hàng
-            function updateCartCount() {
-                $.ajax({
-                    url: '/cart/count',
-                    method: 'GET',
-                    success: function(response) {
-                        $('.cart-count').text(response.count);
-                    },
-                    error: function() {
-                        // toastr.error('Không thể lấy thông tin giỏ hàng', 'Lỗi');
-                        console.error('Lỗi API:', error);
-            console.error('Chi tiết lỗi:', xhr.responseText); // Log chi tiết lỗi
-            toastr.error('Không thể lấy thông tin giỏ hàng', 'Lỗi');
-
-                    }
-                });
-            }
-
-            // Gọi hàm khi trang được tải
-            updateCartCount();
-        });
-    </script>
-
+    @stack('scripts')
 </body>
 
 </html>

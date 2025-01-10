@@ -2,28 +2,13 @@
 @section('header-home')
     @include('client.layouts.particals.header-home')
 @endsection
+
 @section('content')
     <!-- page-title -->
-    <div class="tf-page-title">
-        <div class="container-full">
-            <div class="row">
-                <div class="col-12">
-                    <div class="heading text-center">Bài viết</div>
-                    {{-- <ul class="breadcrumbs d-flex align-items-center justify-content-center">
-                            <li>
-                                <a href="index.html">Home</a>
-                            </li>
-                            <li>
-                                <i class="icon-arrow-right"></i>
-                            </li>
-                            <li>
-                                Fashion
-                            </li>
-                        </ul> --}}
-                </div>
+    <div class="flat-title wow fadeInUp" data-wow-delay="0s">
+                <span class="title">Bài viết</span>
+            
             </div>
-        </div>
-    </div>
     <!-- /page-title -->
 
     <!-- blog-grid-main -->

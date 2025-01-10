@@ -67,7 +67,9 @@
 
                                         <div class="item">
                                             <div class="text-2 text_black-2">Đỉa chỉ</div>
-                                            <div class="text-2 mt_4 fw-6">{{ $order->address }}</div>
+                                            <div class="text-2 mt_4 fw-6">
+                                                {{ $city->name_thanhpho }},{{ $province->name_quanhuyen }},{{ $ward->name_xaphuong }},
+                                                {{ $order->address }}</div>
                                         </div>
                                     </div>
                                     <div class="widget-tabs style-has-border widget-order-tab">
@@ -110,18 +112,18 @@
                                                                 </p>
                                                             </div>
                                                         </li> --}}
-                                                        @if ($order->status = 'hủy')
-                                                        <li>
-                                                            <div class="timeline-badge "></div>
-                                                            <div class="timeline-box">
+                                                        @if ($order->status == 'hủy')
+                                                            <li>
+                                                                <div class="timeline-badge "></div>
+                                                                <div class="timeline-box">
 
-                                                                <div class="text-2 fw-6">Trang thái:</div>
-                                                                <span>Đơn hàng của bạn đã hủy</span>
-                                                                <div class="text-2 fw-6">Thời gian cập nhật:</div>
-                                                                <span>{{ $order->updated_at->format('d/m/Y H:i:s') }}</span>
+                                                                    <div class="text-2 fw-6">Trang thái:</div>
+                                                                    <span>Đơn hàng của bạn đã hủy</span>
+                                                                    <div class="text-2 fw-6">Thời gian cập nhật:</div>
+                                                                    <span>{{ $order->updated_at->format('d/m/Y H:i:s') }}</span>
 
-                                                            </div>
-                                                        </li>
+                                                                </div>
+                                                            </li>
                                                         @else
                                                             <li>
                                                                 <div class="timeline-badge success"></div>
@@ -131,6 +133,10 @@
                                                                     <span>{{ $order->status }}</span>
                                                                     <div class="text-2 fw-6">Thời gian cập nhật:</div>
                                                                     <span>{{ $order->updated_at->format('d/m/Y H:i:s') }}</span>
+                                                                    <div class="text-2 fw-6">Tên khách hàng:</div>
+                                                                    <span>{{ $order->name }}</span>
+                                                                    <div class="text-2 fw-6">Số điện thoại:</div>
+                                                                    <span>{{ $order->phone_number }}</span>
 
                                                                 </div>
                                                             </li>
@@ -150,7 +156,7 @@
 
                                                             <div class="text-2 fw-6">{{ $item->product_name }}</div>
                                                             <div class="mt_4"><span class="fw-6">Giá :</span>
-                                                                {{ $item->price }}
+                                                                {{ number_format($item->price, 0, ',', '.') }}đ
                                                             </div>
                                                             <div class="mt_4"><span class="fw-6">Kích thước :</span>
                                                                 {{ $item->size_name }}</div>
@@ -165,30 +171,28 @@
                                                 <ul>
                                                     <li class="d-flex justify-content-between text-2">
                                                         <span>Tổng giá</span>
-                                                        <span class="fw-6">{{ $order->total_price }}</span>
+                                                        <span class="fw-6">
+                                                            {{ number_format($order->total_price, 0, ',', '.') }}₫ </span>
                                                     </li>
-                                                    <li class="d-flex justify-content-between text-2 mt_4 pb_8 line">
-                                                        <span>Giảm</span>
-                                                        <span class="fw-6">$10</span>
-
-                                                    </li>
+                                               
                                                     <li class="d-flex justify-content-between text-2 mt_8">
                                                         <span>Tổng đơn hàng</span>
-                                                        <span class="fw-6">{{ $order->total_price }}</span>
+                                                        <span
+                                                            class="fw-6">{{ number_format($order->total_price, 0, ',', '.') }}đ</span>
                                                     </li>
                                                 </ul>
                                             </div>
                                             <div class="widget-content-inner">
                                                 <ul class="mt_20">
-                                                    <li>Số đơn hàng : <span class="fw-7">{{ $order->order_code }}</span>
+                                                    <li>Mã đơn hàng : <span class="fw-7">{{ $order->order_code }}</span>
                                                     </li>
                                                     <li>Thời gian : <span class="fw-7">
                                                             {{ $order->created_at->format('d/m/Y H:i:s') }}</span></li>
                                                     <li>Tổng đơn hàng : <span
-                                                            class="fw-7">{{ $order->total_price }}</span></li>
+                                                            class="fw-7">{{ number_format($order->total_price, 0, ',', '.') }}đ</span>
+                                                    </li>
                                                     <li>Phương thức thanh toán : <span
                                                             class="fw-7">{{ $order->payment_method }}</span></li>
-
                                                 </ul>
                                             </div>
 

@@ -31,7 +31,10 @@ class BrandController extends Controller
     {
         $validatedData = $this->validateBrand($request);
 
-        $validatedData['image_brand_url'] = $this->handleImageUpload($request);
+        // Upload image nếu có file
+        if ($request->hasFile('image_brand_url')) {
+            $validatedData['image_brand_url'] = $this->handleImageUpload($request);
+        }
 
         Brand::create($validatedData);
 
@@ -59,9 +62,10 @@ class BrandController extends Controller
 
         $validatedData = $this->validateBrand($request, $brand);
 
+        // Nếu có file mới, xử lý upload ảnh mới
         if ($request->hasFile('image_brand_url')) {
-            $this->deleteOldImage($brand->image_brand_url);
-            $validatedData['image_brand_url'] = $this->handleImageUpload($request);
+            $this->deleteOldImage($brand->image_brand_url);  // Xóa ảnh cũ
+            $validatedData['image_brand_url'] = $this->handleImageUpload($request);  // Upload ảnh mới
         }
 
         $brand->update($validatedData);
@@ -74,7 +78,7 @@ class BrandController extends Controller
         $brand = Brand::find($id);
 
         if ($brand) {
-            $this->deleteOldImage($brand->image_brand_url);
+            $this->deleteOldImage($brand->image_brand_url);  // Xóa ảnh khi xóa thương hiệu
             $brand->delete();
             return redirect()->route('admin.brands.index')->with('success', 'Thương hiệu đã được xóa.');
         }
@@ -88,20 +92,23 @@ class BrandController extends Controller
             'name' => [
                 'required',
                 'max:255',
-                Rule::unique('brands')->ignore($brand?->id),
+                Rule::unique('brands')->ignore($brand?->id),  // Kiểm tra trùng tên ngoại trừ bản ghi hiện tại
             ],
-            'image_brand_url' => 'nullable|image',
+            'image_brand_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',  // Hạn chế loại ảnh và kích thước
         ], [
             'name.required' => 'Tên thương hiệu không được để trống.',
             'name.unique' => 'Tên thương hiệu đã tồn tại.',
             'name.max' => 'Tên thương hiệu không được vượt quá 255 ký tự.',
             'image_brand_url.image' => 'Ảnh thương hiệu phải là hình ảnh.',
+            'image_brand_url.mimes' => 'Chỉ chấp nhận các loại hình ảnh: jpeg, png, jpg, gif.',
+            'image_brand_url.max' => 'Ảnh thương hiệu không được vượt quá 10MB.',
         ]);
     }
 
     private function handleImageUpload(Request $request)
     {
         if ($request->hasFile('image_brand_url')) {
+            // Upload ảnh vào thư mục public/brands
             return $request->file('image_brand_url')->store('brands', 'public');
         }
         return null;
@@ -110,6 +117,7 @@ class BrandController extends Controller
     private function deleteOldImage($imagePath)
     {
         if ($imagePath && Storage::disk('public')->exists($imagePath)) {
+            // Xóa ảnh cũ khi có ảnh mới hoặc khi xóa thương hiệu
             Storage::disk('public')->delete($imagePath);
         }
     }

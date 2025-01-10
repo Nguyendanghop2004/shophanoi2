@@ -29,8 +29,8 @@
                                 @endif
                             </div>
                             <label>Cập Nhật Ảnh</label>
-                            <div class="image-preview mx-auto" @error('image_brand_url') style="border:2px dashed red" @enderror>
-                                <label for="image-upload" id="image-label"> Chọn Tập Tin</label>
+                            <div class="image-preview mx-auto @error('image_brand_url') border-danger @enderror" style="border: 2px dashed #ccc; padding: 20px;">
+                                <label for="image-upload" id="image-label" style="cursor: pointer;">Chọn Tập Tin</label>
                                 <input type="file" name="image_brand_url" id="image-upload" accept="image/*" style="display: none;" />
                                 <span id="image-preview" style="display: none;">
                                     <img src="" alt="Preview Image" style="width: 100%; height: 100%; object-fit: cover;" />
@@ -47,20 +47,19 @@
                     <div class="col-lg-9 col-md-6 col-12">
                         <!-- Tên Thương Hiệu -->
                         <div class="form-group">
-                            <label>Tên Thương Hiệu</label>
-                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $brand->name) }}">
+                            <label for="name">Tên Thương Hiệu</label>
+                            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $brand->name) }}" placeholder="Nhập tên thương hiệu">
+                            @error('name')
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
-                        @error('name')
-                            <div class="invalid-feedback" style="display: block;">
-                                {{ $message }}
-                            </div>
-                        @enderror
 
                         <!-- Nút Lưu -->
                         <div class="form-group">
-
                             <button type="button" id="update-btn" class="btn btn-primary">Cập Nhật</button>
-
+                            <a href="{{ route('admin.brands.index') }}" class="btn btn-secondary">Hủy</a>
                         </div>
                     </div>
                 </div>
@@ -68,7 +67,6 @@
         </div>
     </div>
 </section>
-
 
 <!-- Thêm thư viện SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -97,6 +95,8 @@
                 });
             });
         }
+    });
+</script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -113,7 +113,6 @@
                 reader.readAsDataURL(file);
             }
         });
-
     });
 </script>
 @endsection
