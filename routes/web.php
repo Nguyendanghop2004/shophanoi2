@@ -78,11 +78,11 @@ Route::middleware('auth')->group(function () {
 
 });
 
-    //start blog
-    Route::get('/blog/show', [BlogController::class, 'show'])->name('blog.show');
-    Route::get('/blog/{id}/detail', [BlogController::class, 'detail'])->name('blog.detail');
+//start blog
+Route::get('/blog/show', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog/{id}/detail', [BlogController::class, 'detail'])->name('blog.detail');
 
-    //end blog
+//end blog
 
 // cart
 Route::get('/get-product-info', [HomeController::class, 'getProductInfo']);
@@ -102,6 +102,7 @@ Route::post('/cart/update', [CartController::class, 'update'])->name('cart.updat
 Route::get('/cart/modal-cart', [CartController::class, 'getModalCart'])->name('cart.modal');
 
 Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+Route::post('/apply-coupon', [CartController::class, 'applyCoupon'])->name('cart.apply-coupon');
 
 
 Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.donhang');

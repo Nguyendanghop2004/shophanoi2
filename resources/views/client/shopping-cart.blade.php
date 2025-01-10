@@ -34,13 +34,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php
+                            @php 
                                 $totalCart = 0;
                             @endphp
                             @if (count($cartDetails) > 0)
                                 @foreach ($cartDetails as $item)
                                     @php
-                                        $totalCart += (int) $item['quantity'] * (float) $item['subtotal'];
+                                        $totalCart +=$item['subtotal'];
                                     @endphp
                                     <tr class="tf-cart-item file-delete">
 
@@ -52,14 +52,20 @@
                                                 <a href="product-detail.html"
                                                     class="cart-title link">{{ $item['product_name'] }}</a>
                                                 <div class="cart-meta-variant">{{ $item['color_name'] }} /
-                                                    {{ $item['size_name'] }}</div>
+                                                    {{ $item['size_name'] }} + {{ $item['pricebonus'] }} VNĐ</div>
                                                 <span class="remove-cart link remove"
                                                     onclick="removeFromCart({{ $item['product_id'] }}, {{ $item['color_id'] }}, {{ $item['size_id'] }})">Remove</span>
                                             </div>
                                         </td>
                                         <td class="tf-cart-item_price" cart-data-title="Price">
-                                            <div class="cart-price">{{ number_format($item['subtotal'], 0, ',', '.') }} VNĐ
-                                            </div>
+
+                                            <div class="price fw-6">
+                                                <span class="sale-price">{{ number_format($item['final_price'], 0, ',', '.') }} VNĐ</span>
+                                                <span class="original-price" style="text-decoration: line-through; color: #888;">
+                                                    {{$item['price'] > $item['final_price'] ? number_format($item['price'], 0, ',', '.').' VNĐ'  : ''}}
+                                                </span>
+                                            </div> 
+                                          
                                         </td>
                                         <td class="tf-cart-item_quantity" cart-data-title="Quantity">
                                             <div class="cart-quantity">
@@ -98,8 +104,8 @@
                                             </div>
                                         </td>
                                         <td class="tf-cart-item_total" cart-data-title="Total">
-                                            <div class="cart-total" data-price="{{ $item['subtotal'] }}">
-                                                {{ number_format((int) $item['quantity'] * (float) $item['subtotal'], 0, ',', '.') }}
+                                            <div class="cart-total" data-price="{{ $item['final_price'] + $item['pricebonus'] }}">
+                                                {{ number_format( $item['subtotal'], 0, ',', '.') }}
                                                 VNĐ
                                             </div>
                                         </td>
