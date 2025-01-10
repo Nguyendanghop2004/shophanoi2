@@ -236,7 +236,6 @@ use Illuminate\Support\Facades\Route;
     Route::get('orders/danhsachgiaohang', [OrderController::class, 'danhsachgiaohang'])->name('order.danhsachgiaohang')->middleware('permission:Shipper');
     Route::post('order/{order}/remove-shipper', [OrderController::class, 'removeShipper'])->name('order.removeShipper')->middleware('permission:Shipper');
     Route::post('order/{id}/update-updateStatusShip', [OrderController::class, 'updateStatusShip'])->name('order.update-updateStatusShip')->middleware('permission:Shipper');
-    Route::get('order/complete/{id}', [OrderController::class, 'completeOrder'])->name('order.complete');
 
     //sale product
     Route::resource('/sales', SaleProductController::class)->middleware('permission:product');
