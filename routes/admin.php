@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\Route;
     Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus'])->group(function () {
     // Login admin
     Route::get('error', [ErrorController::class, 'error'])->name('error');
-    Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard')->middleware('permission:account_admin');
+ 
     Route::get('trangchu', [AccoutAdminController::class, 'trangchu'])->name('trangchu');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
     Route::get('account', [AccoutAdminController::class, 'account'])->name('accounts.account')->middleware('permission:account_admin');
@@ -236,13 +236,13 @@ use Illuminate\Support\Facades\Route;
     Route::get('orders/danhsachgiaohang', [OrderController::class, 'danhsachgiaohang'])->name('order.danhsachgiaohang')->middleware('permission:Shipper');
     Route::post('order/{order}/remove-shipper', [OrderController::class, 'removeShipper'])->name('order.removeShipper')->middleware('permission:Shipper');
     Route::post('order/{id}/update-updateStatusShip', [OrderController::class, 'updateStatusShip'])->name('order.update-updateStatusShip')->middleware('permission:Shipper');
-  
-
-
+    Route::get('order/complete/{id}', [OrderController::class, 'completeOrder'])->name('order.complete');
 
     //sale product
     Route::resource('/sales', SaleProductController::class)->middleware('permission:product');
-
+    // thongke
+    Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard')->middleware('permission:account_admin');
+    Route::post('/filter', [AdminDashboardController::class, 'index'])->name('dashboard.index.filter');
 });
 
 

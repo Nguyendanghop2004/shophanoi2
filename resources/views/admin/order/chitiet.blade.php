@@ -68,6 +68,10 @@
                         <td>{{ $order->created_at }}</td>
                     </tr>
                     <tr>
+                        <th>Ngày giao</th>
+                        <td>{{ $order->updated_at }}</td>
+                    </tr>
+                    <tr>
                         <th>Tên Shipper</th>
                         <td>{{ $shipper ? $shipper->name : 'Chưa có shipper' }}</td>
                     </tr>
