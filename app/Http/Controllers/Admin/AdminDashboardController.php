@@ -66,36 +66,52 @@ $activeUsersCount = User::where('status', '0')->count(); // User đang hoạt đ
     ->get();
 
     
-$sonam = Order::whereYear('created_at', $year)
-    ->where('status', 'đã thanh toán')
-    ->selectRaw('MONTH(created_at) as month, SUM(total_price) as total')
-    ->groupBy('month')
-    ->orderBy('month')
-    ->get();
-
-// Khởi tạo mảng dữ liệu đầy đủ
-$firstMonth = $sonam->min('month') ?? 1; // Lấy tháng đầu tiên có dữ liệu
-$lastMonth = $sonam->max('month') ?? 12; // Lấy tháng cuối cùng có dữ liệu
-
-$fullMonths = collect(range($firstMonth, $lastMonth));
-
-// Đảm bảo các tháng không có doanh thu được thêm vào với giá trị 0
-$monthlyData = $fullMonths->mapWithKeys(function ($month) use ($sonam) {
-    $sale = $sonam->firstWhere('month', $month);
-    return [$month => $sale->total ?? 0];
-});
-
-// Tạo tên tháng bằng tiếng Việt
-$monthNames = [
-    1 => 'Tháng 1', 2 => 'Tháng 2', 3 => 'Tháng 3', 4 => 'Tháng 4',
-    5 => 'Tháng 5', 6 => 'Tháng 6', 7 => 'Tháng 7', 8 => 'Tháng 8',
-    9 => 'Tháng 9', 10 => 'Tháng 10', 11 => 'Tháng 11', 12 => 'Tháng 12',
-];
-
-$monthLabels = $monthlyData->keys()->map(fn($month) => $monthNames[$month])->toArray();
-$gia = $monthlyData->values()->toArray();
-$totalGia = array_sum($gia);
-
+    $currentYear = now()->year;
+    $previousYear = $currentYear - 1;
+    $nextYear = $currentYear + 1;
+ 
+    // Lấy doanh thu từ năm trước và năm sau (bao gồm cả những tháng có doanh thu)
+    $revenue = Order::whereIn(\DB::raw('YEAR(created_at)'), [$previousYear, $currentYear, $nextYear])
+        ->where('payment_status', 'đã thanh toán')  // Lọc theo trạng thái thanh toán
+        ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(total_price) as total')
+        ->groupBy('year', 'month')
+        ->orderBy('year')
+        ->orderBy('month')
+        ->get();
+ 
+    // Khởi tạo mảng chứa doanh thu theo tháng và năm
+    $monthlyData = [];
+ 
+    // Điền vào dữ liệu doanh thu của các tháng có doanh thu
+    foreach ($revenue as $sale) {
+        // Kết hợp tháng và năm
+        $monthYear = 'Tháng ' . $sale->month . ', ' . $sale->year;
+        $monthlyData[$monthYear] = $sale->total;
+    }
+ 
+    // Mảng chứa tất cả các tháng trong năm trước, năm hiện tại và năm sau
+    $fullMonths = collect(range(1, 12));  // Các tháng từ 1 đến 12
+    $years = [$previousYear, $currentYear, $nextYear];
+ 
+    // Đảm bảo các tháng có doanh thu sẽ được thêm vào kết quả
+    $resultData = collect();
+ 
+    foreach ($years as $year) {
+        foreach ($fullMonths as $month) {
+            $monthYear = 'Tháng ' . $month . ', ' . $year;
+            // Chỉ hiển thị những tháng có doanh thu
+            if (isset($monthlyData[$monthYear]) && $monthlyData[$monthYear] > 0) {
+                $resultData[$monthYear] = $monthlyData[$monthYear];
+            }
+        }
+    }
+ 
+    // Chuyển đổi Collection thành array
+    $monthLabels = $resultData->keys()->toArray();
+    $gia = $resultData->values()->toArray();
+ 
+    // Tính tổng doanh thu
+    $totalGia = array_sum($gia);
 
 
 
