@@ -625,6 +625,9 @@ class CartController extends Controller
                 return response()->json(['success' => false, 'message' => 'Giỏ hàng của bạn đang trống.'], 400);
             }
     
+            // Lấy chi tiết giỏ hàng
+            $cartDetails = $this->getCartDetails($cart->cartItems);
+    
             $coupon = DiscountCode::where('code', $couponCode)
                 ->where('start_date', '<=', now())
                 ->where(function ($query) {
@@ -641,7 +644,7 @@ class CartController extends Controller
                 return response()->json(['success' => false, 'message' => 'Mã giảm giá đã đạt giới hạn sử dụng.'], 400);
             }
     
-            // Kiểm tra mã giảm giá chỉ thuộc về người dùng cụ thể
+            // Kiểm tra giới hạn người dùng cụ thể
             $userLimit = $coupon->userLimits()->where('user_id', auth()->id())->first();
             if ($userLimit) {
                 if (!is_null($userLimit->usage_limit) && $userLimit->times_used >= $userLimit->usage_limit) {
@@ -651,39 +654,27 @@ class CartController extends Controller
                 return response()->json(['success' => false, 'message' => 'Mã giảm giá này không áp dụng cho bạn.'], 403);
             }
     
-            // Kiểm tra nếu mã giảm giá áp dụng cho toàn bộ hóa đơn
-            $applicableProducts = $coupon->applicableProducts ?? collect();
-    
+            // Tính tổng giá trị giỏ hàng từ `cartDetails`
+            $totalPrice = collect($cartDetails)->sum('subtotal'); // Tổng giá trị hóa đơn
             $totalDiscount = 0;
-            $totalPrice = 0; // Tổng giá trị ban đầu của hóa đơn
     
-            foreach ($cart->cartItems as $item) {
-                $product = $item->product;
-    
-                // Tính giá cuối cùng của sản phẩm bao gồm giá cộng thêm
-                $priceBonus = $product->variants()
-                    ->where('color_id', $item->color_id)
-                    ->where('size_id', $item->size_id)
-                    ->value('price') ?? 0;
-    
-                $finalPrice = ($product->price + $priceBonus) * $item->quantity;
-                $totalPrice += $finalPrice; // Cộng dồn vào tổng hóa đơn
-    
-                // Nếu mã giảm giá chỉ áp dụng cho sản phẩm cụ thể
-                if (!$applicableProducts->isEmpty() && !$applicableProducts->pluck('product_id')->contains($product->id)) {
+            foreach ($cartDetails as $item) {
+                // Kiểm tra nếu mã giảm giá chỉ áp dụng cho sản phẩm cụ thể
+                $applicableProducts = $coupon->applicableProducts ?? collect();
+                if (!$applicableProducts->isEmpty() && !$applicableProducts->pluck('product_id')->contains($item['product_id'])) {
                     continue; // Bỏ qua các sản phẩm không hợp lệ
                 }
     
-                // Tính giảm giá cho sản phẩm này
+                // Tính giảm giá cho từng sản phẩm
                 if ($coupon->discount_type === 'percent') {
-                    $discount = ($finalPrice * $coupon->discount_value) / 100;
+                    $discount = ($item['final_price'] * $coupon->discount_value) / 100;
                 } elseif ($coupon->discount_type === 'fixed') {
-                    $discount = $coupon->discount_value;
+                    $discount = min($coupon->discount_value, $item['final_price']); // Đảm bảo giảm giá không vượt quá giá sản phẩm
                 } else {
                     $discount = 0;
                 }
     
-                $totalDiscount += min($discount, $finalPrice); // Đảm bảo giảm giá không vượt quá giá sản phẩm
+                $totalDiscount += $discount;
             }
     
             // Nếu mã giảm giá áp dụng toàn bộ hóa đơn, tính giảm giá trên tổng hóa đơn
@@ -695,7 +686,7 @@ class CartController extends Controller
                 }
             }
     
-            $newTotal = max($totalPrice - $totalDiscount, 0); // Tổng giá trị mới sau giảm giá (không nhỏ hơn 0)
+            $newTotal = max($totalPrice - $totalDiscount, 0); // Tổng giá trị mới sau giảm giá
     
             // Cập nhật số lần sử dụng mã giảm giá
             $coupon->increment('times_used');
@@ -723,6 +714,7 @@ class CartController extends Controller
             ], 500);
         }
     }
+    
     
 
 

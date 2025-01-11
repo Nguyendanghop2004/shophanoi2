@@ -148,7 +148,7 @@
 
                             <div class="d-flex justify-content-between line pb_20">
                                 <h6 class="fw-5">Total</h6>
-                                <h6 class="total fw-5">${{ number_format($totalPrice, 2) }}</h6>
+                                <h6 class="total fw-5 tf-totals-total-value">{{ number_format($totalPrice, 2) }} VNĐ</h6>
                             </div>
 
                             <div class="wd-check-payment">
