@@ -87,10 +87,10 @@ class OrderController extends Controller
             return view('client.orders.show', compact('order', 'orderitems', 'city', 'province', 'ward'));
         } catch (DecryptException $e) {
            
-            return redirect()->route('error')->with('error', 'Dữ liệu không hợp lệ!');
+            return redirect()->back();
         } catch (ModelNotFoundException $e) {
          
-            return redirect()->route('error')->with('error', 'Đơn hàng không tồn tại hoặc bạn không có quyền truy cập!');
+            return redirect()->back();
         }
     }
     
@@ -274,13 +274,13 @@ class OrderController extends Controller
             return view('client.orders.detail', compact('order', 'city', 'province', 'ward', 'orderitems'));
         } catch (DecryptException $e) {
           
-            return redirect()->route('error');
+            return redirect()->back();
         } catch (ModelNotFoundException $e) {
           
-            return redirect()->route('error');
+            return redirect()->back();
         } catch (\Exception $e) {
            
-            return redirect()->route('error');
+            return redirect()->back();
         }
     }
     

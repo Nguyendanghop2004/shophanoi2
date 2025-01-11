@@ -25,7 +25,7 @@
                                 <th scope="col">Email</th>
                                 <th scope="col">Vai Trò</th>
                                 <th scope="col">Trạng Thái</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">Chức năng </th>
                             </tr>
                         </thead>
                         <tbody>

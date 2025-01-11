@@ -33,18 +33,16 @@
                                     <th scope="row">{{ $admin->id }}</th>
                                     <td> {{ $admin->admin->name }}</td>
                                     <td>{{ $admin->action }}</td>
-
                                     <td>
                                         {{ $admin->model_id }}
-
                                     </td>
                                     <td>
-                                        {{ $admin->updated_at }}
+                                        {{ $admin->updated_at ->format('d/m/Y H:i') }}
                                     </td>
                                     <td>
                                         <div class="d-flex">
                                             <a href="{{ route('admin.show', $admin->id) }}" class="btn btn-warning">
-                                                <i class="fas fa-edit"></i>
+                                                <i class="fas fa-eye" ></i>
                                             </a>
                                         </div>
                                     </td>
@@ -53,8 +51,8 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {{ $histories->links() }}
                 </div>
-                {{-- {{ $histories->links() }} --}}
             </div>
         </div>
     </section>

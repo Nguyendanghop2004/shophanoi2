@@ -135,14 +135,7 @@ class ShopCollectionController extends Controller
             'colors' => $product->colors, // Danh sách màu sắc của sản phẩm
         ];
     });
-    $wishlist = [];
-
-    if (Auth::check()) {
-       
-        $wishlist = Wishlist::where('user_id', Auth::id())
-            ->pluck('product_id')
-            ->toArray(); 
-    }
+    
     return $products;
 }
 

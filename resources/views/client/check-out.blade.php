@@ -1,4 +1,8 @@
 @extends('client.layouts.master')
+@section('header-home')
+    @include('client.layouts.particals.header-home')
+@endsection
+
 @section('content')
 
 @include('client.layouts.particals.page-title')

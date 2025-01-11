@@ -3,12 +3,12 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Account User</h1>
+            <h1>Tài khoản người dùng </h1>
         </div>
 
         <div class="card card-primary">
             <div class="card-header">
-                <h4>Danh Sách User</h4>
+                <h4>Danh Sách Người Dùng </h4>
                 <div class="card-header-action">
                     <a href="{{ route('admin.accountsUser.create') }}" class="btn btn-primary">
                         Tạo Mới
@@ -21,12 +21,12 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Name</th>
+                                <th scope="col">Tên </th>
                                 <th scope="col">Email</th>
-                                <th scope="col">Image</th>
+                                <th scope="col">Hình ảnh </th>
                                 <th scope="col">Trạng thái</th>
                                 <th scope="col">Địa chỉ</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">Hành Động </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -60,7 +60,7 @@
                                         <div class="d-flex">
                                             <a href="{{ route('admin.accountsUser.edit', $user->id) }}"
                                                 class="btn btn-warning">
-                                                <i class="fas fa-edit"></i>
+                                                <i class="fas fa-eye" ></i>
                                             </a>
 
                                             {{-- <form action="{{ route('admin.accountsUser.destroy', $user->id) }}"

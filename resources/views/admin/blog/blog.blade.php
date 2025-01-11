@@ -21,11 +21,11 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">title</th>
-                                <th scope="col">unique</th>
-                                <th scope="col">image</th>
+                                <th scope="col">tiêu đề</th>
+                                <th scope="col">Tác giả</th>
+                                <th scope="col">HÌnh ảnh </th>
                                 <th scope="col">Trạng thái</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">Chức năng </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,14 +57,7 @@
                                                 class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.blog.destroy', $admin->id) }}" method="POST" id="delete-form-{{ $admin->id }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn btn-danger ml-2" onclick="confirmDeleteForm({{ $admin->id }})">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </form>
-                                            @if ($admin->status)
+                                                @if ($admin->status)
                                                 <form action="{{ route('admin.accountsUser.deactivateBlog', $admin->id) }}" method="POST" id="deactivate-form-{{ $admin->id }}" class="ml-2">
                                                     @csrf
                                                     <button type="button" class="btn btn-danger" onclick="confirmDeactivateForm({{ $admin->id }})">

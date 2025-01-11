@@ -195,6 +195,9 @@
                         </li>
 
                         <!-- Thông báo lỗi -->
+                     
+                        @include('client.layouts.particals.navright')
+                       
                         <div id="searchError" class="alert alert-danger" style="display: none;">
                             Vui lòng nhập từ khóa tìm kiếm
                             @include('client.layouts.particals.navright')

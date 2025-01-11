@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Models\Wishlist;
 use DB;
 use Session;
 use App\Models\Cart;
@@ -110,8 +109,8 @@ class CartController extends Controller
     {
         $cart = Session::get('cart', []);
         $newItem = $request->only(['product_id', 'color_id', 'size_id', 'quantity']);
-
         $found = false;
+            
         foreach ($cart as &$item) {
             if (
                 $item['product_id'] == $newItem['product_id'] &&
@@ -268,20 +267,12 @@ class CartController extends Controller
 
     public function viewCart()
     {
-        
-
         $products = Product::query()
             ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
             ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
             ->with([
                 'colors' => fn($query) => $query->select('colors.id', 'colors.name', 'colors.sku_color'),
                 'images' => fn($query) => $query->select('product_images.id', 'product_images.product_id', 'product_images.color_id', 'product_images.image_url'),
-                'sales' => fn($query) => $query->select('product_sales.product_id', 'product_sales.discount_type', 'product_sales.discount_value')
-                    ->where('start_date', '<=', now())
-                    ->where(function ($q) {
-                        $q->whereNull('end_date')
-                            ->orWhere('end_date', '>=', now());
-                    }),
             ])
             ->select([
                 'products.id',
@@ -289,10 +280,10 @@ class CartController extends Controller
                 'products.price',
                 'products.slug',
                 DB::raw('COUNT(DISTINCT product_variants.size_id) as distinct_size_count'), // Số size khác nhau
-                DB::raw('(SELECT SUM(stock_quantity) FROM product_variants WHERE product_variants.product_id = products.id) as total_stock_quantity'), // Tổng tồn kho chính xác
+                DB::raw('(SELECT SUM(stock_quantity) FROM product_variants WHERE product_variants.product_id = products.id) as total_stock_quantity') // Tổng tồn kho chính xác
             ])
             ->groupBy('products.id')
-            ->limit(4)
+            ->limit(10)
             ->get();
 
         $products = $products->map(function ($product) {
@@ -314,16 +305,6 @@ class CartController extends Controller
                 ];
             });
 
-            // Tính toán giá giảm nếu có sale
-            $salePrice = $product->price; // Giá gốc
-            if ($product->sales) {
-                if ($product->sales->discount_type === 'percent') {
-                    $salePrice = $product->price * (1 - $product->sales->discount_value / 100);
-                } elseif ($product->sales->discount_type === 'fixed') {
-                    $salePrice = $product->price - $product->sales->discount_value;
-                }
-            }
-
             // Thiết lập main_image_url và hover_main_image_url cho sản phẩm
             $firstColor = $product->colors->first();
             $product->main_image_url = $firstColor ? $firstColor['main_image'] : null;
@@ -334,24 +315,14 @@ class CartController extends Controller
                 'id' => $product->id,
                 'name' => $product->product_name,
                 'price' => $product->price,
-                'sale_price' => max(0, $salePrice), // Giá sau giảm, không được âm
                 'slug' => $product->slug,
                 'distinct_size_count' => $product->distinct_size_count,
                 'total_stock_quantity' => $product->total_stock_quantity,
                 'main_image_url' => $product->main_image_url,
                 'hover_main_image_url' => $product->hover_main_image_url,
                 'colors' => $product->colors,
-            ]; 
+            ];
         });
-        $wishlist = [];
-
-        if (Auth::check()) {
-           
-            $wishlist = Wishlist::where('user_id', Auth::id())
-                ->pluck('product_id')
-                ->toArray(); 
-        }
-     
         $cartDetails = [];
 
         if (Auth::guard('web')->check()) {
@@ -381,7 +352,7 @@ class CartController extends Controller
         }
 
         // Trả về view với dữ liệu giỏ hàng
-        return view('client.shopping-cart', compact('cartDetails', 'products','wishlist'));
+        return view('client.shopping-cart', compact('cartDetails', 'products'));
     }
 
     public function removeFromCart(Request $request)

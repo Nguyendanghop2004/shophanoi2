@@ -16,13 +16,16 @@ use Illuminate\Http\Request;
 class ProfileOrderController extends Controller
 {
 
-    public function showProfileOrder(String $id)
+
+
+    public function showProfileOrder(string $id)
     {
-            $order = Order::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
-            $orderitems = $order->orderItems;
-            $city = City::where('matp', $order->city_id)->first();
-            $province = Province::where('maqh', $order->province_id)->first();
-            $ward = Wards::where('xaid', $order->wards_id)->first();
-            return view('client.user.profile.order-profile.index', compact('order', 'orderitems', 'city', 'province', 'ward'));
+        $order = Order::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $orderitems = $order->orderItems;
+        $city = City::where('matp', $order->city_id)->first();
+        $province = Province::where('maqh', $order->province_id)->first();
+        $ward = Wards::where('xaid', $order->wards_id)->first();
+        return view('client.user.profile.order-profile.index', compact('order', 'orderitems', 'city', 'province', 'ward'));
     }
 }
+

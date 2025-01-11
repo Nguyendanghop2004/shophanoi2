@@ -67,7 +67,6 @@ class WishlistController extends Controller
 
       
         $wishlistProductIds = Wishlist::where('user_id', $userId)->pluck('product_id')->toArray();
-
         if (empty($wishlistProductIds)) {
             return view('client.wishlist', ['message' => 'Danh sách yêu thích của bạn trống.']);
         }
@@ -137,7 +136,6 @@ class WishlistController extends Controller
                 ->pluck('product_id')
                 ->toArray(); 
         }
-  
         return view('client.wishlist', compact('products','wishlist'));
     }
     
@@ -146,10 +144,8 @@ class WishlistController extends Controller
         if (!Auth::check()) {
             return response()->json(['count' => 0]);
         }
-
         $userId = Auth::id();
         $count = Wishlist::where('user_id', $userId)->count();
-
         return response()->json(['count' => $count]);
     }
 

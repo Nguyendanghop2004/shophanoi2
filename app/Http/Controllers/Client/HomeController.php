@@ -118,6 +118,7 @@ class HomeController extends Controller
                 ->toArray(); 
         }
         $data = BlogClient::where('status', 1)->get();
+        // return response()->json($products);
         return view('client.home', compact('products', 'collections', 'sliders','wishlist','data'));
     }
     public function getProductInfo(Request $request)

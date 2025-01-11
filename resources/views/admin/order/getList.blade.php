@@ -47,14 +47,14 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">ID Order</th>
-                                <th scope="col">UserName</th>
+                                <th scope="col">ID đơn hàng </th>
+                                <th scope="col">Tên</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Mã Đơn Hàng</th>
                                 <th scope="col">Thanh toán</th>
                                 <th scope="col">Trạng thái</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>

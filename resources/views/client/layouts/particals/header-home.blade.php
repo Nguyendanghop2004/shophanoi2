@@ -152,8 +152,8 @@
                                Vui lòng nhập từ khóa tìm kiếm
                            </div>
                            @include('client.layouts.particals.navright')
-                        <li class="nav-notify">
-                           {{-- @if (Auth::check())
+                           <li class="nav-notify">
+                               {{-- @if (Auth::check())
                                <a href="{{ route('accountUser.logout') }}">Logout</a>
                            @else
                                <li>
@@ -211,101 +211,47 @@
                                    </ul>
                                </div>
                            </li>
-                        <li class="nav-wishlist">
-                            <a href="{{route('wishlist')}}" class="nav-icon-item">
-                                <i class="icon icon-heart"></i>
-                             
-                                <span class="count-box">0</span>
-                            </a>
-                        </li>
-                        <li class="nav-cart">
-                            <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
-                                <i class="icon icon-bag"></i>
-                                <span class="count-box cart-count">0</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                           {{-- @dd($count); --}}
+                           {{-- dd( $count ); --}}
 
+                           <li class="nav-wishlist">
+                               <a href="{{ route('wishlist') }}" class="nav-icon-item" title="Wishlist">
+                                   <i class="icon icon-heart"></i>
 
+                                   <span id= "wishlist-count" class="count-box">0</span>
+                               </a>
+                           </li>
+
+                           <li class="nav-cart">
+                               <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
+                                   <i class="icon icon-bag"></i>
+                                   <span class="count-box cart-count">0</span>
+                               </a>
+                           </li>
                        </ul>
                    </div>
 
+
                    </ul>
                </div>
-           </div>
-                        <li class="nav-notify">
-                               <div class="btn-group">
-                                   <a class="icon icon-notify" data-bs-toggle="dropdown" aria-expanded="false">
-                                   </a>
-                                   <ul class="dropdown-menu">
-                                       <li>
-                                           <a class="dropdown-item" href="#">
-                                               <div class="notification-icon">
-                                                   <i class="icon icon-notify"></i>
-                                               </div>
-                                               <div class="notification-content">
-                                                   <p class="notification-title">Thông báo 1</p>
-                                                   <span class="notification-time">1 phút trước</span>
-                                               </div>
-                                           </a>
-                                       </li>
-                                       <li>
-                                           <a class="dropdown-item" href="#">
-                                               <div class="notification-icon">
-                                                   <i class="icon icon-notify"></i>
-                                               </div>
-                                               <div class="notification-content">
-                                                   <p class="notification-title">Thông báo 2</p>
-                                                   <span class="notification-time">10 phút trước</span>
-                                               </div>
-                                           </a>
-                                       </li>
-                                       <li>
-                                           <a class="dropdown-item" href="#">
-                                               <div class="notification-icon">
-                                                   <i class="icon icon-notify"></i>
-                                               </div>
-                                               <div class="notification-content">
-                                                   <p class="notification-title">Thông báo 3</p>
-                                                   <span class="notification-time">30 phút trước</span>
-                                               </div>
-                                           </a>
-                                       </li>
-                                       <li>
-                                           <hr class="dropdown-divider">
-                                       </li>
-                                       <li class="text-center">
-                                           <a class="dropdown-item text-primary" href="#">Xem tất cả thông báo</a>
-                                       </li>
-                                   </ul>
-                               </div>
-                           </li>
-                        <li class="nav-wishlist">
-                            <a href="{{route('wishlist')}}" class="nav-icon-item">
-                                <i class="icon icon-heart"></i>
-                             
-                                <span class="count-box">0</span>
-                            </a>
-                        </li>
-                        <li class="nav-cart">
-                            <a href="#shoppingCart" data-bs-toggle="modal" class="nav-icon-item">
-                                <i class="icon icon-bag"></i>
-                                <span class="count-box cart-count">0</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                
 
-                                     
-                      
+               </ul>
            </div>
+       </div>
+
+
+       </ul>
+       </div>
+
+
+
 
        </div>
 
        </div>
 
+       </div>
+       {{-- @dd($count) --}}
 
        <div class="header-bottom line">
            <div class="container-full px_15 lg-px_40">
@@ -323,8 +269,11 @@
            </div>
        </div>
 
+
+
    </header>
    <!-- /header -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    <script>
        function validateSearchForm() {
            var query = document.getElementById('searchQuery').value.trim();
@@ -345,4 +294,32 @@
                errorDiv.style.display = 'none';
            }, 3000);
        }
+
+   </script>
+   <script>
+     function fetchWishlistCount() {
+           fetch('/api/wishlist/count') // Đường dẫn tới API getCount
+               .then(response => {
+                   if (!response.ok) {
+                       throw new Error('Network response was not ok');
+                   }
+                   return response.json();
+               })
+               .then(data => {
+                   const wishlistCountElement = document.getElementById('wishlist-count');
+                   if (wishlistCountElement) {
+                       wishlistCountElement.textContent = data.count; // Cập nhật số lượng vào thẻ span
+                   } else {
+                       console.error("Element with ID 'wishlist-count' not found.");
+                   }
+               })
+               .catch(error => {
+                   console.error('Error fetching wishlist count:', error);
+               });
+       }
+
+       // Gọi hàm sau khi trang tải xong
+       document.addEventListener('DOMContentLoaded', function() {
+           fetchWishlistCount();
+       });
    </script>

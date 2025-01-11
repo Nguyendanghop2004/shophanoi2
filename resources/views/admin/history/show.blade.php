@@ -34,6 +34,7 @@
                             @endif
                         @endforeach
                     </div>
+                    {{-- @dd($data->changes) --}}
                     <div class="card-body">
                         @foreach ($data->changes as $key => $old)
                         {{-- @dd($data->changes) --}}

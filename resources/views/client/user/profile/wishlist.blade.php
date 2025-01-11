@@ -16,7 +16,9 @@
             margin-top: 20px;
             /* Cách phần trên một chút */
             padding: 20px;
+
             /* Thêm khoảng cách xung quanh văn bản */
+
         }
     </style>
     <!-- categories -->
@@ -82,7 +84,7 @@
                                                                     <button type="submit"
                                                                         style="background: none; border: none;">
                                                                         <span class="icon icon-delete"></span>
-                                                                        <span class="tooltip">Remove from Wishlist</span>
+                                                                        <span class="tooltip" style="right: 3px;">Xóa</span>
                                                                     </button>
                                                                 </form>
                                                         </a>
@@ -132,6 +134,40 @@
                     </div>
             </div>
     </section>
+    <style>
+        /* Đặt kiểu mặc định cho nút */
+        /* Kiểu mặc định cho nút */
+        .wishlist-btn {
+            background-color: #fff;
+            /* Nền trắng mặc định */
+            border: none;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 50%;
+            /* Tùy chỉnh để có thể làm nút tròn */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Hiệu ứng nổi nhẹ */
+        }
+
+        .wishlist-btn .icon {
+            font-size: 1.5rem;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+
+        .wishlist-btn:hover {
+            background-color: #000;
+        }
+
+        .wishlist-btn:hover .icon {
+            color: #fff;
+        }
+    </style>
     </div>
     </div>
     </div>
@@ -163,7 +199,6 @@
 
 
     });
-    q
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
