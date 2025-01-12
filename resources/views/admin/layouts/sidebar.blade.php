@@ -298,6 +298,22 @@
                 <li><a class="nav-link" href="{{ route('admin.contact.index') }}"><i class="fas fa-envelope"></i>
                         <span>Liên Hệ</span></a></li>
             @endcan
+            @can('coupoun')
+                <li class="dropdown">
+                    <a href="{{ route('admin.discount_codes.index') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                            class="fas fa-folder"></i>
+                        <span>Mã Giảm Giá</span></a>
+                    <ul class="dropdown-menu">
+
+
+                        <li><a class="nav-link" href="{{ route('admin.discount_codes.index') }}"><span>Danh sách mã giảm giá</span></a>
+                        </li>
+                        <li><a class="nav-link" href="{{ route('admin.discount_codes.create') }}"><span>Tạo mới</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+            @endcan
             @can('manager_ship')
                 <li class="menu-header">Quản Lí Shipper</li>
                 <li class="dropdown">

@@ -168,31 +168,9 @@
                                         <input type="text" name="quantity_product" value="1">
                                         <span class="btn-quantity plus-btn-detail">+</span>
                                     </div>
+                                    
                                 </div>
-                                <div class="tf-product-info-buy-button">
-                                    <form class="">
-                                        <a href="javascript:void(0);"
-                                            class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Thêm
-                                                vào giỏ -&nbsp;<span class="tf-qty-price"
-                                                    data-price="{{ $product->price }}"
-                                                    data-sale-price="{{ isset($product->sale_price) && $product->sale_price < $product->price ? $product->sale_price : $product->price }}">
-                                                    {{ number_format(isset($product->sale_price) && $product->sale_price < $product->price ? $product->sale_price : $product->price, 0, ',', '.') }}
-                                                    VNĐ
-                                                </span>
-                                        </a>
-                                       
-                                        {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                            class="tf-product-btn-wishlist hover-tooltip box-icon bg_white compare btn-icon-action">
-                                            <span class="icon icon-compare"></span>
-                                            <span class="tooltip">Add to Compare</span>
-                                            <span class="icon icon-check"></span>
-                                        </a> --}}
-
-                                    </form>
-                                   
-                                        
-                                </div>
-                                <div class="tf-product-info-buy-button">
+                                <div class="tf-product-info-buy-buttons">
                                     <a href="javascript:void(0);"
                                             class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
                                             @if(in_array($product['id'], $wishlist))
@@ -220,6 +198,30 @@
                                             @endif
                                         </a>
                                         </div>
+                                <div class="tf-product-info-buy-button">
+                                    <form class="">
+                                        <a href="javascript:void(0);"
+                                            class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Thêm
+                                                vào giỏ -&nbsp;<span class="tf-qty-price"
+                                                    data-price="{{ $product->price }}"
+                                                    data-sale-price="{{ isset($product->sale_price) && $product->sale_price < $product->price ? $product->sale_price : $product->price }}">
+                                                    {{ number_format(isset($product->sale_price) && $product->sale_price < $product->price ? $product->sale_price : $product->price, 0, ',', '.') }}
+                                                    VNĐ
+                                                </span>
+                                        </a>
+                                       
+                                        {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
+                                            class="tf-product-btn-wishlist hover-tooltip box-icon bg_white compare btn-icon-action">
+                                            <span class="icon icon-compare"></span>
+                                            <span class="tooltip">Add to Compare</span>
+                                            <span class="icon icon-check"></span>
+                                        </a> --}}
+
+                                    </form>
+                                   
+                                        
+                                </div>
+                                
                                 {{-- <div class="tf-product-info-extra-link">
                                     <a href="#compare_color" data-bs-toggle="modal" class="tf-product-extra-icon">
                                         <div class="icon">
@@ -1598,7 +1600,8 @@
                 let totalPrice = finalPrice * quantity; // Tổng tiền
 
                 // Cập nhật vào giao diện
-                $('.tf-qty-price').text(`${totalPrice.toLocaleString('vi-VN')} VNĐ`);
+                $('.tf-qty-price').text(Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ');
+
             }
 
 
