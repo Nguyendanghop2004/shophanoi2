@@ -151,6 +151,8 @@ Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->nam
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::get('/cart/modal-cart', [CartController::class, 'getModalCart'])->name('cart.modal');
 
+Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+Route::post('/apply-coupon', [CheckOutController::class, 'applyCoupon'])->name('cart.apply-coupon');
 
 
 

@@ -88,7 +88,12 @@
                             VNĐ
                         </span>
                 </a>
-          
+                <a href="javascript:void(0);"
+                    class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
+                    <span class="icon icon-heart"></span>
+                    <span class="tooltip">Add to Wishlist</span>
+                    <span class="icon icon-delete"></span>
+                </a>
                 {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                     class="tf-product-btn-wishlist hover-tooltip box-icon bg_white compare btn-icon-action">
                     <span class="icon icon-compare"></span>
@@ -98,7 +103,7 @@
             </form>
         </div>
         <div>
-            <a href="{{ route('product-detail', $product->slug) }}" class="tf-btn fw-6 btn-line">Chi Tiết<i
+            <a href="{{ route('product-detail', $product->slug) }}" class="tf-btn fw-6 btn-line">Xem chi tiết<i
                     class="icon icon-arrow1-top-left"></i></a>
         </div>
     </div>
@@ -220,7 +225,8 @@
             let totalPrice = finalPrice * quantity; // Tổng tiền
 
             // Cập nhật vào giao diện
-            $('.tf-qty-price').text(`${totalPrice.toLocaleString('vi-VN')} VNĐ`);
+            $('.tf-qty-price').text(Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ');
+
         }
 
 
