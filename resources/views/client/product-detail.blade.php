@@ -4,7 +4,6 @@
 @endsection
 
 @section('content')
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- breadcrumb -->
     <div class="tf-breadcrumb">
         <div class="container">
@@ -364,31 +363,42 @@
                                 <span class="inner">Review</span>
                             </li>
                         </ul>
-                        <div class="widget-content-inner active">
-                            <div class="form-group pl-5 pr-5">
-                                {!! $product->description !!}
+                        <div class="widget-content-tab">
+                            <!-- Mô tả -->
+                            <div class="widget-content-inner active">
+                                <div>
+                                    {{ $product->description }}
+                                </div>
                             </div>
-                        </div>
     
                             <!-- Màu và kích thước -->
                             <div class="widget-content-inner">
-                                <table class="tf-pr-attrs">
-                                    <tbody>
-                                        <tr class="tf-attr-pa-color">
-                                            <th class="tf-attr-label">Color</th>
-                                            <td class="tf-attr-value">
-                                                <p>White, Pink, Black</p>
-                                            </td>
-                                        </tr>
-                                        <tr class="tf-attr-pa-size">
-                                            <th class="tf-attr-label">Size</th>
-                                            <td class="tf-attr-value">
-                                                <p>S, M, L, XL</p>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+    <table class="tf-pr-attrs">
+        <tbody>
+            <tr class="tf-attr-pa-color">
+                <th class="tf-attr-label">Color</th>
+                <td class="tf-attr-value">
+                    <p>
+                        @foreach($colorNames as $color)
+                            {{ $color }}@if(!$loop->last), @endif
+                        @endforeach
+                    </p>
+                </td>
+            </tr>
+            <tr class="tf-attr-pa-size">
+                <th class="tf-attr-label">Size</th>
+                <td class="tf-attr-value">
+                    <p>
+                        @foreach($sizeNames as $size)
+                            {{ $size }}@if(!$loop->last), @endif
+                        @endforeach
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
     
                             <!-- Reviews -->
                             <div class="widget-content-inner">
@@ -409,6 +419,7 @@
                                                             @for($i = 1; $i <= 5; $i++)
                                                                 <i class="bi {{ $i <= $review->rating ? 'bi-star-fill' : 'bi-star' }}"></i>
                                                             @endfor
+                                                            
                                                         </div>
                                                         <p class="review-comment mb-0">{{ $review->comment }}</p>
                                                         <span class="text-muted">{{ $review->created_at->format('d/m/Y H:i') }}</span>
@@ -427,7 +438,7 @@
             </div>
         </div>
     </section>
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- /tabs -->
     {{-- <!-- product -->
     <section class="flat-spacing-1 pt_0">

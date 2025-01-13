@@ -163,12 +163,19 @@ class CartController extends Controller
                 ->where('size_id', $size->id ?? null)
                 ->first();
 
-            // Giới hạn số lượng theo tồn kho
-            if ($item->quantity > $variant->stock_quantity) {
-                $messages[] = "Sản phẩm {$product->product_name} đã được giảm số lượng xuống còn {$variant->stock_quantity} do tồn kho không đủ."; // Thông báo giảm số lượng
-                $item->quantity = $variant->stock_quantity;
-                $item->save(); // Cập nhật trong cơ sở dữ liệu
-            }
+           
+                if (!$variant) {
+                    // Nếu biến thể không tồn tại
+                    $messages[] = "Biến thể sản phẩm {$product->product_name} không tồn tại.";
+                } elseif ($variant->deleted_at !== null) {
+                    // Nếu biến thể bị xóa
+                    $messages[] = "Biến thể sản phẩm {$product->product_name} đã bị xóa.";
+                } elseif ($item->quantity > $variant->stock_quantity) {
+                    // Nếu số lượng yêu cầu lớn hơn số lượng tồn kho
+                    $messages[] = "Sản phẩm {$product->product_name} đã được giảm số lượng xuống còn {$variant->stock_quantity} do tồn kho không đủ."; // Thông báo giảm số lượng
+                    $item->quantity = $variant->stock_quantity;
+                    $item->save(); // Cập nhật trong cơ sở dữ liệu
+                }
 
             // Tính toán giá cuối cùng (final_price)
             $variantPrice = $variant->price ?? 0; // Giá cộng thêm từ biến thể

@@ -37,14 +37,12 @@ class CheckOutController extends Controller
     
         
         if (auth()->check()) {
-           
             $cart = Cart::where('user_id', $user->id)
                 ->with(['cartItems.product.images', 'cartItems.color', 'cartItems.size'])
                 ->first();
     
             if ($cart && $cart->cartItems->isNotEmpty()) {
                 foreach ($cart->cartItems as $item) {
-                    
                     if ($item->quantity == 0) {
                         return redirect()->route('cart')->with('error', "Số lượng sản phẩm không hợp lệ.");
                     }
@@ -54,9 +52,11 @@ class CheckOutController extends Controller
                         ['color_id', $item->color_id],
                         ['size_id', $item->size_id],
                     ])->first();
-    
-                    if (!$variant) {
-                        return redirect()->route('cart')->with('error', "Một số sản phẩm đã bị xóa hoặc không còn tồn tại trong kho.");
+                  
+                    if (!$variant || $variant->deleted_at !== null) {
+                     
+                        $cart->cartItems()->where('id', $item->id)->delete();
+                        return redirect()->route('cart')->with('error', "Biến thể không tồn tại hoặc đã bị xóa.");
                     }
     
                     if ($item->quantity > $variant->stock_quantity) {
@@ -71,7 +71,11 @@ class CheckOutController extends Controller
                     if ($product && $product->status == 0) {
                         return redirect()->route('cart')->with('error', "Một số sản phẩm không còn kinh doanh.");
                     }
-    
+                    if (!$variant || $variant->stock_quantity == 0) {
+                       
+                        $cart->cartItems()->where('id', $item->id)->delete();
+                        return redirect()->route('cart');
+                    }
                     $color = $item->color;
                     $size = $item->size;
                     $image = $product->images->firstWhere('color_id', $color->id);
@@ -123,12 +127,11 @@ class CheckOutController extends Controller
                 return redirect()->route('cart')->with('error', 'Giỏ hàng của bạn hiện tại không có sản phẩm.');
             }
         } else {
-           
+       
             $cart = session()->get('cart', []);
     
             if (!empty($cart)) {
-                foreach ($cart as $item) {
-                   
+                foreach ($cart as $key => $item) {
                     if ($item['quantity'] == 0) {
                         return redirect()->route('cart')->with('error', "Số lượng sản phẩm không hợp lệ. Vui lòng kiểm tra lại giỏ hàng.");
                     }
@@ -138,9 +141,12 @@ class CheckOutController extends Controller
                         ['color_id', $item['color_id']],
                         ['size_id', $item['size_id']],
                     ])->first();
-    
+                    
                     if (!$variant) {
-                        return redirect()->route('cart')->with('error', "Một số sản phẩm đã bị xóa hoặc không còn tồn tại trong kho.");
+                      
+                        unset($cart[$key]);
+                        session()->put('cart', $cart);
+                        return redirect()->route('cart')->with('error', "Biến thể không tồn tại hoặc đã bị xóa.");
                     }
     
                     if ($item['quantity'] > $variant->stock_quantity) {
@@ -155,7 +161,12 @@ class CheckOutController extends Controller
                     if ($product && $product->status == 0) {
                         return redirect()->route('cart')->with('error', "Một số sản phẩm không còn kinh doanh.");
                     }
-    
+                    if (!$variant || $variant->stock_quantity == 0) {
+                     
+                        unset($cart[$key]);
+                        session()->put('cart', $cart);
+                        return redirect()->route('cart');
+                    }
                     $color = Color::find($item['color_id']);
                     $size = Size::find($item['size_id']);
                     $image = $product->images->firstWhere('color_id', $color->id);
@@ -208,7 +219,7 @@ class CheckOutController extends Controller
             }
         }
     
-        
+       
         $cities = City::orderBy('name_thanhpho', 'ASC')->get();
         $provinces = collect();
         $wards = collect();
@@ -220,6 +231,7 @@ class CheckOutController extends Controller
     
         return view('client.check-out', compact('cartDetails', 'totalPrice', 'cities', 'provinces', 'wards', 'user'));
     }
+    
     
 
     public function select_address(Request $request)
@@ -266,6 +278,7 @@ class CheckOutController extends Controller
         $outOfStockItems = [];
         $deletedItems = [];
         $notAvailableItems = []; 
+        $productVariantDeletedItems = [];
     
        
         DB::beginTransaction();
@@ -280,7 +293,10 @@ class CheckOutController extends Controller
                     ->where('size_id', $item['size_id'])
                     ->lockForUpdate()
                     ->first();
-    
+                    if ($productVariant->deleted_at !== null) {
+                        $productVariantDeletedItems[] = $item;
+                        continue; 
+                    }
                 if (!$productVariant) {
                    
                     $outOfStockItems[] = [
@@ -290,6 +306,7 @@ class CheckOutController extends Controller
                     ];
                     continue;
                 }
+               
     
                
                 $product = Product::find($item['product_id']);
@@ -318,7 +335,11 @@ class CheckOutController extends Controller
                 $productVariant->stock_quantity -= $item['quantity'];
                 $productVariant->save();
             }
-    
+            if (!empty($productVariantDeletedItems)) {
+                DB::rollBack();
+                return redirect()->route('cart')
+                    ->with('error', 'biến thể không tồn tại.');
+            }
           
             if (!empty($deletedItems)) {
                 DB::rollBack();

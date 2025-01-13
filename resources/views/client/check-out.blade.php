@@ -119,7 +119,7 @@
 
                     <div class="tf-page-cart-footer">
                         <div class="tf-cart-footer-inner">
-                            <h5 class="fw-5 mb_20">Your order</h5>
+                            <h5 class="fw-5 mb_20">Sản Phẩm</h5>
                             <ul class="wrap-checkout-product mb-3">
                                 @foreach ($cartDetails as $item)
                                     <li class="checkout-product-item">

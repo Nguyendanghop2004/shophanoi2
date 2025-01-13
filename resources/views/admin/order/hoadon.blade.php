@@ -121,6 +121,10 @@
             <h3>Thông Tin Giao Hàng</h3>
             <p><strong>Thành Phố:</strong> {{ $city->name_thanhpho }}</p>
             <p><strong>Quận/Huyện:</strong> {{ $province->name_quanhuyen }}</p>
+            <p><strong>Xã/Phường:</strong> {{ $ward->name_xaphuong }}</p>
+            <p><strong>Địa chỉ cụ thể:</strong> {{$order->address }}</p>
+
+
         </div>
     </div>
 

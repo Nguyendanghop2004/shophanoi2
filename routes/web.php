@@ -56,7 +56,7 @@ Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 Route::get('gioithieu', [AboutUsController::class, 'index'])->name('index');
 Route::get('error', [ErrorController::class, 'error'])->name('error');
 
-Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
+
 
 Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
 Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
@@ -228,9 +228,6 @@ Route::get('/terms-conditions', function () {
 Route::get('/faq-1', function () {
     return view('client.footer.faq-1');
 })->name('faq-1');
-Route::get('/about-us', function () {
-    return view('client.footer.about-us');
-})->name('about-us');
 Route::get('/our-store', function () {
     return view('client.footer.our-store');
 })->name('our-store');
