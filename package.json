@@ -14,8 +14,11 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "alpinejs": "^3.14.8",
         "filepond": "^4.31.4",
         "filepond-plugin-image-preview": "^4.6.12",
+        "laravel-echo": "^1.17.1",
+        "pusher-js": "^8.4.0-rc2",
         "select2": "^4.1.0-rc.0"
     }
 }

@@ -139,7 +139,7 @@
                                 @endforeach
                             </ul>
                             <div class="coupon-box mb-3">
-                                <input type="text" id="coupon-code" placeholder="Discount code">
+                                <input type="text" id="coupon-code" name="coupon-code" placeholder="Discount code">
                                 <a href="#" id="apply-coupon-btn"
                                     class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Apply</a>
                             </div>
@@ -148,7 +148,7 @@
 
                             <div class="d-flex justify-content-between line pb_20">
                                 <h6 class="fw-5">Total</h6>
-                                <h6 class="total fw-5 tf-totals-total-value">{{ number_format($totalPrice, 2) }} VNĐ</h6>
+                                <h6 class="total fw-5 tf-totals-total-value">{{ number_format($totalPrice) }} VNĐ</h6>
                             </div>
 
                             <div class="wd-check-payment">

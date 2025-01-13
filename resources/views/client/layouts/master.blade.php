@@ -28,6 +28,7 @@
     <!-- Favicon and Touch Icons  -->
     <link rel="shortcut icon" href="{{ asset('client/assets/images/logo/favicon.png') }}">
     <link rel="apple-touch-icon-precomposed" href="{{ asset('client/assets/images/logo/favicon.png') }}">
+    @vite('resources/js/app.js')
 
 </head>
 
@@ -258,7 +259,7 @@
             // Thêm từng sản phẩm vào modal
             cartDetails.forEach(item => {
                 const productDetailUrl = `/product/${item.slug}`;
-         
+
                 modalCartContainer.append(`
             <div class="tf-mini-cart-item">
                 <div class="tf-mini-cart-image">

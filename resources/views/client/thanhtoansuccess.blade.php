@@ -43,7 +43,7 @@
                     </tbody>
                 </table>
                 <div class="order-summary-total">
-    <strong>Tổng Tiền:</strong> {{ number_format($orderItems->sum(function ($item) { return $item->price * $item->quantity; }), 0, ',', '.') }}₫
+    <strong>Tổng Tiền:</strong> {{ number_format( $order->total_price, 0, ',', '.') }} VNĐ
 </div>
 <div class="continue-shopping text-center">
     <a href="{{ route('home') }}" class="btn btn-primary">Quay về trang chủ</a>
