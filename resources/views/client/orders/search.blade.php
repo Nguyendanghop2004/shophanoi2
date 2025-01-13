@@ -176,8 +176,8 @@
                         <div class="{{ $order->status == 'chờ giao hàng' ? 'chờ-giao-hàng' : 'not-started' }}">Chờ giao hàng</div>
                         <div class="{{ $order->status == 'đang giao hàng' ? 'đang-giao-hàng' : 'not-started' }}">Đang giao hàng</div>
                         <div class="{{ $order->status == 'giao hàng thành công' ? 'giao-hàng-thành-công' : 'not-started' }}">Giao hàng thành công</div>
-                        <div class="{{ $order->status == 'đã nhận hàng' ? 'đã-nhận-hàng' : 'not-started' }}">Đã nhận hàng</div>
                         <div class="{{ $order->status == 'giao hàng không thành công' ? 'giao-hàng-không-thành-công' : 'not-started' }}">Giao hàng không thành công</div>
+                        <div class="{{ $order->status == 'đã nhận hàng' ? 'đã-nhận-hàng' : 'not-started' }}">Đã nhận hàng</div>
                         <div class="{{ $order->status == 'hủy' ? 'hủy' : 'not-started' }}">Hủy</div>
                     </div>
                 </div>

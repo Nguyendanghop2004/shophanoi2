@@ -33,6 +33,8 @@ Route::middleware('checkPassword')->group(function () {
 
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/home', [HomeController::class, 'home'])->name('home');
+
 
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 
@@ -211,6 +213,28 @@ Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetch
 
 Route::get('/reviews/create/{orderId}', [ReviewController::class, 'create'])->name('client.reviews.create');
 Route::post('/reviews/store', [ReviewController::class, 'store'])->name('client.reviews.store');
+Route::get('/privacy-policy', function () {
+    return view('client.footer.privacy-policy');
+})->name('privacy-policy');
+Route::get('/delivery-return', function () {
+    return view('client.footer.delivery-return');
+})->name('delivery-return');
+Route::get('/shipping-delivery', function () {
+    return view('client.footer.shipping-delivery');
+})->name('shipping-delivery');
+Route::get('/terms-conditions', function () {
+    return view('client.footer.terms-conditions');
+})->name('terms-conditions');
+Route::get('/faq-1', function () {
+    return view('client.footer.faq-1');
+})->name('faq-1');
+Route::get('/about-us', function () {
+    return view('client.footer.about-us');
+})->name('about-us');
+Route::get('/our-store', function () {
+    return view('client.footer.our-store');
+})->name('our-store');
 
     });
 
+   

@@ -52,7 +52,7 @@ class AccountController extends Controller
                 return back()->with('error', 'Tài khoản của bạn đã bị khóa.');
             }
             $request->session()->regenerate();
-            return redirect()->intended('/')->with('success', 'Đăng nhập thành công');
+            return redirect()->intended('home')->with('success', 'Đăng nhập thành công');
         }
 
         return back()->with([

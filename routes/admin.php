@@ -1,42 +1,44 @@
 <?php
 
-use App\Http\Controllers\Admin\AccoutAdminController;
-use App\Http\Controllers\Admin\AccoutUserController;
-use App\Http\Controllers\Admin\AdminDashboardController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\ColorController;
+
+use App\Http\Controllers\Admin\ErrorController;
+
+
+use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ReviewController;
+
+
+use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\HistoryController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\ShipperController;
+use App\Http\Controllers\Admin\ColorSizeController;
+use App\Http\Controllers\Admin\AccoutUserController;
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\AccoutAdminController;
+use App\Http\Controllers\Admin\HistoryUserController;
+use App\Http\Controllers\Admin\SaleProductController;
 
 use App\Http\Controllers\Admin\DiscountCodeController;
 
-
-use App\Http\Controllers\Admin\ColorController;
-use App\Http\Controllers\Admin\ColorSizeController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\ContactMessageController;
-
-
-use App\Http\Controllers\Admin\ErrorController;
-use App\Http\Controllers\Admin\HistoryController;
-use App\Http\Controllers\Admin\HistoryUserController;
-use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\LoginController;
-use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Admin\SaleProductController;
-use App\Http\Controllers\Admin\ShipperController;
-use App\Http\Controllers\Admin\SizeController;
-use App\Http\Controllers\Admin\SliderController;
-
-use App\Http\Controllers\Admin\TagController;
-
-use Illuminate\Support\Facades\Route;
 
     Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
     Route::post('admin/login', [LoginController::class, 'store'])->name('admin.post-login');
     Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus'])->group(function () {
     // Login admin
     Route::get('error', [ErrorController::class, 'error'])->name('error');
-    Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+ 
+    Route::get('trangchu', [AccoutAdminController::class, 'trangchu'])->name('trangchu');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
     Route::get('account', [AccoutAdminController::class, 'account'])->name('accounts.account')->middleware('permission:account_admin');
     Route::get('accounts/create', [AccoutAdminController::class, 'create'])->name('accounts.create')->middleware('permission:account_admin');
@@ -52,7 +54,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('accountsUser/create', [AccoutUserController::class, 'create'])->name('accountsUser.create')->middleware('permission:account_user');
     Route::post('accountsUser/store', [AccoutUserController::class, 'store'])->name('accountsUser.store')->middleware('permission:account_user');
     Route::get('accountsUser/edit/{id}', [AccoutUserController::class, 'edit'])->name('accountsUser.edit')->middleware('permission:account_user');
-Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update')->middleware('permission:account_user');    
+    Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update')->middleware('permission:account_user');    
     Route::delete('accountsUser/destroy/{id}', [AccoutUserController::class, 'destroy'])->name('accountsUser.destroy')->middleware('permission:account_user');
 
     Route::get('accountsUser/change/{id}', [AccoutUserController::class, 'change'])->name('accountsUser.change')->middleware('permission:account_user');
@@ -235,15 +237,14 @@ Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])-
     Route::get('orders/danhsachgiaohang', [OrderController::class, 'danhsachgiaohang'])->name('order.danhsachgiaohang')->middleware('permission:Shipper');
     Route::post('order/{order}/remove-shipper', [OrderController::class, 'removeShipper'])->name('order.removeShipper')->middleware('permission:Shipper');
     Route::post('order/{id}/update-updateStatusShip', [OrderController::class, 'updateStatusShip'])->name('order.update-updateStatusShip')->middleware('permission:Shipper');
-  
-    // thong ke
-    Route::post('/filter', [AdminDashboardController::class, 'index'])->name('dashboard.index.filter');
-    
-
 
     //sale product
-    Route::resource('/sales', SaleProductController::class);
-
+    Route::resource('/sales', SaleProductController::class)->middleware('permission:product');
+    // thongke
+    Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard')->middleware('permission:account_admin');
+    Route::post('/filter', [AdminDashboardController::class, 'index'])->name('dashboard.index.filter');
+    
+    Route::get('reviews', [ReviewController::class, 'index'])->name('review.index');
 });
 
 

@@ -15,7 +15,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-
+use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Crypt;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -25,36 +25,48 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderController extends Controller
 {
-    public function getList(Request $request)
-    {
-        $query = Order::query();
 
-        if ($request->has('search') && !empty($request->search)) {
-            $search = $request->search;
-            $query->where(function ($query) use ($search) {
-                $query->where('order_code', 'like', '%' . $search . '%')
-                      ->orWhere('name', 'like', '%' . $search . '%')
-                      ->orWhere('email', 'like', '%' . $search . '%');
-            });
-        }
+public function getList(Request $request)
+{
+    $query = Order::query();
 
-        if ($request->has('status') && !empty($request->status)) {
-            $query->where('status', $request->status);
-        }
-        $query->where(function($query) {
-            $query->where('payment_method', '!=', 'vnpay')
-                  ->orWhere('payment_status', '!=', 'chờ thanh toán');
+    if ($request->has('search') && !empty($request->search)) {
+        $search = $request->search;
+        $query->where(function ($query) use ($search) {
+            $query->where('order_code', 'like', '%' . $search . '%')
+                  ->orWhere('name', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%');
         });
-        if ($request->has('payment_method') && !empty($request->payment_method)) {
-            $query->where('payment_method', $request->payment_method);
-        }
-        $query->orderBy(DB::raw("status = 'chờ xác nhận'"), 'desc')
-      ->orderBy('updated_at', 'desc');
-
-        $orders = $query->paginate(10);
-
-        return view('admin.order.getList', compact('orders'));
     }
+
+    if ($request->has('status') && !empty($request->status)) {
+        $query->where('status', $request->status);
+    }
+
+    $query->where(function ($query) {
+        $query->where('payment_method', '!=', 'vnpay')
+              ->orWhere('payment_status', '!=', 'chờ thanh toán');
+    });
+
+    if ($request->has('payment_method') && !empty($request->payment_method)) {
+        $query->where('payment_method', $request->payment_method);
+    }
+
+    // Lọc đơn hàng giao hàng thành công quá 7 ngày nếu filter_7_days được bật
+    if ($request->has('filter_7_days')) {
+        $loc7days = Carbon::now()->subDays(7);
+        $query->where('status', 'giao hàng thành công')
+              ->where('updated_at', '<', $loc7days);
+    }
+
+    $query->orderBy(DB::raw("status = 'chờ xác nhận'"), 'desc')
+          ->orderBy('updated_at', 'desc');
+
+    $orders = $query->paginate(10);
+
+    return view('admin.order.getList', compact('orders'));
+}
+
 
     public function chitiet($encryptedId)
     {
@@ -141,7 +153,7 @@ class OrderController extends Controller
             ($currentStatus == 'đã xác nhận' && !in_array($newStatus, ['đã xác nhận', 'hủy'])) ||
             ($currentStatus == 'ship đã nhận' && !in_array($newStatus, ['ship đã nhận', 'đang giao hàng'])) ||
             ($currentStatus == 'đang giao hàng' && !in_array($newStatus, ['đang giao hàng', 'giao hàng thành công', 'giao hàng không thành công'])) ||
-            ($currentStatus == 'giao hàng thành công' && !in_array($newStatus, ['giao hàng thành công'])) ||
+            ($currentStatus == 'giao hàng thành công' && !in_array($newStatus, ['giao hàng thành công','đã nhận hàng'])) ||
             ($currentStatus == 'giao hàng không thành công' && !in_array($newStatus, ['giao hàng không thành công'])) ||
             ($currentStatus == 'đã nhận hàng' && !in_array($newStatus, ['đã nhận hàng'])) ||
             ($currentStatus == 'hủy' && !in_array($newStatus, ['hủy']))

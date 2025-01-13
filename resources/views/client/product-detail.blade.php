@@ -364,13 +364,11 @@
                                 <span class="inner">Review</span>
                             </li>
                         </ul>
-                        <div class="widget-content-tab">
-                            <!-- Mô tả -->
-                            <div class="widget-content-inner active">
-                                <div>
-                                    {{ $product->description }}
-                                </div>
+                        <div class="widget-content-inner active">
+                            <div class="form-group pl-5 pr-5">
+                                {!! $product->description !!}
                             </div>
+                        </div>
     
                             <!-- Màu và kích thước -->
                             <div class="widget-content-inner">

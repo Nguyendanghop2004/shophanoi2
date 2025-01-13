@@ -49,25 +49,22 @@
                         </div>
                         <ul class="footer-menu-list tf-collapse-content">
                             <li>
-                                <a href="" class="footer-menu_item">Chính sách bảo mật</a>
+                                <a href="{{route('privacy-policy')}}" class="footer-menu_item">Chính sách bảo mật</a>
                             </li>
                             <li>
-                                <a href="" class="footer-menu_item">Đổi trả hàng</a>
+                                <a href="{{route('delivery-return')}}" class="footer-menu_item">Đổi trả hàng</a>
                             </li>
                             <li>
-                                <a href="" class="footer-menu_item">Vận chuyển</a>
+                                <a href="{{route('shipping-delivery')}}" class="footer-menu_item">Vận chuyển</a>
                             </li>
                             <li>
-                                <a href="" class="footer-menu_item">Điều khoản & Điều kiện</a>
+                                <a href="{{route('terms-conditions')}}" class="footer-menu_item">Điều khoản & Điều kiện</a>
                             </li>
                             <li>
-                                <a href="" class="footer-menu_item">Câu hỏi thường gặp</a>
+                                <a href="{{route('faq-1')}}" class="footer-menu_item">Câu hỏi thường gặp</a>
                             </li>
                             <li>
-                                <a href="" class="footer-menu_item">So sánh</a>
-                            </li>
-                            <li>
-                                <a href="" class="footer-menu_item">Danh sách yêu thích</a>
+                                <a href="{{route('wishlist')}}" class="footer-menu_item">Danh sách yêu thích</a>
                             </li>
                         </ul>
                     </div>
@@ -83,7 +80,7 @@
                                 <a href="{{route('about-us')}}" class="footer-menu_item">Câu chuyện của chúng tôi</a>
                             </li>
                             <li>
-                                <a href="{{route('home')}}" class="footer-menu_item">Thăm cửa hàng của chúng tôi</a>
+                                <a href="{{route('shop-collection.index')}}" class="footer-menu_item">Thăm cửa hàng của chúng tôi</a>
                             </li>
                             <li>
                                 <a href="{{route('contact')}}" class="footer-menu_item">Liên hệ</a>
@@ -91,6 +88,7 @@
                             <li>
                                 <a href="{{route('accountUser.login')}}" class="footer-menu_item">Tài khoản</a>
                             </li>
+                        </ul>
                             <li class="nav-search footer-menu-list tf-collapse-content">
                                 <form action="{{ route('order.search') }}" method="GET" class="search-form" onsubmit="return validateSearchForm()">
                                     <div class="search-input-wrapper">
