@@ -56,7 +56,7 @@ Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 Route::get('gioithieu', [AboutUsController::class, 'index'])->name('index');
 Route::get('error', [ErrorController::class, 'error'])->name('error');
 
-Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
+
 
 Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
 Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');

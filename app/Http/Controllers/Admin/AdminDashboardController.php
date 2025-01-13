@@ -201,14 +201,16 @@ $activeUsersCount = User::where('status', '0')->count(); // User đang hoạt đ
     ->select('products.product_name as product_name', DB::raw('SUM(product_variants.stock_quantity) as total_stock'))
     ->groupBy('products.product_name')
     ->get(); 
-     $tkSp = $productsStock->pluck('product_name'); // Tên sản phẩm
+     $tkSp = $productsStock->pluck('product_name'); 
     $tkTonkho = $productsStock->pluck('total_stock'); 
-       // Truy vấn dữ liệu từ bảng `product_stocks`
-       $products = DB::table('products')
-       ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
-       ->select('products.product_name', DB::raw('SUM(product_variants.stock_quantity) as total_stock'))
-       ->groupBy('products.id', 'products.product_name')
-       ->get();
+     
+    $products = DB::table('products')
+    ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+    ->select('products.product_name', DB::raw('SUM(product_variants.stock_quantity) as total_stock'))
+    ->whereNull('products.deleted_at') 
+    ->groupBy('products.id', 'products.product_name')
+    ->paginate(10); 
+   
 
 
 

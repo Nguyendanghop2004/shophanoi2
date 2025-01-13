@@ -42,7 +42,9 @@ class OrderController extends Controller
         $query->where('status', $status);
     }
     
-    $orders = $query->orderBy('created_at', 'desc')->paginate(10);
+    $orders = $query->with('orderItems')  
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
     
     return view('client.orders.donhang', compact('orders', 'status'));
 }
@@ -98,40 +100,43 @@ class OrderController extends Controller
      * Show the form for editing the specified resource.
      */
     public function cancel(Request $request, $id)
-{
-    $order = Order::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
-
-    if ($order->isCancellable()) {
-        $request->validate([
-            'reason' => 'required|string|max:255',
-        ]);
-
-        
-        $order->reason = $request->input('reason');
-        $order->status = 'hủy';
-
+    {
+        $order = Order::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+    
        
-        foreach ($order->orderItems as $orderItem) {
-            $productVariant = ProductVariant::where('product_id', $orderItem->product_id)
-                ->where('color_id', $orderItem->color_id)
-                ->where('size_id', $orderItem->size_id)
-                ->first();
-
-            if ($productVariant) {
-               
-                $productVariant->stock_quantity += $orderItem->quantity;
-                $productVariant->save();
+        if ($order->isCancellable()) {
+            $request->validate([
+                'reason' => 'required|string|max:255',
+            ]);
+    
+          
+            $order->reason = $request->input('reason');
+            $order->status = 'hủy';
+    
+            // Hoàn lại số lượng tồn kho
+            foreach ($order->orderItems as $orderItem) {
+                $productVariant = ProductVariant::withTrashed()
+                    ->where('product_id', $orderItem->product_id)
+                    ->where('color_id', $orderItem->color_id)
+                    ->where('size_id', $orderItem->size_id)
+                    ->first();
+    
+                if ($productVariant) {
+                  
+                    $productVariant->stock_quantity += $orderItem->quantity;
+                    $productVariant->save();
+                }
             }
+    
+          
+            $order->save();
+    
+            return redirect()->route('order.donhang')->with('success', 'Đơn hàng đã được hủy thành công.');
         }
-
-      
-        $order->save();
-
-        return redirect()->route('order.donhang')->with('success', 'Đơn hàng đã được hủy thành công.');
+    
+        return redirect()->route('order.donhang', ['status' => 'hủy'])->with('error', 'Không thể hủy đơn hàng ở trạng thái hiện tại.');
     }
-
-    return redirect()->route('order.donhang', ['status' => 'hủy'])->with('error', 'Không thể hủy đơn hàng ở trạng thái hiện tại.');
-}
+    
 
     
     

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
 use App\Models\Review;
+use App\Models\Size;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -78,6 +80,12 @@ class ProductDetailController extends Controller
             // return response()->json($colorSizes);
 
         }
+        $colors = $product->variants->pluck('color_id')->unique(); // Giả sử product có mối quan hệ với variants
+    $sizes = $product->variants->pluck('size_id')->unique();
+
+    // Lấy tên màu sắc và kích thước từ bảng liên quan
+    $colorNames = Color::whereIn('id', $colors)->pluck('name', 'id');
+    $sizeNames = Size::whereIn('id', $sizes)->pluck('name', 'id');
         $reviews = Review::where('product_id', $product->id)
         ->with('user') // Load thông tin người dùng
         ->latest()
@@ -90,7 +98,7 @@ class ProductDetailController extends Controller
                 ->pluck('product_id')
                 ->toArray(); 
         }
-        return view('client.product-detail', compact('product', 'colorSizes','wishlist','reviews'));
+        return view('client.product-detail', compact('product', 'colorSizes','wishlist','reviews','colorNames','sizeNames'));
     }
 
 
