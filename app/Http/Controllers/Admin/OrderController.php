@@ -276,8 +276,20 @@ public function removeShipper($orderId)
 public function updateStatusShip(Request $request, $id)
 {
     $order = Order::find($id);
+    $currentStatus = $order->status;
+    $newStatus = $request->input('status'); 
 
-   
+    if (
+        ($currentStatus == 'ship đã nhận' && !in_array($newStatus, ['ship đã nhận', 'đang giao hàng'])) ||
+        ($currentStatus == 'đang giao hàng' && !in_array($newStatus, ['đang giao hàng', 'giao hàng thành công', 'giao hàng không thành công'])) ||
+        ($currentStatus == 'giao hàng thành công' && !in_array($newStatus, ['giao hàng thành công','đã nhận hàng'])) ||
+        ($currentStatus == 'giao hàng không thành công' && !in_array($newStatus, ['giao hàng không thành công'])) 
+       
+    ) {
+        return redirect()->route('admin.order.danhsachgiaohang')->with('error', 'Trạng thái đã thay đổi.');
+    }
+        $order->status = $newStatus;
+
     if ($order->status == 'hủy') {
         return redirect()->route('admin.order.danhsachgiaohang')
             ->with('error', 'Đơn hàng đã bị hủy trước đó, không thể nhận đơn.');

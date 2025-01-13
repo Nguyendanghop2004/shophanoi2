@@ -12,7 +12,22 @@
         .address-column {
             word-wrap: break-word;
             max-width: 200px;
-        }
+        }.status-cho-xac-nhan {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.status-huy {
+    background-color:#FF0000; 
+    color: #fff;
+}
+.status-da-nhan-hang {
+    background-color: #00EE00; 
+    color: #fff;
+}
+       
+
+    </style>
     </style>
     <section class="section">
         <div class="section-header">
@@ -130,8 +145,7 @@
                                                                 Giao Hàng Không Thành Công</option>
                                                         @elseif($order->status == 'đã nhận hàng')
                                                             <option value="đã nhận hàng"
-                                                                {{ $order->status == 'đã nhận hàng' ? 'selected' : '' }}>Đã
-                                                                nhận hàng</option>
+                                                                {{ $order->status == 'đã nhận hàng' ? 'selected' : '' }}>Hoàn thành</option>
                                                         @elseif($order->status == 'hủy')
                                                             <option value="hủy"
                                                                 {{ $order->status == 'hủy' ? 'selected' : '' }}>Hủy
@@ -264,4 +278,35 @@
             @endif
         });
     </script>
+    <script>
+    function applyStatusColor(selectElement) {
+    const statusClasses = {
+        'chờ xác nhận': 'status-cho-xac-nhan',
+        'đã xác nhận': 'status-da-xac-nhan',
+        'ship đã nhận': 'status-ship-da-nhan',
+        'đang giao hàng': 'status-dang-giao-hang',
+        'giao hàng thành công': 'status-giao-hang-thanh-cong',
+        'giao hàng không thành công': 'status-giao-hang-khong-thanh-cong',
+        'hủy': 'status-huy',
+        'đã nhận hàng': 'status-da-nhan-hang'
+    };
+
+    selectElement.className = selectElement.className.replace(/status-\w+/g, '');
+
+    const selectedStatus = selectElement.value.trim();
+    if (statusClasses[selectedStatus]) {
+        selectElement.classList.add(statusClasses[selectedStatus]);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('select[name="status"]').forEach(select => {
+        applyStatusColor(select);
+        select.addEventListener('change', function () {
+            applyStatusColor(this);
+        });
+    });
+});
+
+</script>
 @endsection

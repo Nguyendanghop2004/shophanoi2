@@ -228,9 +228,6 @@ Route::get('/terms-conditions', function () {
 Route::get('/faq-1', function () {
     return view('client.footer.faq-1');
 })->name('faq-1');
-Route::get('/about-us', function () {
-    return view('client.footer.about-us');
-})->name('about-us');
 Route::get('/our-store', function () {
     return view('client.footer.our-store');
 })->name('our-store');
