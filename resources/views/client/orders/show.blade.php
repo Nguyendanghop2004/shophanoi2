@@ -49,7 +49,7 @@
         </table>
         <div class="order-summary-total">
 
-    <strong>Tổng Tiền:</strong>  {{ number_format($orderitems->sum(fn($item) => $item->quantity * $item->price), 0, ',', '.') }} VNĐ
+    <strong>Tổng Tiền:</strong>  {{ number_format($order->total_price) }} VNĐ
     <div class="continue-shopping text-center">
     <a href="{{ route('order.donhang') }}" class="btn btn-primary">Quay Lại</a>
 </div>

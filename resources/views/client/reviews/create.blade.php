@@ -4,6 +4,7 @@
 @endsection
 
 @section('content')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <div class="container mt-4">
     <h5 class="text-center">Viết đánh giá cho đơn hàng #{{ $order->order_code }}</h5>
 

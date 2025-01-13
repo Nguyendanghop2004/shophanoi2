@@ -4,6 +4,7 @@
 @endsection
 
 @section('content')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- breadcrumb -->
     <div class="tf-breadcrumb">
         <div class="container">

@@ -236,7 +236,9 @@ Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])-
     Route::post('order/{order}/remove-shipper', [OrderController::class, 'removeShipper'])->name('order.removeShipper')->middleware('permission:Shipper');
     Route::post('order/{id}/update-updateStatusShip', [OrderController::class, 'updateStatusShip'])->name('order.update-updateStatusShip')->middleware('permission:Shipper');
   
-
+    // thong ke
+    Route::post('/filter', [AdminDashboardController::class, 'index'])->name('dashboard.index.filter');
+    
 
 
     //sale product
