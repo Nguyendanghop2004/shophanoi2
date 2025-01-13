@@ -52,7 +52,7 @@ class ReviewController extends Controller
         'product_ids.*' => 'exists:products,id',
     ]);
 
-    // Kiểm tra xem đã đánh giá đơn hàng này chưa
+ 
     $existingReviews = Review::where('order_id', $validated['order_id'])
                              ->where('user_id', auth()->id())
                              ->exists();
@@ -62,7 +62,7 @@ class ReviewController extends Controller
                          ->with('error', 'Bạn đã đánh giá đơn hàng này rồi.');
     }
 
-    // Lưu đánh giá cho từng sản phẩm
+  
     foreach ($validated['product_ids'] as $productId) {
         Review::create([
             'order_id' => $validated['order_id'],

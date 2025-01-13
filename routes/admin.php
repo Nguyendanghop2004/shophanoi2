@@ -1,35 +1,36 @@
 <?php
 
-use App\Http\Controllers\Admin\AccoutAdminController;
-use App\Http\Controllers\Admin\AccoutUserController;
-use App\Http\Controllers\Admin\AdminDashboardController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\ColorController;
+
+use App\Http\Controllers\Admin\ErrorController;
+
+
+use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ReviewController;
+
+
+use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\HistoryController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\ShipperController;
+use App\Http\Controllers\Admin\ColorSizeController;
+use App\Http\Controllers\Admin\AccoutUserController;
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\AccoutAdminController;
+use App\Http\Controllers\Admin\HistoryUserController;
+use App\Http\Controllers\Admin\SaleProductController;
 
 use App\Http\Controllers\Admin\DiscountCodeController;
 
-
-use App\Http\Controllers\Admin\ColorController;
-use App\Http\Controllers\Admin\ColorSizeController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\ContactMessageController;
-
-
-use App\Http\Controllers\Admin\ErrorController;
-use App\Http\Controllers\Admin\HistoryController;
-use App\Http\Controllers\Admin\HistoryUserController;
-use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\LoginController;
-use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Admin\SaleProductController;
-use App\Http\Controllers\Admin\ShipperController;
-use App\Http\Controllers\Admin\SizeController;
-use App\Http\Controllers\Admin\SliderController;
-
-use App\Http\Controllers\Admin\TagController;
-
-use Illuminate\Support\Facades\Route;
 
     Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
     Route::post('admin/login', [LoginController::class, 'store'])->name('admin.post-login');
@@ -242,6 +243,8 @@ use Illuminate\Support\Facades\Route;
     // thongke
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard')->middleware('permission:account_admin');
     Route::post('/filter', [AdminDashboardController::class, 'index'])->name('dashboard.index.filter');
+    
+    Route::get('reviews', [ReviewController::class, 'index'])->name('review.index');
 });
 
 

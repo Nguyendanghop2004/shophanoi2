@@ -99,7 +99,7 @@
                 </li>
             @endcan
             @can('account_admin')
-            <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
+            <li><a class="nav-link" href="{{route('admin.review.index')}}"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
             @endcan
 
             @can('contact')
