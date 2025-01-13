@@ -16,6 +16,7 @@
                     <li><strong>Mã Đơn Hàng:</strong> {{ $order->order_code}}</li>
                     <li><strong>Tên Khách Hàng:</strong> {{ $order->name}}</li>
                     <li><strong>Số Điện Thoại:</strong> {{ $order->phone_number}}</li>
+                    <li><strong>Trạng thái:</strong> {{ $order->payment_status}}</li>
                     <li><strong>Ngày Đặt:</strong> {{ $order->created_at->format('d-m-Y') }}</li>
                     <li><strong>Mã giao dịch VNPay:</strong> {{$order->payment_method }}</li>
                   
@@ -27,7 +28,7 @@
                         <tr>
                             <th>Sản phẩm</th>
                             <th>Số lượng</th>
-                            <th>Giá</th>
+                            <th>Giá sản phẩm</th>
                           
                         </tr>
                     </thead>
@@ -36,7 +37,7 @@
                 <tr>
                     <td>{{ $item->product_name }}</td>
                     <td>{{ $item->quantity }}</td>
-                    <td>{{ number_format($item->price, 0, ',', '.') }}₫</td>
+                    <td>{{ number_format($item->price, 0, ',', '.') }} VNĐ</td>
                   
                 </tr>
             @endforeach

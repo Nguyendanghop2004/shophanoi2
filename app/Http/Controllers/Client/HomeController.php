@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\BlogClient;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -13,6 +14,7 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\Size;
 use App\Models\Tag;
+use App\Models\Wishlist;
 use Auth;
 use DB;
 
@@ -34,29 +36,31 @@ class HomeController extends Controller
         $sliders = Slider::where('is_active', 1)->get();
 
         $products = Product::query()
-            ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
-            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
-            ->with([
-                'colors' => fn($query) => $query->select('colors.id', 'colors.name', 'colors.sku_color'),
-                'images' => fn($query) => $query->select('product_images.id', 'product_images.product_id', 'product_images.color_id', 'product_images.image_url'),
-                'sales' => fn($query) => $query->select('product_sales.product_id', 'product_sales.discount_type', 'product_sales.discount_value')
-                    ->where('start_date', '<=', now())
-                    ->where(function ($q) {
-                        $q->whereNull('end_date')
-                            ->orWhere('end_date', '>=', now());
-                    }),
-            ])
-            ->select([
-                'products.id',
-                'products.product_name',
-                'products.price',
-                'products.slug',
-                DB::raw('COUNT(DISTINCT product_variants.size_id) as distinct_size_count'), // Số size khác nhau
-                DB::raw('(SELECT SUM(stock_quantity) FROM product_variants WHERE product_variants.product_id = products.id) as total_stock_quantity'), // Tổng tồn kho chính xác
-            ])
-            ->groupBy('products.id')
-            ->limit(10)
-            ->get();
+    ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+    ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+    ->with([
+        'colors' => fn($query) => $query->select('colors.id', 'colors.name', 'colors.sku_color'),
+        'images' => fn($query) => $query->select('product_images.id', 'product_images.product_id', 'product_images.color_id', 'product_images.image_url'),
+        'sales' => fn($query) => $query->select('product_sales.product_id', 'product_sales.discount_type', 'product_sales.discount_value')
+            ->where('start_date', '<=', now())
+            ->where(function ($q) {
+                $q->whereNull('end_date')
+                    ->orWhere('end_date', '>=', now());
+            }),
+    ])
+    ->select([
+        'products.id',
+        'products.product_name',
+        'products.price',
+        'products.slug',
+        'products.status',  // Lấy status của sản phẩm
+        DB::raw('COUNT(DISTINCT product_variants.size_id) as distinct_size_count'), // Số size khác nhau
+        DB::raw('(SELECT SUM(stock_quantity) FROM product_variants WHERE product_variants.product_id = products.id) as total_stock_quantity'), // Tổng tồn kho chính xác
+    ])
+    ->where('products.status', 1)  // Thêm điều kiện để chỉ lấy sản phẩm có status = 1
+    ->groupBy('products.id')
+    ->limit(10)
+    ->get();
 
         $products = $products->map(function ($product) {
             // Nhóm ảnh theo color_id
@@ -106,8 +110,20 @@ class HomeController extends Controller
                 'colors' => $product->colors,
             ]; 
         });
+        $wishlist = [];
+
+        if (Auth::check()) {
+           
+            $wishlist = Wishlist::where('user_id', Auth::id())
+                ->pluck('product_id')
+                ->toArray(); 
+        }
+        $data = BlogClient::where('status', 1)
+        ->take(3) 
+        ->get();
+    
         // return response()->json($products);
-        return view('client.home', compact('products', 'collections', 'sliders'));
+        return view('client.home', compact('products', 'collections', 'sliders','wishlist','data'));
     }
     public function getProductInfo(Request $request)
     {

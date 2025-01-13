@@ -1,10 +1,8 @@
-
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hóa Đơn - Đơn Hàng #{{ $order->id }}</title>
     <style>
         @font-face {
@@ -76,6 +74,11 @@
             background-color: #f2f2f2;
         }
 
+        .table img {
+            max-width: 50px;
+            height: auto;
+        }
+
         .total {
             text-align: right;
             font-size: 16px;
@@ -93,9 +96,9 @@
             margin: 5px 0;
         }
 
-        .table img {
-            max-width: 50px;
-            height: auto;
+        .qr-code {
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -104,7 +107,7 @@
 <div class="container">
     <div class="header">
         <h1>Hóa Đơn Mua Hàng</h1>
-        <p>Đơn hàng #{{ $order->id }}</p>
+        <p>Đơn hàng #{{ $order->order_code }}</p>
         <p>Ngày: {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</p>
     </div>
 
@@ -112,15 +115,12 @@
         <div class="customer-info">
             <h3>Thông Tin Khách Hàng</h3>
             <p><strong>Tên:</strong> {{ $order->name }}</p>
-            <p><strong>Email:</strong> {{ $order->email }}</p>
-            <p><strong>Điện Thoại:</strong> {{ $order->phone_number }}</p>
+            <p><strong>Điện thoại:</strong>  {{ substr($order->phone_number, 0, 4) . str_repeat('x', strlen($order->phone_number) - 4) }}</p>
         </div>
         <div class="shipping-info">
             <h3>Thông Tin Giao Hàng</h3>
-            <p><strong>Địa Chỉ:</strong> {{ $order->address }}</p>
             <p><strong>Thành Phố:</strong> {{ $city->name_thanhpho }}</p>
             <p><strong>Quận/Huyện:</strong> {{ $province->name_quanhuyen }}</p>
-            <p><strong>Xã/Phường:</strong> {{ $ward->name_xaphuong }}</p>
         </div>
     </div>
 
@@ -148,7 +148,6 @@
     <div class="total">
         <p><strong>Tổng Tiền:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VNĐ</p>
     </div>
-
     <div class="footer">
         <p>Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi!</p>
     </div>

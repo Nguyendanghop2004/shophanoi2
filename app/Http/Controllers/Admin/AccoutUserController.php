@@ -57,16 +57,17 @@ class AccoutUserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-
         $request->except('image');
         $data =
             [
                 'name' => $request->name,
                 "email" => $request->email,
                 "password" => Hash::make($request->password),
+                "image" => $request->image,
             ];
+
         if ($request->hasFile('image')) {
-            $data['image']  =  Storage::put('public/images/admin', $request->file('image_path'));
+            $data['image']  =  Storage::put('public/images/admin', $request->file('image'));
         }
         User::create($data);
         return redirect()->route('admin.accountsUser.accountUser')->with('success', 'Thêm mới thành công');
@@ -102,49 +103,30 @@ class AccoutUserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // Lấy dữ liệu người dùng cũ
         $dataUser = User::findOrFail($id);
-
-
         $data = $request->only('name', 'email', 'phone_number', 'address', 'city_id', 'province_id', 'wards_id');
-
-
         if ($request->password) {
             $data['password'] = Hash::make($request->password);
         } else {
             $data['password'] = $dataUser->password;
         }
-
-
-
-        // Xử lý ảnh (nếu có)
         if ($request->hasFile('image')) {
-            // Xóa ảnh cũ nếu có ảnh mới
+
             if ($dataUser->image && Storage::exists($dataUser->image)) {
                 Storage::delete($dataUser->image);
             }
-            // Lưu ảnh mới
             $data['image'] = Storage::put('public/images/User', $request->file('image'));
         }
-
-
-        // Cập nhật thông tin người dùng
-        $dataUser->update($data);
+        $idadmin = Auth()->user()->id;
+        $data1 = $dataUser->toArray();
         History::create([
-            'user_id' => auth()->id(), // Người thực hiện hành động
-            'action' => 'update', // Hành động (update, create, delete)
-            'model_type' => 'User', // Loại model
-            'model_id' => $dataUser->id, // ID của model
-            'changes' => array_diff($dataUser->getAttributes(), $data),
+            'user_id' =>  $dataUser->id,
+            'action' => 'update',
+            'model_type' => Auth()->user()->name,
+            'model_id' =>  $idadmin,
+            'changes' => array_diff($data1, $data),
         ]);
-        // Trả về thông báo thành công
-
-
-
-        // Cập nhật thông tin người dùng
         $dataUser->update($data);
-
-        // Trả về thông báo thành công
         return redirect()->route('admin.accountsUser.accountUser')->with('success', 'Cập nhật thành công!');
     }
 
@@ -204,5 +186,4 @@ class AccoutUserController extends Controller
             echo $output;
         }
     }
-    
 }

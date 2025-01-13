@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('order:delete-vnpay-pending')->everyMinute();
     }
 
     /**
@@ -20,8 +21,9 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
+        
         $this->load(__DIR__.'/Commands');
-
+        Commands\DeletePendingVnpayOrders::class;
         require base_path('routes/console.php');
     }
 }

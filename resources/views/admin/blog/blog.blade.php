@@ -3,14 +3,14 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Account Quản trị viên</h1>
+            <h1>Danh sách bài viết</h1>
         </div>
 
         <div class="card card-primary">
             <div class="card-header">
-                <h4>Danh Sách Quản Trị</h4>
+                <h4>Danh sách bài viết</h4>
                 <div class="card-header-action">
-                    <a href="{{ route('admin.accounts.create') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.blog.index') }}" class="btn btn-primary">
                         Tạo Mới
                     </a>
                 </div>
@@ -32,8 +32,11 @@
                             @foreach ($data as $admin)
                                 <tr>
                                     <th scope="row">{{ $admin->id }}</th>
-                                   
+
+
                                     <td>{{ $admin->title }}</td>
+
+
                                     <td>{{ $admin->unique }}</td>
                                     <td>
                                         <img src="{{ Storage::url($admin->image) }}" alt="Ảnh quản trị viên"
@@ -50,40 +53,34 @@
                                     
                                     <td>
                                         <div class="d-flex">
-                                            <a href="{{ route('admin.blog.edit', $admin->id) }}"
+                                            <a href="{{ route('admin.blog.edit', ['id' => Crypt::encryptString($admin->id)]) }}"
                                                 class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.blog.destroy', $admin->id) }}" method="POST"
-                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                            <form action="{{ route('admin.blog.destroy', $admin->id) }}" method="POST" id="delete-form-{{ $admin->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger ml-2">
+                                                <button type="button" class="btn btn-danger ml-2" onclick="confirmDeleteForm({{ $admin->id }})">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
                                             @if ($admin->status)
-                                                <form action="{{ route('admin.accountsUser.deactivateBlog', $admin->id) }}"
-                                                    method="POST" class="ml-2">
+                                                <form action="{{ route('admin.accountsUser.deactivateBlog', $admin->id) }}" method="POST" id="deactivate-form-{{ $admin->id }}" class="ml-2">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-danger">
+                                                    <button type="button" class="btn btn-danger" onclick="confirmDeactivateForm({{ $admin->id }})">
                                                         <i class="fas fa-lock"></i>
                                                     </button>
                                                 </form>
                                             @else
-                                                <form action="{{ route('admin.accountsUser.activateBlog', $admin->id) }}"
-                                                    method="POST" class="ml-2">
+                                                <form action="{{ route('admin.accountsUser.activateBlog', $admin->id) }}" method="POST" id="activate-form-{{ $admin->id }}" class="ml-2">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-success">
+                                                    <button type="button" class="btn btn-success" onclick="confirmActivateForm({{ $admin->id }})">
                                                         <i class="fas fa-unlock"></i>
                                                     </button>
                                                 </form>
                                             @endif
-
-
                                         </div>
                                     </td>
-
                                 </tr>
                             @endforeach
                         </tbody>
@@ -93,6 +90,7 @@
             </div>
         </div>
     </section>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -114,5 +112,56 @@
                 });
             @endif
         });
+
+        function confirmDeleteForm(id) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn xóa?',
+                text: "Bạn sẽ không thể hoàn tác thay đổi này!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
+
+        function confirmDeactivateForm(id) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn vô hiệu hóa?',
+                text: "Bạn sẽ không thể hoàn tác thay đổi này!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Vô hiệu hóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deactivate-form-' + id).submit();
+                }
+            });
+        }
+
+        function confirmActivateForm(id) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn kích hoạt?',
+                text: "Bạn sẽ không thể hoàn tác thay đổi này!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Kích hoạt',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('activate-form-' + id).submit();
+                }
+            });
+        }
     </script>
 @endsection

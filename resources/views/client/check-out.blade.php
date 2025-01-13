@@ -1,4 +1,12 @@
 @extends('client.layouts.master')
+@section('header-home')
+    @include('client.layouts.particals.header-home')
+@endsection
+
+@section('topbar')
+    
+@endsection
+
 @section('content')
     @include('client.layouts.particals.page-title')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -10,10 +18,10 @@
             <div class="container">
                 <div class="tf-page-cart-wrap layout-2">
                     <div class="tf-page-cart-item">
-                        <h5 class="fw-5 mb_20">Billing details</h5>
+                        <h5 class="fw-5 mb_20">Chi Tiết Thanh Toán</h5>
 
                         <fieldset class="fieldset">
-                            <label for="first-name">Name</label>
+                            <label for="first-name">Họ Và Tên</label>
                             <input name="name" type="text" id="first-name"
                                 value="{{ auth()->check() ? auth()->user()->name : '' }}" placeholder="Your Name">
                         </fieldset>
@@ -94,7 +102,7 @@
                             </div>
                         @enderror
                         <fieldset class="box fieldset">
-                            <label for="phone">Phone Number</label>
+                            <label for="phone">Số Điện Thoại</label>
                             <input type="text" name="phone_number" id="phone"
                                 value="{{ auth()->check() ? auth()->user()->phone_number : '' }}">
                         </fieldset>
@@ -104,7 +112,7 @@
                             </div>
                         @enderror
                         <fieldset class="box fieldset">
-                            <label for="note">Order notes (optional)</label>
+                            <label for="note">Ghi chú</label>
                             <textarea name="note" id="note"></textarea>
                         </fieldset>
                     </div>
@@ -139,48 +147,46 @@
                                 @endforeach
                             </ul>
                             <div class="coupon-box mb-3">
-                                <input type="text" id="coupon-code" name="coupon-code" placeholder="Discount code">
+                                <input type="text" id="coupon-code" name="coupon-code" placeholder="Nhập mã giảm giá">
                                 <a href="#" id="apply-coupon-btn"
-                                    class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Apply</a>
+                                    class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Áp Mã</a>
                             </div>
                             <div id="coupon-message" style="color: red; margin-top: 10px;"></div>
                             <!-- Nơi hiển thị thông báo -->
 
                             <div class="d-flex justify-content-between line pb_20">
-                                <h6 class="fw-5">Total</h6>
+                                <h6 class="fw-5">Tổng Tiền</h6>
                                 <h6 class="total fw-5 tf-totals-total-value">{{ number_format($totalPrice) }} VNĐ</h6>
                             </div>
 
                             <div class="wd-check-payment">
-                                <div class="fieldset-radio mb_20">
-                                    <input type="radio" name="payment" id="bank" class="tf-check" value="vnpay"
-                                        checked>
-                                    <label for="bank">Direct bank transfer (VNPay)</label>
-                                </div>
-                                <div class="fieldset-radio mb_20">
-                                    <input type="radio" name="payment" id="delivery" class="tf-check"
-                                        value="cod">
-                                    <label for="delivery">Cash on delivery (COD)</label>
-                                </div>
-                                <p class="text_black-2 mb_20">
-                                    Your personal data will be used to process your order, support your experience
-                                    throughout this website, and for other purposes described in our
-                                    <a href="privacy-policy.html" class="text-decoration-underline">privacy policy</a>.
-                                </p>
-                                <div class="box-checkbox fieldset-radio mb_20">
-                                    <input type="checkbox" id="check-agree" class="tf-check" required>
-                                    <label for="check-agree" class="text_black-2">
-                                        I have read and agree to the website
-                                        <a href="terms-conditions.html" class="text-decoration-underline">terms and
-                                            conditions</a>.
-                                    </label>
-                                </div>
+                            <div class="fieldset-radio mb_20">
+                                <input type="radio" name="payment" id="bank" class="tf-check" value="vnpay" checked>
+                                <label for="bank">Chuyển khoản ngân hàng trực tiếp (VNPay)</label>
                             </div>
+                            <div class="fieldset-radio mb_20">
+                                <input type="radio" name="payment" id="delivery" class="tf-check" value="cod">
+                                <label for="delivery">Thanh toán khi nhận hàng (COD)</label>
+                            </div>
+                            <p class="text_black-2 mb_20">
+                                Dữ liệu cá nhân của bạn sẽ được sử dụng để xử lý đơn hàng, hỗ trợ trải nghiệm của bạn trong suốt website này, và cho các mục đích khác theo mô tả trong 
+                                <a href="privacy-policy.html" class="text-decoration-underline">chính sách bảo mật</a>.
+                            </p>
+                            <div class="box-checkbox fieldset-radio mb_20">
+                                <input type="checkbox" id="check-agree" class="tf-check" required>
+                                <label for="check-agree" class="text_black-2">
+                                    Tôi đã đọc và đồng ý với 
+                                    <a href="terms-conditions.html" class="text-decoration-underline">điều khoản và điều kiện</a> của website.
+                                </label>
+                            </div>
+                        </div>
 
-                            <button type="submit" name="redirect"
-                                class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center ">
-                                Place order
-                            </button>
+                        <button type="submit" name="redirect" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">
+                            Đặt hàng
+                        </button>
+                        <a href="{{ route('home') }}" class="tf-btn radius-3 btn-outline btn-icon animate-hover-btn justify-content-center mt_20">
+                            Tiếp tục mua hàng
+                        </a>
                         </div>
                     </div>
                 </div>

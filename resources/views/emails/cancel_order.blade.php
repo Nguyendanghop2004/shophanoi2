@@ -1,35 +1,101 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('client.layouts.master')
+
+@section('header-home')
+    @include('client.layouts.particals.header-home')
+@endsection
+
+@section('content')
     <title>Chọn lý do hủy đơn hàng</title>
     <style>
-        /* Các styles cho form hủy đơn */
-        .container {
-            width: 80%;
-            margin: auto;
-            background: #fff;
-            padding: 20px;
+    
+
+        .containers {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        .cancel-order {
+
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background-color: #fafafa;
+        }
+
+        select:focus {
+            border-color: #5c6bc0;
+            outline: none;
+            background-color: #fff;
+        }
+
+        button.cancel-order {
+            width: 100%;
+            padding: 12px;
             background-color: #f44336;
             color: white;
-            padding: 10px 20px;
-            text-decoration: none;
+            font-size: 18px;
+            border: none;
             border-radius: 5px;
-            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-        .cancel-order:hover {
+
+        button.cancel-order:hover {
             background-color: #d32f2f;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .success-message {
+            color: green;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .cancel-order-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="containers">
         <h2>Chọn lý do hủy đơn hàng {{ $order->order_code }}</h2>
+
+        @if (session('error'))
+            <div class="error-message">
+                {{ session('error') }}
+            </div>
+        @elseif (session('success'))
+            <div class="success-message">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <form action="{{ route('cancel.order') }}" method="POST">
             @csrf
@@ -43,9 +109,12 @@
                 <option value="không_hài_lòng">Không hài lòng với dịch vụ</option>
                 <option value="khác">Khác</option>
             </select>
-            <br><br>
-            <button type="submit" class="cancel-order">Xác nhận hủy đơn hàng</button>
+
+            <div class="cancel-order-wrapper">
+                <button type="submit" class="cancel-order">Xác nhận hủy đơn hàng</button>
+            </div>
         </form>
     </div>
 </body>
-</html>
+
+@endsection

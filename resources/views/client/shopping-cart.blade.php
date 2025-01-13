@@ -52,7 +52,7 @@
                                                 <a href="product-detail.html"
                                                     class="cart-title link">{{ $item['product_name'] }}</a>
                                                 <div class="cart-meta-variant">{{ $item['color_name'] }} /
-                                                    {{ $item['size_name'] }} + {{ $item['pricebonus'] }} VNĐ</div>
+                                                    {{ $item['size_name'] }} + {{ number_format($item['pricebonus'], 0, ',', '.') }} VNĐ</div>
                                                 <span class="remove-cart link remove"
                                                     onclick="removeFromCart({{ $item['product_id'] }}, {{ $item['color_id'] }}, {{ $item['size_id'] }})">Remove</span>
                                             </div>
@@ -377,14 +377,16 @@
                 grandTotal += subtotal;
 
                 // Định dạng lại subtotal (thêm dấu phân cách hàng nghìn và tiền tệ)
-                var formattedSubtotal = subtotal.toLocaleString('vi-VN') + ' VNĐ';
+                var formattedSubtotal = Math.floor(subtotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ';
+
 
                 // Cập nhật giá trị subtotal cho mỗi sản phẩm
                 cartTotalDiv.text(formattedSubtotal);
             });
 
             // Cập nhật tổng tiền giỏ hàng
-            $('.total-value').text(grandTotal.toLocaleString('vi-VN') + ' VNĐ');
+            $('.total-value').text(Math.floor(grandTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ');
+
         }
 
 
@@ -504,4 +506,28 @@
             // });
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+     document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+        });
+
+   
+</script>
 @endpush

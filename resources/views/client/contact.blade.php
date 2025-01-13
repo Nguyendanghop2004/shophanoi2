@@ -3,7 +3,7 @@
     @include('client.layouts.particals.header-home')
 @endsection
 @section('content')
-@include('client.layouts.particals.page-title')
+
 
 <!-- map -->
 <section class="flat-spacing-9">
@@ -14,13 +14,13 @@
             </div>
             <div class="tf-content-left has-mt">
                 <div class="sticky-top">
-                    <h5 class="mb_20">Visit Our Campus</h5>
+                    <h5 class="mb_20">Ghé Thăm Của Hàng Chúng Tôi</h5>
                     <div class="mb_20">
-                        <p class="mb_15"><strong>Address</strong></p>
+                        <p class="mb_15"><strong>Địa Chỉ</strong></p>
                         <p>Số 1, Đường Trịnh Văn Bô, Phường Tây Mỗ, Quận Nam Từ Liêm, Hà Nội.</p>
                     </div>
                     <div class="mb_20">
-                        <p class="mb_15"><strong>Phone</strong></p>
+                        <p class="mb_15"><strong>Số Điện Thoại</strong></p>
                         <p>(039) 6075 753</p>
                     </div>
                     <div class="mb_20">
@@ -28,8 +28,8 @@
                         <p>hanoiclotheshop@gmail.com</p>
                     </div>
                     <div class="mb_36">
-                        <p class="mb_15"><strong>Open Time</strong></p>
-                        <p class="mb_15">Mở cửa đón khách mọi ngày trong tuần từ 8am 5pm</p>
+                        <p class="mb_15"><strong>Thời Gian Mở Cửa</strong></p>
+                        <p class="mb_15">Mở cửa đón khách mọi ngày trong tuần từ 8 giờ sáng tới 5 giờ chiều</p>
                     </div>
                     <div>
                         <ul class="tf-social-icon d-flex gap-20 style-default">
@@ -94,27 +94,29 @@
 </section>
 <!-- /form -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    $(document).ready(function () {
-        toastr.options = {
-            "closeButton": false,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-        };
+     document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+        });
 
-        @if(session('success'))
-            toastr.success("{{ session('success') }}");
-        @endif
-
-        @if(session('error'))
-            toastr.error("{{ session('error') }}");
-        @endif
-    });
+   
 </script>
 @endsection

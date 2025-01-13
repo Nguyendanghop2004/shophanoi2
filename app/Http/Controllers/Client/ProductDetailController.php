@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Review;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductDetailController extends Controller
 {
@@ -75,8 +78,19 @@ class ProductDetailController extends Controller
             // return response()->json($colorSizes);
 
         }
+        $reviews = Review::where('product_id', $product->id)
+        ->with('user') // Load thông tin người dùng
+        ->latest()
+        ->get();
+        $wishlist = [];
 
-        return view('client.product-detail', compact('product', 'colorSizes'));
+        if (Auth::check()) {
+           
+            $wishlist = Wishlist::where('user_id', Auth::id())
+                ->pluck('product_id')
+                ->toArray(); 
+        }
+        return view('client.product-detail', compact('product', 'colorSizes','wishlist','reviews'));
     }
 
 

@@ -33,9 +33,7 @@
                             @foreach ($admins as $admin)
                                 <tr>
                                     <th scope="row">{{ $admin->id }}</th>
-                                    <td><a class="text-primary"
-                                            href="{{ route('admin.accounts.show', $admin->id) }}">{{ $admin->name }}</a>
-                                    </td>
+                                    <td> {{$admin->name}}</td>
                                     <td>{{ $admin->email }}</td>
                                     <td>
                                         <img src="{{ Storage::url($admin->image_path) }}" alt="Ảnh quản trị viên"
@@ -55,40 +53,48 @@
                                     </td>
                                     <td>
                                         <div class="d-flex">
+                                            <a href="{{ route('admin.accounts.show', $admin->id) }}"
+                                                class="btn btn-primary mx-2">
+                                                <i class="fas fa-eye "></i>
+                                            </a>
+                                        <div class="d-flex">
                                             <a href="{{ route('admin.accounts.edit', $admin->id) }}"
                                                 class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.accounts.destroy', $admin->id) }}" method="POST"
-                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+
+                                            {{-- <!-- Xóa tài khoản -->
+                                            <form action="{{ route('admin.accounts.destroy', $admin->id) }}" method="POST" class="ml-2">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger ml-2">
+                                                <button type="submit" class="btn btn-danger">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
-                                            </form>
+                                            </form> --}}
+
+                                            <!-- Vô hiệu hóa tài khoản -->
                                             @if ($admin->status)
-                                                <form action="{{ route('admin.accounts.deactivate', $admin->id) }}"
-                                                    method="POST" class="ml-2">
+                                                <form action="{{ route('admin.accounts.deactivate', $admin->id) }}" method="POST" class="ml-2">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-danger">
+                                                    <button 
+                                                        type="submit" 
+                                                        class="btn btn-danger">
                                                         <i class="fas fa-lock"></i>
                                                     </button>
                                                 </form>
                                             @else
-                                                <form action="{{ route('admin.accounts.activate', $admin->id) }}"
-                                                    method="POST" class="ml-2">
+                                                <!-- Kích hoạt tài khoản -->
+                                                <form action="{{ route('admin.accounts.activate', $admin->id) }}" method="POST" class="ml-2">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-success">
+                                                    <button 
+                                                        type="submit" 
+                                                        class="btn btn-success">
                                                         <i class="fas fa-unlock"></i>
                                                     </button>
                                                 </form>
                                             @endif
-
-                                           
                                         </div>
                                     </td>
-
                                 </tr>
                             @endforeach
                         </tbody>
@@ -98,9 +104,12 @@
             </div>
         </div>
     </section>
+
+    <!-- SweetAlert Script -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Success message
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -118,6 +127,69 @@
                     timer: 2000
                 });
             @endif
+
+            // Confirmation for deleting an account
+            document.querySelectorAll('form[action*="destroy"]').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Bạn có chắc chắn muốn xóa?',
+                        text: "Dữ liệu sẽ không thể phục hồi!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Có, xóa!',
+                        cancelButtonText: 'Hủy'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+
+            // Confirmation for deactivating an account
+            document.querySelectorAll('form[action*="deactivate"]').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Bạn có chắc chắn muốn vô hiệu hóa tài khoản này?',
+                        text: "Tài khoản sẽ không thể đăng nhập!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Có, vô hiệu hóa!',
+                        cancelButtonText: 'Hủy'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+
+            // Confirmation for activating an account
+            document.querySelectorAll('form[action*="activate"]').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Bạn có chắc chắn muốn kích hoạt tài khoản này?',
+                        text: "Tài khoản sẽ có thể đăng nhập lại!",
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Có, kích hoạt!',
+                        cancelButtonText: 'Hủy'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
         });
     </script>
 @endsection

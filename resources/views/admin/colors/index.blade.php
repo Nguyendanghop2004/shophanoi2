@@ -47,11 +47,11 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $color->name }}</td>
-                                    <td>{{ $color->sku_color }}</td> <!-- Hiển thị SKU Color -->
+                                    <td>{{ $color->sku_color }}</td> 
                                     <td>
                                         <div class="d-flex justify-content-start">
                                             <a href="{{ route('admin.colors.edit', $color->id) }}" class="btn btn-warning ml-2"><i class="fas fa-edit"></i></a>
-                                            <form action="{{ route('admin.colors.destroy', $color->id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                            <form action="{{ route('admin.colors.destroy', $color->id) }}" method="POST" style="display:inline-block" onsubmit="event.preventDefault(); confirmDelete('{{ $color->id }}')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger ml-2"><i class="fas fa-trash"></i></button>
@@ -94,27 +94,48 @@
     </div>
 </section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    $(document).ready(function () {
-        toastr.options = {
-            "closeButton": false,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-        };
+    function confirmDelete(colorId) {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn xóa màu sắc này?',
+            text: "Màu sắc sẽ bị xóa vĩnh viễn!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Gửi form xóa khi người dùng xác nhận
+                const form = document.querySelector(`form[action="{{ route('admin.colors.destroy', '') }}/${colorId}"]`);
+                form.submit();
+            }
+        });
+    }
 
-        @if(session('success'))
-            toastr.success("{{ session('success') }}");
-        @endif
-
-        @if(session('error'))
-            toastr.error("{{ session('error') }}");
+    // Hiển thị thông báo thành công hoặc lỗi sau khi hành động
+    document.addEventListener("DOMContentLoaded", function() {
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        @elseif (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: '{{ session('error') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
         @endif
     });
 </script>
+
 @endsection

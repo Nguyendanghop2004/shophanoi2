@@ -57,10 +57,12 @@
                                     <td>
                                         <div class="d-flex justify-content-start">
                                             <a href="{{ route('admin.brands.edit', $brand->id) }}" class="btn btn-warning ml-2"><i class="fas fa-edit"></i></a>
-                                            <form action="{{ route('admin.brands.destroy', $brand->id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                            
+                                            <!-- Form Xóa với id động -->
+                                            <form id="delete-form-{{ $brand->id }}" action="{{ route('admin.brands.destroy', $brand->id) }}" method="POST" style="display:inline-block">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger ml-2"><i class="fas fa-trash"></i></button>
+                                                <button type="button" class="btn btn-danger ml-2" onclick="confirmDelete({{ $brand->id }})"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </div>
                                     </td>
@@ -101,6 +103,7 @@
 </section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
@@ -122,5 +125,48 @@
             toastr.error("{{ session('error') }}");
         @endif
     });
+
+   
+    function confirmDelete(brandId) {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn xóa thương hiệu này?',
+            text: "Thương hiệu sẽ bị xóa vĩnh viễn!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+              
+                const form = document.querySelector(`#delete-form-${brandId}`);
+                form.submit();
+            }
+        });
+    }
+</script>
+<script>
+     document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+        });
+
+   
 </script>
 @endsection

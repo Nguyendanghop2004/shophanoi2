@@ -1,3 +1,4 @@
+
 @extends('admin.layouts.master')
 
 @section('content')
@@ -91,11 +92,15 @@
                                     </td>                               
                                     <td>
                                         <a href="{{ route('admin.discount_codes.edit', $code->id) }}" class="btn btn-warning btn-sm">Sửa</a>
-                                        <form action="{{ route('admin.discount_codes.destroy', $code->id) }}" method="POST" style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
-                                        </form>
+                                        <form 
+    action="{{ route('admin.discount_codes.destroy', $code->id) }}" 
+    method="POST" 
+    style="display:inline-block;" 
+    onsubmit="return confirmDelete(event)">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+</form>
                                     </td>
                                 </tr>
                                 @empty
@@ -115,4 +120,50 @@
 
         </div>
     </section>
+    
 @endsection
+<script>
+    function confirmDelete(event) {
+        event.preventDefault(); 
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn xóa mã giảm giá này?',
+            text: "Hành động này không thể hoàn tác!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                event.target.submit();
+            }
+        });
+        return false; 
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+     document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+        });
+
+   
+</script>

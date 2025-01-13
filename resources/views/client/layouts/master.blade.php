@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Ecomus - Ultimate HTML</title>
+    <title>HANOICLOTHESSHOP</title>
 
     <meta name="author" content="themesflat.com">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -28,7 +28,6 @@
     <!-- Favicon and Touch Icons  -->
     <link rel="shortcut icon" href="{{ asset('client/assets/images/logo/favicon.png') }}">
     <link rel="apple-touch-icon-precomposed" href="{{ asset('client/assets/images/logo/favicon.png') }}">
-    @vite('resources/js/app.js')
 
 </head>
 
@@ -245,7 +244,7 @@
             if (cartDetails.length === 0) {
                 modalCartContainer.append(`<div class="tf-mini-cart-items d-flex justify-content-center align-items-center" style="height: 100px;">
                                          <div class="tf-mini-cart-item">
-                                             <p><i class="fa-solid fa-cart-arrow-down"></i> Giỏ hàng trốnggggggg</p>
+                                             <p><i class="fa-solid fa-cart-arrow-down"></i> Giỏ hàng trống</p>
                                          </div>
                                   </div>    `);
                 return;
@@ -253,7 +252,8 @@
 
             // Hàm định dạng giá tiền
             function formatPrice(price) {
-                return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Thêm dấu "." mỗi 3 chữ số
+                
+                return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             }
 
             // Thêm từng sản phẩm vào modal
@@ -271,7 +271,7 @@
                     <a class="title link" href="${productDetailUrl}">${item.product_name}</a>
                     <div class="meta-variant">${item.color_name} / ${item.size_name} + ${formatPrice(item.pricebonus)} VNĐ</div>
                     <div class="price fw-6" data-price-bonus="${item.pricebonus * item.quantity}" data-price="${item.final_price * item.quantity}">
-                        <span class="sale-price">${formatPrice(item.final_price)} VNĐ</span>
+                        <span class="sale-price">${Math.floor(item.final_price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ'}</span>
                         <span class="original-price" style="text-decoration: line-through; color: #888;">
                             ${item.price > item.final_price ? formatPrice(item.price) + ' VNĐ' : ''}
                         </span>
@@ -336,7 +336,8 @@
             });
 
             // Cập nhật tổng giá với định dạng
-            $('.tf-totals-total-value').text(formatPrice(total) + ' VNĐ');
+            $('.tf-totals-total-value').text(Math.floor(total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ');
+
         }
     </script>
     <script>

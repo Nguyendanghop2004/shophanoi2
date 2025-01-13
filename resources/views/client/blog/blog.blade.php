@@ -1,27 +1,14 @@
 @extends('client.layouts.master')
+@section('header-home')
+    @include('client.layouts.particals.header-home')
+@endsection
 
 @section('content')
     <!-- page-title -->
-    <div class="tf-page-title">
-        <div class="container-full">
-            <div class="row">
-                <div class="col-12">
-                    <div class="heading text-center">Bài viết</div>
-                    {{-- <ul class="breadcrumbs d-flex align-items-center justify-content-center">
-                            <li>
-                                <a href="index.html">Home</a>
-                            </li>
-                            <li>
-                                <i class="icon-arrow-right"></i>
-                            </li>
-                            <li>
-                                Fashion
-                            </li>
-                        </ul> --}}
-                </div>
+    <div class="flat-title wow fadeInUp" data-wow-delay="0s">
+                <span class="title">Bài viết</span>
+            
             </div>
-        </div>
-    </div>
     <!-- /page-title -->
 
     <!-- blog-grid-main -->
@@ -32,7 +19,7 @@
                     <div class="col-xl-4 col-md-6 col-12">
                         <div class="blog-article-item">
                             <div class="article-thumb">
-                                <a href="blog-detail.html">
+                                <a href="{{route('blog.detail',$item->slug)  }}">
                                     <img class="lazyload" src="{{ Storage::url($item->image) }} "
                                         style="width: 366px; height: 235px;" alt="img-blog">
                                 </a>
@@ -44,10 +31,10 @@
                             </div>
                             <div class="article-content">
                                 <div class="article-title">
-                                    <a href="blog-detail.html" class="">{{ $item->title }}</a>
+                                    <a href="{{route('blog.detail',$item->slug)  }}" class="">{{ $item->title }}</a>
                                 </div>
                                 <div class="article-btn">
-                                    <a href="{{route('blog.detail',$item->id)  }}" class="tf-btn btn-line fw-6">Read more<i
+                                    <a href="{{route('blog.detail',$item->slug)  }}" class="tf-btn btn-line fw-6">Xem Thêm<i
                                             class="icon icon-arrow1-top-left"></i></a>
                                 </div>
                             </div>

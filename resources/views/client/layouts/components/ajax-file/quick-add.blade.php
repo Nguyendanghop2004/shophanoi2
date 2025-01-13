@@ -63,8 +63,13 @@
 <div class="tf-product-info-buy-button">
     <form class="">
         <a href="javascript:void(0);"
+<<<<<<< HEAD
+            class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Thêm Giỏ Hàng</span> -&nbsp;</span><span class="tf-qty-price"
+                data-price="{{ $product->price }}">${{ number_format($product->price, 2) }}</span></a>
+=======
             class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Thêm vào giỏ -&nbsp;</span><span class="tf-qty-price"
                 data-price="{{ $product->price }}">{{ $product->price }} VNĐ</span></a>
+>>>>>>> bdf779226be8dfdfa717b8cb6474dd69ce46544e
         <div class="tf-product-btn-wishlist btn-icon-action">
             <i class="icon-heart"></i>
             <i class="icon-delete"></i>
@@ -177,6 +182,20 @@
 
         // Cập nhật giá trị tổng tiền
         function updateTotalPrice() {
+<<<<<<< HEAD
+    var quantity = $('input[name="quantity_product"]').val();
+    var priceBonus = parseFloat($('input.btn-size:checked').data('size-price')) || 0; // Lấy giá cộng thêm của size đã chọn
+    var productPrice = parseFloat($('.tf-qty-price').data('price'));
+    var totalPrice = ((productPrice + priceBonus) * quantity).toFixed(0); // Làm tròn giá tiền theo VND
+    var price = (productPrice + priceBonus).toFixed(0); // Làm tròn giá tiền theo VND
+
+    // Hiển thị giá với dấu chấm phân cách hàng nghìn
+    $('.tf-qty-price').text(`${parseInt(totalPrice).toLocaleString()} VNĐ`);
+    $('.price-product').text(`${parseInt(price).toLocaleString()} VNĐ`);
+}
+
+
+=======
             var quantity = parseInt($('input[name="quantity_product"]').val()) || 0;
             var priceBonus = parseFloat($('input.btn-size:checked').data('size-price')) || 0;
             var productPrice = parseFloat($('.tf-qty-price').data('price')) || 0;
@@ -186,6 +205,7 @@
             $('.tf-qty-price').text(`${totalPrice} VNĐ`);
             $('.price-product').text(`${price} VNĐ`);
         }
+>>>>>>> bdf779226be8dfdfa717b8cb6474dd69ce46544e
 
         // Cập nhật kích thước cho màu đã chọn
         function updateSizeOptions(colorId) {

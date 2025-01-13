@@ -21,6 +21,7 @@
         <h3>Thông Tin Đơn Hàng</h3>
         <p><strong>Tên Khách Hàng:</strong> {{ $order->name }}</p>
         <p><strong>Số Điện Thoại:</strong> {{ $order->phone_number }}</p>
+        <p><strong>Trạng Thái Thanh Toán:</strong> {{ $order->payment_status }}</p>
         <p><strong>Phương thức thanh toán:</strong> {{ $order->payment_method }}</p>
         <p><strong>Địa Chỉ Cụ Thể:</strong>{{ $city->name_thanhpho }},{{ $province->name_quanhuyen }},{{ $ward->name_xaphuong }}, {{ $order->address }}</p>
     </div>
@@ -38,7 +39,8 @@
             <tbody>
                 @foreach ($orderitems as $item)
                 <tr>
-                    <td>{{ $item->product_name }}</td>
+
+                    <td> <img src="{{Storage::url($item->image_url)}}" alt="" width="50px">{{ $item->product_name }}</td>
                     <td>{{ $item->quantity }}</td>
                     <td>{{ number_format($item->price, 0, ',', '.') }}₫</td>
                 </tr>
@@ -46,6 +48,7 @@
             </tbody>
         </table>
         <div class="order-summary-total">
+
     <strong>Tổng Tiền:</strong>  {{ number_format($orderitems->sum(fn($item) => $item->quantity * $item->price), 0, ',', '.') }} VNĐ
     <div class="continue-shopping text-center">
     <a href="{{ route('order.donhang') }}" class="btn btn-primary">Quay Lại</a>

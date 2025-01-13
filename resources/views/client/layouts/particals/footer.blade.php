@@ -1,4 +1,4 @@
-<footer id="footer" class="footer background-gray md-pb-70">
+<footer id="footer" class="footer background-gray md-pb-70 mt-5">
     <div class="footer-wrap">
         <div class="footer-body">
             <div class="container">
@@ -12,16 +12,16 @@
                             </div>
                             <ul>
                                 <li>
-                                    <p>Address: 1234 Fashion Street, Suite 567, <br> New York, NY 10001</p>
+                                    <p>Địa chỉ: Trịnh Văn Bô, Nam Từ Niêm, Hà Nội <br></p>
                                 </li>
                                 <li>
-                                    <p>Email: <a href="#">info@fashionshop.com</a></p>
+                                    <p>Email: <a href="#">Hanoiclothesshop@gmail.com</a></p>
                                 </li>
                                 <li>
-                                    <p>Phone: <a href="#">(212) 555-1234</a></p>
+                                    <p>Điện thoại: <a href="#">03973525321</a></p>
                                 </li>
                             </ul>
-                            <a href="contact-1.html" class="tf-btn btn-line">Get direction<i
+                            <a href="{{route('about-us')}}" class="tf-btn btn-line">Chỉ đường<i
                                     class="icon icon-arrow1-top-left"></i></a>
                             <ul class="tf-social-icon d-flex gap-10">
                                 <li><a href="#"
@@ -42,82 +42,92 @@
                     </div>
                     <div class="col-xl-3 col-md-6 col-12 footer-col-block">
                         <div class="footer-heading footer-heading-desktop">
-                            <h6>Help</h6>
+                            <h6>Hỗ trợ</h6>
                         </div>
                         <div class="footer-heading footer-heading-moblie">
-                            <h6>Help</h6>
+                            <h6>Hỗ trợ</h6>
                         </div>
                         <ul class="footer-menu-list tf-collapse-content">
                             <li>
-                                <a href="privacy-policy.html" class="footer-menu_item">Privacy Policy</a>
+                                <a href="{{route('privacy-policy')}}" class="footer-menu_item">Chính sách bảo mật</a>
                             </li>
                             <li>
-                                <a href="delivery-return.html" class="footer-menu_item"> Returns + Exchanges
-                                </a>
+                                <a href="{{route('delivery-return')}}" class="footer-menu_item">Đổi trả hàng</a>
                             </li>
                             <li>
-                                <a href="shipping-delivery.html" class="footer-menu_item">Shipping</a>
+                                <a href="{{route('shipping-delivery')}}" class="footer-menu_item">Vận chuyển</a>
                             </li>
                             <li>
-                                <a href="terms-conditions.html" class="footer-menu_item">Terms &amp;
-                                    Conditions</a>
+                                <a href="{{route('terms-conditions')}}" class="footer-menu_item">Điều khoản & Điều kiện</a>
                             </li>
                             <li>
-                                <a href="faq-1.html" class="footer-menu_item">FAQ’s</a>
+                                <a href="{{route('faq-1')}}" class="footer-menu_item">Câu hỏi thường gặp</a>
                             </li>
                             <li>
-                                <a href="compare.html" class="footer-menu_item">Compare</a>
-                            </li>
-                            <li>
-                                <a href="wishlist.html" class="footer-menu_item">My Wishlist</a>
+                                <a href="{{route('wishlist')}}" class="footer-menu_item">Danh sách yêu thích</a>
                             </li>
                         </ul>
                     </div>
                     <div class="col-xl-3 col-md-6 col-12 footer-col-block">
                         <div class="footer-heading footer-heading-desktop">
-                            <h6>About us</h6>
+                            <h6>Về chúng tôi</h6>
                         </div>
                         <div class="footer-heading footer-heading-moblie">
-                            <h6>About us</h6>
+                            <h6>Về chúng tôi</h6>
                         </div>
                         <ul class="footer-menu-list tf-collapse-content">
                             <li>
-                                <a href="about-us.html" class="footer-menu_item">Our Story</a>
+                                <a href="{{route('about-us')}}" class="footer-menu_item">Câu chuyện của chúng tôi</a>
                             </li>
                             <li>
-                                <a href="our-store.html" class="footer-menu_item">Visit Our Store</a>
+                                <a href="{{route('shop-collection.index')}}" class="footer-menu_item">Thăm cửa hàng của chúng tôi</a>
                             </li>
                             <li>
-                                <a href="contact-1.html" class="footer-menu_item">Contact Us</a>
+                                <a href="{{route('contact')}}" class="footer-menu_item">Liên hệ</a>
                             </li>
                             <li>
-                                <a href="login.html" class="footer-menu_item">Account</a>
+                                <a href="{{route('accountUser.login')}}" class="footer-menu_item">Tài khoản</a>
                             </li>
+                        </ul>
+                            <li class="nav-search footer-menu-list tf-collapse-content">
+                                <form action="{{ route('order.search') }}" method="GET" class="search-form" onsubmit="return validateSearchForm()">
+                                    <div class="search-input-wrapper">
+                                        <input type="text" name="query" id="searchQuery" placeholder="Tra cứu đơn hàng....." class="search-input">
+                                        <button class="nav-icon-item search-button" type="submit">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </li>
+                            <br>
+                           
+                            
+
                         </ul>
                     </div>
                     <div class="col-xl-3 col-md-6 col-12">
                         <div class="footer-newsletter footer-col-block">
                             <div class="footer-heading footer-heading-desktop">
-                                <h6>Sign Up for Email</h6>
+                                <h6>Đăng ký nhận email</h6>
                             </div>
                             <div class="footer-heading footer-heading-moblie">
-                                <h6>Sign Up for Email</h6>
+                                <h6>Đăng ký nhận email</h6>
                             </div>
                             <div class="tf-collapse-content">
-                                <div class="footer-menu_item">Sign up to get first dibs on new arrivals, sales,
-                                    exclusive content, events and more!</div>
+                                <div class="footer-menu_item">Đăng ký để nhận thông tin về các sản phẩm mới, giảm giá,
+                                    nội dung độc quyền, sự kiện và nhiều hơn nữa!</div>
                                 <form class="form-newsletter" id="subscribe-form" action="#"
                                     method="post" accept-charset="utf-8" data-mailchimp="true">
                                     <div id="subscribe-content">
                                         <fieldset class="email">
                                             <input type="email" name="email-form" id="subscribe-email"
-                                                placeholder="Enter your email...." tabindex="0"
+                                                placeholder="Nhập email của bạn...." tabindex="0"
                                                 aria-required="true">
                                         </fieldset>
                                         <div class="button-submit">
                                             <button id="subscribe-button"
                                                 class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn"
-                                                type="button">Subscribe<i
+                                                type="button">Đăng ký<i
                                                     class="icon icon-arrow1-top-left"></i></button>
                                         </div>
                                     </div>
@@ -125,25 +135,13 @@
                                 </form>
                                 <div class="tf-cur">
                                     <div class="tf-currencies">
-                                        <select class="image-select center style-default type-currencies">
-                                            <option data-thumbnail="images/country/fr.svg">EUR <span>€ |
-                                                    France</span></option>
-                                            <option data-thumbnail="images/country/de.svg">EUR <span>€ |
-                                                    Germany</span></option>
-                                            <option selected data-thumbnail="images/country/us.svg">USD
-                                                <span>$ | United States</span></option>
-                                            <option data-thumbnail="images/country/vn.svg">VND <span>₫ |
-                                                    Vietnam</span></option>
-                                        </select>
+                                        <li class="categories-item footer-menu-list tf-collapse-content">
+                                            <a href="{{ route('contact') }}" class="text-uppercase">
+                                                <i class="fas fa-map-marker-alt"></i> Vị Trí Cửa Hàng
+                                            </a>
+                                        </li>
                                     </div>
-                                    <div class="tf-languages">
-                                        <select class="image-select center style-default type-languages">
-                                            <option>English</option>
-                                            <option>العربية</option>
-                                            <option>简体中文</option>
-                                            <option>اردو</option>
-                                        </select>
-                                    </div>
+                                  
                                 </div>
                             </div>
                         </div>
@@ -157,7 +155,7 @@
                     <div class="col-12">
                         <div
                             class="footer-bottom-wrap d-flex gap-20 flex-wrap justify-content-between align-items-center">
-                            <div class="footer-menu_item">© 2024 Ecomus Store. All Rights Reserved</div>
+                            <div class="footer-menu_item">© 2024 HanoiClothesshop. Bảo lưu tất cả quyền</div>
                             <div class="tf-payment">
                                 <img src="images/payments/visa.png" alt="">
                                 <img src="images/payments/img-1.png" alt="">

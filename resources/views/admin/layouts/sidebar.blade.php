@@ -6,205 +6,13 @@
             <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i
                         class="fas fa-search"></i></a></li>
         </ul>
-        <div class="search-element">
-            <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="250">
-            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
-            <div class="search-backdrop"></div>
-            <div class="search-result">
-                <div class="search-header">
-                    Histories
-                </div>
-                <div class="search-item">
-                    <a href="#">How to hack NASA using CSS</a>
-                    <a href="#" class="search-close"><i class="fas fa-times"></i></a>
-                </div>
-                <div class="search-item">
-                    <a href="#">Kodinger.com</a>
-                    <a href="#" class="search-close"><i class="fas fa-times"></i></a>
-                </div>
-                <div class="search-item">
-                    <a href="">#hanoiclothesshop</a>
-                    <a href="#" class="search-close"><i class="fas fa-times"></i></a>
-                </div>
-                <div class="search-header">
-                    Result
-                </div>
-                <div class="search-item">
-                    <a href="#">
-                        <img class="mr-3 rounded" width="30" src="assets/img/products/product-3-50.png"
-                            alt="product">
-                        oPhone S9 Limited Edition
-                    </a>
-                </div>
-                <div class="search-item">
-                    <a href="#">
-                        <img class="mr-3 rounded" width="30" src="assets/img/products/product-2-50.png"
-                            alt="product">
-                        Drone X2 New Gen-7
-                    </a>
-                </div>
-                <div class="search-item">
-                    <a href="#">
-                        <img class="mr-3 rounded" width="30" src="assets/img/products/product-1-50.png"
-                            alt="product">
-                        Headphone Blitz
-                    </a>
-                </div>
-                <div class="search-header">
-                    Projects
-                </div>
-                <div class="search-item">
-                    <a href="#">
-                        <div class="search-icon bg-danger text-white mr-3">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        Stisla Admin Template
-                    </a>
-                </div>
-                <div class="search-item">
-                    <a href="#">
-                        <div class="search-icon bg-primary text-white mr-3">
-                            <i class="fas fa-laptop"></i>
-                        </div>
-                        Create a new Homepage Design
-                    </a>
-                </div>
-            </div>
-        </div>
     </form>
     {{-- end search --}}
     {{-- left search --}}
     <ul class="navbar-nav navbar-right">
-        <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
-                class="nav-link nav-link-lg message-toggle beep"><i class="far fa-envelope"></i></a>
-            <div class="dropdown-menu dropdown-list dropdown-menu-right">
-                <div class="dropdown-header">Messages
-                    <div class="float-right">
-                        <a href="#">Mark All As Read</a>
-                    </div>
-                </div>
-                <div class="dropdown-list-content dropdown-list-message">
-                    <a href="#" class="dropdown-item dropdown-item-unread">
-                        <div class="dropdown-item-avatar">
-                            <img alt="image" src="assets/img/avatar/avatar-1.png" class="rounded-circle">
-                            <div class="is-online"></div>
-                        </div>
-                        <div class="dropdown-item-desc">
-                            <b>Kusnaedi</b>
-                            <p>Hello, Bro!</p>
-                            <div class="time">10 Hours Ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="dropdown-item dropdown-item-unread">
-                        <div class="dropdown-item-avatar">
-                            <img alt="image" src="assets/img/avatar/avatar-2.png" class="rounded-circle">
-                        </div>
-                        <div class="dropdown-item-desc">
-                            <b>Dedik Sugiharto</b>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-                            <div class="time">12 Hours Ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="dropdown-item dropdown-item-unread">
-                        <div class="dropdown-item-avatar">
-                            <img alt="image" src="assets/img/avatar/avatar-3.png" class="rounded-circle">
-                            <div class="is-online"></div>
-                        </div>
-                        <div class="dropdown-item-desc">
-                            <b>Agung Ardiansyah</b>
-                            <p>Sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                            <div class="time">12 Hours Ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <div class="dropdown-item-avatar">
-                            <img alt="image" src="assets/img/avatar/avatar-4.png" class="rounded-circle">
-                        </div>
-                        <div class="dropdown-item-desc">
-                            <b>Ardian Rahardiansyah</b>
-                            <p>Duis aute irure dolor in reprehenderit in voluptate velit ess</p>
-                            <div class="time">16 Hours Ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <div class="dropdown-item-avatar">
-                            <img alt="image" src="assets/img/avatar/avatar-5.png" class="rounded-circle">
-                        </div>
-                        <div class="dropdown-item-desc">
-                            <b>Alfa Zulkarnain</b>
-                            <p>Exercitation ullamco laboris nisi ut aliquip ex ea commodo</p>
-                            <div class="time">Yesterday</div>
-                        </div>
-                    </a>
-                </div>
-                <div class="dropdown-footer text-center">
-                    <a href="#">View All <i class="fas fa-chevron-right"></i></a>
-                </div>
-            </div>
-        </li>
-        <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
-                class="nav-link notification-toggle nav-link-lg beep"><i class="far fa-bell"></i></a>
-            <div class="dropdown-menu dropdown-list dropdown-menu-right">
-                <div class="dropdown-header">Notifications
-                    <div class="float-right">
-                        <a href="#">Mark All As Read</a>
-                    </div>
-                </div>
-                <div class="dropdown-list-content dropdown-list-icons">
-                    <a href="#" class="dropdown-item dropdown-item-unread">
-                        <div class="dropdown-item-icon bg-primary text-white">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <div class="dropdown-item-desc">
-                            Template update is available now!
-                            <div class="time text-primary">2 Min Ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <div class="dropdown-item-icon bg-info text-white">
-                            <i class="far fa-user"></i>
-                        </div>
-                        <div class="dropdown-item-desc">
-                            <b>You</b> and <b>Dedik Sugiharto</b> are now friends
-                            <div class="time">10 Hours Ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <div class="dropdown-item-icon bg-success text-white">
-                            <i class="fas fa-check"></i>
-                        </div>
-                        <div class="dropdown-item-desc">
-                            <b>Kusnaedi</b> has moved task <b>Fix bug header</b> to <b>Done</b>
-                            <div class="time">12 Hours Ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <div class="dropdown-item-icon bg-danger text-white">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="dropdown-item-desc">
-                            Low disk space. Let's clean it!
-                            <div class="time">17 Hours Ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <div class="dropdown-item-icon bg-info text-white">
-                            <i class="fas fa-bell"></i>
-                        </div>
-                        <div class="dropdown-item-desc">
-                            Welcome to Stisla template!
-                            <div class="time">Yesterday</div>
-                        </div>
-                    </a>
-                </div>
-                <div class="dropdown-footer text-center">
-                    <a href="#">View All <i class="fas fa-chevron-right"></i></a>
-                </div>
-            </div>
-        </li>
         <li class="dropdown">
             <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                <img alt="image" src="assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
+
                 <div class="d-sm-none d-lg-inline-block">
                     {{ Auth::check() ? Auth::user()->name : 'Guest' }}
                 </div>
@@ -238,16 +46,17 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="{{ route('admin.dashboard') }}">Stisla</a>
+            <a href="{{ route('admin.trangchu') }}">Hanoiclothesshop</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
             <a href="index.html">St</a>
         </div>
         <ul class="sidebar-menu">
             <li class="dropdown ">
+                @can('account_admin')
             <li class="menu-header">Quản Lí</li>
 
-            
+
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-columns"></i> <span>Thanh Trượt</span></a>
@@ -258,31 +67,88 @@
 
                 </ul>
             </li>
+        @endcan
+            @can('blog')
+                <li class="dropdown">
+                    <a href="{{ route('admin.blog.index') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                            class="fas fa-edit"></i>
+                        <span>Bài Viết</span></a>
+                    <ul class="dropdown-menu">
 
 
-            <li class="dropdown">
-                <a href="{{ route('admin.blog.index') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
-                        class="fas fa-folder"></i>
-                    <span>Bài Viết</span></a>
-                <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="{{ route('admin.blog.show') }}"><span>Danh Sách Bài viết</span></a>
+                        </li>
+                        <li><a class="nav-link" href="{{ route('admin.blog.index') }}"><span>Thêm Mới Bài viết</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+            @endcan
+            @can('dashboard')
+                <li class="dropdown">
+                    <a href="{{ route('admin.dashboard') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                            class="fas fa-chart-line"></i>
+                        <span>Thống kê</span></a>
+                    <ul class="dropdown-menu">
 
 
-                    <li><a class="nav-link" href="{{ route('admin.blog.show') }}"><span>Danh Sách Bài viết</span></a></li>
-                    <li><a class="nav-link" href="{{ route('admin.blog.index') }}"><span>Thêm Mới Bài viết</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.dashboard') }}"><span>Tổng Quan</span></a></li>
 
-                </ul>
-            </li>
-            <li><a class="nav-link" href="blank.html"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
-            <li><a class="nav-link" href="{{ route('admin.contact.index') }}"><i class="fas fa-envelope"></i>
-                    <span>Liên
-                        Hệ</span></a></li>
-            @can('shipper')
-                <li><a class="nav-link" href="{{ route('admin.shippers.index') }}"><i class="fas fa-shipping-fast"></i>
-                        <span>Nhân
-                            viên giao hàng</span></a></li>
+
+                    </ul>
+                </li>
+            @endcan
+            @can('account_admin')
+            <li><a class="nav-link" href="{{route('admin.review.index')}}"><i class="fas fa-comments"></i> <span>Bình Luận</span></a></li>
             @endcan
 
-            @can('categori')
+            @can('contact')
+                <li><a class="nav-link" href="{{ route('admin.contact.index') }}"><i class="fas fa-envelope"></i>
+                        <span>Liên Hệ</span></a></li>
+            @endcan
+            @can('coupoun')
+                <li class="dropdown">
+                    <a href="{{ route('admin.discount_codes.index') }}" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                            class="fas fa-folder"></i>
+                        <span>Mã Giảm Giá</span></a>
+                    <ul class="dropdown-menu">
+
+
+                        <li><a class="nav-link" href="{{ route('admin.discount_codes.index') }}"><span>Danh sách mã giảm giá</span></a>
+                        </li>
+                        <li><a class="nav-link" href="{{ route('admin.discount_codes.create') }}"><span>Tạo mới</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+            @endcan
+            @can('manager_ship')
+                <li class="menu-header">Quản Lí Shipper</li>
+                <li class="dropdown">
+                    <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                        <span>Quản Lí Shipper</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="{{ route('admin.shippers.index') }}"></i>
+                                <span>Nhân viên giao hàng</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.order.assign') }}"><span>Đơn hàng chưa
+                                    giao</span></a></li>
+                    </ul>
+                </li>
+            @endcan
+            @can('Shipper')
+                <li class="menu-header">Shipper</li>
+                <li class="dropdown">
+                    <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-truck "></i>
+                        <span>Shipper</span></a>
+                    <ul class="dropdown-menu">
+
+                        <li><a class="nav-link" href="{{ route('admin.order.danhsachgiaohang') }}"><span>Danh sách giao
+                                    hàng</span></a></li>
+                    </ul>
+                </li>
+            @endcan
+            @can('categories')
+                <li class="menu-header">Danh mục</li>
                 <li class="dropdown">
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
                         <span>Danh mục sản phẩm</span></a>
@@ -296,19 +162,18 @@
                     </ul>
                 </li>
             @endcan
-               
+
             @can('order')
-            <li class="menu-header">Quản Lí Đơn Hàng</li>
+                <li class="menu-header">Quản Lí Đơn Hàng</li>
                 <li class="dropdown">
-                    <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
+                    <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-receipt"></i>
                         <span>Đơn Hàng</span></a>
                     <ul class="dropdown-menu">
 
-                        <li><a class="nav-link" href="{{route('admin.order.getList')}}"><span>Danh Sách Đơn Hàng</span></a></li>
-                       
+                        <li><a class="nav-link" href="{{ route('admin.order.getList') }}"><span>Danh Sách Đơn
+                                    Hàng</span></a></li>
                     </ul>
                 </li>
-                
             @endcan
             @can('product')
                 <li class="menu-header">Quản Lí Sản Phẩm</li>
@@ -317,6 +182,7 @@
                         <span>Sản Phẩm</span></a>
                     <ul class="dropdown-menu">
                         <li><a class="nav-link" href="{{ route('admin.product.index') }}"><span>Danh Sách</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.sales.index') }}"><span>Giảm Giá</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.product.create') }}"><span>Tạo Mới</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Thùng Rác</span></a>
                         </li>
@@ -326,37 +192,40 @@
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i>
                         <span>Quản lí Biển Thể</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="{{ route('admin.colors.index') }}"><span>Quản Màu Sắc</span></a></li>
-                        <li><a class="nav-link" href="{{ route('admin.sizes.index') }}"><span>Quản Lí Số Đo</span></a></li>
-                        <li><a class="nav-link" href="{{ route('admin.brands.index') }}"><span>Quản Lí Thương Hiệu</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.colors.index') }}"><span>Quản Màu Sắc</span></a>
+                        </li>
+
+                        <li><a class="nav-link" href="{{ route('admin.sizes.index') }}"><span> Lí Số Đo</span></a></li>
+
+                        <li><a class="nav-link" href="{{ route('admin.brands.index') }}"><span>Quản Lí Thương
+                                    Hiệu</span></a></li>
                         <li><a class="nav-link" href="{{ route('admin.tags.index') }}"><span>Quản lí Thẻ</span></a></li>
                     </ul>
                 </li>
             @endcan
 
-            @can('Acount')
-            <li class="menu-header">Quản Lí tài khoản</li>
-
-            <li class="dropdown">
-
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-folder"></i>
-                    <span>Account</span></a>
-                <ul class="dropdown-menu">
-
-                    <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Tài khoản
-                                Admin</span></a></li>
-                    <li><a class="nav-link" href="{{ route('admin.history') }}">
-                            <span>Lịch sử Admin</span></a></li>
-                    <li><a class="nav-link" href="{{ route('admin.accountsUser.accountUser') }}"><span>Tài khoản User</span></a></li>
-                    <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Phân quyền và vai
-                                trò</span></a></li>
-                    
-                </ul>
-            </li>
+            @canany(['account_admin', 'account_user'])
+                <li class="menu-header">Quản Lí tài khoản</li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-users "></i>
+                        <span>Account</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="{{ route('admin.accounts.account') }}"><span>Tài khoản
+                                    Admin</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.history') }}">
+                                <span>Lịch sử Admin</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.historyUser') }}">
+                                <span>Lịch sử User</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.accountsUser.accountUser') }}"><span>Tài khoản
+                                    User</span></a></li>
+                        <li><a class="nav-link" href="{{ route('admin.permissions.index') }}"><span>Phân quyền và vai
+                                    trò</span></a></li>
+                    </ul>
+                </li>
             @endcan
 
 
-         
+
 
 
     </aside>
