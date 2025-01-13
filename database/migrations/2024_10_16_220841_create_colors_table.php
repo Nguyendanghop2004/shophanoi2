@@ -4,21 +4,21 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateColorsTable extends Migration
+class CreateBrandsTable extends Migration
 {
     public function up()
     {
-        Schema::create('colors', function (Blueprint $table) {
+        Schema::create('brands', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique(); // Tên màu sắc (Ví dụ: Đỏ, Xanh)
-            $table->string('sku_color')->unique();
+            $table->string('name')->unique();
+            $table->string('image_brand_url')->nullable();
             $table->timestamps();
+            $table->softDeletes();  
         });
-
     }
 
     public function down()
     {
-        Schema::dropIfExists('colors');
+        Schema::dropIfExists('brands');
     }
 }

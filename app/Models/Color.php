@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Color extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;  
 
     protected $fillable = ['name', 'sku_color'];
 
@@ -25,6 +26,7 @@ class Color extends Model
     {
         return $this->belongsToMany(Product::class, 'product_variants', 'color_id', 'product_id');
     }
+
     public function variants()
     {
         return $this->hasMany(ProductVariant::class, 'color_id');

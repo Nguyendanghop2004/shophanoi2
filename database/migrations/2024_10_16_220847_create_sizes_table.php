@@ -10,8 +10,9 @@ class CreateSizesTable extends Migration
     {
         Schema::create('sizes', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique(); // Kích thước (Ví dụ: S, M, L)
+            $table->string('name')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
 
     }

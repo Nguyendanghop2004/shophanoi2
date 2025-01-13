@@ -75,7 +75,9 @@ class TagController extends Controller
 
         if ($tag) {
             $this->deleteOldImage($tag->background_image);
+            
             $tag->delete();
+
             return redirect()->route('admin.tags.index')->with('success', 'Tag đã được xóa.');
         }
 

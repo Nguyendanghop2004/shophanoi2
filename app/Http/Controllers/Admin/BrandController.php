@@ -31,7 +31,6 @@ class BrandController extends Controller
     {
         $validatedData = $this->validateBrand($request);
 
-        // Upload image nếu có file
         if ($request->hasFile('image_brand_url')) {
             $validatedData['image_brand_url'] = $this->handleImageUpload($request);
         }
@@ -62,10 +61,9 @@ class BrandController extends Controller
 
         $validatedData = $this->validateBrand($request, $brand);
 
-        // Nếu có file mới, xử lý upload ảnh mới
         if ($request->hasFile('image_brand_url')) {
-            $this->deleteOldImage($brand->image_brand_url);  // Xóa ảnh cũ
-            $validatedData['image_brand_url'] = $this->handleImageUpload($request);  // Upload ảnh mới
+            $this->deleteOldImage($brand->image_brand_url);  
+            $validatedData['image_brand_url'] = $this->handleImageUpload($request); 
         }
 
         $brand->update($validatedData);
@@ -78,8 +76,10 @@ class BrandController extends Controller
         $brand = Brand::find($id);
 
         if ($brand) {
-            $this->deleteOldImage($brand->image_brand_url);  // Xóa ảnh khi xóa thương hiệu
+            $this->deleteOldImage($brand->image_brand_url);  
+
             $brand->delete();
+
             return redirect()->route('admin.brands.index')->with('success', 'Thương hiệu đã được xóa.');
         }
 
@@ -92,9 +92,9 @@ class BrandController extends Controller
             'name' => [
                 'required',
                 'max:255',
-                Rule::unique('brands')->ignore($brand?->id),  // Kiểm tra trùng tên ngoại trừ bản ghi hiện tại
+                Rule::unique('brands')->ignore($brand?->id),  
             ],
-            'image_brand_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',  // Hạn chế loại ảnh và kích thước
+            'image_brand_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',  
         ], [
             'name.required' => 'Tên thương hiệu không được để trống.',
             'name.unique' => 'Tên thương hiệu đã tồn tại.',
@@ -108,7 +108,6 @@ class BrandController extends Controller
     private function handleImageUpload(Request $request)
     {
         if ($request->hasFile('image_brand_url')) {
-            // Upload ảnh vào thư mục public/brands
             return $request->file('image_brand_url')->store('brands', 'public');
         }
         return null;
@@ -117,7 +116,6 @@ class BrandController extends Controller
     private function deleteOldImage($imagePath)
     {
         if ($imagePath && Storage::disk('public')->exists($imagePath)) {
-            // Xóa ảnh cũ khi có ảnh mới hoặc khi xóa thương hiệu
             Storage::disk('public')->delete($imagePath);
         }
     }
