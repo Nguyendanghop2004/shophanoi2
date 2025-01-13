@@ -3,12 +3,12 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Sản Phẩm Giảm Giá</h1>
+            <h1>Sản Phẩm Giảm Giá </h1>
         </div>
 
         <div class="card card-primary">
             <div class="card-header">
-                <h4>Danh Sách Sản Phẩm Được Giảm</h4>
+                <h4>Danh Sách Sản Phẩm Được Giảm </h4>
                 <div class="card-header-action">
                     <a href="{{ route('admin.sales.create') }}" class="btn btn-primary">
                         Tạo Mới
@@ -39,7 +39,6 @@
                                     <th>Loại giảm giá</th>
                                     <th>Giá trị giảm</th>
                                     <th>Thời gian</th>
-                                    <th>Trạng thái</th>
                                     <th>Hành động</th>
                                 </tr>
                             </thead>

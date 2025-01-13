@@ -39,7 +39,8 @@
             <tbody>
                 @foreach ($orderitems as $item)
                 <tr>
-                    <td>{{ $item->product_name }}</td>
+
+                    <td> <img src="{{Storage::url($item->image_url)}}" alt="" width="50px">{{ $item->product_name }}</td>
                     <td>{{ $item->quantity }}</td>
                     <td>{{ number_format($item->price, 0, ',', '.') }}₫</td>
                 </tr>
@@ -47,6 +48,7 @@
             </tbody>
         </table>
         <div class="order-summary-total">
+
     <strong>Tổng Tiền:</strong>  {{ number_format($orderitems->sum(fn($item) => $item->quantity * $item->price), 0, ',', '.') }} VNĐ
     <div class="continue-shopping text-center">
     <a href="{{ route('order.donhang') }}" class="btn btn-primary">Quay Lại</a>

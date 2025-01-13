@@ -76,7 +76,8 @@
                                 <div class="box-title-price">
                                     <span>Price:</span>
                                     <div>
-                                        $<span id="display-min">0</span> - $<span id="display-max">2000000</span>
+
+                                        $<span id="display-min">0</span> - <span id="display-max">2.000.000 VNĐ</span>
                                     </div>
                                 </div>
                             </div>
@@ -114,7 +115,6 @@
                                         <li class="list-item d-flex gap-12 align-items-center">
                                             <input type="checkbox" name="color[]" class="tf-check-color bg_{{ strtolower($color->name) }}" id="color-{{ $color->id }}" value="{{ $color->id }}">
                                             <label for="color-{{ $color->id }}" class="label d-flex align-items-center color-label">
-                                                <!-- Hiển thị ô màu với màu nền từ sku_color -->
                                                 <span class="color-swatch" style="background-color: {{ $color->sku_color }};"></span>
                                                 <span>{{ $color->name }}</span>&nbsp;<span>({{ $color->products_count }})</span>
                                             </label> 
@@ -142,7 +142,7 @@
                                             <input type="radio" name="size" class="tf-check tf-check-size" value="{{ $size->id }}" id="size-{{ $size->id }}">
                                             <label for="size-{{ $size->id }}" class="label">
                                                 <span>{{ $size->name }}</span> 
-                                                &nbsp;<span>({{ $size->productVariants->count() }})</span> <!-- Số lượng sản phẩm liên quan -->
+                                                &nbsp;<span>({{ $size->productVariants->count() }})</span>
                                             </label>
                                         </li>
                                     @endforeach
@@ -182,21 +182,17 @@
         sizeFilters: document.querySelectorAll('input[name="size"]'),
     };
 
-    // Cập nhật giá trị hiển thị giá
     const updatePrices = () => {
         elements.displayMin.textContent = elements.rangeMin.value;
         elements.displayMax.textContent = elements.rangeMax.value;
     };
 
-    // Cập nhật URL với các tham số lọc
     const updateURL = () => {
         const url = new URL(window.location.href);
 
-        // Lọc giá
         url.searchParams.set('price_min', elements.rangeMin.value);
         url.searchParams.set('price_max', elements.rangeMax.value);
 
-        // Lọc thương hiệu
         const selectedBrand = document.querySelector('input[name="brand"]:checked');
         if (selectedBrand) {
             url.searchParams.set('brand', selectedBrand.dataset.brandId);
@@ -204,7 +200,6 @@
             url.searchParams.delete('brand');
         }
 
-        // Lọc màu sắc
         const selectedColors = Array.from(elements.colorFilters)
             .filter(input => input.checked)
             .map(input => input.value);
@@ -214,7 +209,6 @@
             url.searchParams.delete('color');
         }
 
-        // Lọc kích thước
         const selectedSize = document.querySelector('input[name="size"]:checked');
         if (selectedSize) {
             url.searchParams.set('size', selectedSize.value);
@@ -222,14 +216,11 @@
             url.searchParams.delete('size');
         }
 
-        // Cập nhật URL mà không tải lại trang
         history.pushState(null, '', url.toString());
     };
 
-    // Hàm lọc sản phẩm
     const filterProducts = debounce(() => {
         updateURL();
-        // Thực hiện gọi AJAX để lấy sản phẩm sau khi URL được cập nhật
         fetch(window.location.href, { method: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
             .then(response => response.text())
             .then(html => {
@@ -240,7 +231,6 @@
             .catch(error => console.error('Lỗi:', error));
     }, 300);
 
-    // Lắng nghe thay đổi giá
     elements.rangeMin.addEventListener('input', () => {
         updatePrices();
         filterProducts();
@@ -250,7 +240,6 @@
         filterProducts();
     });
 
-    // Lắng nghe thay đổi các bộ lọc khác
     elements.brandFilters.forEach(input => {
         input.addEventListener('change', filterProducts);
     });
@@ -263,11 +252,9 @@
         input.addEventListener('change', filterProducts);
     });
 
-    // Cập nhật giá trị hiển thị giá ban đầu
     updatePrices();
 });
 
-// Hàm debounce
 function debounce(func, wait) {
     let timeout;
     return (...args) => {
@@ -276,7 +263,6 @@ function debounce(func, wait) {
     };
 }
 
-// Xử lý sự kiện khi người dùng reset các bộ lọc
 document.getElementById('reset-filters').addEventListener('click', function () {
     const radios = document.querySelectorAll('#facet-filter-form input[type="radio"], #facet-filter-form input[type="checkbox"]');
     radios.forEach(radio => radio.checked = false);
@@ -365,37 +351,31 @@ document.getElementById('reset-filters').addEventListener('click', function () {
 .color-swatch {
     width: 20px;
     height: 20px;
-    border-radius: 50%; /* Tùy chọn nếu bạn muốn ô màu tròn */
+    border-radius: 50%;
     display: inline-block;
     margin-right: 8px;
 }
-/* Kiểu cho dấu tick */
 input[type="checkbox"]:checked + label .color-swatch {
-    border: 2px solid #000; /* Bạn có thể thay đổi màu sắc của đường viền để hiển thị dấu tick */
+    border: 2px solid #000;
 }
 
-/* Tạo hiệu ứng khi hover */
 input[type="checkbox"]:hover + label .color-swatch {
     opacity: 0.8;
 }
-/* Khi ô màu được chọn */
 input[type="checkbox"]:checked + label .color-swatch {
-    border: 2px solid #007bff; /* Đổi màu viền khi chọn */
-    transform: scale(1.1); /* Phóng to một chút */
+    border: 2px solid #007bff; 
+    transform: scale(1.1);
 }
 
-/* Đổi màu chữ khi màu sắc được chọn */
 input[type="checkbox"]:checked + label {
-    font-weight: bold; /* Làm đậm chữ */
-    color: #007bff; /* Đổi màu chữ */
+    font-weight: bold; 
+    color: #007bff;
 }
 
-/* Hiệu ứng hover cho các ô màu */
 label:hover .color-swatch {
     opacity: 0.8;
 }
 
-/* Hiển thị màu sắc khi chưa chọn */
 .color-swatch {
     width: 24px;
     height: 24px;
@@ -404,12 +384,10 @@ label:hover .color-swatch {
     transition: all 0.3s ease;
 }
 
-/* Khi người dùng hover lên ô màu */
 label:hover {
     cursor: pointer;
 }
 
-/* Phần viền khi chọn màu */
 label.checked .color-swatch {
     box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
 }

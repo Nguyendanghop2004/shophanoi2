@@ -23,16 +23,18 @@ use App\Http\Controllers\Client\ShopCollectionController;
 use App\Http\Controllers\Client\ShoppingCartController;
 use App\Http\Controllers\Client\TimeLineController;
 use App\Http\Controllers\ProfileController;
-
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Client\ReviewController;
 
-use App\Http\Controllers\WishlistController;
+
 
 use Illuminate\Support\Facades\Route;
 Route::middleware('checkPassword')->group(function () {
 
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/home', [HomeController::class, 'home'])->name('home');
+
 
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 
@@ -149,6 +151,8 @@ Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->nam
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::get('/cart/modal-cart', [CartController::class, 'getModalCart'])->name('cart.modal');
 
+Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+Route::post('/apply-coupon', [CheckOutController::class, 'applyCoupon'])->name('cart.apply-coupon');
 
 
 
@@ -187,7 +191,11 @@ Route::prefix('profile')
 
 
 Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
+// 1 cái của đặt hàng
 Route::post('/select-address', [CheckoutController::class, 'select_address']);
+// 1 cái của profile user
+Route::post('/select-address', [AccountController::class, 'select_address']);
+
 
 
 Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
@@ -205,6 +213,28 @@ Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetch
 
 Route::get('/reviews/create/{orderId}', [ReviewController::class, 'create'])->name('client.reviews.create');
 Route::post('/reviews/store', [ReviewController::class, 'store'])->name('client.reviews.store');
+Route::get('/privacy-policy', function () {
+    return view('client.footer.privacy-policy');
+})->name('privacy-policy');
+Route::get('/delivery-return', function () {
+    return view('client.footer.delivery-return');
+})->name('delivery-return');
+Route::get('/shipping-delivery', function () {
+    return view('client.footer.shipping-delivery');
+})->name('shipping-delivery');
+Route::get('/terms-conditions', function () {
+    return view('client.footer.terms-conditions');
+})->name('terms-conditions');
+Route::get('/faq-1', function () {
+    return view('client.footer.faq-1');
+})->name('faq-1');
+Route::get('/about-us', function () {
+    return view('client.footer.about-us');
+})->name('about-us');
+Route::get('/our-store', function () {
+    return view('client.footer.our-store');
+})->name('our-store');
 
     });
 
+   

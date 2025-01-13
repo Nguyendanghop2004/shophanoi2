@@ -167,15 +167,14 @@
 
                                 <p class="card-text mb-1"><small class="text-muted">{{ $order->created_at }}</small></p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <p class="card-text mb-1"><strong>Giá: </strong> <span class="text-danger"> {{ number_format($order->total_price, 0, ',', '.') }} VND</span></p>
-                                    <p class="card-text mb-1"><strong>Số tiền hoàn: </strong>{{ number_format($order->refund_amount, 0, ',', '.') }} VND</p>
+                                    <p class="card-text mb-1"><strong>Tổng tiền: </strong> <span class="text-danger"> {{ number_format($order->total_price, 0, ',', '.') }} VND</span></p>
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('client.orders.show', ['id' => Crypt::encryptString($order->id)]) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
                                     
                                     @if ($order->status === 'đã nhận hàng')
                                        
-                                            <a href="{{ route('client.reviews.create', ['orderId' => $order->id, 'productId' => $order->product_id]) }}" class="btn btn-warning btn-sm">Viết đánh giá cho</a>
+                                            <a href="{{ route('client.reviews.create', ['orderId' => $order->id, 'productId' => $order->product_id]) }}" class="btn btn-warning btn-sm">Đánh giá sản phẩm  </a>
                                        
                                     @endif
                                     @if ($order->status === 'giao hàng thành công')

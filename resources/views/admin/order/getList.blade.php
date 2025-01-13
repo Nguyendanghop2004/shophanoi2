@@ -2,7 +2,22 @@
 
 @section('content')
 <section class="section">
-    
+    <style>
+        .status-cho-xac-nhan {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.status-huy {
+    background-color:#FF0000; 
+    color: #fff;
+}
+.status-da-nhan-hang {
+    background-color: #00EE00; 
+    color: #fff;
+}
+
+    </style>
     <div class="section-header">
         <h1>Danh Mục Đơn Hàng</h1>
     </div>
@@ -26,6 +41,7 @@
                                 <option value="">Tất cả trạng thái</option>
                                 <option value="chờ xác nhận" {{ request('status') == 'chờ xác nhận' ? 'selected' : '' }}>Chờ Xác Nhận</option>
                                 <option value="đã xác nhận" {{ request('status') == 'đã xác nhận' ? 'selected' : '' }}>Đã Xác Nhận</option>
+                                <option value="ship đã nhận" {{ request('status') == 'ship đã nhận' ? 'selected' : '' }}>Ship đã nhận</option>
                                 <option value="đang giao hàng" {{ request('status') == 'đang giao hàng' ? 'selected' : '' }}>Đang Giao Hàng</option>
                                 <option value="giao hàng thành công" {{ request('status') == 'giao hàng thành công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
                                 <option value="giao hàng không thành công" {{ request('status') == 'giao không hàng thành công' ? 'selected' : '' }}>Giao Hàng Không Thành Công</option>
@@ -37,7 +53,13 @@
                                 <option value="vnpay" {{ request('payment_method') == 'vnpay' ? 'selected' : '' }}>Thanh Toán VNPAY</option>
                                 <option value="cod" {{ request('payment_method') == 'cod' ? 'selected' : '' }}>Thanh Toán COD</option>
                             </select>
+                            <div class="form-check form-check-inline ml-2">
+                                <input type="checkbox" name="filter_7_days" class="form-check-input" id="filter7Days" 
+                                       onchange="this.form.submit()" {{ request('filter_7_days') == 'on' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="filter7Days">Lọc đơn chưa xác nhận sau 7 ngày giao thành công</label>
+                            </div>
                         </div>
+                        
                     </form> 
                 </div>
             </div>
@@ -87,6 +109,7 @@
                                                 <option value="giao hàng không thành công" {{ $order->status == 'giao hàng không thành công' ? 'selected' : '' }}>Giao Hàng Không Thành Công</option>
                                             @elseif($order->status == 'giao hàng thành công')
                                                 <option value="giao hàng thành công" {{ $order->status == 'giao hàng thành công' ? 'selected' : '' }}>Giao Hàng Thành Công</option>
+                                                <option value="đã nhận hàng" {{ $order->status == 'đã nhận hàng' ? 'selected' : '' }}>Hoàn thành</option>
                                             @elseif($order->status == 'giao hàng không thành công')
                                                 <option value="giao hàng không thành công" {{ $order->status == 'giao hàng không thành công' ? 'selected' : '' }}>Giao Hàng Không Thành Công</option>
                                             @elseif($order->status == 'đã nhận hàng')
@@ -109,8 +132,8 @@
                                             </select>
                                             <button type="button" class="btn btn-danger btn-sm mt-2 mx-2 close-btn" onclick="resetStatus(this)">X</button>
                                         </div>
-                                        @if($order->status != 'hủy' &&  $order->status != 'giao hàng thành công'  &&  $order->status != 'giao hàng không thành công' &&  $order->status != 'đã nhận hàng')
-                                    <button type="button"  class="btn btn-success btn-sm mt-2" onclick="confirmUpdateForm(this)">Cập Nhật</button>
+                                        @if($order->status != 'hủy' &&  $order->status != 'giao hàng không thành công' &&  $order->status != 'đã nhận hàng')
+                                    <button type="button"  class="btn btn-dark btn-sm mx-2 mt-2" onclick="confirmUpdateForm(this)">Cập Nhật</button>
                                          
                                     @endif
 
@@ -200,6 +223,37 @@
                 });
             @endif
         });
+
+</script>
+<script>
+    function applyStatusColor(selectElement) {
+    const statusClasses = {
+        'chờ xác nhận': 'status-cho-xac-nhan',
+        'đã xác nhận': 'status-da-xac-nhan',
+        'ship đã nhận': 'status-ship-da-nhan',
+        'đang giao hàng': 'status-dang-giao-hang',
+        'giao hàng thành công': 'status-giao-hang-thanh-cong',
+        'giao hàng không thành công': 'status-giao-hang-khong-thanh-cong',
+        'hủy': 'status-huy',
+        'đã nhận hàng': 'status-da-nhan-hang'
+    };
+
+    selectElement.className = selectElement.className.replace(/status-\w+/g, '');
+
+    const selectedStatus = selectElement.value.trim();
+    if (statusClasses[selectedStatus]) {
+        selectElement.classList.add(statusClasses[selectedStatus]);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('select[name="status"]').forEach(select => {
+        applyStatusColor(select);
+        select.addEventListener('change', function () {
+            applyStatusColor(this);
+        });
+    });
+});
 
 </script>
 @endsection

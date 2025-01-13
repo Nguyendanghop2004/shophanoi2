@@ -26,7 +26,7 @@ use Storage;
 
 class AccountController extends Controller
 {
-   public function acc(Request $request, $section = null)
+    public function acc(Request $request, $section = null)
     {
         if ($request->ajax()) {
             switch ($section) {
@@ -41,20 +41,19 @@ class AccountController extends Controller
         return view('client.my-account', ['section' => $section]);
     }
 
-    public function login(\App\Http\Requests\Client\LoginRequest $request)
-    {
 
+    public function login(LoginRequest $request)
+    {
 
         $credentials = $request->only('email', 'password');
     
         if (Auth::attempt($credentials)) {
-            // Đăng nhập thành công
             if (Auth::user()->status) {
                 Auth::logout();
                 return back()->with('error', 'Tài khoản của bạn đã bị khóa.');
             }
             $request->session()->regenerate();
-            return redirect()->intended('/')->with('success', 'Đăng nhập thành công');
+            return redirect()->intended('home')->with('success', 'Đăng nhập thành công');
         }
 
 
@@ -84,14 +83,14 @@ class AccountController extends Controller
 
         auth()->login($user);
 
-        return redirect()->route('home');
+        return redirect()->route('home')->with('success', 'Đăng ký thành công');
     }
     public function loginIndex()
     {
         if (Auth::check()) {
             return redirect()->route('home');
         }
-    
+
         return response()->view('client.login')
             ->header('Cache-Control', 'no-store, no-cache, must-revalidate')
             ->header('Pragma', 'no-cache')
@@ -103,9 +102,9 @@ class AccountController extends Controller
         return view('client.register');
     }
 
-    public function ResePasswordIndex(){
+    public function ResePasswordIndex()
+    {
         return view('client.ResetPassword');
-
     }
     public function profile(String $id)
     {
@@ -347,6 +346,27 @@ class AccountController extends Controller
             return back()->with('success', 'Đổi mật khẩu thành công');
         } else {
             return back()->with('error', 'Mật khẩu cũ không chính xác');
+        }
+    }
+    public function select_address(Request $request)
+    {
+        $data = $request->all();
+        if (isset($data['action'])) {
+            $output = '';
+            if ($data['action'] == "city") {
+                $select_province = Province::where('matp', $data['ma_id'])->orderBy('maqh', 'ASC')->get();
+                $output .= '<option>--Chọn Quận Huyện---</option>';
+                foreach ($select_province as $province) {
+                    $output .= '<option value="' . $province->maqh . '">' . $province->name_quanhuyen . '</option>';
+                }
+            } else {
+                $select_wards = Wards::where('maqh', $data['ma_id'])->orderBy('xaid', 'ASC')->get();
+                $output .= '<option>--Chọn Xã Phường---</option>';
+                foreach ($select_wards as $ward) {
+                    $output .= '<option value="' . $ward->xaid . '">' . $ward->name_xaphuong . '</option>';
+                }
+            }
+            echo $output;
         }
     }
 }

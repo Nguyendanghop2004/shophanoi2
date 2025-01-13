@@ -34,7 +34,10 @@ class OrderController extends Controller
     $status = $request->query('status', '');
     
     $query = Order::where('user_id', $user->id);
-    
+    $query->where(function($query) {
+        $query->where('payment_method', '!=', 'vnpay')
+              ->orWhere('payment_status', '!=', 'chờ thanh toán');
+    });
     if ($status !== '') {
         $query->where('status', $status);
     }
@@ -69,30 +72,26 @@ class OrderController extends Controller
     public function show($encryptedId)
     {
         try {
-            // Giải mã ID từ URL
             $id = Crypt::decryptString($encryptedId);
     
-          
             $order = Order::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
     
-          
-            $orderitems = $order->orderItems;
+            $orderitems = $order->orderItems->map(function ($item) {
+                return $item;
+            });
     
-         
             $city = City::where('matp', $order->city_id)->first();
             $province = Province::where('maqh', $order->province_id)->first();
             $ward = Wards::where('xaid', $order->wards_id)->first();
     
-            
             return view('client.orders.show', compact('order', 'orderitems', 'city', 'province', 'ward'));
         } catch (DecryptException $e) {
-           
             return redirect()->back();
         } catch (ModelNotFoundException $e) {
-         
             return redirect()->back();
         }
     }
+    
     
 
     /**

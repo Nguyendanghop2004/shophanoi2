@@ -15,23 +15,15 @@ use Illuminate\Support\Facades\DB;
 
 class ShopCollectionController extends Controller
 {
-    /**
-     * Hiển thị trang bộ sưu tập.
-     */
     public function index(Request $request, $slug = null)
     {
-        // Lấy danh sách danh mục, thương hiệu, màu sắc
         $categories = $this->getCategories();
         $brands = Brand::withCount('products')->get();
         $colors = Color::withCount('products')->get();
 
-        // Lấy danh sách kích thước
         $sizes = Size::withCount('productVariants')->get();
 
-        // Lấy sản phẩm đã lọc từ request
         $products = $this->getFilteredProducts($request);
-
-        // Kiểm tra nếu yêu cầu là AJAX, trả về danh sách sản phẩm dưới dạng HTML
         if ($request->ajax()) {
             return view('client.partials.product_list', compact('products'))->render();
         }
@@ -44,24 +36,18 @@ class ShopCollectionController extends Controller
                 ->toArray(); 
         }
 
-        // Trả về view với tất cả các dữ liệu cần thiết
         return view('client.shop-collection', compact('categories', 'brands', 'colors', 'sizes', 'products', 'wishlist'));
     }
 
-    /**
-     * Lọc và lấy danh sách sản phẩm theo các tham số từ request.
-     */
     public function getFilteredProducts(Request $request)
     {
-        // Lấy các tham số lọc từ request
         $categoryId = $request->get('category');
         $priceMin = $request->get('price_min');
         $priceMax = $request->get('price_max');
         $brand = $request->get('brand');
-        $colors = $request->get('color'); // Màu sắc từ request
-        $size = $request->get('size'); // Kích thước từ request
+        $colors = $request->get('color');
+        $size = $request->get('size'); 
 
-        // Khởi tạo truy vấn sản phẩm
         $productsQuery = Product::query()
             ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
             ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
@@ -80,7 +66,6 @@ class ShopCollectionController extends Controller
             ])
             ->groupBy('products.id');
 
-        // Áp dụng các bộ lọc
         if ($categoryId) {
             $productsQuery->where('category_product.category_id', $categoryId);
         }
@@ -91,20 +76,16 @@ class ShopCollectionController extends Controller
             $productsQuery->where('products.brand_id', $brand);
         }
         if ($colors) {
-            // Lọc theo các màu sắc đã chọn
             $productsQuery->whereIn('product_variants.color_id', (array) $colors);
         }
         if ($size) {
-            // Lọc theo kích thước đã chọn
             $productsQuery->whereHas('productVariants', function ($query) use ($size) {
                 $query->where('size_id', $size);
             });
         }
 
-        // Phân trang kết quả sản phẩm
         $products = $productsQuery->paginate(15)->appends($request->except('page'));
 
-        // Xử lý sản phẩm để tạo thêm thông tin màu sắc, hình ảnh
         $products->getCollection()->transform(function ($product) {
             $imagesByColor = $product->images->groupBy('color_id');
             $product->colors = $product->colors->map(function ($color) use ($imagesByColor) {
@@ -131,16 +112,14 @@ class ShopCollectionController extends Controller
                 'total_stock_quantity' => $product->total_stock_quantity,
                 'main_image_url' => $product->main_image_url,
                 'hover_main_image_url' => $product->hover_main_image_url,
-                'colors' => $product->colors, // Danh sách màu sắc của sản phẩm
+
+                'colors' => $product->colors,
             ];
         });
-
+      
         return $products;
     }
 
-    /**
-     * Lấy danh sách danh mục
-     */
     private function getCategories()
     {
         return Category::with(['children' => fn($query) => $query->where('status', 1)])

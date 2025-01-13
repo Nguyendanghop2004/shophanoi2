@@ -23,7 +23,9 @@ class ReviewController extends Controller
 
         $product = $order->orderItems->first();
 
-        return view('client.reviews.create', compact('order', 'product'));
+        $reviews = Review::where('order_id', $order->id)->get();
+        $reviewedProducts = $reviews->pluck('product_id')->toArray(); 
+        return view('client.reviews.create', compact('order', 'product' ,'reviewedProducts'));
     }
 
     public function store(Request $request)
@@ -35,7 +37,6 @@ class ReviewController extends Controller
         'product_ids' => 'required|array',
         'product_ids.*' => 'exists:products,id',
     ]);
-
     $existingReviews = Review::where('order_id', $validated['order_id'])
                              ->where('user_id', auth()->id())
                              ->exists();

@@ -103,7 +103,7 @@
             </form>
         </div>
         <div>
-            <a href="{{ route('product-detail', $product->slug) }}" class="tf-btn fw-6 btn-line">Chi Tiết<i
+            <a href="{{ route('product-detail', $product->slug) }}" class="tf-btn fw-6 btn-line">Xem chi tiết<i
                     class="icon icon-arrow1-top-left"></i></a>
         </div>
     </div>
@@ -225,7 +225,8 @@
             let totalPrice = finalPrice * quantity; // Tổng tiền
 
             // Cập nhật vào giao diện
-            $('.tf-qty-price').text(`${totalPrice.toLocaleString('vi-VN')} VNĐ`);
+            $('.tf-qty-price').text(Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ');
+
         }
 
 

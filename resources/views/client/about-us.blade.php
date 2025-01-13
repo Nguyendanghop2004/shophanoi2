@@ -31,8 +31,8 @@ một tủ đồ hiện đại và bền vững.
         <div class="container">
             <div class="tf-grid-layout md-col-2 tf-img-with-text style-4">
                 <div class="tf-image-wrap">
-                    <img class="lazyload w-100" data-src="{{asset('client/assets/images/collections/logo.jpg') }}"
-                        src="{{ asset('client/assets/images/collections/logo.jpg') }}" alt="ảnh bộ sưu tập">
+                    <img class="lazyload w-100" data-src="{{asset('client/assets/images/logo/logo4.png') }}"
+                        src="{{ asset('client/assets/images/logo/logo4.png') }}" alt="ảnh bộ sưu tập">
                 </div>
                 <div class="tf-content-wrap px-0 d-flex justify-content-center w-100">
                     <div>
@@ -67,14 +67,14 @@ Cửa hàng đầu tiên được mở tại một thị trấn nhỏ, nhanh ch�
                 <div class="grid-img-group">
                     <div class="tf-image-wrap box-img item-1">
                         <div class="img-style">
-                            <img class="lazyload" src="{{ asset('client/assets/images/collections/collection-71.jpg') }}"
-                                data-src="{{asset('client/assets/images/collections/collection-71.jpg') }}" alt="ảnh bộ sưu tập">
+                            <img class="lazyload" src="{{ asset('client/assets/images/aboutus/collection-70.jpg') }}"
+                                data-src="{{asset('client/assets/images/aboutus/collection-70.jpg') }}" alt="ảnh bộ sưu tập">
                         </div>
                     </div>
                     <div class="tf-image-wrap box-img item-2">
                         <div class="img-style">
-                            <img class="lazyload" src="{{ asset('client/assets/images/collections/collection-70.jpg') }}"
-                                data-src="{{asset('client/assets/images/collections/collection-70.jpg') }}" alt="ảnh bộ sưu tập">
+                            <img class="lazyload" src="{{ asset('client/assets/images/aboutus/collection-70.jpg') }}"
+                                data-src="{{asset('client/assets/images/aboutus/collection-70.jpg') }}" alt="ảnh bộ sưu tập">
                         </div>
                     </div>
                 </div>

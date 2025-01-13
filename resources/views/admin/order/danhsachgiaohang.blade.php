@@ -87,6 +87,8 @@
                                                 @endif
                                             @endif
                                             
+                                           
+                                            
                                                 <form
                                                     action="{{ route('admin.order.update-updateStatusShip', $order->id) }}"
                                                     method="POST">
@@ -151,9 +153,26 @@
                                                     @endif
 
                                                 </form>
-
+                                                @can('account_admin')
+                                                @if (
+                                                    !in_array($order->status, [
+                                                        'ship đã nhận',
+                                                        'đang giao hàng',
+                                                        'giao hàng thành công',
+                                                        'đã nhận hàng',
+                                                        'giao hàng không thành công',
+                                                    ]))
+                                                     <form action="{{ route('admin.order.removeShipper', $order->id) }}"
+                                                        method="POST" style="display:inline;">
+                                                        @csrf
+                                                        <button type="button" class="btn btn-danger btn-sm mt-2"
+                                                            onclick="confirmUpdateForm(this)">
+                                                            Hoàn tác đơn</button>
+                                                    </form>
+                                                    @endif
+                                                    @endcan
                                             </td>
-
+                                         
                                         </tr>
                                     @endforeach
                                 @endif
@@ -163,6 +182,7 @@
                 </div>
             </div>
         </div>
+        
     </section>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
