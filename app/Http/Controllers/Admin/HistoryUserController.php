@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\HistorieAdmins;
 
-class HistoryController extends Controller
+class HistoryUserController extends Controller
 {
     public function  history()
     {

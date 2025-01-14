@@ -40,9 +40,8 @@
                                     <th scope="col">Danh mục</th>
                                     <th scope="col">Biến thể màu</th>
                                     <th scope="col">Số lượng tồn kho</th>
-                                    <th scope="col">Giá</th>
+                                    <th scope="col">Giá gốc</th>
                                     <th scope="col">Bộ sưu tập</th>
-                                    <th scope="col">Chất liệu</th>
                                     <th scope="col">Trạng Thái</th>
                                     <th scope="col">Hành động</th>
                                 </tr>
@@ -74,22 +73,13 @@
                                             </div>
                                         </td>
                                         <td>{{ $product->total_stock_quantity }}</td>
-                                        <td>{{ $product->price }}</td>
+                                        <td>{{ number_format($product->price, 0, ',', '.') . ' VNĐ' }}
+                                        </td>
                                         <td>
                                             <div class="row">
                                                 @foreach ($product->tags as $tag)
                                                     @if ($tag->type === 'collection')
                                                         <a href="#" class="badge badge-info m-1">
-                                                            {{ $tag->name }}</a>
-                                                    @endif
-                                                @endforeach
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="row">
-                                                @foreach ($product->tags as $tag)
-                                                    @if ($tag->type === 'material')
-                                                        <a href="#" class="badge badge-success m-1">
                                                             {{ $tag->name }}</a>
                                                     @endif
                                                 @endforeach
@@ -132,7 +122,7 @@
                         </table>
                     </div>
                 </div>
-            </div> 
+            </div>
             <div class="card-body mx-auto">
                 <div class="buttons">
                     <nav aria-label="Page navigation example">

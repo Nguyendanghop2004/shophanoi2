@@ -1,7 +1,7 @@
 <!-- partials/variant-card.blade.php -->
 <div class="card">
     <div class="card-header">
-        <h4>Biến thể cho màu: {{ $color->name }}</h4>
+        <h4> Biến thể cho màu: {{ $color->name }}</h4>
         <div class="card-header-action">
             <a data-collapse="#mycard-collapse-{{ $color->id }}" class="btn btn-icon btn-info" href="#"><i
                     class="fas fa-minus"></i></a>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="col-lg-3 col-md-12 col-12">
                         <button type="button" id="createVariantsSize-{{ $color->id }}"
-                            data-color-id="{{ $color->id }}" class="btn btn-primary create-variants-size">
+                            data-color-id="{{ $color->id }}" data-color-name="{{ $color->name }}" class="btn btn-primary create-variants-size">
                             Tạo biến thể kích thước
                         </button>
                     </div>
@@ -52,18 +52,16 @@
         </div>
     </div>
     <div class="card-footer">
-        Thẻ biến thể cho màu {{ $color->name }}
+        <span class="colorinput-color" style="background-color: {{ $color->sku_color }};"></span>
     </div>
 </div>
 <style>
     .file-upload {
         border: 2px dashed #ccc;
-        /* Viền nét đứt */
         border-radius: 5px;
         padding: 20px;
         text-align: center;
         cursor: pointer;
-        /* Hiển thị con trỏ dạng bàn tay khi di chuột qua */
     }
 
     .file-upload input[type="file"] {
@@ -77,7 +75,6 @@
         margin-right: 10px;
         margin-bottom: 10px;
         position: relative;
-        /* Để định vị nút "Xóa" */
     }
 
     .remove-button {
@@ -85,7 +82,6 @@
         top: 5px;
         right: 5px;
         background-color: #ccc;
-        /* Nền xám */
         color: black;
         border: none;
         width: 20px;
@@ -93,7 +89,6 @@
         font-size: 12px;
         cursor: pointer;
         display: flex;
-        /* Căn giữa nội dung nút */
         align-items: center;
         justify-content: center;
     }
@@ -104,16 +99,13 @@
 
     .select2-container {
         width: 100% !important;
-        /* Đảm bảo Select2 chiếm toàn bộ chiều rộng */
     }
 
     .form-control {
         width: 100%;
-        /* Đảm bảo các trường input chiếm đủ chiều rộng của thẻ form */
     }
 
     .nav-pills .nav-link {
         width: 100%;
-        /* Đảm bảo các link trong nav-pills chiếm toàn bộ chiều rộng */
     }
 </style>

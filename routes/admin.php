@@ -32,12 +32,12 @@ use App\Http\Controllers\Admin\DiscountCodeController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\ContactMessageController;
 
-    Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
-    Route::post('admin/login', [LoginController::class, 'store'])->name('admin.post-login');
-    Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus'])->group(function () {
+Route::get('admin/login', [LoginController::class, 'login'])->name('admin.login');
+Route::post('admin/login', [LoginController::class, 'store'])->name('admin.post-login');
+Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminStatus'])->group(function () {
     // Login admin
     Route::get('error', [ErrorController::class, 'error'])->name('error');
- 
+
     Route::get('trangchu', [AccoutAdminController::class, 'trangchu'])->name('trangchu');
     Route::get('admin-logout', [LoginController::class, 'logout'])->name('post-logout');
     Route::get('account', [AccoutAdminController::class, 'account'])->name('accounts.account')->middleware('permission:account_admin');
@@ -54,7 +54,7 @@ use App\Http\Controllers\Admin\ContactMessageController;
     Route::get('accountsUser/create', [AccoutUserController::class, 'create'])->name('accountsUser.create')->middleware('permission:account_user');
     Route::post('accountsUser/store', [AccoutUserController::class, 'store'])->name('accountsUser.store')->middleware('permission:account_user');
     Route::get('accountsUser/edit/{id}', [AccoutUserController::class, 'edit'])->name('accountsUser.edit')->middleware('permission:account_user');
-    Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update')->middleware('permission:account_user');    
+    Route::put('accountsUser/update/{id}', [AccoutUserController::class, 'update'])->name('accountsUser.update')->middleware('permission:account_user');
     Route::delete('accountsUser/destroy/{id}', [AccoutUserController::class, 'destroy'])->name('accountsUser.destroy')->middleware('permission:account_user');
 
     Route::get('accountsUser/change/{id}', [AccoutUserController::class, 'change'])->name('accountsUser.change')->middleware('permission:account_user');
@@ -157,7 +157,13 @@ use App\Http\Controllers\Admin\ContactMessageController;
 
     Route::post('product/create-variant-image-product', [ProductController::class, 'createVariantImageColorProduct'])->name('product.createVariantImageColorProduct')->middleware('permission:product');
     Route::post('product/create-variant-color-product', [ProductController::class, 'createVariantColorProduct'])->name('product.createVariantColorProduct')->middleware('permission:product');
-    Route::delete('/product-variants/{id}', [ProductController::class, 'destroyVariant'])->name('product-variants.destroy')->middleware('permission:product');
+    // Xóa một biến thể cụ thể
+    Route::delete('/product-variants/{id}', [ProductController::class, 'destroyVariant'])
+        ->name('product-variants.destroy')->middleware('permission:product');
+
+    // Xóa tất cả biến thể theo color_id và product_id
+    Route::delete('/product-variants', [ProductController::class, 'destroyByColorAndProduct'])
+        ->name('product-variants.destroyByColor')->middleware('permission:product');
 
     Route::resource('contact', ContactMessageController::class)->middleware('permission:contact');
     Route::get('/shippers/search', [ShipperController::class, 'search'])->name('shippers.search');
@@ -205,13 +211,13 @@ use App\Http\Controllers\Admin\ContactMessageController;
     Route::get('history', [HistoryController::class, 'history'])->name('history')->middleware('permission:account_admin');
     Route::get('history/show/{id}', [HistoryController::class, 'show'])->name('show')->middleware('permission:account_admin');
     Route::delete('history/delete/{id}', [HistoryController::class, 'delete'])->name('delete')->middleware('permission:account_admin');
-// end  lịch sử cập nhật admin
+    // end  lịch sử cập nhật admin
 
- // lịch sử cập nhật user
- Route::get('history-user', [HistoryUserController::class, 'historyUser'])->name('historyUser')->middleware('permission:account_admin');
- Route::get('history-user/show/{id}', [HistoryUserController::class, 'showUser'])->name('showUser')->middleware('permission:account_admin');
+    // lịch sử cập nhật user
+    Route::get('history-user', [HistoryUserController::class, 'historyUser'])->name('historyUser')->middleware('permission:account_admin');
+    Route::get('history-user/show/{id}', [HistoryUserController::class, 'showUser'])->name('showUser')->middleware('permission:account_admin');
 
- // end  lịch sử cập nhật admin
+    // end  lịch sử cập nhật admin
     //start blog
     Route::get('blog/index', [BlogController::class, 'index'])->name('blog.index')->middleware('permission:blog');
     Route::post('blog/store', [BlogController::class, 'store'])->name('blog.store')->middleware('permission:blog');
@@ -243,7 +249,7 @@ use App\Http\Controllers\Admin\ContactMessageController;
     // thongke
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard')->middleware('permission:account_admin');
     Route::post('/filter', [AdminDashboardController::class, 'index'])->name('dashboard.index.filter');
-    
+
     Route::get('reviews', [ReviewController::class, 'index'])->name('review.index');
 });
 
