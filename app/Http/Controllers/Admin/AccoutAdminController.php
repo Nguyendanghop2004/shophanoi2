@@ -107,8 +107,8 @@ class AccoutAdminController extends Controller
     public function show(string $id)
     {
         $admin = Admin::findOrFail($id);
-
-        return view('admin.accounts.show', compact('admin'));
+        $isAdmin = $admin->hasRole('admin');
+        return view('admin.accounts.show', compact('admin','isAdmin'));
     }
 
     /**
@@ -345,18 +345,32 @@ class AccoutAdminController extends Controller
     }
 
     public function change(string $id)
-    {
-        $dataUser = Admin::query()->findOrFail($id);
+{
+    $dataUser = Admin::query()->findOrFail($id);
 
-        return view('admin.accounts.change', compact('dataUser'));
+    if ($dataUser->hasRole('admin')) {
+        return redirect()->route('admin.accounts.index')
+            ->with('error', 'Không thể chỉnh sửa email của tài khoản có vai trò admin.');
     }
+
+    return view('admin.accounts.change', compact('dataUser'));
+}
+
     public function changeAdmin(ChangeUserRequest $request, $id)
     {
         $user = Admin::findOrFail($id);
+    
+        if ($user->hasRole('admin')) {
+            return back()->with('error', 'Không thể đổi mật khẩu của tài khoản có vai trò admin.');
+        }
+    
         $data = [
             'password' => Hash::make($request->password),
         ];
         $user->update($data);
-        return back()->with('success', 'Đổi mới thành công',);
+    
+        return back()->with('success', 'Đổi mật khẩu thành công.');
     }
+    
+
 }

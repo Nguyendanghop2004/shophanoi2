@@ -133,12 +133,6 @@
 
                             </div>
 
-                            <div class="cart-checkbox">
-                                <input type="checkbox" class="tf-check" id="check-agree" required>
-                                <label for="check-agree" class="fw-4">
-                                    Tôi đồng ý với các <a href="terms-conditions.html">điều khoản và điều kiện</a>
-                                </label>
-                            </div>
                             <div class="cart-checkout-btn">
                                 <a href="{{ count($cartDetails) === 0 ? 'javascript:void(0);' : route('checkout') }}"
                                     class="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center"

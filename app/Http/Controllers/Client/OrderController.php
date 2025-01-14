@@ -44,7 +44,7 @@ class OrderController extends Controller
     
     $orders = $query->with('orderItems')  
                     ->orderBy('created_at', 'desc')
-                    ->paginate(10);
+                    ->paginate(5);
     
     return view('client.orders.donhang', compact('orders', 'status'));
 }
