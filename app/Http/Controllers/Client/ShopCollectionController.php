@@ -102,7 +102,7 @@ class ShopCollectionController extends Controller
         }
 
         // Phân trang kết quả sản phẩm
-        $products = $productsQuery->paginate(15)->appends($request->except('page'));
+        $products = $productsQuery->paginate(10)->appends($request->except('page'));
 
         // Xử lý sản phẩm để tạo thêm thông tin màu sắc, hình ảnh
         $products->getCollection()->transform(function ($product) {
@@ -134,7 +134,7 @@ class ShopCollectionController extends Controller
                 'colors' => $product->colors,
             ];
         });
-      
+     
         return $products;
     }
 

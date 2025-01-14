@@ -35,7 +35,7 @@
                              data-bs-toggle="collapse" 
                              aria-expanded="true" 
                              aria-controls="categories">
-                            <span>Product categories</span>
+                            <span>Danh Mục</span>
                             <span class="icon">
                                 <i class="fas fa-chevron-up"></i>
                             </span>
@@ -66,7 +66,7 @@
                     <form action="#" id="facet-filter-form" class="facet-filter-form">
                         <div id="filter-price" class="widget-facet wrap-price">
                             <div class="facet-title">
-                                <span>Price</span>
+                                <span>Giá</span>
                             </div>
                             <div class="filter-price">
                                 <div class="range-input">
@@ -74,7 +74,7 @@
                                     <input id="price-max" class="range-max" type="range" min="0" max="2000000" value="2000000" />
                                 </div>
                                 <div class="box-title-price">
-                                    <span>Price:</span>
+                                    <span>Giá:</span>
                                     <div>
                                         $<span id="display-min">0</span> - <span id="display-max">2.000.000 VNĐ</span>
                                     </div>
@@ -84,7 +84,7 @@
                         
                         <div class="widget-facet">
                             <div class="facet-title" data-bs-target="#brand" data-bs-toggle="collapse" aria-expanded="true" aria-controls="brand">
-                                <span>Brand</span>
+                                <span>Thương hiệu</span>
                                 <span class="icon icon-arrow-up"></span>
                             </div>
                             <div id="brand" class="collapse show">
@@ -105,7 +105,7 @@
 
                         <div class="widget-facet">
                             <div class="facet-title" data-bs-target="#color" data-bs-toggle="collapse" aria-expanded="true" aria-controls="color">
-                                <span>Color</span>
+                                <span>Màu Sắc</span>
                                 <span class="icon icon-arrow-up"></span>
                             </div>
                             <div id="color" class="collapse show">
@@ -132,7 +132,7 @@
                         <div class="widget-facet">
                             <div class="facet-title" data-bs-target="#size" data-bs-toggle="collapse"
                                 aria-expanded="true" aria-controls="size">
-                                <span>Size</span>
+                                <span>Số Đo</span>
                                 <span class="icon icon-arrow-up"></span>
                             </div>
                             <div id="size" class="collapse show">
@@ -142,7 +142,7 @@
                                             <input type="radio" name="size" class="tf-check tf-check-size" value="{{ $size->id }}" id="size-{{ $size->id }}">
                                             <label for="size-{{ $size->id }}" class="label">
                                                 <span>{{ $size->name }}</span> 
-                                                &nbsp;<span>({{ $size->productVariants->count() }})</span> <!-- Số lượng sản phẩm liên quan -->
+                                                &nbsp;<span>({{ $size->productVariants->count() }})</span> 
                                             </label>
                                         </li>
                                     @endforeach
@@ -155,16 +155,27 @@
                         <button type="button" id="reset-filters" class="btn btn-sm btn-secondary">Reset</button>
 
                     </form>
+                    
+
                 </div>
                     <div class="tf-shop-content wrapper-control-shop">
                         <div class="meta-filter-shop">
-                            <div class="grid-layout wrapper-shop" data-grid="grid-3">
+                            <div class="grid-layout wrapper-shop" data-grid="grid-3" >
                                     @include('client.partials.product_list', ['products' => $products])
                             </div>
                         </div>
                     </div>
                 </div>
+                {{ $products->links() }}
         </div>
+      <style>
+        .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Tùy chỉnh khoảng cách trên */
+    margin-bottom: 20px; /* Tùy chỉnh khoảng cách dưới */
+}
+      </style>
     </section>
 
     

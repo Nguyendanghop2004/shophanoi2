@@ -4,6 +4,7 @@
 @endsection
 
 @section('content')
+
     <!-- breadcrumb -->
     <div class="tf-breadcrumb">
         <div class="container">
@@ -32,6 +33,9 @@
             </div>
         </div>
     </div>
+    <style>
+        
+    </style>
     <!-- /breadcrumb -->
     <!-- default -->
     <section class="flat-spacing-4 pt_0">
@@ -48,7 +52,7 @@
                                                 <div class="item">
                                                     <img class="lazyload"
                                                         data-src="{{ asset('storage/' . $image->image_url) }}"
-                                                        src="{{ asset('storage/' . $image->image_url) }}" alt="img-compare">
+                                                        src="{{ asset('storage/' . $image->image_url) }}" alt="img-compare" width="100px">
                                                 </div>
                                             </div>
                                         @endforeach
@@ -366,8 +370,8 @@
                         <div class="widget-content-tab">
                             <!-- Mô tả -->
                             <div class="widget-content-inner active">
-                                <div>
-                                    {{ $product->description }}
+                            <div class="form-group pl-5 pr-5">
+                                    {!! $product->description !!}
                                 </div>
                             </div>
     
