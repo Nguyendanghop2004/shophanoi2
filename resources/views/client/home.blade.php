@@ -184,7 +184,7 @@
                         @foreach ($products as $product)
                             <div class="swiper-slide" lazy="true">
                                 <div class="card-product" >
-                                    <div class="card-product-wrapper" style="height: 465px ; width: 332px;">
+                                    <div class="card-product-wrapper" style="height: 465px ; width: 100%;">
                                         <a href="{{ route('product-detail', $product['slug']) }}" class="product-img">
                                             <img class="lazyload img-product"
                                                 data-src="{{ asset('storage/' . $product['main_image_url']) }}"

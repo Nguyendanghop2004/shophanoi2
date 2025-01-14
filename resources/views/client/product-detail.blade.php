@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
                                 <div class="swiper tf-product-media-main" id="gallery-swiper-started">
-                                    <div class="swiper-wrapper">
+                                    <div class="swiper-wrapper"style="height:550px ; width: 80%;">
                                         @foreach ($product->images as $image)
                                             <div class="swiper-slide">
                                                 <a href="{{ asset('storage/' . $image->image_url) }}" target="_blank"
