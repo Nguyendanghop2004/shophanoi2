@@ -65,11 +65,11 @@
                                             @if ($sale->start_date)
                                                 {{ $sale->start_date }}
                                             @endif
-                                        
+
                                             @if ($sale->end_date)
-                                                 - {{ $sale->end_date }}
+                                                - {{ $sale->end_date }}
                                             @else
-                                              -  Vô Hạn 
+                                                - Vô Hạn
                                             @endif
                                         </td>
                                         <td>

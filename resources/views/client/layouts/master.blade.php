@@ -28,7 +28,7 @@
     <!-- Favicon and Touch Icons  -->
     <link rel="shortcut icon" href="{{ asset('client/assets/images/logo/favicon.png') }}">
     <link rel="apple-touch-icon-precomposed" href="{{ asset('client/assets/images/logo/favicon.png') }}">
-
+    @vite('resources/js/app.js')
 </head>
 
 <body class="preload-wrapper">
@@ -252,7 +252,7 @@
 
             // Hàm định dạng giá tiền
             function formatPrice(price) {
-                
+
                 return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             }
 

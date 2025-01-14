@@ -56,8 +56,8 @@ class SaleProductController extends Controller
                 'numeric',
                 'min:0',
                 function ($attribute, $value, $fail) use ($request) {
-                    if ($request->discount_type === 'percent' && $value > 99) {
-                        $fail('Giảm giá theo phần trăm không được vượt quá 99%.');
+                    if ($request->discount_type === 'percent' && $value > 80) {
+                        $fail('Giảm giá theo phần trăm không được vượt quá 80%.');
                     }
 
                     if ($request->discount_type === 'fixed') {

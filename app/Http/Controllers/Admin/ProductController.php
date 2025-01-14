@@ -13,6 +13,7 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductSale;
 use App\Models\ProductVariant;
 use App\Models\Size;
 use App\Models\Tag;
@@ -43,7 +44,23 @@ class ProductController extends Controller
                     ->inRandomOrder()
                     ->limit(1),
                 'total_stock_quantity' => ProductVariant::select(DB::raw('SUM(stock_quantity)'))
-                    ->whereColumn('product_variants.product_id', 'products.id')
+                    ->whereColumn('product_variants.product_id', 'products.id'),
+                // Giá sale hiện tại (nếu có)
+                'sale_price' => ProductSale::select(DB::raw('CASE 
+                          WHEN discount_type = "percent" THEN products.price * (1 - discount_value / 100) 
+                          ELSE products.price - discount_value 
+                          END'))
+                    ->whereColumn('product_sales.product_id', 'products.id')
+                    ->where(function ($query) {
+                        $query->where('start_date', '<=', now())
+                            ->where(function ($query) {
+                                $query->whereNull('end_date')
+                                    ->orWhere('end_date', '>=', now());
+                            });
+                    })
+                    ->orderByDesc('start_date') // Lấy giá sale mới nhất
+                    ->limit(1)
+
             ])->when($search, function ($query) use ($search) {
                 return $query->where(function ($query) use ($search) {
                     $query->where('product_name', 'like', "%{$search}%")
@@ -666,43 +683,43 @@ class ProductController extends Controller
     {
         $colorId = $request->color_id;
         $productId = $request->product_id;
-    
+
         try {
             // Kiểm tra tổng số lượng biến thể của sản phẩm
             $totalVariants = ProductVariant::where('product_id', $productId)->count();
-    
+
             if ($totalVariants <= 1) {
                 return redirect()->back()->withErrors(['message' => 'Không thể xóa. Sản phẩm chỉ còn một biến thể.']);
             }
-    
+
             // Lấy danh sách biến thể cần xóa
             $variants = ProductVariant::where('color_id', $colorId)
                 ->where('product_id', $productId)
                 ->get();
-    
+
             if ($variants->isEmpty()) {
                 return redirect()->back()->withErrors(['message' => 'Không tìm thấy biến thể nào phù hợp.']);
             }
-    
+
             // Xóa mềm các ảnh liên quan trong bảng product_images
             ProductImage::where('color_id', $colorId)
                 ->where('product_id', $productId)
                 ->delete(); // Soft delete: không xóa vĩnh viễn, chỉ cập nhật deleted_at
-    
+
             // Xóa các biến thể
             foreach ($variants as $variant) {
                 $variant->product_code = $variant->product_code . '-DELETED-' . time();
                 $variant->save();
                 $variant->delete();
             }
-    
+
             return redirect()->back()->with('success', 'Đã xóa tất cả biến thể và thực hiện xóa mềm ảnh liên quan thành công.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['message' => $e->getMessage()]);
         }
     }
-    
-        
+
+
     public function destroyVariant(string $id)
     {
         try {
@@ -727,7 +744,6 @@ class ProductController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
-
 
     public function destroy(string $id)
     {
@@ -755,12 +771,17 @@ class ProductController extends Controller
                 $variant->delete();
             }
 
+            // Xóa mềm ảnh sản phẩm
+            ProductImage::where('product_id', $product->id)->delete();
+
+            // Xóa mềm giá sale của sản phẩm
+            ProductSale::where('product_id', $product->id)->delete();
+
             // Xóa mềm sản phẩm
             $product->delete();
         });
 
-        return redirect()->route('admin.product.index')->with('success', 'Sản phẩm và các biến thể liên quan đã được xóa mềm thành công.');
+        return redirect()->route('admin.product.index')->with('success', 'Sản phẩm, các biến thể, ảnh, và giá sale liên quan đã được xóa mềm thành công.');
     }
-
 
 }

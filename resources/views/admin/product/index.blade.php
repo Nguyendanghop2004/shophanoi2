@@ -40,7 +40,7 @@
                                     <th scope="col">Danh mục</th>
                                     <th scope="col">Biến thể màu</th>
                                     <th scope="col">Số lượng tồn kho</th>
-                                    <th scope="col">Giá gốc</th>
+                                    <th scope="col">Giá</th>
                                     <th scope="col">Bộ sưu tập</th>
                                     <th scope="col">Trạng Thái</th>
                                     <th scope="col">Hành động</th>
@@ -73,7 +73,18 @@
                                             </div>
                                         </td>
                                         <td>{{ $product->total_stock_quantity }}</td>
-                                        <td>{{ number_format($product->price, 0, ',', '.') . ' VNĐ' }}
+                                        <td>
+                                            @if (isset($product->sale_price))
+                                                <span class="text-danger fw-bold">
+                                                    {{ number_format($product->sale_price, 0, ',', '.') }}₫
+                                                </span>
+                                                <span class="text-muted text-decoration-line-through"
+                                                    style="text-decoration: line-through;">
+                                                    {{ number_format($product->price, 0, ',', '.') }}₫
+                                                </span>
+                                            @else
+                                                <span>{{ number_format($product->price, 0, ',', '.') }}₫</span>
+                                            @endif
                                         </td>
                                         <td>
                                             <div class="row">
@@ -105,14 +116,17 @@
                                                                 style="color: #ffffff;"></i></a></div>
                                                 </div>
                                                 <div>
-                                                    <form action="{{ route('admin.product.destroy', $product->id) }}"
-                                                        method="post"
-                                                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                                    <form id="delete-form-{{ $product->id }}"
+                                                        action="{{ route('admin.product.destroy', $product->id) }}"
+                                                        method="post" style="display: none;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger ml-2"><i
-                                                                class="fas fa-trash" style="color: #ffffff;"></i></button>
                                                     </form>
+
+                                                    <button type="button" class="btn btn-danger ml-2"
+                                                        onclick="confirmDelete({{ $product->id }})">
+                                                        <i class="fas fa-trash" style="color: #ffffff;"></i>
+                                                    </button>
                                                 </div>
                                         </td>
                                     </tr>
@@ -153,6 +167,29 @@
 @endsection
 
 @push('scripts')
+    <script>
+        function confirmDelete(productId) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn xóa?',
+                text: "Hành động này không thể hoàn tác!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Gửi form xóa
+                    document.getElementById(`delete-form-${productId}`).submit();
+                }
+            });
+        }
+        @if (session('success'))
+            toastr.success('{{ session('success') }}');
+        @endif
+    </script>
+
     <style>
         /* CSS */
         .colorinput-color {
