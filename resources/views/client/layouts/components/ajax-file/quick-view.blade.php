@@ -4,7 +4,7 @@
             @foreach ($product->images as $image)
                 <div class="swiper-slide">
                     <div class="item">
-                        <img src="{{ asset('storage/' . $image->image_url) }}" alt="">
+                        <img src="{{ asset('storage/' . $image->image_url) }}" alt=""style="height: 700px ; width: 100%;">
                     </div>
                 </div>
             @endforeach
@@ -13,7 +13,7 @@
         <div class="swiper-button-prev button-style-arrow single-slide-next"></div>
     </div>
 </div>
-<div class="tf-product-info-wrap position-relative"style="height: 465px ; width: 332px;">
+<div class="tf-product-info-wrap position-relative"style="height: 700px ; width: 332px;">
     <div class="tf-product-info-list">
         <div class="tf-product-info-title">
             <h5><a class="link" href="{{ route('product-detail', $product->slug) }}">{{ $product->product_name }}</a>

@@ -62,7 +62,8 @@
                             <!-- Ngày bắt đầu -->
                             <div class="form-group">
                                 <label for="start_date">Ngày bắt đầu</label>
-                                <input type="date" name="start_date" id="start_date" class="form-control datetimepicker @error('start_date') is-invalid @enderror" 
+                                <input type="text" name="start_date" id="start_date" class="form-control datetimepicker @error('start_date') is-invalid @enderror" 
+
                                     value="{{ old('start_date') }}">
                                 @error('start_date')
                                     <span class="invalid-feedback">{{ $message }}</span>
@@ -72,7 +73,8 @@
                             <!-- Ngày kết thúc -->
                             <div class="form-group">
                                 <label for="end_date">Ngày kết thúc</label>
-                                <input type="date" name="end_date" id="end_date" class="form-control datetimepicker @error('end_date') is-invalid @enderror" 
+                                <input type="text" name="end_date" id="end_date" class="form-control datetimepicker @error('end_date') is-invalid @enderror" 
+
                                     value="{{ old('end_date') }}">
                                 @error('end_date')
                                     <span class="invalid-feedback">{{ $message }}</span>
@@ -121,3 +123,4 @@
         </div>
     </section>
 @endsection
+

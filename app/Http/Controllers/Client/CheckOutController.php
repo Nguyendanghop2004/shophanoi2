@@ -259,7 +259,7 @@ class CheckOutController extends Controller
   
     public function placeOrder(OrderRequest $request)
     {
-        
+     
         $this->applyCoupon(new \Illuminate\Http\Request([]), $code = $request->input('coupon-code'));
         
         $paymentMethod = $request->input('payment');

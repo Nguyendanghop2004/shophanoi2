@@ -16,7 +16,6 @@
                             <h4>Thêm Mới Sản Phẩm</h4>
                         </div>
                         <div class="card-body">
-
                             <div class="row">
                                 <div class="col-lg-6 col-md-8 col-12">
                                     <div class="form-group">
@@ -120,6 +119,7 @@
                                         @enderror
                                     </div>
                                 </div>
+
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group d-flex align-items-center">
                                         <img id="brandImage"
@@ -198,7 +198,8 @@
                 <div class="col-lg-3 col-md-6 col-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <button type="button" class="btn btn-primary">Quay trở lại</button>
+                            <a href="{{ route('admin.product.index') }}" class="btn btn-secondary">Quay lại danh sách
+                            </a>
                         </div>
                         <div class="card-body">
                             <div class="section-title mt-0 d-flex justify-content-start">Danh mục<div
@@ -259,12 +260,13 @@
 @endsection
 
 @push('scripts')
+    {{-- setup mô tả  --}}
     <script>
         $(document).ready(function() {
-            const oldDescription = "{{ old('description') }}"; // Lấy dữ liệu cũ từ Laravel
+            const oldDescription = "{{ old('description') }}";
 
             $('.summernote').summernote({
-                height: 300, // Chiều cao của editor
+                height: 300,
                 tabsize: 2,
                 toolbar: [
                     ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -278,12 +280,10 @@
                 ]
             });
 
-            // Đặt nội dung cũ vào Summernote
             if (oldDescription) {
                 $('.summernote').summernote(oldDescription);
             }
 
-            // Cập nhật giá trị của textarea ẩn trước khi gửi form
             $('form').on('submit', function() {
                 const summernoteContent = $('.summernote').summernote('code');
                 $(this).find('textarea[name="description"]').val(summernoteContent);
@@ -303,6 +303,12 @@
                     },
                     error: function(xhr, status, error) {
                         console.error(`Có lỗi xảy ra khi tải thẻ biến thể cho ID màu: ${colorId}`);
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: `Có lỗi xảy ra khi tải thẻ biến thể cho ID màu: ${colorId}`,
+                            icon: 'error',
+                            confirmButtonText: 'Thử lại'
+                        });
                         reject(error);
                     }
                 });
@@ -314,7 +320,7 @@
             var selectedColorIds = $('#colorSelect').val();
             var container = document.getElementById('variantCardsContainer');
 
-            container.innerHTML = ''; // Xóa các thẻ biến thể hiện tại
+            container.innerHTML = '';
 
             if (selectedColorIds.length === 0) {
                 Swal.fire({
@@ -324,14 +330,21 @@
                 });
                 return;
             }
+            if (selectedColorIds.length > 5) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Giới hạn!",
+                    text: "Chỉ được tạo tối đa 5 biến thể màu!",
+                });
+                return;
+            }
 
             for (let colorId of selectedColorIds) {
                 try {
                     const cardHtml = await loadVariantCard(colorId);
                     container.insertAdjacentHTML('beforeend', cardHtml);
                     initCollapsable();
-                    initDropzone(colorId); // Khởi tạo Dropzone với `colorId` riêng biệt
-                    // Khởi tạo Select2 cho các phần tử trong thẻ biến thể mới
+                    initDropzone(colorId);
                     $('#variantCardsContainer .select2').select2();
                     initSizeChoose();
                 } catch (error) {
@@ -346,14 +359,28 @@
                 e.preventDefault();
 
                 const colorId = $(this).data('color-id');
+                const colorName = $(this).data('color-name');
                 const selectedSizes = $(`#sizeSelect-${colorId}`).val();
                 const container = $(`#sizeVariantsContainer-${colorId}`);
 
                 container.empty(); // Xóa các biến thể kích thước cũ
 
                 if (selectedSizes.length === 0) {
-                    alert('Vui lòng chọn ít nhất một kích thước của ' + colorId + ' để tạo biến thể!');
+                    Swal.fire({
+                        icon: "error",
+                        title: "Cảnh báo",
+                        text: 'Vui lòng chọn ít nhất một kích thước để tạo biến thể!',
+                    });
                     return;
+
+                    if (selectedSizes.length > 5) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Giới hạn kích thước",
+                            text: 'Bạn chỉ được chọn tối đa 5 kích thước!',
+                        });
+                        return;
+                    }
                 }
 
                 // Bọc tất cả các nút radio trong một div `.selectgroup`
@@ -364,36 +391,37 @@
 
                     // Thêm mỗi nút radio vào nhóm
                     sizeVariantHtml += `
-                <label class="selectgroup-item">
-                    <input type="radio" name="size_variant_${colorId}" value="${sizeId}" class="selectgroup-input" data-size-id="${sizeId}">
-                    <span class="selectgroup-button">${sizeText}</span>
-                </label>
-            `;
+                        <label class="selectgroup-item">
+                            <input type="radio" name="size_variant_${colorId}" value="${sizeId}" class="selectgroup-input" data-size-id="${sizeId}">
+                            <span class="selectgroup-button">${sizeText}</span>
+                        </label>
+                    `;
                 });
 
                 sizeVariantHtml += `</div>`;
 
                 // Thêm các trường quantity collapsible cho mỗi kích thước và ẩn mặc định
                 selectedSizes.forEach(sizeId => {
+                    const sizeText = $(`#sizeSelect-${colorId} option[value="${sizeId}"]`).text();
                     sizeVariantHtml += `
-    <div id="quantityCollapse-${colorId}-${sizeId}" class="quantity-collapse mt-2" style="display: none;">
-        <div class="form-group">
-            <input type="hidden" name="variants[${colorId}][color_id]" value="${colorId}">
-            <input type="hidden" name="variants[${colorId}][sizes][${sizeId}][size_id]" value="${sizeId}">
-            <div class="d-flex justify-content-start">
-                <label for="quantity-${colorId}-${sizeId}">Số lượng ${sizeId}</label>
-                <div class="text-danger ml-2">*</div>
-            </div>
-            <input type="number" name="variants[${colorId}][sizes][${sizeId}][stock_quantity]" class="form-control" id="quantity-${colorId}-${sizeId}" min="0" placeholder="Nhập số lượng">
-        </div>
-        <div class="form-group">
-            <div class="d-flex justify-content-start">
-                <label for="price-${colorId}-${sizeId}">Giá ${sizeId}</label>
-                <div class="text-danger ml-2">*</div>
-            </div>
-            <input type="number" name="variants[${colorId}][sizes][${sizeId}][price]" class="form-control" id="price-${colorId}-${sizeId}" min="0" placeholder="Nhập giá">
-        </div>
-    </div>`;
+                        <div id="quantityCollapse-${colorId}-${sizeId}" class="quantity-collapse mt-2" style="display: none;">
+                            <div class="form-group">
+                                <input type="hidden" name="variants[${colorId}][color_id]" value="${colorId}">
+                                <input type="hidden" name="variants[${colorId}][sizes][${sizeId}][size_id]" value="${sizeId}">
+                                <div class="d-flex justify-content-start">
+                                    <label for="quantity-${colorId}-${sizeId}">Số lượng của biến thể màu ${colorName} và kích thước ${sizeText}</label>
+                                    <div class="text-danger ml-2">*</div>
+                                </div>
+                                <input type="number" name="variants[${colorId}][sizes][${sizeId}][stock_quantity]" class="form-control" id="quantity-${colorId}-${sizeId}" min="0" placeholder="Nhập số lượng">
+                            </div>
+                            <div class="form-group">
+                                <div class="d-flex justify-content-start">
+                                    <label for="price-${colorId}-${sizeId}">Giá của cộng thêm cho kích thước ${sizeText}</label>
+                                    <div class="text-danger ml-2">*</div>
+                                </div>
+                                <input type="number" name="variants[${colorId}][sizes][${sizeId}][price]" class="form-control" id="price-${colorId}-${sizeId}" min="0" placeholder="Nhập giá cộng thêm">
+                            </div>
+                        </div>`;
 
                 });
 
@@ -541,35 +569,28 @@
         });
     </script>
 
-
+    {{-- setup ảnh cho thương hiệu  --}}
     <script>
         document.getElementById('brandSelect').addEventListener('change', function() {
-            // Lấy option đang được chọn
             var selectedOption = this.options[this.selectedIndex];
-
-            // Lấy URL của hình ảnh từ thuộc tính data-image-url
             var imageUrl = selectedOption.getAttribute('data-image-url');
 
-            // Cập nhật src cho thẻ img
             document.getElementById('brandImage').src = imageUrl;
         });
     </script>
-
+    {{-- Khi người dùng thay đổi lựa chọn radio button --}}
     <script>
         $(document).ready(function() {
-            // Khi người dùng thay đổi lựa chọn radio button
-            $('input[name="tabOption"]').on('change', function() {
-                var selectedTab = $(this).val(); // Lấy giá trị được chọn (home, profile, contact)
 
-                // Ẩn tất cả các tab với hiệu ứng fade
+            $('input[name="tabOption"]').on('change', function() {
+                var selectedTab = $(this).val();
                 $('.tab-pane').removeClass('show active');
 
-                // Hiển thị tab được chọn với hiệu ứng mờ dần
                 $('#' + selectedTab).addClass('show active fade');
             });
         });
     </script>
-    <!-- CSS tùy chỉnh -->
+    <!-- CSS -->
     <style>
         .select2-container {
             width: 100% !important;
@@ -579,47 +600,36 @@
         .nav-pills .nav-item {
             flex: 1;
             margin: 0;
-            /* Loại bỏ khoảng cách giữa các tab */
         }
 
         .nav-pills .nav-link {
             padding: 10px;
             width: 100%;
             margin: 0;
-            /* Không thêm khoảng cách giữa các tab */
             border-radius: 0;
-            /* Giữ bo góc đều */
             text-align: center;
             background-color: #f8f9fa;
             border: 1px solid #ddd;
             color: #000;
             transition: background-color 0.3s ease, color 0.3s ease;
             box-sizing: border-box;
-            /* Đảm bảo border không làm tăng kích thước của tab */
         }
 
-        /* Khi tab được chọn */
         .nav-pills .nav-link.active {
             background-color: #5a73ff;
-            /* Màu nền xanh cho tab được chọn */
             color: white;
-            /* Chữ màu trắng cho tab được chọn */
-
         }
 
-        /* Hiệu ứng hover */
         .nav-pills .nav-link:hover {
             background-color: #e0e0e0;
-            /* Màu nền khi hover */
         }
 
-        /* Đồng đều chiều rộng giữa các tab */
         .nav-pills .nav-item .nav-link {
             flex-grow: 1;
         }
     </style>
+    {{-- Hàm chuyển đổi tên sản phẩm thành slug --}}
     <script>
-        // Hàm chuyển đổi tên sản phẩm thành slug
         function generateSlug(str) {
             str = str.trim().toLowerCase(); // Chuyển về chữ thường và bỏ khoảng trắng thừa
             str = str.normalize('NFD').replace(/[\u0300-\u036f]/g, ""); // Loại bỏ dấu tiếng Việt

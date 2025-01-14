@@ -158,7 +158,7 @@
                 </div>
                     <div class="tf-shop-content wrapper-control-shop">
                         <div class="meta-filter-shop">
-                            <div class="grid-layout wrapper-shop" data-grid="grid-3">
+                            <div class="grid-layout wrapper-shop" data-grid="grid-3" >
                                     @include('client.partials.product_list', ['products' => $products])
                             </div>
                         </div>

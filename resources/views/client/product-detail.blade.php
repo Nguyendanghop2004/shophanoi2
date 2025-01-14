@@ -45,7 +45,7 @@
                                     <div class="swiper-wrapper stagger-wrap">
                                         @foreach ($product->images as $image)
                                             <div class="swiper-slide stagger-item">
-                                                <div class="item">
+                                                <div class="item"style="height:100px ; width: 100%;">
                                                     <img class="lazyload"
                                                         data-src="{{ asset('storage/' . $image->image_url) }}"
                                                         src="{{ asset('storage/' . $image->image_url) }}" alt="img-compare">
