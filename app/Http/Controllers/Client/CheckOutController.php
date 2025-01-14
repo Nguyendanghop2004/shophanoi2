@@ -56,7 +56,7 @@ class CheckOutController extends Controller
                     if (!$variant || $variant->deleted_at !== null) {
                      
                         $cart->cartItems()->where('id', $item->id)->delete();
-                        return redirect()->route('cart')->with('error', "Biến thể không tồn tại hoặc đã bị xóa.");
+                        return redirect()->route('cart')->with('error', "Sản phẩm đã thay đổi vui lòng đặt lại.");
                     }
     
                     if ($item->quantity > $variant->stock_quantity) {
@@ -146,7 +146,7 @@ class CheckOutController extends Controller
                       
                         unset($cart[$key]);
                         session()->put('cart', $cart);
-                        return redirect()->route('cart')->with('error', "Biến thể không tồn tại hoặc đã bị xóa.");
+                        return redirect()->route('cart')->with('error', "Sản phẩm đã thay đổi vui lòng đặt lại.");
                     }
     
                     if ($item['quantity'] > $variant->stock_quantity) {

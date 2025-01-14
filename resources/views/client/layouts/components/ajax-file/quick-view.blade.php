@@ -13,7 +13,7 @@
         <div class="swiper-button-prev button-style-arrow single-slide-next"></div>
     </div>
 </div>
-<div class="tf-product-info-wrap position-relative">
+<div class="tf-product-info-wrap position-relative"style="height: 465px ; width: 332px;">
     <div class="tf-product-info-list">
         <div class="tf-product-info-title">
             <h5><a class="link" href="{{ route('product-detail', $product->slug) }}">{{ $product->product_name }}</a>
