@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Mail\OrderStatusMail;
 use App\Models\City;
 use App\Models\Admin;
 use App\Models\Order;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -276,22 +278,39 @@ public function removeShipper($orderId)
 public function updateStatusShip(Request $request, $id)
 {
     $order = Order::find($id);
+    $currentStatus = $order->status;
+    $newStatus = $request->input('status'); 
 
-   
-    if ($order->status == 'hủy') {
+    if (
+        ($currentStatus == 'ship đã nhận' && !in_array($newStatus, ['ship đã nhận', 'đang giao hàng'])) ||
+        ($currentStatus == 'đang giao hàng' && !in_array($newStatus, ['đang giao hàng', 'giao hàng thành công', 'giao hàng không thành công'])) ||
+        ($currentStatus == 'giao hàng thành công' && !in_array($newStatus, ['giao hàng thành công','đã nhận hàng'])) ||
+        ($currentStatus == 'giao hàng không thành công' && !in_array($newStatus, ['giao hàng không thành công']))
+    ) {
+        return redirect()->route('admin.order.danhsachgiaohang')->with('error', 'Trạng thái đã thay đổi.');
+    }
+
+    if ($currentStatus == 'hủy') {
         return redirect()->route('admin.order.danhsachgiaohang')
             ->with('error', 'Đơn hàng đã bị hủy trước đó, không thể nhận đơn.');
     }
-    $order->status = $request->input('status');
-    if ($order->status == 'hủy') {
+
+    $order->status = $newStatus;
+
+    if ($newStatus == 'hủy') {
         $order->reason = $request->input('reason');
     } else {
         $order->reason = null; 
     }
-    if ($order->status == 'giao hàng thành công') {
-        $order->payment_status = 'đã thanh toán'; 
+
+    if ($newStatus == 'giao hàng thành công') {
+        $order->payment_status = 'đã thanh toán';
+
+  
+        Mail::to($order->email)->send(new OrderStatusMail($order));
     }
-    if ($order->status == 'giao hàng không thành công') {
+
+    if ($newStatus == 'giao hàng không thành công') {
         foreach ($order->orderItems as $orderItem) {
             $variant = ProductVariant::where('product_id', $orderItem->product_id)
                 ->where('color_id', $orderItem->color_id)
@@ -299,13 +318,17 @@ public function updateStatusShip(Request $request, $id)
                 ->first();
 
             if ($variant) {
-               
                 $variant->stock_quantity += $orderItem->quantity;
                 $variant->save();
             }
         }
+
+    
+        Mail::to($order->email)->send(new OrderStatusMail($order));
     }
+
     $order->save();
+
     return redirect()->route('admin.order.danhsachgiaohang')
         ->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
 }

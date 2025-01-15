@@ -1,7 +1,8 @@
+
 @foreach ($products as $product)
                             <div class="swiper-slide" lazy="true">
                                 <div class="card-product">
-                                    <div class="card-product-wrapper">
+                                    <div class="card-product-wrapper"style="height: 465px ; width: 100%;">
                                         <a href="{{ route('product-detail', $product['slug']) }}" class="product-img">
                                             <img class="lazyload img-product"
                                                 data-src="{{ asset('storage/' . $product['main_image_url']) }}"
@@ -19,12 +20,7 @@
                                                 <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick Add</span>
                                             </a> --}}
-                                            <a href="javascript:void(0);"
-                                                class="box-icon bg_white wishlist btn-icon-action">
-                                                <span class="icon icon-heart"></span>
-                                                <span class="tooltip">Add to Wishlist</span>
-                                                <span class="icon icon-delete"></span>
-                                            </a>
+                                     
                                             {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                                                 class="box-icon bg_white compare btn-icon-action">
                                                 <span class="icon icon-compare"></span>
@@ -68,3 +64,4 @@
                                 </div>
                             </div>
                         @endforeach
+                        

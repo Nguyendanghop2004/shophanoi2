@@ -287,6 +287,29 @@ class OrderController extends Controller
             return redirect()->back();
         }
     }
-    
+  public function confirm($orderId)
+{
+    $order = Order::findOrFail($orderId);
+
+
+    if ($order->status === 'giao hàng thành công') {
+      
+        $order->status = 'đã nhận hàng';
+        $order->save();
+
+      
+        return redirect()->route('home')->with('success', 'Cảm ơn bạn đã nhận hàng!');
+    }
+
+  
+    if ($order->status === 'đã nhận hàng') {
+        return redirect()->route('home')->with('error', 'Đơn hàng đã được nhận hàng, không thể thay đổi trạng thái.');
+    }
+
+   
+    return redirect()->route('home')->with('error', 'Trạng thái đơn hàng không hợp lệ.');
+}
+
+
 
 }
