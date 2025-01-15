@@ -82,6 +82,7 @@ public function getList(Request $request)
             $city = City::where('matp', $order->city_id)->first();
             $province = Province::where('maqh', $order->province_id)->first();
             $ward = Wards::where('xaid', $order->wards_id)->first();
+            
             $shipper = Admin::where('id', $order->assigned_shipper_id)->first();
            
             return view('admin.order.chitiet', compact('order', 'city', 'province', 'ward', 'orderitems','shipper'));
@@ -143,50 +144,65 @@ public function getList(Request $request)
     
 
     public function updateStatus(Request $request, $id)
-    {
-        $order = Order::find($id);
-        $currentStatus = $order->status;
-        $newStatus = $request->input('status'); 
-    
-        if (
-            ($currentStatus == 'chờ xác nhận' && !in_array($newStatus, ['chờ xác nhận', 'đã xác nhận', 'hủy'])) ||
-            ($currentStatus == 'đã xác nhận' && !in_array($newStatus, ['đã xác nhận', 'hủy'])) ||
-            ($currentStatus == 'ship đã nhận' && !in_array($newStatus, ['ship đã nhận', 'đang giao hàng'])) ||
-            ($currentStatus == 'đang giao hàng' && !in_array($newStatus, ['đang giao hàng', 'giao hàng thành công', 'giao hàng không thành công'])) ||
-            ($currentStatus == 'giao hàng thành công' && !in_array($newStatus, ['giao hàng thành công','đã nhận hàng'])) ||
-            ($currentStatus == 'giao hàng không thành công' && !in_array($newStatus, ['giao hàng không thành công'])) ||
-            ($currentStatus == 'đã nhận hàng' && !in_array($newStatus, ['đã nhận hàng'])) ||
-            ($currentStatus == 'hủy' && !in_array($newStatus, ['hủy']))
-        ) {
-            return redirect()->route('admin.order.getList')->with('error', 'Trạng thái đã thay đổi.');
+{
+    $order = Order::find($id);
+    $currentStatus = $order->status;
+    $newStatus = $request->input('status');
+
+    if ($currentStatus == 'giao hàng thành công') {
+        $day7active = $order->updated_at; 
+        $days7fail = now()->diffInDays($day7active);
+
+        if ($days7fail < 7) {
+            return redirect()->route('admin.order.getList')->with(
+                'error',
+                'Trạng thái "giao hàng thành công" chưa đủ 7 ngày, không thể cập nhật trạng thái.'
+            );
         }
-    
-      
-        $order->status = $newStatus;
-    
-   
-        if ($newStatus == 'hủy') {
-            $order->reason = $request->input('reason');
-    
-            foreach ($order->orderItems as $orderItem) {
-                $variant = ProductVariant::where('product_id', $orderItem->product_id)
-                    ->where('color_id', $orderItem->color_id)
-                    ->where('size_id', $orderItem->size_id)
-                    ->first();
-    
-                if ($variant) {
-                    $variant->stock_quantity += $orderItem->quantity;
-                    $variant->save();
-                }
-            }
-        } else {
-            $order->reason = null;
-        }
-    
-        $order->save();
-    
-        return redirect()->route('admin.order.getList')->with('success', 'Trạng thái đơn hàng đã được cập nhật từ ' . $currentStatus . ' sang ' . $newStatus . '.');
     }
+
+    if (
+        ($currentStatus == 'chờ xác nhận' && !in_array($newStatus, ['chờ xác nhận', 'đã xác nhận', 'hủy'])) ||
+        ($currentStatus == 'đã xác nhận' && !in_array($newStatus, ['đã xác nhận', 'hủy'])) ||
+        ($currentStatus == 'ship đã nhận' && !in_array($newStatus, ['ship đã nhận', 'đang giao hàng'])) ||
+        ($currentStatus == 'đang giao hàng' && !in_array($newStatus, ['đang giao hàng', 'giao hàng thành công', 'giao hàng không thành công'])) ||
+        ($currentStatus == 'giao hàng thành công' && !in_array($newStatus, ['giao hàng thành công', 'đã nhận hàng'])) ||
+        ($currentStatus == 'giao hàng không thành công' && !in_array($newStatus, ['giao hàng không thành công'])) ||
+        ($currentStatus == 'chưa nhận được hàng' && !in_array($newStatus, ['chưa nhận được hàng', 'đã nhận hàng'])) ||
+        ($currentStatus == 'đã nhận hàng' && !in_array($newStatus, ['đã nhận hàng'])) ||
+        ($currentStatus == 'hủy' && !in_array($newStatus, ['hủy']))
+    ) {
+        return redirect()->route('admin.order.getList')->with('error', 'Trạng thái đã thay đổi.');
+    }
+
+    $order->status = $newStatus;
+
+    if ($newStatus == 'hủy') {
+        $order->reason = $request->input('reason');
+
+        foreach ($order->orderItems as $orderItem) {
+            $variant = ProductVariant::where('product_id', $orderItem->product_id)
+                ->where('color_id', $orderItem->color_id)
+                ->where('size_id', $orderItem->size_id)
+                ->first();
+
+            if ($variant) {
+                $variant->stock_quantity += $orderItem->quantity;
+                $variant->save();
+            }
+        }
+    } else {
+        $order->reason = null;
+    }
+
+    $order->save();
+
+    return redirect()->route('admin.order.getList')->with(
+        'success',
+        'Trạng thái đơn hàng đã được cập nhật từ ' . $currentStatus . ' sang ' . $newStatus . '.'
+    );
+}
+
     
 
 public function showAssignShipperForm()
@@ -253,7 +269,8 @@ public function removeShipper($orderId)
         'đang giao hàng',
         'giao hàng thành công',
         'đã nhận hàng',
-        'giao hàng không thành công'
+        'giao hàng không thành công',
+        'chưa nhận được hàng'
     ];
 
     if (in_array($order->status, $errship)) {
@@ -290,7 +307,7 @@ public function updateStatusShip(Request $request, $id)
     if (
         ($currentStatus == 'ship đã nhận' && !in_array($newStatus, ['ship đã nhận', 'đang giao hàng'])) ||
         ($currentStatus == 'đang giao hàng' && !in_array($newStatus, ['đang giao hàng', 'giao hàng thành công', 'giao hàng không thành công'])) ||
-        ($currentStatus == 'giao hàng thành công' && !in_array($newStatus, ['giao hàng thành công','đã nhận hàng'])) ||
+        ($currentStatus == 'giao hàng thành công' && !in_array($newStatus, ['giao hàng thành công','đã nhận hàng','chưa nhận được hàng'])) ||
         ($currentStatus == 'giao hàng không thành công' && !in_array($newStatus, ['giao hàng không thành công'])) 
        
     ) {

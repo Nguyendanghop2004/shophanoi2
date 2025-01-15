@@ -16,7 +16,10 @@
     background-color: #ffc107;
     color: #000;
 }
-
+.status-chua-nhan {
+    background-color:#8B1A1A; 
+    color: #fff;
+}
 .status-huy {
     background-color:#FF0000; 
     color: #fff;
@@ -49,6 +52,7 @@
                                 <th scope="col">Thanh Toán</th>
                                 <th scope="col">Địa chỉ cụ thể</th>
                                 <th scope="col">Số điện thoại</th>
+                                <th scope="col">Lý do chưa nhận</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -71,6 +75,7 @@
                                                 {{ $order->city->name_thanhpho ?? '....' }}
                                             </td>
                                             <td>{{ $order->phone_number }}</td>
+                                            <td>{{ $order->reason_faile_order}}</td>
                                             <td>
                                                 @if (auth()->user()->hasRole('Shipper'))
                                                 @if (
@@ -80,6 +85,8 @@
                                                         'giao hàng thành công',
                                                         'đã nhận hàng',
                                                         'giao hàng không thành công',
+                                                        'chưa nhận được hàng',
+
                                                     ]))
                                                     <form action="{{ route('admin.order.removeShipper', $order->id) }}"
                                                         method="POST" style="display:inline;">
@@ -146,6 +153,9 @@
                                                         @elseif($order->status == 'đã nhận hàng')
                                                             <option value="đã nhận hàng"
                                                                 {{ $order->status == 'đã nhận hàng' ? 'selected' : '' }}>Hoàn thành</option>
+                                                        @elseif($order->status == 'chưa nhận được hàng')
+                                                            <option value="chưa nhận được hàng"
+                                                                {{ $order->status == 'chưa nhận được hàng' ? 'selected' : '' }}>Khách chưa nhận được hàng</option>
                                                         @elseif($order->status == 'hủy')
                                                             <option value="hủy"
                                                                 {{ $order->status == 'hủy' ? 'selected' : '' }}>Hủy
@@ -159,6 +169,7 @@
                                                             $order->status != 'đã nhận hàng' &&
                                                             $order->status != 'giao hàng không thành công' &&
                                                             $order->status != 'chờ xác nhận' &&
+                                                            $order->status != 'chưa nhận được hàng' &&
                                                             $order->status != 'đã xác nhận')
                                                         <button type="button" class="btn btn-primary btn-sm mt-2"
                                                             onclick="confirmUpdateFormss(this)">
@@ -288,6 +299,7 @@
         'giao hàng thành công': 'status-giao-hang-thanh-cong',
         'giao hàng không thành công': 'status-giao-hang-khong-thanh-cong',
         'hủy': 'status-huy',
+        'chưa nhận được hàng': 'status-chua-nhan',
         'đã nhận hàng': 'status-da-nhan-hang'
     };
 
