@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Mail\OrderStatusMail;
 use App\Models\City;
 use App\Models\Admin;
 use App\Models\Order;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -307,7 +309,8 @@ public function updateStatusShip(Request $request, $id)
     if (
         ($currentStatus == 'ship đã nhận' && !in_array($newStatus, ['ship đã nhận', 'đang giao hàng'])) ||
         ($currentStatus == 'đang giao hàng' && !in_array($newStatus, ['đang giao hàng', 'giao hàng thành công', 'giao hàng không thành công'])) ||
-        ($currentStatus == 'giao hàng thành công' && !in_array($newStatus, ['giao hàng thành công','đã nhận hàng','chưa nhận được hàng'])) ||
+        ($currentStatus == 'giao hàng thành công' && !in_array($newStatus, ['giao hàng thành công','đã nhận hàng'])) ||
+        ($currentStatus == 'chưa nhận được hàng' && !in_array($newStatus, ['chưa nhận được hàng'])) ||
         ($currentStatus == 'giao hàng không thành công' && !in_array($newStatus, ['giao hàng không thành công'])) 
        
     ) {
@@ -322,14 +325,20 @@ public function updateStatusShip(Request $request, $id)
   
     $order->status = $request->input('status');
     if ($order->status == 'hủy') {
+
         $order->reason = $request->input('reason');
     } else {
         $order->reason = null; 
     }
-    if ($order->status == 'giao hàng thành công') {
-        $order->payment_status = 'đã thanh toán'; 
+
+    if ($newStatus == 'giao hàng thành công') {
+        $order->payment_status = 'đã thanh toán';
+
+  
+        Mail::to($order->email)->send(new OrderStatusMail($order));
     }
-    if ($order->status == 'giao hàng không thành công') {
+
+    if ($newStatus == 'giao hàng không thành công') {
         foreach ($order->orderItems as $orderItem) {
             $variant = ProductVariant::where('product_id', $orderItem->product_id)
                 ->where('color_id', $orderItem->color_id)
@@ -337,13 +346,17 @@ public function updateStatusShip(Request $request, $id)
                 ->first();
 
             if ($variant) {
-               
                 $variant->stock_quantity += $orderItem->quantity;
                 $variant->save();
             }
         }
+
+    
+        Mail::to($order->email)->send(new OrderStatusMail($order));
     }
+
     $order->save();
+
     return redirect()->route('admin.order.danhsachgiaohang')
         ->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
 }

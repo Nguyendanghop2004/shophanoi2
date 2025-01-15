@@ -13,14 +13,14 @@
                         <div class="tf-categories-container">
                             @foreach ($collections as $collection)
                                 <div class="collection-item-circle hover-img">
-                                    <a href="shop-collection-sub.html" class="collection-image img-style">
+                                    <a href="{{route('shop-collection.index')}}" class="collection-image img-style">
                                         <img class="lazyload"
                                             data-src="{{ asset('storage/' . $collection->background_image) }}"
                                             src="{{ asset('storage/' . $collection->background_image) }}"
                                             alt="collection-img">
                                     </a>
                                     <div class="collection-content text-center">
-                                        <a href="shop-collection-sub.html"
+                                        <a href="{{route('shop-collection.index')}}"
                                             class="link title fw-6">{{ $collection->name }}</a>
                                     </div>
                                 </div>
@@ -28,11 +28,11 @@
                         </div>
                         <div class="tf-shopall-wrap">
                             <div class="collection-item-circle tf-shopall">
-                                <a href="shop-collection-sub.html" class="collection-image img-style tf-shopall-icon">
+                                <a href="{{route('shop-collection.index')}}" class="collection-image img-style tf-shopall-icon">
                                     <i class="icon icon-arrow1-top-left"></i>
                                 </a>
                                 <div class="collection-content text-center">
-                                    <a href="shop-collection-sub.html" class="link title fw-6">Shop all</a>
+                                    <a href="{{route('shop-collection.index')}}" class="link title fw-6">Shop all</a>
                                 </div>
                             </div>
                         </div>
@@ -185,6 +185,7 @@
                             <div class="swiper-slide" lazy="true">
                                 <div class="card-product" >
                                     <div class="card-product-wrapper" style="height: 465px ; width: 100%;">
+
                                         <a href="{{ route('product-detail', $product['slug']) }}" class="product-img">
                                             <img class="lazyload img-product"
                                                 data-src="{{ asset('storage/' . $product['main_image_url']) }}"
@@ -203,12 +204,25 @@
                                                 <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick Add</span>
                                             </a> --}}
-                                            <a href="javascript:void(0);"
-                                                class="box-icon bg_white wishlist btn-icon-action">
-                                                <span class="icon icon-heart"></span>
-                                                <span class="tooltip">Add to Wishlist</span>
-                                                <span class="icon icon-delete"></span>
-                                            </a>
+                                            <div class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
+    @if(in_array($product['id'], $wishlist))
+        <form action="{{ route('wishlist.remove') }}" method="POST" style="display: inline;">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <button type="submit" class="wishlist-btn remove-wishlist">
+                <span class="icon icon-delete"></span>
+            </button>
+        </form>
+    @else
+        <form action="{{ route('wishlist.add') }}" method="POST" style="display: inline;">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <button type="submit" class="wishlist-btn add-wishlist">
+                <span class="icon icon-heart"></span>
+            </button>
+        </form>
+    @endif
+</div>
                                             {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                                                 class="box-icon bg_white compare btn-icon-action">
                                                 <span class="icon icon-compare"></span>
@@ -267,6 +281,44 @@
                         class="icon icon-arrow-right"></span></div>
             </div>
         </div>
+        <style>
+          
+    
+    /* Đặt kiểu mặc định cho nút */
+/* Kiểu mặc định cho nút */
+.wishlist-btn {
+    background-color: #fff; /* Nền trắng mặc định */
+    border: none;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 50%; /* Tùy chỉnh để có thể làm nút tròn */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng nổi nhẹ */
+}
+
+=
+.wishlist-btn .icon {
+    font-size: 1.5rem;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+    
+.wishlist-btn:hover {
+    background-color: #000;
+}
+
+.wishlist-btn:hover .icon {
+    color: #fff;
+}
+
+
+
+    </style>
+      
     </section>
     <!-- /Best seller -->
     

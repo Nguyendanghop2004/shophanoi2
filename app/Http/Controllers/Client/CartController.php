@@ -392,7 +392,7 @@ class CartController extends Controller
         $cartDetails = [];
 
         if (Auth::guard('web')->check()) {
-            // Lấy giỏ hàng từ cơ sở dữ liệu
+          
             $cart = Cart::where('user_id', auth()->id())
                 ->with([
                     'cartItems.product.images' => function ($query) {
@@ -404,7 +404,7 @@ class CartController extends Controller
                 ->first();
 
             if ($cart && $cart->cartItems->isNotEmpty()) {
-                // Sử dụng hàm getCartDetails
+                
                 $cartDetails = $this->getCartDetails($cart->cartItems);
             }
         } else {

@@ -1,3 +1,4 @@
+
 @foreach ($products as $product)
                             <div class="swiper-slide" lazy="true">
                                 <div class="card-product">
@@ -19,12 +20,7 @@
                                                 <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick Add</span>
                                             </a> --}}
-                                            <a href="javascript:void(0);"
-                                                class="box-icon bg_white wishlist btn-icon-action">
-                                                <span class="icon icon-heart"></span>
-                                                <span class="tooltip">Add to Wishlist</span>
-                                                <span class="icon icon-delete"></span>
-                                            </a>
+                                     
                                             {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                                                 class="box-icon bg_white compare btn-icon-action">
                                                 <span class="icon icon-compare"></span>
@@ -68,3 +64,4 @@
                                 </div>
                             </div>
                         @endforeach
+                        

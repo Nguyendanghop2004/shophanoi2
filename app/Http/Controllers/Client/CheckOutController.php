@@ -7,6 +7,7 @@ use DB;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Crypt;
+use Log;
 use Mail;
 use Session;
 use App\Models\Cart;
@@ -332,8 +333,7 @@ class CheckOutController extends Controller
                 }
     
               
-                $productVariant->stock_quantity -= $item['quantity'];
-                $productVariant->save();
+             
             }
             if (!empty($productVariantDeletedItems)) {
                 DB::rollBack();
@@ -655,18 +655,47 @@ class CheckOutController extends Controller
 
     private function handleCOD(Order $order)
     {
-
-        Mail::to($order->email)->send(new OrderConfirmationMail($order));
-
-
-        if (auth()->check()) {
-            Cart::where('user_id', auth()->id())->delete();
-        } else {
-            session()->forget('cart');
+       
+     
+    
+    
+        DB::beginTransaction();
+    
+        try {
+            foreach ($order->orderItems as $orderItem) {
+                $productVariant = ProductVariant::where('product_id', $orderItem->product_id)
+                    ->where('color_id', $orderItem->color_id)
+                    ->where('size_id', $orderItem->size_id)
+                    ->lockForUpdate()
+                    ->first();
+    
+              
+                if ($productVariant) {
+                    $productVariant->decrement('stock_quantity', $orderItem->quantity);
+                }
+            }
+            Mail::to($order->email)->send(new OrderConfirmationMail($order));
+           
+            if (auth()->check()) {
+                Cart::where('user_id', auth()->id())->delete();
+            } else {
+                session()->forget('cart');
+            }
+    
+          
+            DB::commit();
+    
+          
+            return redirect()->route('thanhtoanthanhcong', ['id' => Crypt::encryptString($order->id)]);
+        } catch (\Exception $e) {
+        
+            DB::rollBack();
+            Log::error('Error handling COD order: ' . $e->getMessage());
+    
+            return redirect()->route('home')->with('error', 'Đã có lỗi xảy ra khi xử lý đơn hàng COD.');
         }
-
-        return redirect()->route('thanhtoanthanhcong',  ['id' => Crypt::encryptString($order->id)]);
     }
+    
 
    
     private function handleVNPay(Order $order, $totalPrice)
@@ -760,69 +789,109 @@ class CheckOutController extends Controller
     {
         $vnp_HashSecret = "RJVBT58452T7DZK0UOOM0EY10SVH79VS";
         $inputData = $request->all();
-
+    
         $vnp_SecureHash = $inputData['vnp_SecureHash'];
         unset($inputData['vnp_SecureHash'], $inputData['vnp_SecureHashType']);
-
+    
         ksort($inputData);
         $hashData = urldecode(http_build_query($inputData));
         $checkHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
-
+    
         if ($checkHash === $vnp_SecureHash) {
-            if ($inputData['vnp_ResponseCode'] === '00') {
-                
-                $orderCode = $inputData['vnp_OrderInfo'];
-                $order = Order::where('order_code', $orderCode)->first();
-
-                if ($order) {
-                    $order->payment_status = 'Đã thanh toán';
-                    $order->save();
-                    Mail::to($order->email)->send(new OrderConfirmationMail($order));
-
-                   
-                    if (auth()->check()) {
-                        Cart::where('user_id', auth()->id())->delete();
+            $orderCode = $inputData['vnp_OrderInfo'];
+            $order = Order::where('order_code', $orderCode)->first();
+    
+            if ($order) {
+                DB::beginTransaction();
+                try {
+                    if ($inputData['vnp_ResponseCode'] === '00') {
+                        foreach ($order->orderItems as $orderItem) {
+                            $productVariant = ProductVariant::where('product_id', $orderItem->product_id)
+                                ->where('color_id', $orderItem->color_id)
+                                ->where('size_id', $orderItem->size_id)
+                                ->lockForUpdate()
+                                ->first();
+    
+                         
+                            if (!$productVariant) {
+                                $order->delete(); 
+                                DB::commit();
+                                return redirect()->route('cart')->with('error', 'Biến thể sản phẩm không tồn tại.');
+                            }
+    
+                           
+                            if ($productVariant->deleted_at !== null) {
+                                $order->delete();
+                                DB::commit();
+                                return redirect()->route('cart')->with('error', 'Sản phẩm đã bị xóa.');
+                            }
+    
+                          
+                            if ($productVariant->stock_quantity < $orderItem->quantity) {
+                                $order->delete(); 
+                                DB::commit();
+                                return redirect()->route('cart')->with('error', 'Không đủ số lượng sản phẩm.');
+                            }
+    
+                            
+                            $product = Product::find($orderItem->product_id);
+                            if ($product && $product->status == 0) {
+                                $order->delete();
+                                DB::commit();
+                                return redirect()->route('cart')->with('error', 'Sản phẩm không còn kinh doanh.');
+                            }
+    
+                          
+                            $productVariant->decrement('stock_quantity', $orderItem->quantity);
+                        }
+    
+                     
+                        $order->payment_status = 'Đã thanh toán';
+                        $order->save();
+    
+                       
+                        Mail::to($order->email)->send(new OrderConfirmationMail($order));
+    
+                     
+                        if (auth()->check()) {
+                            Cart::where('user_id', auth()->id())->delete();
+                        } else {
+                            session()->forget('cart');
+                        }
+    
+                        DB::commit();
+                        return redirect()->route('thanhtoanthanhcong', ['id' => Crypt::encryptString($order->id)]);
                     } else {
-                        session()->forget('cart');
-                    }
-
+                     
+                        $order->payment_status = 'Thất bại';
+                        $order->save();
+    
                    
-                    return redirect()->route('thanhtoanthanhcong',  ['id' => Crypt::encryptString($order->id)]);
-
-                } else {
-                    return redirect()->route('home')->with('error', 'Không tìm thấy đơn hàng');
+                        $order->delete();
+    
+                        DB::commit();
+                        return redirect()->route('home')->with('error', 'Thanh toán thất bại');
+                    }
+                } catch (\Exception $e) {
+                 
+                    $order->delete();
+                    DB::rollBack();
+                    Log::error('Error processing VNPay return: ' . $e->getMessage());
+    
+                    return redirect()->route('home')->with('error', 'Có lỗi xảy ra khi xử lý thanh toán');
                 }
             } else {
-               
-                $orderCode = $inputData['vnp_OrderInfo'];
-                $order = Order::where('order_code', $orderCode)->first();
-
-                if ($order) {
-                    $order->payment_status = 'Thất bại';
-                    $order->save();
-
-                    
-                    foreach ($order->orderItems as $orderItem) {
-                        $productVariant = ProductVariant::where('product_id', $orderItem->product_id)
-                            ->where('color_id', $orderItem->color_id)
-                            ->where('size_id', $orderItem->size_id)
-                            ->first();
-
-                        if ($productVariant) {
-                            $productVariant->stock_quantity += $orderItem->quantity;
-                            $productVariant->save();
-                        }
-                    }
-
-                    $order->delete(); 
-                }
-
-                return redirect()->route('home')->with('error', 'Thanh toán thất bại');
+                return redirect()->route('home')->with('error', 'Không tìm thấy đơn hàng');
             }
         } else {
             return redirect()->route('home')->with('error', 'Lỗi bảo mật, vui lòng thử lại');
         }
     }
+    
+    
+    
+    
+    
 
    
     public function thanhtoanthanhcong($encryptedId)
