@@ -56,7 +56,7 @@ public function getList(Request $request)
 
     // Lọc đơn hàng giao hàng thành công quá 7 ngày nếu filter_7_days được bật
     if ($request->has('filter_7_days')) {
-        $loc7days = Carbon::now()->subDays(7);
+        $loc7days = Carbon::now()->subDays(3);
         $query->where('status', 'giao hàng thành công')
               ->where('updated_at', '<', $loc7days);
     }
@@ -280,7 +280,15 @@ public function updateStatusShip(Request $request, $id)
     $order = Order::find($id);
     $currentStatus = $order->status;
     $newStatus = $request->input('status'); 
+    if (!$order) {
+        return redirect()->route('admin.order.danhsachgiaohang')
+            ->with('error', 'Đơn hàng không tồn tại.');
+    }
 
+    if (!$order->assigned_shipper_id) {
+        return redirect()->route('admin.order.danhsachgiaohang')
+            ->with('error', 'Không thể cập nhật trạng thái vì đơn hàng chưa được gán shipper.');
+    }
     if (
         ($currentStatus == 'ship đã nhận' && !in_array($newStatus, ['ship đã nhận', 'đang giao hàng'])) ||
         ($currentStatus == 'đang giao hàng' && !in_array($newStatus, ['đang giao hàng', 'giao hàng thành công', 'giao hàng không thành công'])) ||
@@ -289,6 +297,7 @@ public function updateStatusShip(Request $request, $id)
     ) {
         return redirect()->route('admin.order.danhsachgiaohang')->with('error', 'Trạng thái đã thay đổi.');
     }
+<<<<<<< HEAD
 
     if ($currentStatus == 'hủy') {
         return redirect()->route('admin.order.danhsachgiaohang')
@@ -298,6 +307,17 @@ public function updateStatusShip(Request $request, $id)
     $order->status = $newStatus;
 
     if ($newStatus == 'hủy') {
+=======
+    if ($currentStatus == 'hủy') {
+        return redirect()->route('admin.order.danhsachgiaohang')
+            ->with('error', 'Đơn hàng đã bị hủy trước đó,bạn không thể nhận đơn.');
+    }
+        $order->status = $newStatus;
+
+  
+    $order->status = $request->input('status');
+    if ($order->status == 'hủy') {
+>>>>>>> c30e7bc9f636d019044de004653697aebf0d172a
         $order->reason = $request->input('reason');
     } else {
         $order->reason = null; 

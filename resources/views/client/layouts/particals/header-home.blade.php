@@ -139,7 +139,7 @@
                                 onsubmit="return validateSearchForm()">
                                 <div class="search-input-wrapper">
                                     <input type="text" name="query" id="searchQuery"
-                                        placeholder="Search orders..." class="search-input">
+                                        placeholder="Tìm kiếm đơn hàng..." class="search-input">
                                     <button class="nav-icon-item search-button" type="submit">
                                         <i class="icon icon-search"></i>
                                     </button>

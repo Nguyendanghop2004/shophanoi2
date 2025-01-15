@@ -59,8 +59,8 @@
                                     <td>
                                         <div class="d-flex">
                                             <a href="{{ route('admin.accountsUser.edit', $user->id) }}"
-                                                class="btn btn-warning">
-                                                <i class="fas fa-edit"></i>
+                                                class="btn btn-primary">
+                                                <i class="fas fa-eye"></i>
                                             </a>
 
                                             {{-- <form action="{{ route('admin.accountsUser.destroy', $user->id) }}"

@@ -68,6 +68,7 @@
                                             Please fill in the first name
                                         </div>
                                     </div>
+                                    @if($isAdmin)
                                     <div class="form-group col-md-6 col-12">
                                         <label>Email</label>
                                         <input type="email" class="form-control" value="{{ $admin->email }}"
@@ -76,6 +77,8 @@
                                             Please fill in the email
                                         </div>
                                     </div>
+                                    @endif
+
                                 </div>
                                 <td>
                                     @if ($admin->status)
@@ -86,10 +89,12 @@
                                 </td>
 
                             </div>
+                            @if(!$isAdmin)
                             <div class="card-footer text-right">
                                 <a class="btn btn-primary"
                                     href="{{ route('admin.accounts.change', $admin->id) }}"> Đổi mật khẩu</a>
                             </div>
+                            @endif
                         </form>
                     </div>
                 </div>
