@@ -24,6 +24,14 @@
         <p><strong>Trạng Thái Thanh Toán:</strong> {{ $order->payment_status }}</p>
         <p><strong>Phương thức thanh toán:</strong> {{ $order->payment_method }}</p>
         <p><strong>Địa Chỉ Cụ Thể:</strong>{{ $city->name_thanhpho }},{{ $province->name_quanhuyen }},{{ $ward->name_xaphuong }}, {{ $order->address }}</p>
+        @if ($order->reason_faile_order)
+            <p><strong>Lý do chưa nhận được đơn hàng:</strong> {{ $order->reason_faile_order }}</p>
+            @endif
+        @if(in_array($order->status, ['giao hàng thành công', 'đã nhận hàng', 'chưa nhận được hàng']))
+            <p><strong>Tên shipper:</strong> {{ $shipper ? $shipper->name : 'Chưa có shipper' }}</p>
+            <p><strong>Thông tin liên hệ ship:</strong> {{ $shipper ? $shipper->phone : 'Chưa có shipper' }}</p>
+        @endif
+        
     </div>
     <!-- Danh sách sản phẩm -->
     <div class="order-details">

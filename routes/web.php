@@ -169,8 +169,12 @@ Route::get('/order/detail/{order_code}', [OrderController::class, 'showOrderDeta
 Route::post('/order/cancel', [OrderController::class, 'cancelOrder'])->name('cancel.order');
 
 
-
+// đã nhận hàng
 Route::post('/orders/confirm/{id}', [OrderController::class, 'confirmOrder'])->name('orders.confirm');
+// chưa nhận được hàng
+Route::post('/orders/not-received/{id}', [OrderController::class, 'notReceived'])->name('orders.notReceived');
+
+
 Route::get('/orders/search', [OrderController::class, 'search'])->name('order.search');
 
 

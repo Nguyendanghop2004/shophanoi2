@@ -9,7 +9,11 @@
 }
 
 .status-huy {
-    background-color:#FF0000; 
+    background-color:#FF4040; 
+    color: #fff;
+}
+.status-chua-nhan {
+    background-color:#8B1A1A; 
     color: #fff;
 }
 .status-da-nhan-hang {
@@ -114,6 +118,10 @@
                                                 <option value="giao hàng không thành công" {{ $order->status == 'giao hàng không thành công' ? 'selected' : '' }}>Giao Hàng Không Thành Công</option>
                                             @elseif($order->status == 'đã nhận hàng')
                                             <option value="đã nhận hàng" {{ $order->status == 'đã nhận hàng' ? 'selected' : '' }}>Hoàn thành</option>
+                                            @elseif($order->status == 'chưa nhận được hàng')
+                                            <option value="chưa nhận được hàng" {{ $order->status == 'chưa nhận được hàng' ? 'selected' : '' }}>Chưa nhận được hàng</option>
+                                            <option value="đã nhận hàng" {{ $order->status == 'đã nhận hàng' ? 'selected' : '' }}>Hoàn thành</option>
+
                                             @elseif($order->status == 'hủy')
                                                 <option value="hủy" {{ $order->status == 'hủy' ? 'selected' : '' }}>Hủy</option>
                                             @endif
@@ -235,6 +243,7 @@
         'giao hàng thành công': 'status-giao-hang-thanh-cong',
         'giao hàng không thành công': 'status-giao-hang-khong-thanh-cong',
         'hủy': 'status-huy',
+        'chưa nhận được hàng': 'status-chua-nhan',
         'đã nhận hàng': 'status-da-nhan-hang'
     };
 
