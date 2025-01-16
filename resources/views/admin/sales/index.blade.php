@@ -89,14 +89,7 @@
                     // Làm mới dữ liệu DataTables
                     table.ajax.reload(null, false); // false để giữ nguyên trang hiện tại
                 });
-            // Lắng nghe sự kiện từ Laravel Echo
-            Echo.channel('sales')
-                .listen('SaleUpdated', function(e) {
-                    const action = e.action;
-                    const sale = e.sale;
-
-                    console.log('dasdasdasdasdsa');
-                });
+        
         });
     </script>
 @endpush

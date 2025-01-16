@@ -2,41 +2,67 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\DiscountCodeUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\DiscountCode;
+use DataTables;
 use DB;
 use Illuminate\Http\Request;
-use Str;
 
 class DiscountCodeController extends Controller
 {
-    // 1. Hiển thị danh sách mã giảm giá
-    public function index(Request $request)
+    public function index()
     {
-        $query = DiscountCode::query();
-
-        // 7. Bộ lọc và tìm kiếm
-        if ($request->has('code')) {
-            $query->where('code', 'like', '%' . $request->code . '%');
-        }
-        if ($request->has('discount_type')) {
-            $query->where('discount_type', $request->discount_type);
-        }
-        if ($request->has('status')) {
-            $query->where(function ($q) use ($request) {
-                if ($request->status == 'active') {
-                    $q->where('start_date', '<=', now())->where('end_date', '>=', now());
-                } elseif ($request->status == 'expired') {
-                    $q->where('end_date', '<', now());
-                }
-            });
-        }
-
-        $discountCodes = $query->with([ 'userLimits', 'products'])->paginate(10);
-        return view('admin.discount_codes.index', compact('discountCodes'));
+        return view('admin.discount_codes.index');
     }
 
-    // 2. Hiển thị form tạo mã giảm giá
+    public function getDiscountCodesData(Request $request)
+    {
+        $discountCodes = DiscountCode::query();
+
+        return DataTables::of($discountCodes)
+            ->addColumn('discount_type', function ($discountCode) {
+                return $discountCode->discount_type === 'percent' ? 'Phần trăm' : 'Cố định';
+            })
+            ->addColumn('discount_value', function ($discountCode) {
+                if ($discountCode->discount_type === 'percent') {
+                    return $discountCode->discount_value . '%';
+                } else {
+                    return number_format($discountCode->discount_value, 0, ',', '.') . ' VND';
+                }
+            })
+            ->addColumn('start_date', function ($discountCode) {
+                return $discountCode->start_date->format('d/m/Y H:i:s');
+            })
+            ->addColumn('end_date', function ($discountCode) {
+                return $discountCode->end_date
+                    ? $discountCode->end_date->format('d/m/Y H:i:s')
+                    : 'Không giới hạn';
+            })
+            ->addColumn('status', function ($discountCode) {
+                if ($discountCode->end_date && $discountCode->end_date->lt(now())) {
+                    return '<span class="badge badge-danger">Hết hạn</span>';
+                }
+                return '<span class="badge badge-success">Còn hiệu lực</span>';
+            })
+            ->addColumn('usage_limit', function ($discountCode) {
+                // Hiển thị dạng times_used / usage_limit
+                $usageLimit = $discountCode->usage_limit ?? 'Không giới hạn';
+                return "{$discountCode->times_used} / {$usageLimit}";
+            })
+            ->addColumn('action', function ($discountCode) {
+                return '
+                    <a href="' . route('admin.discount_codes.edit', $discountCode->id) . '" class="btn btn-warning btn-sm">Sửa</a>
+                    <form action="' . route('admin.discount_codes.destroy', $discountCode->id) . '" method="POST" style="display:inline-block;" onsubmit="return confirmDelete(event);">
+                        ' . csrf_field() . method_field('DELETE') . '
+                        <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                    </form>
+                ';
+            })
+            ->rawColumns(['status', 'action'])
+            ->make(true);
+    }
+
     public function create()
     {
         $users = \App\Models\User::all();
@@ -44,76 +70,34 @@ class DiscountCodeController extends Controller
         $discountCodes = DiscountCode::all();
         return view('admin.discount_codes.create', compact('users', 'products', 'discountCodes'));
     }
-
-    // 3. Lưu mã giảm giá
     public function store(Request $request)
     {
         $validated = $request->validate([
             'code' => 'required|unique:discount_codes',
             'discount_type' => 'required|in:percent,fixed',
-            'discount_value' => 'required|numeric',
+            'discount_value' => 'required|numeric|min:1',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after:start_date',
-            'usage_limit' => 'nullable|numeric',
-            'user_ids' => 'array',
-            'product_ids' => 'array',
         ], [
             'code.required' => 'Bạn phải nhập mã giảm giá.',
             'code.unique' => 'Mã giảm giá đã tồn tại.',
             'discount_type.required' => 'Vui lòng chọn loại giảm giá.',
-            'discount_type.in' => 'Loại giảm giá chỉ được là percent hoặc fixed.',
-            'discount_value.required' => 'Vui lòng nhập giá trị giảm giá.',
-            'discount_value.numeric' => 'Giá trị giảm giá phải là số.',
+            'discount_type.in' => 'Loại giảm giá không hợp lệ.',
+            'discount_value.required' => 'Vui lòng nhập giá trị giảm.',
+            'discount_value.numeric' => 'Giá trị giảm phải là số.',
+            'discount_value.min' => 'Giá trị giảm phải lớn hơn 0.',
             'start_date.required' => 'Vui lòng nhập ngày bắt đầu.',
             'end_date.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
         ]);
 
-        // Kiểm tra giá trị giảm giá với giá sản phẩm nếu có sản phẩm được chỉ định
-        if (!empty($request->product_ids)) {
-            $products = \App\Models\Product::whereIn('id', $request->product_ids)->get();
-            foreach ($products as $product) {
-                if ($request->discount_type === 'fixed' && $request->discount_value > $product->price) {
-                    return back()->withErrors([
-                        'discount_value' => "Giá trị giảm giá không được lớn hơn giá sản phẩm '{$product->name}' ({$product->price} VNĐ).",
-                    ]);
-                }
-            }
-        }
-
-        // Kiểm tra giá trị giảm giá phần trăm
-        if ($request->discount_type === 'percent' && ($request->discount_value < 1 || $request->discount_value > 100)) {
-            return back()->withErrors([
-                'discount_value' => 'Giá trị giảm giá phần trăm phải nằm trong khoảng từ 1% đến 100%.',
-            ]);
-        }
-
-        DB::transaction(function () use ($validated, $request) {
+        DB::transaction(function () use ($validated) {
             $discountCode = DiscountCode::create($validated);
-
-            // Gán người dùng
-            if (!empty($request->user_ids)) {
-                foreach ($request->user_ids as $userId) {
-                    $discountCode->userLimits()->create([
-                        'user_id' => $userId,
-                        'usage_limit' => $request->usage_limit,
-                    ]);
-                }
-            }
-
-            // Gán sản phẩm
-            if (!empty($request->product_ids)) {
-                foreach ($request->product_ids as $productId) {
-                    $discountCode->products()->create(['product_id' => $productId]);
-                }
-            }
-         
+            event(new DiscountCodeUpdated($discountCode, 'create'));
         });
 
-        return redirect()->route('admin.discount_codes.index')->with('success', 'Mã giảm giá đã được tạo.');
+        return redirect()->route('admin.discount_codes.index')->with('success', 'Mã giảm giá đã được tạo thành công.');
     }
 
-
-    // 4. Hiển thị form chỉnh sửa mã giảm giá
     public function edit($id)
     {
         $discountCode = DiscountCode::with(['userLimits', 'products'])->findOrFail($id);
@@ -123,7 +107,6 @@ class DiscountCodeController extends Controller
         return view('admin.discount_codes.edit', compact('discountCode', 'users', 'products', 'discountCodes'));
     }
 
-    // 5. Cập nhật mã giảm giá
     public function update(Request $request, $id)
     {
         $discountCode = DiscountCode::findOrFail($id);
@@ -131,78 +114,38 @@ class DiscountCodeController extends Controller
         $validated = $request->validate([
             'code' => 'required|unique:discount_codes,code,' . $id,
             'discount_type' => 'required|in:percent,fixed',
-            'discount_value' => 'required|numeric',
+            'discount_value' => 'required|numeric|min:1',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after:start_date',
-            'usage_limit' => 'nullable|numeric',
-            'user_ids' => 'array',
-            'product_ids' => 'array',
         ], [
             'code.required' => 'Bạn phải nhập mã giảm giá.',
             'code.unique' => 'Mã giảm giá đã tồn tại.',
             'discount_type.required' => 'Vui lòng chọn loại giảm giá.',
-            'discount_type.in' => 'Loại giảm giá chỉ được là percent hoặc fixed.',
-            'discount_value.required' => 'Vui lòng nhập giá trị giảm giá.',
-            'discount_value.numeric' => 'Giá trị giảm giá phải là số.',
+            'discount_type.in' => 'Loại giảm giá không hợp lệ.',
+            'discount_value.required' => 'Vui lòng nhập giá trị giảm.',
+            'discount_value.numeric' => 'Giá trị giảm phải là số.',
+            'discount_value.min' => 'Giá trị giảm phải lớn hơn 0.',
             'start_date.required' => 'Vui lòng nhập ngày bắt đầu.',
             'end_date.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
         ]);
 
-        // Kiểm tra giá trị giảm giá với giá sản phẩm nếu có sản phẩm được chỉ định
-        if (!empty($request->product_ids)) {
-            $products = \App\Models\Product::whereIn('id', $request->product_ids)->get();
-            foreach ($products as $product) {
-                if ($request->discount_type === 'fixed' && $request->discount_value > $product->price) {
-                    return back()->withErrors([
-                        'discount_value' => "Giá trị giảm giá không được lớn hơn giá sản phẩm '{$product->name}' ({$product->price} VNĐ).",
-                    ]);
-                }
-            }
-        }
-
-        // Kiểm tra giá trị giảm giá phần trăm
-        if ($request->discount_type === 'percent' && ($request->discount_value < 1 || $request->discount_value > 100)) {
-            return back()->withErrors([
-                'discount_value' => 'Giá trị giảm giá phần trăm phải nằm trong khoảng từ 1% đến 100%.',
-            ]);
-        }
-
-        DB::transaction(function () use ($discountCode, $validated, $request) {
+        DB::transaction(function () use ($discountCode, $validated) {
             $discountCode->update($validated);
-
-            // Cập nhật người dùng
-            $discountCode->userLimits()->delete();
-            if (!empty($request->user_ids)) {
-                foreach ($request->user_ids as $userId) {
-                    $discountCode->userLimits()->create([
-                        'user_id' => $userId,
-                        'usage_limit' => $request->usage_limit,
-                    ]);
-                }
-            }
-
-            // Cập nhật sản phẩm
-            $discountCode->products()->delete();
-            if (!empty($request->product_ids)) {
-                foreach ($request->product_ids as $productId) {
-                    $discountCode->products()->create(['product_id' => $productId]);
-                }
-            }
-
-           
+            event(new DiscountCodeUpdated($discountCode, 'update'));
         });
 
         return redirect()->route('admin.discount_codes.index')->with('success', 'Mã giảm giá đã được cập nhật.');
     }
 
-
-    // 6. Xóa mã giảm giá
     public function destroy($id)
     {
         $discountCode = DiscountCode::findOrFail($id);
-        $discountCode->delete();
+
+        DB::transaction(function () use ($discountCode) {
+            $discountCode->delete();
+            event(new DiscountCodeUpdated($discountCode->id, 'delete'));
+        });
+
         return redirect()->route('admin.discount_codes.index')->with('success', 'Mã giảm giá đã được xóa.');
     }
-
-
 }

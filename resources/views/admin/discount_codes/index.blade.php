@@ -1,4 +1,3 @@
-
 @extends('admin.layouts.master')
 
 @section('content')
@@ -20,46 +19,10 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <div class="section-title mt-0">
                     </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <!-- Bộ lọc -->
-                        <form method="GET" action="{{ route('admin.discount_codes.index') }}"
-                            class="mb-3 d-flex align-items-center">
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="code">Tìm kiếm mã giảm giá</label>
-                                    <input type="text" name="code" id="code" class="form-control"
-                                        value="{{ request('code') }}" placeholder="Nhập mã giảm giá">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="discount_type">Loại giảm giá</label>
-                                    <select name="discount_type" id="discount_type" class="form-control">
-                                        <option value="">Tất cả</option>
-                                        <option value="percent"
-                                            {{ request('discount_type') == 'percent' ? 'selected' : '' }}>Phần trăm</option>
-                                        <option value="fixed" {{ request('discount_type') == 'fixed' ? 'selected' : '' }}>
-                                            Cố định</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="status">Trạng thái</label>
-                                    <select name="status" id="status" class="form-control">
-                                        <option value="">Tất cả</option>
-                                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Đang
-                                            hoạt động</option>
-                                        <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>Hết
-                                            hạn</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary ml-3">Lọc</button>
-                            <a href="{{ route('admin.discount_codes.index') }}" class="btn btn-secondary ml-3">Xóa bộ
-                                lọc</a>
-                        </form>
-                    </div>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table id="discount-codes-table" class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -74,96 +37,99 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($discountCodes as $code)
-                                <tr>
-                                    <td>{{ $code->id }}</td>
-                                    <td>{{ $code->code }}</td>
-                                    <td>{{ ucfirst($code->discount_type) }}</td>
-                                    <td>{{ $code->discount_value }}</td>
-                                    <td>{{ $code->times_used }}/{{ $code->usage_limit ?? 'Không giới hạn' }}</td>
-                                    <td>{{ $code->start_date }}</td>
-                                    <td>{{ $code->end_date }}</td>
-                                    <td>
-                                        @if ($code->end_date && $code->end_date->lt(now()))
-                                            <span class="badge badge-danger">Hết hạn</span>
-                                        @else
-                                            <span class="badge badge-success">Còn hiệu lực</span>
-                                        @endif
-                                    </td>                               
-                                    <td>
-                                        <a href="{{ route('admin.discount_codes.edit', $code->id) }}" class="btn btn-warning btn-sm">Sửa</a>
-                                        <form 
-    action="{{ route('admin.discount_codes.destroy', $code->id) }}" 
-    method="POST" 
-    style="display:inline-block;" 
-    onsubmit="return confirmDelete(event)">
-    @csrf
-    @method('DELETE')
-    <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
-</form>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="9" class="text-center">Chưa có mã giảm giá nào.</td>
-                                </tr>
-                                @endforelse
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
-            <!-- Phân trang -->
-            <div class="d-flex justify-content-center">
-                {{ $discountCodes->links() }}
-            </div>
 
+            </div>
         </div>
     </section>
-    
 @endsection
-<script>
-    function confirmDelete(event) {
-        event.preventDefault(); 
-        Swal.fire({
-            title: 'Bạn có chắc chắn muốn xóa mã giảm giá này?',
-            text: "Hành động này không thể hoàn tác!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Xóa',
-            cancelButtonText: 'Hủy'
-        }).then((result) => {
-            if (result.isConfirmed) {
 
-                event.target.submit();
-            }
-        });
-        return false; 
-    }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@push('scripts')
     <script>
-     document.addEventListener("DOMContentLoaded", function() {
-            @if (session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Thành công!',
-                    text: '{{ session('success') }}',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            @elseif (session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi!',
-                    text: '{{ session('error') }}',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            @endif
-        });
+        function confirmDelete(event) {
+            event.preventDefault(); // Ngăn form gửi đi ngay lập tức
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn xóa mã giảm giá này?',
+                text: 'Hành động này không thể hoàn tác!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit(); // Gửi form khi người dùng xác nhận
+                }
+            });
+            return false; // Ngăn gửi form mặc định
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const table = $('#discount-codes-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: {!! json_encode(route('admin.discount_codes.data')) !!},
+                    type: 'GET',
+                },
+                columns: [{
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'code',
+                        name: 'code'
+                    },
+                    {
+                        data: 'discount_type',
+                        name: 'discount_type'
+                    },
+                    {
+                        data: 'discount_value',
+                        name: 'discount_value'
+                    },
+                    { data: 'usage_limit', name: 'usage_limit' }, // Thêm cột giới hạn sử dụng
 
-   
-</script>
+                    {
+                        data: 'start_date',
+                        name: 'start_date'
+                    },
+                    {
+                        data: 'end_date',
+                        name: 'end_date'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+            });
+
+            // Lắng nghe sự kiện real-time từ Laravel Echo
+            Echo.channel('discount-codes')
+                .listen('.DiscountCodeUpdated', (e) => {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Mã giảm giá đã được cập nhật!',
+                        text: `Hành động: ${e.action}`,
+                        showConfirmButton: false,
+                        timer: 2000,
+                    });
+                    table.ajax.reload(null, false); // Làm mới DataTable
+                });
+        });
+    </script>
+@endpush

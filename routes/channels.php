@@ -22,3 +22,6 @@ Broadcast::channel('sales', function () {
 Broadcast::channel('products', function () {
     return true; // Cho phép tất cả user truy cập
 });
+Broadcast::channel('discount-codes', function () {
+    return true; // Cho phép tất cả user truy cập
+});

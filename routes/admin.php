@@ -130,21 +130,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::resource('product', ProductController::class);
     //quản lí coupons
     Route::get('discount-codes', [DiscountCodeController::class, 'index'])->name('discount_codes.index');
-
-    // Route để hiển thị form tạo mã giảm giá
     Route::get('discount-codes/create', [DiscountCodeController::class, 'create'])->name('discount_codes.create');
-
-    // Route để lưu mã giảm giá mới
     Route::post('discount-codes', [DiscountCodeController::class, 'store'])->name('discount_codes.store');
-
-    // Route để hiển thị form sửa mã giảm giá
     Route::get('discount-codes/{id}/edit', [DiscountCodeController::class, 'edit'])->name('discount_codes.edit');
-
-    // Route để cập nhật mã giảm giá
     Route::put('discount-codes/{id}', [DiscountCodeController::class, 'update'])->name('discount_codes.update');
+    Route::get('/discount-codes-data', [DiscountCodeController::class, 'getDiscountCodesData'])->name('discount_codes.data');
 
     // Route để xóa mã giảm giá
-    Route::delete('discount-codes/{id}', [DiscountCodeController::class, 'destroy'])->name('discount_codes.destroy');
+    Route::delete('/discount-codes/{id}', [DiscountCodeController::class, 'destroy'])->name('discount_codes.destroy');
 
     Route::resource('product', ProductController::class)->middleware('permission:product');
 
