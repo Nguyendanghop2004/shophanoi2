@@ -154,6 +154,7 @@ Route::get('/cart/modal-cart', [CartController::class, 'getModalCart'])->name('c
 Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
 Route::post('/apply-coupon', [CheckOutController::class, 'applyCoupon'])->name('cart.apply-coupon');
 
+Route::post('/cart/check', [CartController::class, 'checkProductInCart'])->name('cart.check');
 
 
 Route::get('/order/donhang', [OrderController::class, 'index'])->name('order.donhang');

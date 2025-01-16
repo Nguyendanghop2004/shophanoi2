@@ -14,12 +14,6 @@
     <!-- page-cart -->
     <section class="flat-spacing-11">
         <div class="container">
-            <!-- <div class="tf-page-cart text-center mt_140 mb_200">
-                                                                        <h5 class="mb_24">Your cart is empty</h5>
-                                                                        <p class="mb_24">You may check out all the available products and buy some in the shop</p>
-                                                                        <a href="shop-default.html" class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Return to shop<i class="icon icon-arrow1-top-left"></i></a>
-                                                                    </div> -->
-
             <div class="tf-page-cart-wrap">
                 <div class="tf-page-cart-item">
 
@@ -34,13 +28,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php 
+                            @php
                                 $totalCart = 0;
                             @endphp
                             @if (count($cartDetails) > 0)
                                 @foreach ($cartDetails as $item)
                                     @php
-                                        $totalCart +=$item['subtotal'];
+                                        $totalCart += $item['subtotal'];
                                     @endphp
                                     <tr class="tf-cart-item file-delete">
 
@@ -52,7 +46,8 @@
                                                 <a href="product-detail.html"
                                                     class="cart-title link">{{ $item['product_name'] }}</a>
                                                 <div class="cart-meta-variant">{{ $item['color_name'] }} /
-                                                    {{ $item['size_name'] }} + {{ number_format($item['pricebonus'], 0, ',', '.') }} VNĐ</div>
+                                                    {{ $item['size_name'] }} +
+                                                    {{ number_format($item['pricebonus'], 0, ',', '.') }} VNĐ</div>
                                                 <span class="remove-cart link remove"
                                                     onclick="removeFromCart({{ $item['product_id'] }}, {{ $item['color_id'] }}, {{ $item['size_id'] }})">Remove</span>
                                             </div>
@@ -60,12 +55,15 @@
                                         <td class="tf-cart-item_price" cart-data-title="Price">
 
                                             <div class="price fw-6">
-                                                <span class="sale-price">{{ number_format($item['final_price'], 0, ',', '.') }} VNĐ</span>
-                                                <span class="original-price" style="text-decoration: line-through; color: #888;">
-                                                    {{$item['price'] > $item['final_price'] ? number_format($item['price'], 0, ',', '.').' VNĐ'  : ''}}
+                                                <span
+                                                    class="sale-price">{{ number_format($item['final_price'], 0, ',', '.') }}
+                                                    VNĐ</span>
+                                                <span class="original-price"
+                                                    style="text-decoration: line-through; color: #888;">
+                                                    {{ $item['price'] > $item['final_price'] ? number_format($item['price'], 0, ',', '.') . ' VNĐ' : '' }}
                                                 </span>
-                                            </div> 
-                                          
+                                            </div>
+
                                         </td>
                                         <td class="tf-cart-item_quantity" cart-data-title="Quantity">
                                             <div class="cart-quantity">
@@ -104,8 +102,9 @@
                                             </div>
                                         </td>
                                         <td class="tf-cart-item_total" cart-data-title="Total">
-                                            <div class="cart-total" data-price="{{ $item['final_price'] + $item['pricebonus'] }}">
-                                                {{ number_format( $item['subtotal'], 0, ',', '.') }}
+                                            <div class="cart-total"
+                                                data-price="{{ $item['final_price'] + $item['pricebonus'] }}">
+                                                {{ number_format($item['subtotal'], 0, ',', '.') }}
                                                 VNĐ
                                             </div>
                                         </td>
@@ -268,96 +267,7 @@
             </form>
         </div>
     </section>
-    {{-- <section class="flat-spacing-15 pb_0">
-        <div class="container">
-            <div class="flat-title wow fadeInUp" data-wow-delay="0s">
-                <span class="title">Sản Phẩm Liên Quan</span>
 
-            </div>
-            <div class="hover-sw-nav hover-sw-3">
-                <div class="swiper tf-sw-product-sell wrap-sw-over" data-preview="4" data-tablet="3" data-mobile="2"
-                    data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3"
-                    data-pagination-lg="3">
-                    <div class="swiper-wrapper">
-
-                        @foreach ($products as $product)
-                            <div class="swiper-slide" lazy="true">
-                                <div class="card-product">
-                                    <div class="card-product-wrapper">
-                                        <a href="{{ route('product-detail', $product['slug']) }}" class="product-img">
-                                            <img class="lazyload img-product"
-                                                data-src="{{ asset('storage/' . $product['main_image_url']) }}"
-                                                src="{{ asset('storage/' . $product['main_image_url']) }}"
-                                                alt="image-product">
-                                            <img class="lazyload img-hover"
-                                                data-src="{{ asset('storage/' . $product['hover_main_image_url']) }}"
-                                                src="{{ asset('storage/' . $product['hover_main_image_url']) }}"
-                                                alt="image-product">
-                                        </a>
-                                        <div class="list-product-btn">
-                                            <a href="#quick_add" data-bs-toggle="modal"
-                                                data-product-id="{{ $product['id'] }}"
-                                                class="box-icon bg_white quick-add tf-btn-loading">
-                                                <span class="icon icon-bag"></span>
-                                                <span class="tooltip">Quick Add</span>
-                                            </a>
-                                            <a href="javascript:void(0);"
-                                                class="box-icon bg_white wishlist btn-icon-action">
-                                                <span class="icon icon-heart"></span>
-                                                <span class="tooltip">Add to Wishlist</span>
-                                                <span class="icon icon-delete"></span>
-                                            </a>
-                                            <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                                class="box-icon bg_white compare btn-icon-action">
-                                                <span class="icon icon-compare"></span>
-                                                <span class="tooltip">Add to Compare</span>
-                                                <span class="icon icon-check"></span>
-                                            </a>
-                                            <a href="#quick_view" data-bs-toggle="modal"
-                                                class="box-icon bg_white quickview tf-btn-loading">
-                                                <span class="icon icon-view"></span>
-                                                <span class="tooltip">Quick View</span>
-                                            </a>
-                                        </div>
-                                        <div class="size-list">
-                                            <span>{{ $product['distinct_size_count'] }} sizes available</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-product-info">
-                                        <a href="{{ route('product-detail', $product['slug']) }}"
-                                            class="title link">{{ $product['name'] }}</a>
-                                        <span class="price">${{ $product['price'] }}</span>
-                                        <ul class="list-color-product">
-                                            @foreach ($product['colors'] as $index => $color)
-                                                <li
-                                                    class="list-color-item color-swatch @if ($index == 0) active @endif">
-                                                    <span class="tooltip">{{ $color['name'] }}</span>
-                                                    <span class="swatch-value"
-                                                        style="background-color: {{ $color['sku_color'] }}"></span>
-                                                    <img class="lazyload image-product"
-                                                        data-src="{{ asset('storage/' . $color['main_image']) }}"
-                                                        src="{{ asset('storage/' . $color['main_image']) }}"
-                                                        alt="image-product">
-                                                    <img class="lazyload hover-image-product"
-                                                        data-src="{{ asset('storage/' . $color['hover_image']) }}"
-                                                        src="{{ asset('storage/' . $color['hover_image']) }}"
-                                                        alt="image-product">
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-                <div class="nav-sw nav-next-slider nav-next-product box-icon w_46 round"><span
-                        class="icon icon-arrow-left"></span></div>
-                <div class="nav-sw nav-prev-slider nav-prev-product box-icon w_46 round"><span
-                        class="icon icon-arrow-right"></span></div>
-            </div>
-        </div>
-    </section> --}}
 @endsection
 
 @push('scripts')
@@ -377,7 +287,8 @@
                 grandTotal += subtotal;
 
                 // Định dạng lại subtotal (thêm dấu phân cách hàng nghìn và tiền tệ)
-                var formattedSubtotal = Math.floor(subtotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ';
+                var formattedSubtotal = Math.floor(subtotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') +
+                    ' VNĐ';
 
 
                 // Cập nhật giá trị subtotal cho mỗi sản phẩm
@@ -508,7 +419,7 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-     document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function() {
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -527,7 +438,5 @@
                 });
             @endif
         });
-
-   
-</script>
+    </script>
 @endpush

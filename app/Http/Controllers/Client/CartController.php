@@ -600,8 +600,116 @@ class CartController extends Controller
 
         return response()->json(['count' => $distinctProducts]);
     }
-  
+
+    public function checkProductInCart(Request $request) 
+    {
+        $productId = $request->input('product_id');
+        $colorId = $request->input('color_id');
+        $sizeId = $request->input('size_id');
+        $action = $request->input('action');
     
+        // Hàm kiểm tra và xóa sản phẩm có status = 0
+        $handleProductWithStatusZero = function ($cartItems, $productId) {
+            $productsToRemove = collect();
+            foreach ($cartItems as $cartItem) {
+                if ($cartItem['product_id'] == $productId) {
+                    $product = Product::find($cartItem['product_id']);
+                    if ($product && $product->status == 0) {
+                        $productsToRemove->push($cartItem);
+                    }
+                }
+            }
+            return $productsToRemove;
+        };
+    
+        // **Người dùng đã đăng nhập**
+        if (Auth::guard('web')->check()) {
+            $cart = Cart::where('user_id', auth()->id())
+                ->with(['cartItems.product', 'cartItems.color', 'cartItems.size'])
+                ->first();
+    
+            if ($cart) {
+                $cartItems = $cart->cartItems;
+    
+                if ($colorId == 0 && $sizeId == 0) {
+                    $itemsToCheck = $cartItems->where('product_id', $productId);
+                } else {
+                    $itemsToCheck = $cartItems->filter(function ($item) use ($productId, $colorId, $sizeId) {
+                        return $item->product_id == $productId &&
+                               $item->color_id == $colorId &&
+                               $item->size_id == $sizeId;
+                    });
+                }
+    
+                // Xử lý nếu sản phẩm có status = 0
+                $productsToRemove = $handleProductWithStatusZero($itemsToCheck, $productId);
+                if ($productsToRemove->isNotEmpty()) {
+                    foreach ($productsToRemove as $cartItem) {
+                        $cartItem->delete();
+                    }
+    
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Sản phẩm đã ngừng kinh doanh và được xóa khỏi giỏ hàng.'
+                    ]);
+                }
+    
+                if ($itemsToCheck->isNotEmpty()) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Sản phẩm tồn tại trong giỏ hàng.'
+                    ]);
+                }
+            }
+    
+            return response()->json([
+                'success' => false,
+                'message' => 'Sản phẩm không tồn tại trong giỏ hàng.'
+            ]);
+        } 
+        // **Người dùng chưa đăng nhập**
+        else {
+            $cart = Session::get('cart', []);
+    
+            if ($colorId == 0 && $sizeId == 0) {
+                $itemsToCheck = array_filter($cart, function ($cartItem) use ($productId) {
+                    return $cartItem['product_id'] == $productId;
+                });
+            } else {
+                $itemsToCheck = array_filter($cart, function ($cartItem) use ($productId, $colorId, $sizeId) {
+                    return $cartItem['product_id'] == $productId &&
+                           $cartItem['color_id'] == $colorId &&
+                           $cartItem['size_id'] == $sizeId;
+                });
+            }
+    
+            // Xử lý nếu sản phẩm có status = 0
+            $productsToRemove = $handleProductWithStatusZero($cart, $productId);
+            if ($productsToRemove->isNotEmpty()) {
+                $cart = array_filter($cart, function ($cartItem) use ($productsToRemove) {
+                    return !$productsToRemove->contains($cartItem);
+                });
+                Session::put('cart', $cart);
+    
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sản phẩm đã ngừng kinh doanh và được xóa khỏi giỏ hàng.'
+                ]);
+            }
+    
+            if (!empty($itemsToCheck)) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Sản phẩm tồn tại trong giỏ hàng.'
+                ]);
+            }
+    
+            return response()->json([
+                'success' => false,
+                'message' => 'Sản phẩm không tồn tại trong giỏ hàng.'
+            ]);
+        }
+    }
     
 
 

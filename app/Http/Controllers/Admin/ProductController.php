@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\ProductUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateProductRequest;
 use App\Http\Requests\Admin\CreateProductVariantColorRequest;
@@ -404,6 +405,7 @@ class ProductController extends Controller
                 $variant->product_code = $productCode;
                 $variant->save(); // Lưu lại biến thể
             }
+            event(new ProductUpdated($product->id, 0, 0, 'update'));
 
             // Commit transaction nếu mọi thứ thành công
             DB::commit();
@@ -418,42 +420,71 @@ class ProductController extends Controller
     }
     //okok
     public function updateVariantProduct(UpdateVariantProductRequest $request, string $id)
-    { // Bắt đầu DB Transaction
-
-
-
+    {
         DB::beginTransaction();
 
         try {
-            // Duyệt qua tất cả các variant_id trong mảng stock_update
-            foreach ($request->input('variant')["'stock_update'"] as $variantId => $stock_update) {
-                if ($stock_update < 0 || $request->input("variant.price_update.$variantId") < 0) {
+            $updatedVariants = []; // Danh sách biến thể được cập nhật
+
+            // Lấy danh sách stock_update và price_update từ request
+            $stockUpdates = $request->input('variant')["'stock_update'"] ?? [];
+            $priceUpdates = $request->input('variant')["'price_update'"] ?? [];
+
+            foreach ($stockUpdates as $variantId => $newStock) {
+                $newPrice = $priceUpdates[$variantId] ?? null;
+
+                // Tìm biến thể theo variantId
+                $variant = ProductVariant::find($variantId);
+
+                if (!$variant) {
+                    throw new \Exception("Không tìm thấy biến thể sản phẩm với ID: $variantId");
+                }
+
+                // Validate số lượng và giá
+                if ($newStock < 0 || $newPrice < 0) {
                     return redirect()->back()
-                        ->withErrors("Số lượng hoặc giá không được nhỏ hơn 0 ")
+                        ->withErrors("Số lượng hoặc giá không được nhỏ hơn 0 (Tên sản phẩm: {$variant->product->product_name}, Kích thước biến thể: {$variant->size->name})")
                         ->with('active_tab', 'variantproduct')
                         ->with('colorIdUpdateVariantProduct', $id);
                 }
-                // Lấy giá trị price_update tương ứng với variantId
-                $price_update = $request->input('variant')["'price_update'"][$variantId];
 
-                // Tìm variant theo variantId
-                $variant = ProductVariant::find($variantId);
+                $hasChanges = false;
 
-                if ($variant) {
-                    // Cập nhật stock_quantity và price
-                    $variant->stock_quantity = $stock_update;
-                    $variant->price = $price_update;
+                // Kiểm tra và cập nhật số lượng tồn kho
+                if ($variant->stock_quantity != $newStock) {
+                    $variant->stock_quantity = $newStock;
+                    $hasChanges = true;
+                }
+
+                // Kiểm tra và cập nhật giá
+                if ($variant->price != $newPrice) {
+                    $variant->price = $newPrice;
+                    $hasChanges = true;
+                }
+
+                // Nếu có thay đổi, lưu lại và phát sự kiện
+                if ($hasChanges) {
                     $variant->save();
-                } else {
-                    throw new \Exception("Không tìm thấy biến thể sản phẩm với ID: $variantId");
+                    $updatedVariants[] = [
+                        'variant_id' => $variantId,
+                        'product_name' => $variant->product->product_name,
+                        'color_id' => $variant->color_id,
+                        'size_id' => $variant->size_id,
+                    ];
+
+                    // Phát sự kiện riêng cho từng biến thể được cập nhật
+                    event(new ProductUpdated($variant->product_id, $variant->color_id, $variant->size_id, 'update'));
                 }
             }
 
             // Commit transaction nếu mọi thứ thành công
             DB::commit();
 
-            // Trả về trang trước với thông báo thành công
-            return redirect()->back()->with('success', 'Cập nhật thành công!')->with('active_tab', 'variantproduct');
+            // Trả về trang trước với thông báo thành công và danh sách biến thể được cập nhật
+            return redirect()->back()
+                ->with('success', 'Cập nhật biến thể theo kích thước thành công!')
+                ->with('updatedVariants', $updatedVariants)
+                ->with('active_tab', 'variantproduct');
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
             DB::rollBack();
@@ -461,9 +492,8 @@ class ProductController extends Controller
             // Trả về thông báo lỗi
             return redirect()->back()->withErrors('Đã xảy ra lỗi: ' . $e->getMessage());
         }
-
-
     }
+
 
     // okok
     public function createVariantProduct(CreateVariantProductRequest $request)
@@ -509,7 +539,6 @@ class ProductController extends Controller
 
             // Lưu hình ảnh sản phẩm
             $this->storeProductImages($product_id, $images['images']);
-
             DB::commit();
 
             return redirect()->back()->with('success', 'Sản phẩm đã được lưu thành công.')->with('active_tab', 'variantproduct');
@@ -562,7 +591,6 @@ class ProductController extends Controller
             $product_variant->stock_quantity = $stock ?? 0;
             $product_variant->product_code = $this->generateProductCode($sku, $color_id, $sizes);
             $product_variant->save();
-
             // Commit transaction nếu mọi thứ thành công
             DB::commit();
 
@@ -665,7 +693,6 @@ class ProductController extends Controller
                     ]);
                 }
             }
-
             // Commit transaction nếu mọi thứ thành công
             DB::commit();
 
@@ -689,7 +716,7 @@ class ProductController extends Controller
             $totalVariants = ProductVariant::where('product_id', $productId)->count();
 
             if ($totalVariants <= 1) {
-                return redirect()->back()->withErrors(['message' => 'Không thể xóa. Sản phẩm chỉ còn một biến thể.']);
+                return redirect()->back()->withErrors(['message' => 'Không thể xóa. Sản phẩm chỉ còn một biến thể.'])->with('active_tab', 'variantproduct');
             }
 
             // Lấy danh sách biến thể cần xóa
@@ -698,7 +725,7 @@ class ProductController extends Controller
                 ->get();
 
             if ($variants->isEmpty()) {
-                return redirect()->back()->withErrors(['message' => 'Không tìm thấy biến thể nào phù hợp.']);
+                return redirect()->back()->withErrors(['message' => 'Không tìm thấy biến thể nào phù hợp.'])->with('active_tab', 'variantproduct');
             }
 
             // Xóa mềm các ảnh liên quan trong bảng product_images
@@ -708,12 +735,15 @@ class ProductController extends Controller
 
             // Xóa các biến thể
             foreach ($variants as $variant) {
+                event(new ProductUpdated($productId, $variant->color_id, $variant->size_id, 'delete'));
+
                 $variant->product_code = $variant->product_code . '-DELETED-' . time();
                 $variant->save();
                 $variant->delete();
+
             }
 
-            return redirect()->back()->with('success', 'Đã xóa tất cả biến thể và thực hiện xóa mềm ảnh liên quan thành công.');
+            return redirect()->back()->with('success', 'Đã xóa tất cả biến thể và thực hiện xóa mềm ảnh liên quan thành công.')->with('active_tab', 'variantproduct');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['message' => $e->getMessage()]);
         }
@@ -722,15 +752,13 @@ class ProductController extends Controller
 
     public function destroyVariant(string $id)
     {
-        try {
             // Lấy biến thể cần xóa
             $variant = ProductVariant::findOrFail($id);
 
             // Kiểm tra tổng số lượng biến thể của sản phẩm
             $totalVariants = ProductVariant::where('product_id', $variant->product_id)->count();
-
             if ($totalVariants <= 1) {
-                return response()->json(['success' => false, 'message' => 'Không thể xóa. Sản phẩm chỉ còn một biến thể.'], 400);
+                return response()->json(['success' => false, 'message' => 'Không thể xóa. Sản phẩm chỉ còn một biến thể.']);
             }
 
             // Tạo mã mới để tránh lỗi unique
@@ -738,11 +766,10 @@ class ProductController extends Controller
             $variant->save();
 
             $variant->delete();
+            event(new ProductUpdated($variant->product_id, $variant->color_id, $variant->size_id, 'delete'));
 
             return response()->json(['success' => true, 'message' => 'Biến thể đã được xóa thành công.']);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
-        }
+      
     }
 
     public function destroy(string $id)

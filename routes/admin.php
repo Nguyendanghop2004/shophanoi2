@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ColorController;
 
 use App\Http\Controllers\Admin\ErrorController;
-
+use App\Events\SaleUpdated;
 
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\OrderController;
@@ -245,12 +245,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'checkAdminSta
     Route::post('order/{id}/update-updateStatusShip', [OrderController::class, 'updateStatusShip'])->name('order.update-updateStatusShip')->middleware('permission:Shipper');
 
     //sale product
+    Route::get('sales/datatables', [SaleProductController::class, 'getSalesData'])->name('sales.datatables')->middleware('permission:product');
     Route::resource('/sales', SaleProductController::class)->middleware('permission:product');
     // thongke
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard')->middleware('permission:account_admin');
     Route::post('/filter', [AdminDashboardController::class, 'index'])->name('dashboard.index.filter');
 
     Route::get('reviews', [ReviewController::class, 'index'])->name('review.index');
+
+
+
+
 });
 
 

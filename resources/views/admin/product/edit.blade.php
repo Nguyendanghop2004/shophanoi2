@@ -1229,6 +1229,9 @@
             @if (session('success'))
                 toastr.success('{{ session('success') }}');
             @endif
+            @if ($errors->has('message'))
+                    toastr.warning('{{ $errors->first('message') }}');
+            @endif
         });
     </script>
 

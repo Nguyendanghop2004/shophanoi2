@@ -451,6 +451,66 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            Echo.channel('products')
+                .listen('ProductUpdated', function(e) {
+                    const action = e.action;
+                    const product_id = e.product_id;
+                    const color_id = e.color_id;
+                    const size_id = e.size_id;
+                    checkProductInCart(product_id, color_id, size_id, action);
+                     // Kiểm tra URL và reload nếu cần
+        if (window.location.pathname.includes('/cart')) {
+            console.log('URL hiện tại chứa "/cart". Reload lại trang.');
+            window.location.reload();
+        }
+        if (window.location.pathname.includes('/check-out')) {
+            console.log('URL hiện tại chứa "/check-out". Reload lại trang.');
+            window.location.reload();
+        }
+                });
+
+            function checkProductInCart(productId, colorId, sizeId, action) {
+                $.ajax({
+                    url: '/cart/check', // Endpoint kiểm tra
+                    method: 'POST',
+                    data: {
+                        product_id: productId,
+                        color_id: colorId,
+                        size_id: sizeId,
+                        action: action,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        console.log(response.success);
+
+                        if (response.success) {
+                            if (action === 'update') {
+                                toastr.info('Sản phẩm trong giỏ đã được cập nhật.');
+                                loadModalCart();
+
+                            } else if (action === 'delete') {
+                                toastr.warning('Sản phẩm đã bị xóa khỏi giỏ hàng.');
+                                removeFromCart(productId, colorId, sizeId)
+                                loadModalCart();
+                            }
+                        }
+                        if (response.success === false) {
+                            toastr.warning(response.message);
+
+                            removeFromCart(productId, colorId, sizeId)
+                            loadModalCart();
+
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Không thể kiểm tra giỏ hàng.');
+                    }
+                });
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 
