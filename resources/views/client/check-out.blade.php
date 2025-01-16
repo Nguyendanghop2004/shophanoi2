@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    @include('client.layouts.particals.page-title')
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- page-cart -->

@@ -104,7 +104,7 @@
                                                             class="btn btn-warning"><i class="fas fa-edit"
                                                                 style="color: #ffffff;"></i></a></div>
                                                 </div>
-                                                <div>
+                                                <!-- <div>
                                                     <form action="{{ route('admin.product.destroy', $product->id) }}"
                                                         method="post"
                                                         onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
@@ -113,7 +113,7 @@
                                                         <button type="submit" class="btn btn-danger ml-2"><i
                                                                 class="fas fa-trash" style="color: #ffffff;"></i></button>
                                                     </form>
-                                                </div>
+                                                </div> -->
                                         </td>
                                     </tr>
                                 @endforeach

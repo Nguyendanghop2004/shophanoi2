@@ -27,21 +27,16 @@
                                                 <span class="tooltip">Add to Compare</span>
                                                 <span class="icon icon-check"></span>
                                             </a> --}}
-                                            <a href="#quick_view" data-bs-toggle="modal"
-                                                data-product-id="{{ $product['id'] }}"
-                                                class="box-icon bg_white quickview tf-btn-loading">
-                                                <span class="icon icon-bag"></span>
-                                                <span class="tooltip">Quick View</span>
-                                            </a>
+                                        
                                         </div>
                                         <div class="size-list">
-                                            <span>{{ $product['distinct_size_count'] }} sizes available</span>
+                                            <span>{{ $product['distinct_size_count'] }} sizes có sẵn</span>
                                         </div>
                                     </div>
                                     <div class="card-product-info">
                                         <a href="{{ route('product-detail', $product['slug']) }}"
                                             class="title link">{{ $product['name'] }}</a>
-                                        <span class="price">{{ $product['price'] }} VNĐ</span>
+                                        <span class="price">{{ number_format($product['price'], 0, ',', '.') }} VNĐ</span>
                                         <ul class="list-color-product">
                                             @foreach ($product['colors'] as $index => $color)
                                                 <li

@@ -148,4 +148,5 @@ class ShopCollectionController extends Controller
             ->whereNull('parent_id')
             ->get();
     }
+    
 }

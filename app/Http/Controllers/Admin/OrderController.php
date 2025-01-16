@@ -197,6 +197,30 @@ public function getList(Request $request)
         $order->reason = null;
     }
 
+    if ($newStatus == 'giao hàng thành công') {
+        $order->payment_status = 'đã thanh toán';
+
+  
+        Mail::to($order->email)->send(new OrderStatusMail($order));
+    }
+
+    if ($newStatus == 'giao hàng không thành công') {
+        foreach ($order->orderItems as $orderItem) {
+            $variant = ProductVariant::where('product_id', $orderItem->product_id)
+                ->where('color_id', $orderItem->color_id)
+                ->where('size_id', $orderItem->size_id)
+                ->first();
+
+            if ($variant) {
+                $variant->stock_quantity += $orderItem->quantity;
+                $variant->save();
+            }
+        }
+
+    
+        Mail::to($order->email)->send(new OrderStatusMail($order));
+    }
+
     $order->save();
 
     return redirect()->route('admin.order.getList')->with(

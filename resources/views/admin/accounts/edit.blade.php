@@ -20,7 +20,7 @@
                         
                             <div class="form-group">
                                 <label for="name">Tên</label>
-                                <input type="text" name="name" class="form-control" value="{{ old('name', $admin->name) }}">
+                                <input type="text" name="name" class="form-control" value="{{ old('name', $admin->name) }}"disabled>
                             </div>
                             
                             @if(!$isAdmin)

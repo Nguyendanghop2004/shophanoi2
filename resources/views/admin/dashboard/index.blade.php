@@ -285,10 +285,7 @@
                     <h4 class="mb-0">Top 5 Sản Phẩm Bán Chạy Nhất</h4>
                 </div>
                 <div class="card-body">
-                    <div class="text-center mb-4">
-                        <p class="text-muted mb-1">Tổng số tiền từ các sản phẩm</p>
-                        <h4 class="text-success font-weight-bold">{{ number_format($totalRevenue) }} VNĐ</h4>
-                    </div>
+                    
                     <ul class="list-unstyled">
                         @foreach ($topProducts as $product)
                             <li class="media align-items-center mb-3 p-2 border-bottom">

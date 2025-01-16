@@ -173,7 +173,7 @@
     <section class="flat-spacing-15 pb_0">
         <div class="container">
             <div class="flat-title wow fadeInUp" data-wow-delay="0s">
-                <span class="title">Sản Phẩm Yêu Thích</span>
+                <span class="title">Sản Phẩm Mới</span>
                 <p class="sub-title">Thời trang đẹp mắt, tiện lợi và bền vững – dành cho mọi phong cách của bạn.</p>
             </div>
             <div class="hover-sw-nav hover-sw-3">
@@ -237,7 +237,7 @@
                                             </a>
                                         </div>
                                         <div class="size-list">
-                                            <span>{{ $product['distinct_size_count'] }} sizes available</span>
+                                            <span>{{ $product['distinct_size_count'] }} sizes có sẵn</span>
                                         </div>
                                     </div>
                                     <div class="card-product-info">
@@ -335,7 +335,7 @@
                     <p class="description">Đây là cơ hội để bạn nâng cấp tủ quần áo của mình với nhiều phong cách khác nhau
                     </p>
                     <a href="shop-collection-list.html"
-                        class="tf-btn style-2 btn-fill rounded-full animate-hover-btn">Đọc câu chuyện của chúng tôi</a>
+                        class="tf-btn style-2 btn-fill rounded-full animate-hover-btn">Xem Ngay</a>
                 </div>
             </div>
         </div>

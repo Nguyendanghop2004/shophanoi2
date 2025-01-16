@@ -3,7 +3,7 @@
     @include('client.layouts.particals.header-home')
 @endsection
 @section('content')
-    @include('client.layouts.particals.page-title')
+
     <style>
         a[disabled] {
             pointer-events: none;

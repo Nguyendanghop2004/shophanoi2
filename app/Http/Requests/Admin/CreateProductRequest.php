@@ -25,7 +25,8 @@ class CreateProductRequest extends FormRequest
             'brand_id' => 'required|exists:brands,id',
             'product_name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:products,slug',
-            'product_code' => 'required|string|max:255|unique:product_variants,product_code',
+        'product_code' => 'required|string|max:255|unique:products,sku',
+
             'status' => 'required|boolean',
             'description' => 'nullable|string',
             'tagCollection' => 'nullable|array',

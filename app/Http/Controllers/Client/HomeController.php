@@ -53,14 +53,16 @@ class HomeController extends Controller
         'products.product_name',
         'products.price',
         'products.slug',
-        'products.status',  // Lấy status của sản phẩm
-        DB::raw('COUNT(DISTINCT product_variants.size_id) as distinct_size_count'), // Số size khác nhau
-        DB::raw('(SELECT SUM(stock_quantity) FROM product_variants WHERE product_variants.product_id = products.id) as total_stock_quantity'), // Tổng tồn kho chính xác
+        'products.status',
+        DB::raw('COUNT(DISTINCT product_variants.size_id) as distinct_size_count'),
+        DB::raw('(SELECT SUM(stock_quantity) FROM product_variants WHERE product_variants.product_id = products.id) as total_stock_quantity'),
     ])
-    ->where('products.status', 1)  // Thêm điều kiện để chỉ lấy sản phẩm có status = 1
+    ->where('products.status', 1)
     ->groupBy('products.id')
+    ->orderBy('products.created_at', 'desc') // Sắp xếp theo ngày tạo mới nhất
     ->limit(10)
     ->get();
+
 
         $products = $products->map(function ($product) {
             // Nhóm ảnh theo color_id
@@ -119,8 +121,10 @@ class HomeController extends Controller
                 ->toArray(); 
         }
         $data = BlogClient::where('status', 1)
-        ->take(3) 
+        ->orderBy('created_at', 'desc') // Sắp xếp theo ngày tạo mới nhất
+        ->take(3) // Giới hạn lấy 3 bài viết
         ->get();
+    
     
         // return response()->json($products);
         return view('client.home', compact('products', 'collections', 'sliders','wishlist','data'));
