@@ -10,7 +10,7 @@ class HistoryController extends Controller
 {
     public function  history()
     {
-        $histories = HistorieAdmins::get();
+        $histories = HistorieAdmins::paginate(5);
 
         return view('admin.history.index', compact('histories'));
     }

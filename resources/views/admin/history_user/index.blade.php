@@ -44,7 +44,9 @@
                                     </td>
                                     <td>
                                         <div class="d-flex">
-                                            <a href="{{ route('admin.showUser', $admin->id) }}" class="btn btn-primary">
+
+                                            <a href="{{ route('admin.showUser', $admin->id) }}" class="btn btn-warning">
+
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </div>
@@ -55,11 +57,11 @@
                         </tbody>
                     </table>
                 </div>
-                {{-- {{ $histories->links() }} --}}
+                {{ $histories->links() }}
             </div>
         </div>
     </section>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             @if (session('success'))

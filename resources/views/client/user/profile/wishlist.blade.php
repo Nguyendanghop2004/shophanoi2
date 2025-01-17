@@ -16,7 +16,9 @@
             margin-top: 20px;
             /* Cách phần trên một chút */
             padding: 20px;
+
             /* Thêm khoảng cách xung quanh văn bản */
+
         }
     </style>
     <!-- categories -->
@@ -82,7 +84,7 @@
                                                                     <button type="submit"
                                                                         style="background: none; border: none;">
                                                                         <span class="icon icon-delete"></span>
-                                                                        <span class="tooltip">Remove from Wishlist</span>
+                                                                        <span class="tooltip" style="right: 3px;">Xóa</span>
                                                                     </button>
                                                                 </form>
                                                         </a>
@@ -151,7 +153,7 @@
             /* Hiệu ứng nổi nhẹ */
         }
 
-      .wishlist-btn .icon {
+        .wishlist-btn .icon {
             font-size: 1.5rem;
             color: #333;
             transition: color 0.3s ease;
@@ -197,7 +199,6 @@
 
 
     });
-    
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {

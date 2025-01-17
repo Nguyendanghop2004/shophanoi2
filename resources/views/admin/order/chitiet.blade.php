@@ -18,7 +18,7 @@
                         <td>{{ $order->id }}</td>
                     </tr>
                     <tr>
-                        <th>Username</th>
+                        <th>Tên </th>
                         <td>{{ $order->name }}</td>
                     </tr>
                     <tr>

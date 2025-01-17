@@ -3,12 +3,12 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Thêm mới Blog</h1>
+            <h1>Thêm mới bài viết</h1>
         </div>
 
         <div class="card card-primary">
             <div class="card-header">
-                <h4>Thêm mới Blog</h4>
+                <h4>Thêm mới bài viết</h4>
             </div>
             <div class="card-body">
                 <form action="{{ route('admin.blog.store') }}" method="POST" enctype="multipart/form-data">
@@ -35,7 +35,7 @@
 
                     <div class="form-group">
                         <div id="form-group">
-                            <label for="title">Tên Title</label>
+                            <label for="title">Tên đề</label>
                             <input @error('title') style="border:2px dashed red"  @enderror type="text" name="title"
                                 class="form-control" value="{{ old('title') }}">
                         </div>
