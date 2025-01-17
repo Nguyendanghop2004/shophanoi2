@@ -3,7 +3,7 @@
     @include('client.layouts.particals.header-home')
 @endsection
 @section('content')
-    @include('client.layouts.particals.page-title')
+
     <style>
         a[disabled] {
             pointer-events: none;
@@ -34,13 +34,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php
+                            @php 
                                 $totalCart = 0;
                             @endphp
                             @if (count($cartDetails) > 0)
                                 @foreach ($cartDetails as $item)
                                     @php
-                                        $totalCart += (int) $item['quantity'] * (float) $item['subtotal'];
+                                        $totalCart +=$item['subtotal'];
                                     @endphp
                                     <tr class="tf-cart-item file-delete">
 
@@ -52,14 +52,20 @@
                                                 <a href="product-detail.html"
                                                     class="cart-title link">{{ $item['product_name'] }}</a>
                                                 <div class="cart-meta-variant">{{ $item['color_name'] }} /
-                                                    {{ $item['size_name'] }}</div>
+                                                    {{ $item['size_name'] }} + {{ number_format($item['pricebonus'], 0, ',', '.') }} VNĐ</div>
                                                 <span class="remove-cart link remove"
                                                     onclick="removeFromCart({{ $item['product_id'] }}, {{ $item['color_id'] }}, {{ $item['size_id'] }})">Remove</span>
                                             </div>
                                         </td>
                                         <td class="tf-cart-item_price" cart-data-title="Price">
-                                            <div class="cart-price">{{ number_format($item['price'], 0, ',', '.') }} VNĐ
-                                            </div>
+
+                                            <div class="price fw-6">
+                                                <span class="sale-price">{{ number_format($item['final_price'], 0, ',', '.') }} VNĐ</span>
+                                                <span class="original-price" style="text-decoration: line-through; color: #888;">
+                                                    {{$item['price'] > $item['final_price'] ? number_format($item['price'], 0, ',', '.').' VNĐ'  : ''}}
+                                                </span>
+                                            </div> 
+                                          
                                         </td>
                                         <td class="tf-cart-item_quantity" cart-data-title="Quantity">
                                             <div class="cart-quantity">
@@ -98,8 +104,8 @@
                                             </div>
                                         </td>
                                         <td class="tf-cart-item_total" cart-data-title="Total">
-                                            <div class="cart-total" data-price="{{ $item['price'] }}">
-                                                {{ number_format((int) $item['quantity'] * (float) $item['price'], 0, ',', '.') }}
+                                            <div class="cart-total" data-price="{{ $item['final_price'] + $item['pricebonus'] }}">
+                                                {{ number_format( $item['subtotal'], 0, ',', '.') }}
                                                 VNĐ
                                             </div>
                                         </td>
@@ -127,12 +133,6 @@
 
                             </div>
 
-                            <div class="cart-checkbox">
-                                <input type="checkbox" class="tf-check" id="check-agree" required>
-                                <label for="check-agree" class="fw-4">
-                                    Tôi đồng ý với các <a href="terms-conditions.html">điều khoản và điều kiện</a>
-                                </label>
-                            </div>
                             <div class="cart-checkout-btn">
                                 <a href="{{ count($cartDetails) === 0 ? 'javascript:void(0);' : route('checkout') }}"
                                     class="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center"
@@ -371,14 +371,16 @@
                 grandTotal += subtotal;
 
                 // Định dạng lại subtotal (thêm dấu phân cách hàng nghìn và tiền tệ)
-                var formattedSubtotal = subtotal.toLocaleString('vi-VN') + ' VNĐ';
+                var formattedSubtotal = Math.floor(subtotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ';
+
 
                 // Cập nhật giá trị subtotal cho mỗi sản phẩm
                 cartTotalDiv.text(formattedSubtotal);
             });
 
             // Cập nhật tổng tiền giỏ hàng
-            $('.total-value').text(grandTotal.toLocaleString('vi-VN') + ' VNĐ');
+            $('.total-value').text(Math.floor(grandTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ');
+
         }
 
 

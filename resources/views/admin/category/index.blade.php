@@ -94,13 +94,15 @@
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                     
+
                                                     {{-- <form action="{{ route('admin.categories.delete', $cate->id) }}" method="post" style="display: inline;">
+
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="button" class="btn btn-danger ml-2" onclick="confirmDelete('{{ $cate->id }}')">
                                                             <i class="fas fa-trash" style="color: #ffffff;"></i>
                                                         </button>
-                                                    </form> --}}
+
                                                 </div>
                                             @endif
                                         </td>
@@ -211,4 +213,5 @@
 
    
 </script>
+
 @endsection

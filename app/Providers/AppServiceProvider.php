@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Wishlist;
+use Auth;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\View;
@@ -37,6 +39,16 @@ class AppServiceProvider extends ServiceProvider
             ])->where('status', 1)->whereNull('parent_id')->get();
 
             $view->with('categories', $categories);
+        });
+        View::composer('*', function ($view) {
+            $wishlistCount = 0;
+    
+            if (Auth::check()) {
+                $wishlistCount = Wishlist::where('user_id', Auth::id())->count();
+            }
+    
+            // Truyền biến wishlistCount vào view
+            $view->with('wishlistCount', $wishlistCount);
         });
     }
 }

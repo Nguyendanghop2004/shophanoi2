@@ -22,6 +22,7 @@
 
         .container {
             width: 100%;
+
             max-width: 800px;
             /* Giới hạn chiều rộng của container */
 
@@ -42,6 +43,7 @@
 
         .container {
             width: 100%;
+
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
@@ -49,9 +51,11 @@
             background-color: #f9f9f9;
         }
 
+
         HEAD
 
         /* Định dạng phần tiêu đề */
+
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -70,9 +74,8 @@
             font-size: 16px;
         }
 
-        HEAD
-
         /* Định dạng thông tin đơn hàng */
+
         .order-details {
             display: flex;
             justify-content: space-between;
@@ -89,9 +92,9 @@
             margin: 5px 0;
         }
 
-        HEAD
 
         /* Định dạng bảng hiển thị sản phẩm */
+
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -109,16 +112,20 @@
             background-color: #f2f2f2;
         }
 
-        HEAD
+
 
         /* Định dạng tổng tiền */
+        .table img {
+            max-width: 50px;
+            height: auto;
+        }
+
         .total {
             text-align: right;
             font-size: 16px;
             margin-top: 10px;
         }
 
-        HEAD
 
         /* Định dạng phần footer */
         .footer {
@@ -132,13 +139,14 @@
             margin: 5px 0;
         }
 
-        HEAD
+
 
         /* Đảm bảo hình ảnh sản phẩm không bị lệch hoặc vỡ bố cục */
         .table img {
             max-width: 50px;
             height: auto;
         }
+
 
         .qr-code {
             text-align: center;
@@ -173,6 +181,28 @@
                 <p><strong>Quận/Huyện:</strong> {{ $province->name_quanhuyen }}</p>
                 <p><strong>Xã/Phường:</strong> {{ $ward->name_xaphuong }}</p>
             </div>
+=======
+<div class="container">
+    <div class="header">
+        <h1>Hóa Đơn Mua Hàng</h1>
+        <p>Đơn hàng #{{ $order->order_code }}</p>
+        <p>Ngày: {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</p>
+    </div>
+
+    <div class="order-details">
+        <div class="customer-info">
+            <h3>Thông Tin Khách Hàng</h3>
+            <p><strong>Tên:</strong> {{ $order->name }}</p>
+            <p><strong>Điện thoại:</strong>  {{ substr($order->phone_number, 0, 4) . str_repeat('x', strlen($order->phone_number) - 4) }}</p>
+        </div>
+        <div class="shipping-info">
+            <h3>Thông Tin Giao Hàng</h3>
+            <p><strong>Thành Phố:</strong> {{ $city->name_thanhpho }}</p>
+            <p><strong>Quận/Huyện:</strong> {{ $province->name_quanhuyen }}</p>
+            <p><strong>Xã/Phường:</strong> {{ $ward->name_xaphuong }}</p>
+            <p><strong>Địa chỉ cụ thể:</strong> {{$order->address }}</p>
+
+
         </div>
 
         HEAD <!-- Order Items Table -->
@@ -222,6 +252,7 @@
         <div class="footer">
             <p>Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi!</p>
         </div>
+   
     </div>
 
 </body>

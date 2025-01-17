@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Hanoiclothesshop</title>
+    <title>HANOICLOTHESSHOP</title>
 
     <meta name="author" content="themesflat.com">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -24,7 +24,6 @@
     <link rel="stylesheet"type="text/css" href="{{ asset('client/assets/css/styles.css') }}" />
     <!-- Toastr CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Favicon and Touch Icons  -->
     <link rel="shortcut icon" href="{{ asset('client/assets/images/logo/favicon.png') }}">
@@ -241,7 +240,7 @@
         function renderModalCart(cartDetails) {
             const modalCartContainer = $('.tf-mini-cart-items'); // Container của modal cart
             modalCartContainer.empty(); // Xóa nội dung cũ trước khi cập nhật mới
-console.log('ádsadasdas');
+
             if (cartDetails.length === 0) {
                 modalCartContainer.append(`<div class="tf-mini-cart-items d-flex justify-content-center align-items-center" style="height: 100px;">
                                          <div class="tf-mini-cart-item">
@@ -253,15 +252,14 @@ console.log('ádsadasdas');
 
             // Hàm định dạng giá tiền
             function formatPrice(price) {
-                return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Thêm dấu "." mỗi 3 chữ số
+                
+                return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             }
 
             // Thêm từng sản phẩm vào modal
             cartDetails.forEach(item => {
                 const productDetailUrl = `/product/${item.slug}`;
-                const itemTotalPrice = item.price * item.quantity; // Tổng giá sản phẩm
-                const formattedPrice = formatPrice(itemTotalPrice); // Định dạng giá sản phẩm
-                const formattecBonusPrice = formatPrice(item.pricebonus * item.quantity);
+
                 modalCartContainer.append(`
             <div class="tf-mini-cart-item">
                 <div class="tf-mini-cart-image">
@@ -271,8 +269,13 @@ console.log('ádsadasdas');
                 </div>
                 <div class="tf-mini-cart-info">
                     <a class="title link" href="${productDetailUrl}">${item.product_name}</a>
-                    <div class="meta-variant">${item.color_name} / ${item.size_name} + ${formattecBonusPrice}</div>
-                    <div class="price fw-6" data-price-bonus="${item.pricebonus * item.quantity}" data-price="${itemTotalPrice}">${formattedPrice} VNĐ</div>
+                    <div class="meta-variant">${item.color_name} / ${item.size_name} + ${formatPrice(item.pricebonus)} VNĐ</div>
+                    <div class="price fw-6" data-price-bonus="${item.pricebonus * item.quantity}" data-price="${item.final_price * item.quantity}">
+                        <span class="sale-price">${Math.floor(item.final_price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ'}</span>
+                        <span class="original-price" style="text-decoration: line-through; color: #888;">
+                            ${item.price > item.final_price ? formatPrice(item.price) + ' VNĐ' : ''}
+                        </span>
+                    </div>        
                     <div class="tf-mini-cart-btns">
                         <div class="wg-quantity small">
                             <!-- Nút giảm số lượng -->
@@ -333,7 +336,8 @@ console.log('ádsadasdas');
             });
 
             // Cập nhật tổng giá với định dạng
-            $('.tf-totals-total-value').text(formatPrice(total) + ' VNĐ');
+            $('.tf-totals-total-value').text(Math.floor(total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ');
+
         }
     </script>
     <script>

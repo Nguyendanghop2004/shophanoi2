@@ -182,7 +182,6 @@
 
         // Cập nhật giá trị tổng tiền
         function updateTotalPrice() {
-<<<<<<< HEAD
     var quantity = $('input[name="quantity_product"]').val();
     var priceBonus = parseFloat($('input.btn-size:checked').data('size-price')) || 0; // Lấy giá cộng thêm của size đã chọn
     var productPrice = parseFloat($('.tf-qty-price').data('price'));
@@ -195,17 +194,6 @@
 }
 
 
-=======
-            var quantity = parseInt($('input[name="quantity_product"]').val()) || 0;
-            var priceBonus = parseFloat($('input.btn-size:checked').data('size-price')) || 0;
-            var productPrice = parseFloat($('.tf-qty-price').data('price')) || 0;
-            var totalPrice = (productPrice + priceBonus) * quantity;
-            var price = productPrice + priceBonus;
-
-            $('.tf-qty-price').text(`${totalPrice} VNĐ`);
-            $('.price-product').text(`${price} VNĐ`);
-        }
->>>>>>> bdf779226be8dfdfa717b8cb6474dd69ce46544e
 
         // Cập nhật kích thước cho màu đã chọn
         function updateSizeOptions(colorId) {

@@ -41,8 +41,10 @@
                                     </td>
                                     <td>
                                         <div class="d-flex">
-                                            <a href="{{ route('admin.show', $admin->id) }}" class="btn btn-warning">
-                                                <i class="fas fa-eye" ></i>
+
+                                            <a href="{{ route('admin.show', $admin->id) }}" class="btn btn-primary">
+                                                <i class="fas fa-eye"></i>
+
                                             </a>
                                         </div>
                                     </td>

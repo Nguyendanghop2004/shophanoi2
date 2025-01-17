@@ -44,7 +44,9 @@
                                     </td>
                                     <td>
                                         <div class="d-flex">
+
                                             <a href="{{ route('admin.showUser', $admin->id) }}" class="btn btn-warning">
+
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </div>

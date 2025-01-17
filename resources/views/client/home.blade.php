@@ -173,10 +173,9 @@
     <section class="flat-spacing-15 pb_0">
         <div class="container">
             <div class="flat-title wow fadeInUp" data-wow-delay="0s">
-                <span class="title">Sản Phẩm Yêu Thích</span>
+                <span class="title">Sản Phẩm Mới</span>
                 <p class="sub-title">Thời trang đẹp mắt, tiện lợi và bền vững – dành cho mọi phong cách của bạn.</p>
             </div>
-        
             <div class="hover-sw-nav hover-sw-3">
                 <div class="swiper tf-sw-product-sell wrap-sw-over" data-preview="4" data-tablet="3" data-mobile="2"
                     data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3" data-pagination-lg="3">
@@ -184,8 +183,9 @@
 
                         @foreach ($products as $product)
                             <div class="swiper-slide" lazy="true">
-                                <div class="card-product">
-                                    <div class="card-product-wrapper">
+                                <div class="card-product" >
+                                    <div class="card-product-wrapper" style="height: 465px ; width: 100%;">
+
                                         <a href="{{ route('product-detail', $product['slug']) }}" class="product-img">
                                             <img class="lazyload img-product"
                                                 data-src="{{ asset('storage/' . $product['main_image_url']) }}"
@@ -204,7 +204,6 @@
                                                 <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick Add</span>
                                             </a> --}}
-                                           
                                             <div class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
     @if(in_array($product['id'], $wishlist))
         <form action="{{ route('wishlist.remove') }}" method="POST" style="display: inline;">
@@ -238,7 +237,7 @@
                                             </a>
                                         </div>
                                         <div class="size-list">
-                                            <span>{{ $product['distinct_size_count'] }} sizes available</span>
+                                            <span>{{ $product['distinct_size_count'] }} sizes có sẵn</span>
                                         </div>
                                     </div>
                                     <div class="card-product-info">
@@ -282,9 +281,8 @@
                         class="icon icon-arrow-right"></span></div>
             </div>
         </div>
-    </section>
-
-    <style>
+        <style>
+          
     
     /* Đặt kiểu mặc định cho nút */
 /* Kiểu mặc định cho nút */
@@ -320,43 +318,8 @@
 
 
     </style>
-
-                    <div class="row">
-                  
-
-                    {{-- <div class="row">
-                        @foreach ($data as $item)
-                            <div class="col-xl-4 col-md-6 col-12">
-                                <div class="blog-article-item">
-                                    <div class="article-thumb">
-                                        <a href="{{ route('blog.detail', $item->slug) }}">
-                                            <img class="lazyload" src="{{ Storage::url($item->image) }} "
-                                                style="width: 366px; height: 235px;" alt="img-blog">
-                                        </a>
-                                    </div>
-                                    <div class="article-content">
-                                        <div class="article-title">
-                                            <a href="{{ route('blog.detail', $item->slug) }}"
-                                                class="">{{ $item->title }}</a>
-                                        </div>
-                                        <div class="article-btn">
-                                            <a href="{{ route('blog.detail', $item->slug) }}"
-                                                class="tf-btn btn-line fw-6">Xêm Thêm<i
-                                                    class="icon icon-arrow1-top-left"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-
-
-
-                    </div> --}}
-                </div>
-            </div>
-        </div>
+      
     </section>
-
     <!-- /Best seller -->
     
     <!-- Shop Collection -->
@@ -371,8 +334,8 @@
                     <div class="heading">Định nghĩa lại thời trang <br> Xuất sắc</div>
                     <p class="description">Đây là cơ hội để bạn nâng cấp tủ quần áo của mình với nhiều phong cách khác nhau
                     </p>
-                    <a href="{{route('shop-collection.index')}}"
-                        class="tf-btn style-2 btn-fill rounded-full animate-hover-btn">Đọc câu chuyện của chúng tôi</a>
+                    <a href="shop-collection-list.html"
+                        class="tf-btn style-2 btn-fill rounded-full animate-hover-btn">Xem Ngay</a>
                 </div>
             </div>
         </div>
@@ -518,13 +481,11 @@
     </section>
     <!-- /Testimonial --> --}}
     <!-- Icon box -->
-    <section class="flat-spacing-15 pb_0">
-        <div class="container">
-            <div class="flat-title wow fadeInUp" data-wow-delay="0s">
+    <div class="flat-title wow fadeInUp" data-wow-delay="0s">
                 <span class="title">Bài viết</span>
-            
+             
             </div>
-            <div class="blog-grid-main">
+    <div class="blog-grid-main">
         <div class="container">
             <div class="row">
                 @foreach ($data as $item)
@@ -558,8 +519,6 @@
             </div>
         </div>
     </div>
-        </div>
-    </section>
     <section class="flat-spacing-11 pb_0 flat-iconbox wow fadeInUp mb-4" data-wow-delay="0s">
         <div class="container">
             <div class="wrap-carousel wrap-mobile">

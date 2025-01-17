@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
     use HasFactory;
-
+   
     protected $fillable = [
        
 
-        'user_id', 'name','reason', 'phone_number', 'address','city_id','province_id','wards_id', 'email', 'note', 'total_price', 'status','payment_method','order_code','created_at', 'updated_at',
+        'user_id', 'name','reason', 'phone_number', 'address','city_id','province_id','wards_id', 'email', 'note', 'total_price', 'status','payment_method','order_code','reason_faile_order','created_at', 'updated_at',
     ];
     public function city()
 {

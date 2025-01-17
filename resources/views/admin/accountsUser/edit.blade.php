@@ -19,19 +19,19 @@
                             <!-- Tên -->
                             <div class="form-group">
                                 <label for="name">Tên</label>
-                                <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}">
+                                <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}"disabled>
                             </div>
 
                             <!-- Email -->
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}">
+                                <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}"disabled>
                             </div>
 
                             <!-- Thành phố -->
                             <div class="form-group">
                                 <label for="city">Chọn thành phố</label>
-                                <select name="city_id" id="city" class="form-control choose city">
+                                <select name="city_id" id="city" class="form-control choose city"disabled>
                                     <option value="" disabled selected>Chọn thành phố</option>
                                     @foreach($cities as $city)
                                         <option value="{{ $city->matp }}" {{ $user->city_id == $city->matp ? 'selected' : '' }}>
@@ -44,7 +44,7 @@
                             <!-- Quận/huyện -->
                             <div class="form-group">
                                 <label for="province">Chọn quận/huyện</label>
-                                <select name="province_id" id="province" class="form-control choose province">
+                                <select name="province_id" id="province" class="form-control choose province"disabled>
                                     <option value="">Chọn quận/huyện</option>
                                     @foreach($provinces as $province)
                                         <option value="{{ $province->maqh }}" {{ $user->province_id == $province->maqh ? 'selected' : '' }}>
@@ -57,8 +57,8 @@
                             <!-- Xã/phường -->
                             <div class="form-group">
                                 <label for="wards">Chọn xã/phường</label>
-                                <select name="wards_id" id="wards" class="form-control wards">
-                                    <option value="">Chọn xã/phường</option>
+                                <select name="wards_id" id="wards" class="form-control wards"disabled>
+                                    <option value="">Chọn xã/phường </option>
                                     @foreach($wards as $ward)
                                         <option value="{{ $ward->xaid }}" {{ $user->wards_id == $ward->xaid ? 'selected' : '' }}>
                                             {{ $ward->name_xaphuong }}
@@ -71,25 +71,25 @@
                             <div class="form-group">
                                 <label for="address">Địa chỉ cụ thể</label>
                                 <input type="text" name="address" class="form-control"
-                                    value="{{ old('address', $user->address) }}" placeholder="Nhập vào địa chỉ cụ thể">
+                                    value="{{ old('address', $user->address) }}" placeholder="Nhập vào địa chỉ cụ thể"disabled>
                             </div>
 
                             <!-- Số điện thoại -->
                             <div class="form-group">
                                 <label for="phone_number">Số điện thoại</label>
                                 <input type="text" name="phone_number" class="form-control"
-                                    value="{{ old('phone_number', $user->phone_number) }}" placeholder="Nhập vào số điện thoại">
+                                    value="{{ old('phone_number', $user->phone_number) }}" placeholder="Nhập vào số điện thoại"disabled>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-12">
                             <!-- Xem trước hình ảnh -->
                             <div id="image-preview" class="image-preview mx-auto">
-                                <img id="image-preview-img" src="{{ Storage::url($user['image']) }}" width="250px" height="250px" alt="Ảnh xem trước">
+                                <img id="image-preview-img" src="{{ Storage::url($user['image']) }}" width="250px" height="250px" alt="Ảnh xem trước" >
                             </div>
                             <div class="form-group text-center mt-2">
                                 <label for="image-upload" id="image-label">Chọn ảnh</label>
-                                <input type="file" name="image" id="image-upload" />
+                                <input type="file" name="image" id="image-upload" disabled/>
                             </div>
                             @error('image')
                                 <div class="invalid-feedback" style="display: block;">
@@ -99,9 +99,9 @@
                         </div>
 
                         <!-- Nút cập nhật -->
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <button type="button" name="edit_user" id="submit-btn" class="btn btn-primary edit_user">Cập nhật</button>
-                        </div>
+                        </div> --}}
                     </div>
                 </form>
             </div>

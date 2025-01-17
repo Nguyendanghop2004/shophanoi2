@@ -141,6 +141,9 @@
             <button class="nav-link btn {{ $status === 'đã nhận hàng' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'đã nhận hàng']) }}'">Đơn hàng đã nhận</button>
         </li>
         <li class="nav-item">
+            <button class="nav-link btn {{ $status === 'chưa nhận được hàng' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'chưa nhận được hàng']) }}'">Chưa nhận được hàng</button>
+        </li>
+        <li class="nav-item">
             <button class="nav-link btn {{ $status === 'giao hàng không thành công' ? 'active' : '' }}" onclick="window.location.href='{{ route('order.donhang', ['status' => 'giao hàng không thành công']) }}'">Đơn hàng hoàn về</button>
         </li>
         <li class="nav-item">
@@ -167,15 +170,14 @@
 
                                 <p class="card-text mb-1"><small class="text-muted">{{ $order->created_at }}</small></p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <p class="card-text mb-1"><strong>Giá: </strong> <span class="text-danger"> {{ number_format($order->total_price, 0, ',', '.') }} VND</span></p>
-                                    <p class="card-text mb-1"><strong>Số tiền hoàn: </strong>{{ number_format($order->refund_amount, 0, ',', '.') }} VND</p>
+                                    <p class="card-text mb-1"><strong>Tổng tiền: </strong> <span class="text-danger"> {{ number_format($order->total_price, 0, ',', '.') }} VND</span></p>
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('client.orders.show', ['id' => Crypt::encryptString($order->id)]) }}" class="btn btn-primary btn-sm">Xem chi tiết</a>
                                     
                                     @if ($order->status === 'đã nhận hàng')
                                        
-                                            <a href="{{ route('client.reviews.create', ['orderId' => $order->id, 'productId' => $order->product_id]) }}" class="btn btn-warning btn-sm">Viết đánh giá cho</a>
+                                            <a href="{{ route('client.reviews.create', ['orderId' => $order->id, 'productId' => $order->product_id]) }}" class="btn btn-warning btn-sm">Đánh giá sản phẩm  </a>
                                        
                                     @endif
                                     @if ($order->status === 'giao hàng thành công')
@@ -184,6 +186,11 @@
                                         <button type="submit" class="btn btn-success btn-sm">Đã nhận hàng</button>
                                     </form>
                                     @endif
+                                    @if ($order->status === 'giao hàng thành công')
+                                    <button class="btn btn-danger btn-sm notReceivedBtn" data-order-id="{{ $order->id }}" data-action="{{ route('orders.notReceived', $order->id) }}">Chưa nhận được hàng</button>
+                                 @endif
+                                
+
                                     @if (in_array($order->status, ['chờ xác nhận', 'đã xác nhận']))
                                         <button class="btn btn-danger cancelOrderBtn" data-order-id="{{ $order->id }}" data-action="{{ route('client.orders.cancel', $order->id) }}">Hủy đơn hàng</button>
                                     @endif
@@ -199,7 +206,7 @@
         </div>
     </div>
 </div>
-
+{{-- hủy đơn hàng --}}
 <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -222,6 +229,33 @@
                         </select>
                     </div>
                     <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- chưa nhận đc hàng --}}
+<div class="modal fade" id="notReceivedModal" tabindex="-1" aria-labelledby="notReceivedModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notReceivedModalLabel">Lý do chưa nhận được hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="notReceivedForm" action="" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="notReceivedReason" class="form-label">Chọn lý do</label>
+                        <select class="form-select" id="notReceivedReason" name="reason" required>
+                            <option value="" disabled selected>Chọn lý do</option>
+                            <option value="Hàng chưa được giao đến địa chỉ">Hàng chưa được giao đến địa chỉ</option>
+                            <option value="Thời gian giao hàng chậm trễ">Thời gian giao hàng chậm trễ</option>
+                            <option value="Người giao hàng không liên lạc được">Người giao hàng không liên lạc được</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Xác nhận</button>
                 </form>
             </div>
         </div>
@@ -278,5 +312,32 @@
         });
 
    
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.notReceivedBtn').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            const orderId = this.getAttribute('data-order-id');
+            const actionUrl = this.getAttribute('data-action');
+
+            const notReceivedForm = document.getElementById('notReceivedForm');
+            notReceivedForm.action = actionUrl;
+
+            const modal = new bootstrap.Modal(document.getElementById('notReceivedModal'));
+            modal.show();
+        });
+    });
+
+    document.getElementById('notReceivedForm').addEventListener('submit', function (event) {
+        const reason = document.getElementById('notReceivedReason').value;
+        if (!reason) {
+            event.preventDefault();
+            alert('Vui lòng chọn lý do chưa nhận được hàng');
+        }
+    });
+});
+
 </script>
 @endsection

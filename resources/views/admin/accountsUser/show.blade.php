@@ -102,10 +102,10 @@
                                 </td>
 
                             </div>
-                            <div class="card-footer text-right">
+                            <!-- <div class="card-footer text-right">
                                 <a class="btn btn-primary"
                                     href="{{ route('admin.accountsUser.change', $user->id) }}"> Đổi mật khẩu</a>
-                            </div>
+                            </div> -->
                         </form>
                     </div>
                 </div>
