@@ -4,6 +4,7 @@
 @endsection
 
 @section('content')
+
     <!-- breadcrumb -->
     <div class="tf-breadcrumb">
         <div class="container">
@@ -32,6 +33,9 @@
             </div>
         </div>
     </div>
+    <style>
+        
+    </style>
     <!-- /breadcrumb -->
     <!-- default -->
     <section class="flat-spacing-4 pt_0">
@@ -45,17 +49,17 @@
                                     <div class="swiper-wrapper stagger-wrap">
                                         @foreach ($product->images as $image)
                                             <div class="swiper-slide stagger-item">
-                                                <div class="item">
+                                                <div class="item"style="height:100px ; width: 100%;">
                                                     <img class="lazyload"
                                                         data-src="{{ asset('storage/' . $image->image_url) }}"
-                                                        src="{{ asset('storage/' . $image->image_url) }}" alt="img-compare">
+                                                        src="{{ asset('storage/' . $image->image_url) }}" alt="img-compare" width="100px">
                                                 </div>
                                             </div>
                                         @endforeach
                                     </div>
                                 </div>
                                 <div class="swiper tf-product-media-main" id="gallery-swiper-started">
-                                    <div class="swiper-wrapper">
+                                    <div class="swiper-wrapper"style="height:550px ; width: 80%;">
                                         @foreach ($product->images as $image)
                                             <div class="swiper-slide">
                                                 <a href="{{ asset('storage/' . $image->image_url) }}" target="_blank"
@@ -168,27 +172,9 @@
                                         <input type="text" name="quantity_product" value="1">
                                         <span class="btn-quantity plus-btn-detail">+</span>
                                     </div>
+                                    
                                 </div>
-                                <div class="tf-product-info-buy-button">
-                                    <form class="">
-                                        <a href="javascript:void(0);"
-                                            class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Thêm
-                                                vào giỏ -&nbsp;<span class="tf-qty-price"
-                                                    data-price="{{ $product->price }}"
-                                                    data-sale-price="{{ isset($product->sale_price) && $product->sale_price < $product->price ? $product->sale_price : $product->price }}">
-                                                    {{ number_format(isset($product->sale_price) && $product->sale_price < $product->price ? $product->sale_price : $product->price, 0, ',', '.') }}
-                                                    VNĐ
-                                                </span>
-                                        </a>
-                                       
-                                        {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
-                                            class="tf-product-btn-wishlist hover-tooltip box-icon bg_white compare btn-icon-action">
-                                            <span class="icon icon-compare"></span>
-                                            <span class="tooltip">Add to Compare</span>
-                                            <span class="icon icon-check"></span>
-                                        </a> --}}
-
-                                    </form>
+                                <div class="tf-product-info-buy-buttons">
                                     <a href="javascript:void(0);"
                                             class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
                                             @if(in_array($product['id'], $wishlist))
@@ -215,8 +201,31 @@
                                                 </form>
                                             @endif
                                         </a>
+                                        </div>
+                                <div class="tf-product-info-buy-button">
+                                    <form class="">
+                                        <a href="javascript:void(0);"
+                                            class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Thêm
+                                                vào giỏ -&nbsp;<span class="tf-qty-price"
+                                                    data-price="{{ $product->price }}"
+                                                    data-sale-price="{{ isset($product->sale_price) && $product->sale_price < $product->price ? $product->sale_price : $product->price }}">
+                                                    {{ number_format(isset($product->sale_price) && $product->sale_price < $product->price ? $product->sale_price : $product->price, 0, ',', '.') }}
+                                                    VNĐ
+                                                </span>
+                                        </a>
+                                       
+                                        {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
+                                            class="tf-product-btn-wishlist hover-tooltip box-icon bg_white compare btn-icon-action">
+                                            <span class="icon icon-compare"></span>
+                                            <span class="tooltip">Add to Compare</span>
+                                            <span class="icon icon-check"></span>
+                                        </a> --}}
+
+                                    </form>
+                                   
                                         
                                 </div>
+                                
                                 {{-- <div class="tf-product-info-extra-link">
                                     <a href="#compare_color" data-bs-toggle="modal" class="tf-product-extra-icon">
                                         <div class="icon">
@@ -361,30 +370,39 @@
                         <div class="widget-content-tab">
                             <!-- Mô tả -->
                             <div class="widget-content-inner active">
-                                <div>
-                                    {{ $product->description }}
+                            <div class="form-group pl-5 pr-5">
+                                    {!! $product->description !!}
                                 </div>
                             </div>
     
                             <!-- Màu và kích thước -->
                             <div class="widget-content-inner">
-                                <table class="tf-pr-attrs">
-                                    <tbody>
-                                        <tr class="tf-attr-pa-color">
-                                            <th class="tf-attr-label">Color</th>
-                                            <td class="tf-attr-value">
-                                                <p>White, Pink, Black</p>
-                                            </td>
-                                        </tr>
-                                        <tr class="tf-attr-pa-size">
-                                            <th class="tf-attr-label">Size</th>
-                                            <td class="tf-attr-value">
-                                                <p>S, M, L, XL</p>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+    <table class="tf-pr-attrs">
+        <tbody>
+            <tr class="tf-attr-pa-color">
+                <th class="tf-attr-label">Color</th>
+                <td class="tf-attr-value">
+                    <p>
+                        @foreach($colorNames as $color)
+                            {{ $color }}@if(!$loop->last), @endif
+                        @endforeach
+                    </p>
+                </td>
+            </tr>
+            <tr class="tf-attr-pa-size">
+                <th class="tf-attr-label">Size</th>
+                <td class="tf-attr-value">
+                    <p>
+                        @foreach($sizeNames as $size)
+                            {{ $size }}@if(!$loop->last), @endif
+                        @endforeach
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
     
                             <!-- Reviews -->
                             <div class="widget-content-inner">
@@ -405,6 +423,7 @@
                                                             @for($i = 1; $i <= 5; $i++)
                                                                 <i class="bi {{ $i <= $review->rating ? 'bi-star-fill' : 'bi-star' }}"></i>
                                                             @endfor
+                                                            
                                                         </div>
                                                         <p class="review-comment mb-0">{{ $review->comment }}</p>
                                                         <span class="text-muted">{{ $review->created_at->format('d/m/Y H:i') }}</span>
@@ -423,7 +442,7 @@
             </div>
         </div>
     </section>
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- /tabs -->
     {{-- <!-- product -->
     <section class="flat-spacing-1 pt_0">
@@ -1233,6 +1252,15 @@
     </section>
     <!-- /recent --> --}}
 @endsection
+<style>
+    .review-rating .bi-star-fill {
+    color: #FFD700; 
+}
+
+.review-rating .bi-star {
+    color: #ccc; 
+}
+</style>
 @section('product-detail')
     <!-- modal compare_color -->
     <div class="modal fade modalDemo tf-product-modal modal-part-content" id="compare_color">
@@ -1586,7 +1614,8 @@
                 let totalPrice = finalPrice * quantity; // Tổng tiền
 
                 // Cập nhật vào giao diện
-                $('.tf-qty-price').text(`${totalPrice.toLocaleString('vi-VN')} VNĐ`);
+                $('.tf-qty-price').text(Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ');
+
             }
 
 

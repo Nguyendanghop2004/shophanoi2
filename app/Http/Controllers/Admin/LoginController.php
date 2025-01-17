@@ -16,7 +16,7 @@ class LoginController extends Controller
     {
         if (Auth::guard('admin')->check()) {
             
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.trangchu');
         }
         return response()->view('admin.logins.login')
             ->header('Cache-Control', 'no-store, no-cache, must-revalidate')
@@ -30,7 +30,7 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::guard('admin')->attempt($credentials)) {
 
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.trangchu');
         }
 
         return redirect()->back()->withErrors(['email' => 'Email hoặc mật khẩu không chính xác.']);

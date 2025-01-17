@@ -41,7 +41,7 @@ class CreateVariantProductRequest extends FormRequest
             redirect()->back()
                 ->withErrors($validator)
                 ->withInput()
-                ->with('active_tab', 'variantproduct') // Tab form 2
+                ->with('active_tab', 'variantproduct')->with('show_modal', 'variantproductcolor') // Tab form 2
         );
 
     } 

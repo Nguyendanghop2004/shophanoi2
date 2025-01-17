@@ -23,16 +23,18 @@ use App\Http\Controllers\Client\ShopCollectionController;
 use App\Http\Controllers\Client\ShoppingCartController;
 use App\Http\Controllers\Client\TimeLineController;
 use App\Http\Controllers\ProfileController;
-
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Client\ReviewController;
 
-use App\Http\Controllers\WishlistController;
+
 
 use Illuminate\Support\Facades\Route;
-// Route::middleware('checkPassword')->group(function () {
+Route::middleware('checkPassword')->group(function () {
 
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/home', [HomeController::class, 'home'])->name('home');
+
 
 Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 
@@ -54,7 +56,7 @@ Route::get('home/{slug}', [HomeController::class, 'slug'])->name('home.slug');
 Route::get('gioithieu', [AboutUsController::class, 'index'])->name('index');
 Route::get('error', [ErrorController::class, 'error'])->name('error');
 
-Route::get('about-us', [AboutUsController::class, 'index'])->name('about-us');
+
 
 Route::get('shop-collection/{slug}', [ShopCollectionController::class, 'index'])->name('shop-collection');
 Route::get('product/{slug}', [ProductDetailController::class, 'index'])->name('product-detail');
@@ -149,6 +151,8 @@ Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->nam
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::get('/cart/modal-cart', [CartController::class, 'getModalCart'])->name('cart.modal');
 
+Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+Route::post('/apply-coupon', [CheckOutController::class, 'applyCoupon'])->name('cart.apply-coupon');
 
 
 
@@ -165,8 +169,12 @@ Route::get('/order/detail/{order_code}', [OrderController::class, 'showOrderDeta
 Route::post('/order/cancel', [OrderController::class, 'cancelOrder'])->name('cancel.order');
 
 
-
+// đã nhận hàng
 Route::post('/orders/confirm/{id}', [OrderController::class, 'confirmOrder'])->name('orders.confirm');
+// chưa nhận được hàng
+Route::post('/orders/not-received/{id}', [OrderController::class, 'notReceived'])->name('orders.notReceived');
+
+
 Route::get('/orders/search', [OrderController::class, 'search'])->name('order.search');
 
 
@@ -187,7 +195,11 @@ Route::prefix('profile')
 
 
 Route::get('/thanhtoanthanhcong/{id}', [CheckOutController::class, 'thanhtoanthanhcong'])->name('thanhtoanthanhcong');
+// 1 cái của đặt hàng
 Route::post('/select-address', [CheckoutController::class, 'select_address']);
+// 1 cái của profile user
+Route::post('/select-address', [AccountController::class, 'select_address']);
+
 
 
 Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
@@ -198,12 +210,32 @@ Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist
 // Route cho xóa sản phẩm khỏi danh sách yêu thích
 Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
 Route::get('/wishlist/list', [WishlistController::class, 'getWishlist'])->name('wishlist');
-
+Route::get('orders/confirm/{order}', [OrderController::class, 'confirm'])->name('orders.confirm');
 Route::get('/shop-collection/{slug?}', [ShopCollectionController::class, 'index'])->name('shop-collection.index');
 Route::get('/shop/filter', [ShopCollectionController::class, 'filterProducts'])->name('shop.filter');
 Route::get('/shop-collection/products', [ShopCollectionController::class, 'fetchProducts'])->name('shop-collection.fetch-products');
 
 Route::get('/reviews/create/{orderId}', [ReviewController::class, 'create'])->name('client.reviews.create');
 Route::post('/reviews/store', [ReviewController::class, 'store'])->name('client.reviews.store');
+Route::get('/privacy-policy', function () {
+    return view('client.footer.privacy-policy');
+})->name('privacy-policy');
+Route::get('/delivery-return', function () {
+    return view('client.footer.delivery-return');
+})->name('delivery-return');
+Route::get('/shipping-delivery', function () {
+    return view('client.footer.shipping-delivery');
+})->name('shipping-delivery');
+Route::get('/terms-conditions', function () {
+    return view('client.footer.terms-conditions');
+})->name('terms-conditions');
+Route::get('/faq-1', function () {
+    return view('client.footer.faq-1');
+})->name('faq-1');
+Route::get('/our-store', function () {
+    return view('client.footer.our-store');
+})->name('our-store');
 
-// });
+    });
+
+   

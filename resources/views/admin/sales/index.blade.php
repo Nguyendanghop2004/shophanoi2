@@ -19,15 +19,14 @@
             <div class="card-body">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <div class="section-title mt-0"></div>
-                    <div class="card-header-action">
-                        <form class="form-inline" method="GET" action="">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <form class="form-inline" method="GET" action="{{ route('admin.sales.index') }}">
                             <div class="search-element">
-                                <input class="form-control" type="search" placeholder="Tìm kiếm..." aria-label="Search"
-                                    name="name" value="" data-width="250">
+                                <input class="form-control" name="search" type="search" placeholder="Search"
+                                    aria-label="Search" data-width="250" value="{{ request()->input('search') }}">
                                 <button class="btn" type="submit"><i class="fas fa-search"></i></button>
                             </div>
                         </form>
-
                     </div>
                 </div>
                 <div class="card-body p-0">
@@ -48,11 +47,34 @@
                                     <tr>
                                         <td>{{ $sale->id }}</td>
                                         <td>{{ $sale->product->product_name }}</td>
-                                        <td>{{ $sale->discount_type }}</td>
-                                        <td>{{ $sale->discount_value }}</td>
-                                        <td>{{ $sale->start_date }} - {{ $sale->end_date }}</td>
                                         <td>
-                                            <a href="{{ route('admin.sales.edit', $sale->id) }}" class="btn btn-warning">Chỉnh
+                                            @if ($sale->discount_type == 'fixed')
+                                                Giá tiền
+                                            @else
+                                                Phần Trăm
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($sale->discount_type == 'fixed')
+                                                {{ number_format($sale->discount_value, 0, ',', '.') }} VNĐ
+                                            @else
+                                                {{ number_format($sale->discount_value, 0, ',', '.') }} %
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($sale->start_date)
+                                                {{ $sale->start_date }}
+                                            @endif
+                                        
+                                            @if ($sale->end_date)
+                                                 - {{ $sale->end_date }}
+                                            @else
+                                              -  Vô Hạn 
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.sales.edit', $sale->id) }}"
+                                                class="btn btn-warning">Chỉnh
                                                 sửa</a>
                                             <form action="{{ route('admin.sales.destroy', $sale->id) }}" method="POST"
                                                 style="display:inline-block;">

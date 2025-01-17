@@ -279,16 +279,16 @@ namespace App\Models{
  * @property string $code
  * @property string $discount_type
  * @property string $discount_value
- * @property int $usage_limit
+ * @property int|null $usage_limit
  * @property int $times_used
- * @property string $start_date
- * @property string|null $end_date
+ * @property \Illuminate\Support\Carbon $start_date
+ * @property \Illuminate\Support\Carbon|null $end_date
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserDiscountCode> $userDiscountCodes
- * @property-read int|null $user_discount_codes_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
- * @property-read int|null $users_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DiscountCodeProduct> $products
+ * @property-read int|null $products_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DiscountCodeUserLimit> $userLimits
+ * @property-read int|null $user_limits_count
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode query()
@@ -304,6 +304,48 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|DiscountCode whereUsageLimit($value)
  */
 	class DiscountCode extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $discount_code_id
+ * @property int $product_id
+ * @property-read \App\Models\DiscountCode $discountCode
+ * @property-read \App\Models\Product $product
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeProduct newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeProduct newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeProduct query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeProduct whereDiscountCodeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeProduct whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeProduct whereProductId($value)
+ */
+	class DiscountCodeProduct extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $discount_code_id
+ * @property int $user_id
+ * @property int $usage_limit
+ * @property int $times_used
+ * @property-read \App\Models\DiscountCode $discountCode
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeUserLimit newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeUserLimit newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeUserLimit query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeUserLimit whereDiscountCodeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeUserLimit whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeUserLimit whereTimesUsed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeUserLimit whereUsageLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DiscountCodeUserLimit whereUserId($value)
+ */
+	class DiscountCodeUserLimit extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -532,7 +574,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $product_id
- * @property int $color_id
+ * @property int|null $color_id
  * @property string $image_url
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

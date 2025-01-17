@@ -13,7 +13,7 @@ class Admin extends Authenticatable
     use Notifiable, HasRoles;
 
     protected $fillable = [
-        'name', 'email', 'password', 'status', 'image_path','check'
+        'name', 'email','phone', 'password', 'status', 'image_path','check'
     ];
 
     protected $hidden = [
@@ -25,6 +25,7 @@ class Admin extends Authenticatable
         'status' => 'boolean',
         'check' => 'boolean',
     ];
+    
 
     // Check if admin is active
     public function isActive()

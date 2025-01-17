@@ -41,7 +41,7 @@
                             @foreach ($products as $product)
                                 <div class="swiper-slide" lazy="true">
                                     <div class="card-product">
-                                        <div class="card-product-wrapper">
+                                        <div class="card-product-wrapper"style="height: 465px ; width: 332px;">
                                             <a href="{{ route('product-detail', $product['slug']) }}" class="product-img">
                                                 <img class="lazyload img-product"
                                                     data-src="{{ asset('storage/' . $product['main_image_url']) }}"
@@ -53,32 +53,25 @@
                                                     alt="image-product">
                                             </a>
                                             <div class="list-product-btn">
-                                                <a href="javascript:void(0);"
-                                                    class="box-icon bg_white wishlist btn-icon-action">
-                                                    @if (in_array($product['id'], $wishlist))
-                                                        <form action="{{ route('wishlist.remove') }}" method="POST"
-                                                            style="display: inline;">
-                                                            @csrf
-                                                            <input type="hidden" name="product_id"
-                                                                value="{{ $product['id'] }}">
-                                                            <button type="submit" style="background: none; border: none;">
-                                                                <span class="icon icon-delete"></span>
-                                                                <span class="tooltip">Remove from Wishlist</span>
-                                                            </button>
-                                                        </form>
-                                                    @else
-                                                        <form action="{{ route('wishlist.add') }}" method="POST"
-                                                            style="display: inline;">
-                                                            @csrf
-                                                            <input type="hidden" name="product_id"
-                                                                value="{{ $product['id'] }}">
-                                                            <button type="submit" style="background: none; border: none;">
-                                                                <span class="icon icon-heart"></span>
-                                                                <span class="tooltip">Add to Wishlist</span>
-                                                            </button>
-                                                        </form>
-                                                    @endif
-                                                </a>
+                                            <div class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
+    @if(in_array($product['id'], $wishlist))
+        <form action="{{ route('wishlist.remove') }}" method="POST" style="display: inline;">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <button type="submit" class="wishlist-btn remove-wishlist">
+                <span class="icon icon-delete"></span>
+            </button>
+        </form>
+    @else
+        <form action="{{ route('wishlist.add') }}" method="POST" style="display: inline;">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <button type="submit" class="wishlist-btn add-wishlist">
+                <span class="icon icon-heart"></span>
+            </button>
+        </form>
+    @endif
+</div>
                                                 <a href="#quick_view" data-bs-toggle="modal"
                                                     data-product-id="{{ $product['id'] }}"
                                                     class="box-icon bg_white quickview tf-btn-loading">
@@ -127,12 +120,9 @@
         </div>
     </section>
 
-    <div class="nav-sw nav-next-slider nav-next-product box-icon w_46 round"><span class="icon icon-arrow-left"></span>
+  
     </div>
-    <div class="nav-sw nav-prev-slider nav-prev-product box-icon w_46 round"><span class="icon icon-arrow-right"></span>
-    </div>
-    </div>
-    @endif
+   
     </div>
     </section>
     <style>
@@ -154,7 +144,7 @@
             /* Hiệu ứng nổi nhẹ */
         }
 
-        >>>>>>>443d4eb17bc7ad9df8dbc418ba14196302cf14b4=.wishlist-btn .icon {
+      .wishlist-btn .icon {
             font-size: 1.5rem;
             color: #333;
             transition: color 0.3s ease;
@@ -170,15 +160,19 @@
         }
     </style>
 
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
                     title: 'Thành công!',
                     text: '{{ session('success') }}',
                     showConfirmButton: false,
-                    timer: 5000
+                    timer: 2000
                 });
             @elseif (session('error'))
                 Swal.fire({
@@ -186,7 +180,7 @@
                     title: 'Lỗi!',
                     text: '{{ session('error') }}',
                     showConfirmButton: false,
-                    timer: 5000
+                    timer: 2000
                 });
             @endif
         });

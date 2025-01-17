@@ -1,5 +1,6 @@
 
  <!-- Header -->
+ 
  <header id="header" class="header-default">
 
     
@@ -195,6 +196,9 @@
                         </li>
 
                         <!-- Thông báo lỗi -->
+                     
+                        @include('client.layouts.particals.navright')
+                       
                         <div id="searchError" class="alert alert-danger" style="display: none;">
                             Vui lòng nhập từ khóa tìm kiếm
                             @include('client.layouts.particals.navright')
@@ -250,7 +254,7 @@
                             <a href="{{ route('wishlist') }}" class="nav-icon-item">
                                 <i class="icon icon-heart"></i>
 
-                                <span class="count-box">0</span>
+                                <span class="count-box">{{$wishlistCount}}</span>
                             </a>
                         </li>
                         <li class="nav-cart">

@@ -4,7 +4,6 @@
 @endsection
 
 @section('content')
-
     <!-- categories -->
     <section class="flat-spacing-20">
         <div class="container">
@@ -14,14 +13,14 @@
                         <div class="tf-categories-container">
                             @foreach ($collections as $collection)
                                 <div class="collection-item-circle hover-img">
-                                    <a href="shop-collection-sub.html" class="collection-image img-style">
+                                    <a href="{{route('shop-collection.index')}}" class="collection-image img-style">
                                         <img class="lazyload"
                                             data-src="{{ asset('storage/' . $collection->background_image) }}"
                                             src="{{ asset('storage/' . $collection->background_image) }}"
                                             alt="collection-img">
                                     </a>
                                     <div class="collection-content text-center">
-                                        <a href="shop-collection-sub.html"
+                                        <a href="{{route('shop-collection.index')}}"
                                             class="link title fw-6">{{ $collection->name }}</a>
                                     </div>
                                 </div>
@@ -29,11 +28,11 @@
                         </div>
                         <div class="tf-shopall-wrap">
                             <div class="collection-item-circle tf-shopall">
-                                <a href="shop-collection-sub.html" class="collection-image img-style tf-shopall-icon">
+                                <a href="{{route('shop-collection.index')}}" class="collection-image img-style tf-shopall-icon">
                                     <i class="icon icon-arrow1-top-left"></i>
                                 </a>
                                 <div class="collection-content text-center">
-                                    <a href="shop-collection-sub.html" class="link title fw-6">Shop all</a>
+                                    <a href="{{route('shop-collection.index')}}" class="link title fw-6">Shop all</a>
                                 </div>
                             </div>
                         </div>
@@ -174,24 +173,9 @@
     <section class="flat-spacing-15 pb_0">
         <div class="container">
             <div class="flat-title wow fadeInUp" data-wow-delay="0s">
-                <span class="title">Sản Phẩm Yêu Thích</span>
+                <span class="title">Sản Phẩm Mới</span>
                 <p class="sub-title">Thời trang đẹp mắt, tiện lợi và bền vững – dành cho mọi phong cách của bạn.</p>
             </div>
-            @if(session('success'))
-            <div style="position: relative; padding: 15px; margin: 15px 0; background: linear-gradient(to right, #a8e063, #56ab2f); color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                <strong style="font-size: 16px;">🎉 Thành công!</strong>
-                <p style="margin: 5px 0; font-size: 14px;">{{ session('success') }}</p>
-                <button style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
-            </div>
-        @endif
-        
-        @if(session('error'))
-            <div style="position: relative; padding: 15px; margin: 15px 0; background: linear-gradient(to right, #ff416c, #ff4b2b); color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                <strong style="font-size: 16px;">⚠️ Lỗi!</strong>
-                <p style="margin: 5px 0; font-size: 14px;">{{ session('error') }}</p>
-                <button style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;" onclick="this.parentElement.style.display='none';">×</button>
-            </div>
-        @endif
             <div class="hover-sw-nav hover-sw-3">
                 <div class="swiper tf-sw-product-sell wrap-sw-over" data-preview="4" data-tablet="3" data-mobile="2"
                     data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3" data-pagination-lg="3">
@@ -199,8 +183,9 @@
 
                         @foreach ($products as $product)
                             <div class="swiper-slide" lazy="true">
-                                <div class="card-product">
-                                    <div class="card-product-wrapper">
+                                <div class="card-product" >
+                                    <div class="card-product-wrapper" style="height: 465px ; width: 100%;">
+
                                         <a href="{{ route('product-detail', $product['slug']) }}" class="product-img">
                                             <img class="lazyload img-product"
                                                 data-src="{{ asset('storage/' . $product['main_image_url']) }}"
@@ -219,13 +204,6 @@
                                                 <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick Add</span>
                                             </a> --}}
-                                            <form action="{{ route('wishlist.add', $product['id']) }}" method="POST" style="display: inline;">
-                                                @csrf
-                                                <button type="submit" class="box-icon bg_white wishlist btn-icon-action">
-                                                    <span class="icon icon-heart"></span>
-                                                    <span class="tooltip">Add to Wishlist</span>
-                                                </button>
-                                            </form>
                                             <div class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
     @if(in_array($product['id'], $wishlist))
         <form action="{{ route('wishlist.remove') }}" method="POST" style="display: inline;">
@@ -245,9 +223,6 @@
         </form>
     @endif
 </div>
-
-
-
                                             {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                                                 class="box-icon bg_white compare btn-icon-action">
                                                 <span class="icon icon-compare"></span>
@@ -262,7 +237,7 @@
                                             </a>
                                         </div>
                                         <div class="size-list">
-                                            <span>{{ $product['distinct_size_count'] }} sizes available</span>
+                                            <span>{{ $product['distinct_size_count'] }} sizes có sẵn</span>
                                         </div>
                                     </div>
                                     <div class="card-product-info">
@@ -306,50 +281,44 @@
                         class="icon icon-arrow-right"></span></div>
             </div>
         </div>
-    </section>
-    <section class="flat-spacing-15 pb_0">
-        <div class="container">
-            <div class="flat-title wow fadeInUp" data-wow-delay="0s">
-                <span class="title">Bài Viết</span>
+        <style>
+          
+    
+    /* Đặt kiểu mặc định cho nút */
+/* Kiểu mặc định cho nút */
+.wishlist-btn {
+    background-color: #fff; /* Nền trắng mặc định */
+    border: none;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 50%; /* Tùy chỉnh để có thể làm nút tròn */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng nổi nhẹ */
+}
 
-            </div>
-            <div class="blog-grid-main">
-                <div class="container">
+=
+.wishlist-btn .icon {
+    font-size: 1.5rem;
+    color: #333;
+    transition: color 0.3s ease;
+}
 
-                    <div class="row">
-                  
+    
+.wishlist-btn:hover {
+    background-color: #000;
+}
 
-                    {{-- <div class="row">
-                        @foreach ($data as $item)
-                            <div class="col-xl-4 col-md-6 col-12">
-                                <div class="blog-article-item">
-                                    <div class="article-thumb">
-                                        <a href="{{ route('blog.detail', $item->slug) }}">
-                                            <img class="lazyload" src="{{ Storage::url($item->image) }} "
-                                                style="width: 366px; height: 235px;" alt="img-blog">
-                                        </a>
-                                    </div>
-                                    <div class="article-content">
-                                        <div class="article-title">
-                                            <a href="{{ route('blog.detail', $item->slug) }}"
-                                                class="">{{ $item->title }}</a>
-                                        </div>
-                                        <div class="article-btn">
-                                            <a href="{{ route('blog.detail', $item->slug) }}"
-                                                class="tf-btn btn-line fw-6">Xêm Thêm<i
-                                                    class="icon icon-arrow1-top-left"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
+.wishlist-btn:hover .icon {
+    color: #fff;
+}
 
 
 
-                    </div> --}}
-                </div>
-            </div>
-        </div>
+    </style>
+      
     </section>
     <!-- /Best seller -->
     
@@ -365,58 +334,12 @@
                     <div class="heading">Định nghĩa lại thời trang <br> Xuất sắc</div>
                     <p class="description">Đây là cơ hội để bạn nâng cấp tủ quần áo của mình với nhiều phong cách khác nhau
                     </p>
-                    <a href="{{route('shop-collection.index')}}"
-                        class="tf-btn style-2 btn-fill rounded-full animate-hover-btn">Đọc câu chuyện của chúng tôi</a>
+                    <a href="shop-collection-list.html"
+                        class="tf-btn style-2 btn-fill rounded-full animate-hover-btn">Xem Ngay</a>
                 </div>
             </div>
         </div>
     </section>
-    
-    <!-- /page-title -->
-    <section class="flat-spacing-15 pb_0">
-        <div class="container">
-            <div class="flat-title wow fadeInUp" data-wow-delay="0s">
-                <span class="title">Bài viết</span>
-            
-            </div>
-            <div class="blog-grid-main">
-        <div class="container">
-            <div class="row">
-                @foreach ($data as $item)
-                    <div class="col-xl-4 col-md-6 col-12">
-                        <div class="blog-article-item">
-                            <div class="article-thumb">
-                                <a href="{{route('blog.detail',$item->slug)  }}">
-                                    <img class="lazyload" src="{{ Storage::url($item->image) }} "
-                                        style="width: 366px; height: 235px;" alt="img-blog">
-                                </a>
-                                 
-                                {{-- <div class="article-label">
-                                    <a href="blog-detail.html"
-                                        class="tf-btn btn-sm radius-3 btn-fill animate-hover-btn">{{$item->category->name}}</a>
-                                </div> --}}
-                            </div>
-                            <div class="article-content">
-                                <div class="article-title">
-                                    <a href="{{route('blog.detail',$item->slug)  }}" class="">{{ $item->title }}</a>
-                                </div>
-                                <div class="article-btn">
-                                    <a href="{{route('blog.detail',$item->slug)  }}" class="tf-btn btn-line fw-6">Xêm Thêm<i
-                                            class="icon icon-arrow1-top-left"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-
-               
-            </div>
-        </div>
-    </div>
-        </div>
-    </section>
-    <!-- blog-grid-main -->
-   
     <!-- /Shop Collection -->
     {{-- <!-- Testimonial -->
     <section class="flat-testimonial-v2 py-0 wow fadeInUp" data-wow-delay="0s">
@@ -558,6 +481,44 @@
     </section>
     <!-- /Testimonial --> --}}
     <!-- Icon box -->
+    <div class="flat-title wow fadeInUp" data-wow-delay="0s">
+                <span class="title">Bài viết</span>
+             
+            </div>
+    <div class="blog-grid-main">
+        <div class="container">
+            <div class="row">
+                @foreach ($data as $item)
+                    <div class="col-xl-4 col-md-6 col-12">
+                        <div class="blog-article-item">
+                            <div class="article-thumb">
+                                <a href="{{route('blog.detail',$item->slug)  }}">
+                                    <img class="lazyload" src="{{ Storage::url($item->image) }} "
+                                        style="width: 366px; height: 235px;" alt="img-blog">
+                                </a>
+                                 
+                                {{-- <div class="article-label">
+                                    <a href="blog-detail.html"
+                                        class="tf-btn btn-sm radius-3 btn-fill animate-hover-btn">{{$item->category->name}}</a>
+                                </div> --}}
+                            </div>
+                            <div class="article-content">
+                                <div class="article-title">
+                                    <a href="{{route('blog.detail',$item->slug)  }}" class="">{{ $item->title }}</a>
+                                </div>
+                                <div class="article-btn">
+                                    <a href="{{route('blog.detail',$item->slug)  }}" class="tf-btn btn-line fw-6">Xêm Thêm<i
+                                            class="icon icon-arrow1-top-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+
+               
+            </div>
+        </div>
+    </div>
     <section class="flat-spacing-11 pb_0 flat-iconbox wow fadeInUp mb-4" data-wow-delay="0s">
         <div class="container">
             <div class="wrap-carousel wrap-mobile">
@@ -614,42 +575,6 @@
             </div>
         </div>
     </section>
-    <style>
-    
-    /* Đặt kiểu mặc định cho nút */
-/* Kiểu mặc định cho nút */
-.wishlist-btn {
-    background-color: #fff; /* Nền trắng mặc định */
-    border: none;
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    border-radius: 50%; /* Tùy chỉnh để có thể làm nút tròn */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng nổi nhẹ */
-}
-
-=
-.wishlist-btn .icon {
-    font-size: 1.5rem;
-    color: #333;
-    transition: color 0.3s ease;
-}
-
-
-.wishlist-btn:hover {
-    background-color: #000;
-}
-
-.wishlist-btn:hover .icon {
-    color: #fff;
-}
-
-
-
-    </style>
     <!-- /Icon box -->
 
     {{-- <!-- Brand -->
@@ -703,7 +628,7 @@
     <!-- /Brand --> --}}
 @endsection
 @push('scripts')
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             // Bắt sự kiện click vào nút Quick Add
             $(".quick-add").on("click", function(e) {
@@ -1008,19 +933,17 @@
                 updateQuantity(productId, colorId, sizeId, newQuantity, url);
             });
         });
-    </script>
+    </script> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-
      document.addEventListener("DOMContentLoaded", function() {
-
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
                     title: 'Thành công!',
                     text: '{{ session('success') }}',
                     showConfirmButton: false,
-                    timer: 5000
+                    timer: 2000
                 });
             @elseif (session('error'))
                 Swal.fire({
@@ -1028,9 +951,11 @@
                     title: 'Lỗi!',
                     text: '{{ session('error') }}',
                     showConfirmButton: false,
-                    timer: 5000
+                    timer: 2000
                 });
             @endif
         });
-    </script>
+
+   
+</script>
 @endpush

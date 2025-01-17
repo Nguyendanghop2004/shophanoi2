@@ -39,20 +39,30 @@ class CreateProductVariantColorRequest extends FormRequest
             redirect()->back()
                 ->withErrors($validator)
                 ->withInput()
-                ->with('active_tab', 'variantproduct') // Tab form 2
+                ->with('active_tab', 'variantproduct')->with('show_modal', 'createVariantColorProduct')->with('colorId', $this->input('color_id'))// Tab form 2
         );
     }
-
     public function messages()
     {
         return [
-            'product_id.required' => 'Product ID là bắt buộc.',
-            'color_id.required' => 'Color ID là bắt buộc.',
-            'sizes.required' => 'Kích thước là bắt buộc.',
-            'sizes.*.required' => 'Mỗi kích thước là bắt buộc.',
-            'pricevariantcolor.required' => 'Giá là bắt buộc.',
-            'quantityvariantcolor.required' => 'Số lượng là bắt buộc.',
-            'product_code.unique' => 'Mã sản phẩm phải là duy nhất.',
+            'product_id.required' => 'ID sản phẩm là bắt buộc.',
+            'product_id.exists' => 'ID sản phẩm không tồn tại trong hệ thống.',
+            'color_id.required' => 'ID màu sắc là bắt buộc.',
+            'color_id.exists' => 'ID màu sắc không tồn tại trong hệ thống.',
+            'sizes.required' => 'Bạn cần chọn ít nhất một kích thước.',
+            'sizes.*.required' => 'Kích thước không được để trống.',
+            'sizes.*.string' => 'Kích thước phải là một chuỗi ký tự hợp lệ.',
+            'pricevariantcolor.required' => 'Giá sản phẩm là bắt buộc.',
+            'pricevariantcolor.numeric' => 'Giá sản phẩm phải là một số hợp lệ.',
+            'pricevariantcolor.min' => 'Giá sản phẩm không được nhỏ hơn 0.',
+            'quantityvariantcolor.required' => 'Số lượng sản phẩm là bắt buộc.',
+            'quantityvariantcolor.integer' => 'Số lượng sản phẩm phải là một số nguyên.',
+            'quantityvariantcolor.min' => 'Số lượng sản phẩm không được nhỏ hơn 0.',
+            'product_code.required' => 'Mã sản phẩm là bắt buộc.',
+            'product_code.string' => 'Mã sản phẩm phải là một chuỗi ký tự.',
+            'product_code.max' => 'Mã sản phẩm không được vượt quá 255 ký tự.',
+            'product_code.unique' => 'Mã sản phẩm đã tồn tại, vui lòng chọn mã khác.',
         ];
     }
+    
 }

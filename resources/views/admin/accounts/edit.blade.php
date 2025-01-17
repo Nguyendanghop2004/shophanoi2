@@ -20,7 +20,7 @@
                         
                             <div class="form-group">
                                 <label for="name">Tên</label>
-                                <input type="text" name="name" class="form-control" value="{{ old('name', $admin->name) }}">
+                                <input type="text" name="name" class="form-control" value="{{ old('name', $admin->name) }}"disabled>
                             </div>
                             
                             @if(!$isAdmin)
@@ -28,9 +28,13 @@
                                     <label for="password">Password</label>
                                     <input type="password" name="password" class="form-control" value="">
                                 </div>
-                            @endif
+                          
                         </div>
-                        
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại:</label>
+                            <input type="text" name="phone" id="phone" class="form-control" value="{{ old('phone', $admin->phone ?? '') }}">
+                        </div>
+                        @endif
                         <div class="col-lg-6 col-md-6 col-12">
                             <div id="image-preview" class="image-preview mx-auto"
                                 @error('image_path') style="border:2px dashed red" @enderror>

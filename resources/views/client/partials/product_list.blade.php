@@ -1,7 +1,8 @@
+
 @foreach ($products as $product)
                             <div class="swiper-slide" lazy="true">
                                 <div class="card-product">
-                                    <div class="card-product-wrapper">
+                                    <div class="card-product-wrapper"style="height: 465px ; width: 100%;">
                                         <a href="{{ route('product-detail', $product['slug']) }}" class="product-img">
                                             <img class="lazyload img-product"
                                                 data-src="{{ asset('storage/' . $product['main_image_url']) }}"
@@ -19,33 +20,23 @@
                                                 <span class="icon icon-bag"></span>
                                                 <span class="tooltip">Quick Add</span>
                                             </a> --}}
-                                            <a href="javascript:void(0);"
-                                                class="box-icon bg_white wishlist btn-icon-action">
-                                                <span class="icon icon-heart"></span>
-                                                <span class="tooltip">Add to Wishlist</span>
-                                                <span class="icon icon-delete"></span>
-                                            </a>
+                                     
                                             {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                                                 class="box-icon bg_white compare btn-icon-action">
                                                 <span class="icon icon-compare"></span>
                                                 <span class="tooltip">Add to Compare</span>
                                                 <span class="icon icon-check"></span>
                                             </a> --}}
-                                            <a href="#quick_view" data-bs-toggle="modal"
-                                                data-product-id="{{ $product['id'] }}"
-                                                class="box-icon bg_white quickview tf-btn-loading">
-                                                <span class="icon icon-bag"></span>
-                                                <span class="tooltip">Quick View</span>
-                                            </a>
+                                        
                                         </div>
                                         <div class="size-list">
-                                            <span>{{ $product['distinct_size_count'] }} sizes available</span>
+                                            <span>{{ $product['distinct_size_count'] }} sizes có sẵn</span>
                                         </div>
                                     </div>
                                     <div class="card-product-info">
                                         <a href="{{ route('product-detail', $product['slug']) }}"
                                             class="title link">{{ $product['name'] }}</a>
-                                        <span class="price">{{ $product['price'] }} VNĐ</span>
+                                        <span class="price">{{ number_format($product['price'], 0, ',', '.') }} VNĐ</span>
                                         <ul class="list-color-product">
                                             @foreach ($product['colors'] as $index => $color)
                                                 <li
@@ -68,3 +59,4 @@
                                 </div>
                             </div>
                         @endforeach
+                        

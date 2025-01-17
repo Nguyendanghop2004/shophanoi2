@@ -12,7 +12,25 @@
         .address-column {
             word-wrap: break-word;
             max-width: 200px;
-        }
+        }.status-cho-xac-nhan {
+    background-color: #ffc107;
+    color: #000;
+}
+.status-chua-nhan {
+    background-color:#8B1A1A; 
+    color: #fff;
+}
+.status-huy {
+    background-color:#FF0000; 
+    color: #fff;
+}
+.status-da-nhan-hang {
+    background-color: #00EE00; 
+    color: #fff;
+}
+       
+
+    </style>
     </style>
     <section class="section">
         <div class="section-header">
@@ -34,6 +52,7 @@
                                 <th scope="col">Thanh Toán</th>
                                 <th scope="col">Địa chỉ cụ thể</th>
                                 <th scope="col">Số điện thoại</th>
+                                <th scope="col">Lý do chưa nhận</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -56,6 +75,7 @@
                                                 {{ $order->city->name_thanhpho ?? '....' }}
                                             </td>
                                             <td>{{ $order->phone_number }}</td>
+                                            <td>{{ $order->reason_faile_order}}</td>
                                             <td>
                                                 @if (auth()->user()->hasRole('Shipper'))
                                                 @if (
@@ -65,6 +85,8 @@
                                                         'giao hàng thành công',
                                                         'đã nhận hàng',
                                                         'giao hàng không thành công',
+                                                        'chưa nhận được hàng',
+
                                                     ]))
                                                     <form action="{{ route('admin.order.removeShipper', $order->id) }}"
                                                         method="POST" style="display:inline;">
@@ -86,6 +108,8 @@
                                                     </form>
                                                 @endif
                                             @endif
+                                            
+                                           
                                             
                                                 <form
                                                     action="{{ route('admin.order.update-updateStatusShip', $order->id) }}"
@@ -128,8 +152,10 @@
                                                                 Giao Hàng Không Thành Công</option>
                                                         @elseif($order->status == 'đã nhận hàng')
                                                             <option value="đã nhận hàng"
-                                                                {{ $order->status == 'đã nhận hàng' ? 'selected' : '' }}>Đã
-                                                                nhận hàng</option>
+                                                                {{ $order->status == 'đã nhận hàng' ? 'selected' : '' }}>Hoàn thành</option>
+                                                        @elseif($order->status == 'chưa nhận được hàng')
+                                                            <option value="chưa nhận được hàng"
+                                                                {{ $order->status == 'chưa nhận được hàng' ? 'selected' : '' }}>Khách chưa nhận được hàng</option>
                                                         @elseif($order->status == 'hủy')
                                                             <option value="hủy"
                                                                 {{ $order->status == 'hủy' ? 'selected' : '' }}>Hủy
@@ -143,6 +169,7 @@
                                                             $order->status != 'đã nhận hàng' &&
                                                             $order->status != 'giao hàng không thành công' &&
                                                             $order->status != 'chờ xác nhận' &&
+                                                            $order->status != 'chưa nhận được hàng' &&
                                                             $order->status != 'đã xác nhận')
                                                         <button type="button" class="btn btn-primary btn-sm mt-2"
                                                             onclick="confirmUpdateFormss(this)">
@@ -151,9 +178,26 @@
                                                     @endif
 
                                                 </form>
-
+                                                @can('account_admin')
+                                                @if (
+                                                    !in_array($order->status, [
+                                                        'ship đã nhận',
+                                                        'đang giao hàng',
+                                                        'giao hàng thành công',
+                                                        'đã nhận hàng',
+                                                        'giao hàng không thành công',
+                                                    ]))
+                                                     <form action="{{ route('admin.order.removeShipper', $order->id) }}"
+                                                        method="POST" style="display:inline;">
+                                                        @csrf
+                                                        <button type="button" class="btn btn-danger btn-sm mt-2"
+                                                            onclick="confirmUpdateForm(this)">
+                                                            Hoàn tác đơn</button>
+                                                    </form>
+                                                    @endif
+                                                    @endcan
                                             </td>
-
+                                         
                                         </tr>
                                     @endforeach
                                 @endif
@@ -163,6 +207,7 @@
                 </div>
             </div>
         </div>
+        
     </section>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -244,4 +289,36 @@
             @endif
         });
     </script>
+    <script>
+    function applyStatusColor(selectElement) {
+    const statusClasses = {
+        'chờ xác nhận': 'status-cho-xac-nhan',
+        'đã xác nhận': 'status-da-xac-nhan',
+        'ship đã nhận': 'status-ship-da-nhan',
+        'đang giao hàng': 'status-dang-giao-hang',
+        'giao hàng thành công': 'status-giao-hang-thanh-cong',
+        'giao hàng không thành công': 'status-giao-hang-khong-thanh-cong',
+        'hủy': 'status-huy',
+        'chưa nhận được hàng': 'status-chua-nhan',
+        'đã nhận hàng': 'status-da-nhan-hang'
+    };
+
+    selectElement.className = selectElement.className.replace(/status-\w+/g, '');
+
+    const selectedStatus = selectElement.value.trim();
+    if (statusClasses[selectedStatus]) {
+        selectElement.classList.add(statusClasses[selectedStatus]);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('select[name="status"]').forEach(select => {
+        applyStatusColor(select);
+        select.addEventListener('change', function () {
+            applyStatusColor(this);
+        });
+    });
+});
+
+</script>
 @endsection

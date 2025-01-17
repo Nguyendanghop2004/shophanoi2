@@ -4,7 +4,7 @@
             @foreach ($product->images as $image)
                 <div class="swiper-slide">
                     <div class="item">
-                        <img src="{{ asset('storage/' . $image->image_url) }}" alt="">
+                        <img src="{{ asset('storage/' . $image->image_url) }}" alt=""style="height: 700px ; width: 100%;">
                     </div>
                 </div>
             @endforeach
@@ -13,7 +13,7 @@
         <div class="swiper-button-prev button-style-arrow single-slide-next"></div>
     </div>
 </div>
-<div class="tf-product-info-wrap position-relative">
+<div class="tf-product-info-wrap position-relative"style="height: 700px ; width: 332px;">
     <div class="tf-product-info-list">
         <div class="tf-product-info-title">
             <h5><a class="link" href="{{ route('product-detail', $product->slug) }}">{{ $product->product_name }}</a>
@@ -88,12 +88,7 @@
                             VNĐ
                         </span>
                 </a>
-                <a href="javascript:void(0);"
-                    class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
-                    <span class="icon icon-heart"></span>
-                    <span class="tooltip">yêu thích</span>
-                    <span class="icon icon-delete"></span>
-                </a>
+            
                 {{-- <a href="#compare" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft"
                     class="tf-product-btn-wishlist hover-tooltip box-icon bg_white compare btn-icon-action">
                     <span class="icon icon-compare"></span>
@@ -103,7 +98,7 @@
             </form>
         </div>
         <div>
-            <a href="{{ route('product-detail', $product->slug) }}" class="tf-btn fw-6 btn-line">Xem Chi Tiết<i
+            <a href="{{ route('product-detail', $product->slug) }}" class="tf-btn fw-6 btn-line">Xem chi tiết<i
                     class="icon icon-arrow1-top-left"></i></a>
         </div>
     </div>
@@ -161,7 +156,7 @@
             if (quantity > stock) {
                 toastr.warning(`Hiện tại sản phẩm chỉ còn ${stock} chiếc trong kho.`, 'Lưu ý');
                 return;
-            }
+            } 
 
             $.ajax({
                 url: '/add-to-cart',
@@ -177,6 +172,7 @@
                     if (response.success === true) {
                         // Nếu thành công, hiển thị modal giỏ hàng
                         $("#shoppingCart").modal("show");
+                        updateCartCount();
                     } else {
                         toastr.error(response.message, 'Cảnh báo');
                     }
@@ -224,7 +220,8 @@
             let totalPrice = finalPrice * quantity; // Tổng tiền
 
             // Cập nhật vào giao diện
-            $('.tf-qty-price').text(`${totalPrice.toLocaleString('vi-VN')} VNĐ`);
+            $('.tf-qty-price').text(Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ');
+
         }
 
 

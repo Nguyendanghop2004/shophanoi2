@@ -5,6 +5,7 @@
         <div class="section-header">
             <h1>Chỉnh Sửa Sản Phẩm {{ $product->product_name }} </h1>
         </div>
+
         <div class="card card-warning">
             <div class="card-header">
                 <ul class="nav nav-pills justify-content-between" id="myTab3" role="tablist" style="width: 100%;">
@@ -23,16 +24,6 @@
                 </ul>
             </div>
         </div>
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
         <div class="tab-content" id="myTabContent2">
 
             {{-- tab san pham --}}
@@ -48,8 +39,8 @@
                         <div class="col-lg-3 col-md-6 col-12">
                             <div class="card card-primary">
                                 <div class="card-header d-flex justify-content-between">
-                                    <input type="submit" class="btn btn-primary" value="Sửa sản phẩm chính">
-                                    <a href="javascript:history.back()" class="btn btn-primary">Quay lại</a>
+                                    <input type="submit" class="btn btn-success" value="Sửa sản phẩm chính">
+                                    <a href="javascript:history.back()" class="btn btn-secondary">Quay lại</a>
                                 </div>
                             </div>
                             <div class="card">
@@ -256,13 +247,8 @@
 
             <div class="tab-pane fade {{ session('active_tab') === 'variantproduct' ? 'show active' : '' }}"
                 id="variantproduct3" role="tabpanel" aria-labelledby="profile-tab3">
-                {{-- <form action="{{ route('admin.product.updateVariantProduct', $product->id) }}" method="POST"
-                    enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                </form> --}}
-                <p> <button class="btn btn-primary" id="openModal">Tạo biến thể mới</button> </p>
 
+                <p> <button class="btn btn-primary" id="openModal">Tạo biến thể mới</button> </p>
 
                 @foreach ($product->colors as $color)
                     <div class="card card-info">
@@ -278,14 +264,17 @@
                                     <button class="btn btn-primary open-variant-modal ml-2"
                                         data-color-id="{{ $color->id }}">Tạo biến thể của màu
                                         {{ $color->name }}</button>
-                                    <form action="{{ route('admin.product-variants.destroy', $color->id) }}"
-                                        method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                    <form action="{{ route('admin.product-variants.destroyByColor') }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button type="submit" class="btn btn-danger ml-2"><i class="fas fa-trash"
-                                                style="color: #ffffff;"></i></button>
+                                        <input type="hidden" name="color_id" value="{{ $color->id }}">
+
+                                        <button type="submit" class="btn btn-danger ml-2">
+                                            <i class="fas fa-trash" style="color: #ffffff;"></i>
+                                        </button>
                                     </form>
+
                                 </div>
                                 <div class="gallery gallery-md">
                                     @if (isset($imagesGroupedByColor[$color->id]))
@@ -349,11 +338,23 @@
                                                                 onclick="deleteVariant({{ $variant->id }})">
                                                                 <i class="fas fa-trash" style="color: #ffffff;"></i>
                                                             </button>
+
                                                     </tr>
                                                 @endforeach
 
                                             </tbody>
                                         </table>
+                                        @if (session('colorIdUpdateVariantProduct') == $color->id)
+                                            @if ($errors->any())
+                                                <div class="alert alert-danger">
+                                                    <ul>
+                                                        @foreach ($errors->all() as $error)
+                                                            <li>{{ $error }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endif
+                                        @endif
                                         <button type="submit" class="btn btn-primary">Cập Nhật</button>
                                     </form>
                                 </div>
@@ -379,6 +380,17 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                @php
+                    $productColorIds = $product->colors->pluck('id')->toArray();
+
+                    $colorVariantCount = count($productColorIds);
+
+                    $availableColors =
+                        $colorVariantCount < 5
+                            ? $colors->filter(fn($color) => !in_array($color->id, $productColorIds))
+                            : collect();
+                @endphp
+
                 <form action="{{ route('admin.product.createVariantProduct') }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
@@ -386,77 +398,92 @@
                     <input type="hidden" name="product_code" value="{{ $product->sku }}">
 
                     <div class="modal-body">
-                        @php
-                            // Lấy danh sách id các màu hiện có trong sản phẩm
-                            $productColorIds = $product->colors->pluck('id')->toArray();
-
-                            // Lọc các màu không thuộc sản phẩm
-                            $availableColors = $colors->filter(fn($color) => !in_array($color->id, $productColorIds));
-                        @endphp
-                        <div class="form-group">
-                            <label for="color">Chọn Màu</label>
-                            <select class="form-control" id="color" name="colorVatiant">
-                                @foreach ($availableColors as $color)
-                                    <option value="{{ $color->id }}">{{ $color->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('colorVatiant')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
+                        @if ($colorVariantCount >= 5)
+                            <div class="alert alert-warning">
+                                Sản phẩm này đã có tối đa 5 biến thể màu. Bạn không thể tạo thêm biến thể màu mới.
+                            </div>
+                        @else
+                            <div class="form-group">
+                                <label for="color">Chọn Màu</label>
+                                <select class="form-control" id="color" name="colorVatiant">
+                                    @foreach ($availableColors as $color)
+                                        <option value="{{ $color->id }}">{{ $color->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('colorVatiant')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                @error('imagesVatiant')
+                                    <div class="invalid-feedback" style="display: block;">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                <div class="file-upload rounded p-4 text-center">
+                                    <input type="file" id="imageUpload" name="imagesVatiant[]" multiple
+                                        accept="image/*">
+                                    <div class="file-upload-label font-weight-bold">
+                                        Kéo và thả tập tin vào đây hoặc nhấn để chọn nhiều Ảnh
+                                        <div class="text-danger ml-2">*</div>
+                                    </div>
                                 </div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            @error('imagesVatiant')
-                                <div class="invalid-feedback" style="display: block;">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                            <div class="file-upload rounded p-4 text-center">
-                                <input type="file" id="imageUpload" name="imagesVatiant[]" multiple accept="image/*">
-                                <div class="file-upload-label font-weight-bold">
-                                    Kéo và thả tập tin vào đây hoặc nhấn để chọn nhiều Ảnh
-                                    <div class="text-danger ml-2">*</div>
+                                <div class="image-preview-container mt-3 d-flex flex-wrap">
+                                    <!-- Các ảnh được chọn sẽ hiển thị ở đây -->
                                 </div>
                             </div>
-                            <div class="image-preview-container mt-3 d-flex flex-wrap">
-                                <!-- Các ảnh được chọn sẽ hiển thị ở đây -->
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="size">Chọn Kích thước</label>
-                            <div class="row">
-                                <div class="col-lg-8 col-md-6 col-12">
-                                    <select id="sizeSelect" name="sizes[]" class="form-control select2" multiple="">
-                                        @foreach ($sizes as $size)
-                                            <option data-name="{{ $size->name }}" value="{{ $size->id }}">
-                                                {{ $size->name }}</option>
-                                        @endforeach
+                            <div class="form-group">
+                                <label for="size">Chọn Kích thước</label>
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-6 col-12">
+                                        <select id="sizeSelect" name="sizes[]" class="form-control select2"
+                                            multiple="">
+                                            @foreach ($sizes as $size)
+                                                <option data-name="{{ $size->name }}" value="{{ $size->id }}">
+                                                    {{ $size->name }}</option>
+                                            @endforeach
 
-                                    </select>
-                                </div>
-                                <div class="col-lg-4 col-md-6 col-12">
-                                    <button class="btn btn-primary" id="createSizeBtn" type="button">Tạo Kích
-                                        thước</button>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-12">
+                                        <button class="btn btn-primary" id="createSizeBtn" type="button">Tạo Kích
+                                            thước</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-group" id="sizeRadioGroup">
-                            <div class="selectgroup w-100" id="sizeRadios">
-                                <!-- Các radio button sẽ được tạo ra ở đây -->
+                            <div class="form-group" id="ff">
+                                <div class="selectgroup w-100" id="sizeRadios">
+                                    <!-- Các radio button sẽ được tạo ra ở đây -->
+                                </div>
                             </div>
-                        </div>
 
-                        <div id="sizeDetailsContainer">
-                            <!-- Các cụm nhập liệu giá và số lượng sẽ được hiển thị ở đây -->
-                        </div>
+                            <div id="sizeDetailsContainer">
+                                <!-- Các cụm nhập liệu giá và số lượng sẽ được hiển thị ở đây -->
+                            </div>
 
+                            @if (session('show_modal') === 'variantproductcolor')
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                            @endif
+                        @endif
 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-primary" id="saveBtn">Lưu</button>
+                        @if ($colorVariantCount >= 5)
+                        @else
+                            <button type="submit" class="btn btn-success" id="saveBtn">Lưu</button>
+                        @endif
                     </div>
                 </form>
             </div>
@@ -482,71 +509,99 @@
                         <input type="hidden" name="product_code" value="{{ $product->sku }}">
                         <input type="hidden" name="color_id" value="{{ $color->id }}">
 
+                        @php
+                            $currentSizeCount = count($variantsGroupedByColor[$color->id]);
+                        @endphp
+
                         <div class="modal-body">
+                            @if ($currentSizeCount >= 5)
+                                <div class="alert alert-warning">
+                                    Màu {{ $color->name }} đã đạt tối đa 5 kích thước. Không thể thêm kích thước mới.
+                                </div>
+                            @else
+                                <div class="form-group">
+                                    <label for="color">Chọn Màu</label>
+                                    <select class="form-control" id="color" name="colorVatiant" disabled>
+                                        @foreach ($product->colors as $colorrr)
+                                            <option @selected($color->id == $colorrr->id) value="{{ $colorrr->id }}">
+                                                {{ $colorrr->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('colorVatiant')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="size">Chọn Kích thước</label>
 
-                            <div class="form-group">
-                                <label for="color">Chọn Màu</label>
-                                <select class="form-control" id="color" name="colorVatiant" disabled>
-                                    @foreach ($product->colors as $colorrr)
-                                        <option @selected($color->id == $colorrr->id) value="{{ $colorrr->id }}">
-                                            {{ $colorrr->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('colorVatiant')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="size">Chọn Kích thước</label>
-                                <select name="sizes" class="form-control ">
-                                    @foreach ($sizes as $size)
-                                        @php
-                                            // Kiểm tra xem size này đã có trong variants của color hiện tại chưa
-                                            $sizeExists = false;
-                                            foreach ($variantsGroupedByColor[$color->id] as $variant) {
-                                                if ($variant->size->id === $size->id) {
-                                                    $sizeExists = true;
-                                                    break;
+
+                                    <select name="sizes" class="form-control">
+                                        @foreach ($sizes as $size)
+                                            @php
+                                                // Kiểm tra xem size này đã có trong variants của color hiện tại chưa
+                                                $sizeExists = false;
+                                                foreach ($variantsGroupedByColor[$color->id] as $variant) {
+                                                    if ($variant->size->id === $size->id) {
+                                                        $sizeExists = true;
+                                                        break;
+                                                    }
                                                 }
-                                            }
-                                        @endphp
+                                            @endphp
 
-                                        @if (!$sizeExists)
-                                            <option data-name="{{ $size->name }}" value="{{ $size->id }}">
-                                                {{ $size->name }}
-                                            </option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <div class="d-flex justify-content-start"> <label>Giá</label>
-                                    <div class="text-danger ml-2">*</div>
+                                            @if (!$sizeExists)
+                                                <option data-name="{{ $size->name }}" value="{{ $size->id }}">
+                                                    {{ $size->name }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+
                                 </div>
-                                <input type="text" name="pricevariantcolor" class="form-control">
-                                @error('pricevariantcolor')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
+
+                                <div class="form-group">
+                                    <div class="d-flex justify-content-start"> <label>Giá cộng thêm của kích thước</label>
+                                        <div class="text-danger ml-2">*</div>
                                     </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <div class="d-flex justify-content-start"> <label>Số lượng</label>
-                                    <div class="text-danger ml-2">*</div>
+                                    <input type="text" name="pricevariantcolor" class="form-control">
+                                    @error('pricevariantcolor')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
-                                <input type="text" name="quantityvariantcolor" class="form-control">
-                                @error('quantityvariantcolor')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
+                                <div class="form-group">
+                                    <div class="d-flex justify-content-start"> <label>Số lượng biến thể</label>
+                                        <div class="text-danger ml-2">*</div>
                                     </div>
-                                @enderror
-                            </div>
+                                    <input type="text" name="quantityvariantcolor" class="form-control">
+                                    @error('quantityvariantcolor')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                @if (session('show_modal') === 'createVariantColorProduct')
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+                                @endif
+                            @endif
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-primary" id="saveBtn">Lưu</button>
+                            @if ($currentSizeCount >= 5)
+                            @else
+                                <button type="submit" class="btn btn-primary" id="saveBtn">Lưu</button>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -628,10 +683,21 @@
 
 
                             </div>
+                            @if (session('show_modal') === 'createVariantImageColorProduct')
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                            @endif
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-primary" id="saveBtn">Lưu</button>
+                            <button type="submit" class="btn btn-success" id="saveBtn">Lưu</button>
                         </div>
                     </form>
                 </div>
@@ -645,25 +711,46 @@
     <script src="{{ asset('admin/assets/modules/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
     <script>
         function deleteVariant(variantId) {
-            if (confirm('Bạn có chắc chắn muốn xóa?')) {
-                fetch(`/admin/product-variants/${variantId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-Token': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Xóa thành công');
-                            location.reload(); // Tải lại trang sau khi xóa thành công
-                        } else {
-                            alert('Có lỗi xảy ra khi xóa');
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            }
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn xóa?',
+                text: "Thao tác này không thể hoàn tác!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/product-variants/${variantId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                    'content'),
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Đã xóa!', data.message || 'Xóa thành công!', 'success')
+                                    .then(() => location.reload());
+                            } else {
+                                Swal.fire('Lỗi!', data.message || 'Có lỗi xảy ra. Vui lòng thử lại!', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire('Lỗi!', 'Đã xảy ra lỗi trong quá trình xử lý. Vui lòng thử lại!',
+                                'error');
+                            console.error('Error:', error);
+                        });
+                }
+            });
         }
     </script>
     <script>
@@ -729,13 +816,13 @@
                     priceGroup.classList.add('form-group');
                     const priceLabel = document.createElement('label');
                     priceLabel.setAttribute('for', `price-${size}`);
-                    priceLabel.textContent = `Giá sản phẩm (${size})`;
+                    priceLabel.textContent = `Giá cộng thêm của kích thước (${size})`;
                     const priceInput = document.createElement('input');
                     priceInput.type = 'number';
                     priceInput.classList.add('form-control');
                     priceInput.id = `price-${size}`;
                     priceInput.name = `price[${size}]`;
-                    priceInput.placeholder = 'Nhập giá sản phẩm';
+                    priceInput.placeholder = `Nhập giá cộng thêm của biến thể kích thước (${size})`;
                     priceGroup.appendChild(priceLabel);
                     priceGroup.appendChild(priceInput);
 
@@ -1123,6 +1210,28 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            // Kiểm tra xem có session 'success' không
+            @if (session('show_modal') === 'variantproductcolor')
+                // Hiển thị modal nếu session 'success' tồn tại
+                $('#exampleModal').modal('show');
+            @endif
+            @if (session('show_modal') === 'createVariantColorProduct')
+                // Hiển thị modal nếu session 'success' tồn tại
+                $('#exampleModalvariantcolor{{ session('colorId') }}').modal('show');
+            @endif
+            // Kiểm tra xem có session 'success' không
+            @if (session('show_modal') === 'createVariantImageColorProduct')
+                // Hiển thị modal nếu session 'success' tồn tại
+                $('#exampleModalvariantImagecolor{{ session('colorId') }}').modal('show');
+            @endif
+            @if (session('success'))
+                toastr.success('{{ session('success') }}');
+            @endif
+        });
+    </script>
+
     <style>
         .select2-container {
             width: 100% !important;

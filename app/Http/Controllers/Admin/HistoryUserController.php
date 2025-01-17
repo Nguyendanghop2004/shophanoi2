@@ -12,7 +12,7 @@ class HistoryUserController extends Controller
 {
     public function  historyUser()
     {
-        $histories = History::get();
+        $histories = History::query()->latest('id')->paginate(5);
       
         return view('admin.history_user.index', compact('histories'));
     }
